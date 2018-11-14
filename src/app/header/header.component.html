@@ -1,0 +1,51 @@
+<mdb-navbar SideClass="navbar navbar-expand-md navbar-dark background-proxiExplorer">
+  <mdb-navbar-brand>
+    <img src="../../assets/images/logo/proximax-white.png" alt="ProxiExplorer" height="30" class="mr-20px d-inline-block align-top">
+  </mdb-navbar-brand>
+  <links>
+    <ul class=" navbar-nav">
+      <ng-container *ngFor="let h of objectkeys(header)">
+        <ng-container *ngIf="header[h].show === true">
+          <ng-container *ngIf="header[h].type === 'default'; else menuDropdown">
+            <li [ngClass]="['nav-item', header[h].class]">
+              <a class="nav-link waves-light" mdbWavesEffect [routerLink]="[header[h].link]">
+                {{header[h].name}}
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #menuDropdown>
+          <li class="nav-item dropdown btn-group" dropdown>
+            <a dropdownToggle type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+              {{header[h].name}}
+              <span class="caret"></span>
+            </a>
+            <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+              <ng-container *ngFor="let b of objectkeys(header[h].submenu)">
+                <ng-container *ngIf="header[h].submenu[b].show === true">
+                  <a class="dropdown-item waves-light" [routerLink]="[header[h].submenu[b].link]" mdbWavesEffect>{{header[h].submenu[b].name}}</a>
+                </ng-container>
+              </ng-container>
+            </div>
+          </li>
+        </ng-template>
+      </ng-container>
+
+      <li class="nav-item dropdown btn-group" dropdown>
+        <a dropdownToggle type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+          Select Node
+          <span class="caret"></span>
+        </a>
+        <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+          <!-- <a [ngClass]="{'active':person.country === 'UK'}" class="dropdown-item waves-light" mdbWavesEffect>item1</a> -->
+          <!-- <a class="dropdown-item waves-light" mdbWavesEffect>item2</a> -->
+          <ng-container *ngFor="let item of objectkeys(optionsSelect)">
+            <a (click)="optionSelected(optionsSelect[item].value)" [ngClass]="{'node-active':optionsSelect[item].value === nodeSelected}" class="dropdown-item waves-light" mdbWavesEffect>{{optionsSelect[item].value}}</a>
+          </ng-container>
+        </div>
+      </li>
+    </ul>
+  </links>
+</mdb-navbar>

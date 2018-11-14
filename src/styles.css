@@ -1,0 +1,291 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+body {
+  font-family: 'Lato', sans-serif !important;
+  background-image: -webkit-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
+  background-image: -moz-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
+  background-image: -o-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
+  background-image: -ms-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
+  background-image: linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
+  background-attachment: fixed;
+  background-position: center center;
+}
+
+.background-explorer {
+  background-image: -webkit-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
+  background-image: -moz-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
+  background-image: -o-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
+  background-image: -ms-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
+  background-image: linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
+  background-attachment: fixed;
+  background-position: center center;
+}
+
+.modal-body{
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+}
+
+.text-link:hover{
+  color: #0f8e85 !important;
+  font-weight: 400 !important;
+}
+
+
+.mr-20px {
+  margin-right: 20px;
+}
+
+.none-box-shadow {
+  box-shadow: none !important;
+}
+
+.mt-3r {
+  margin-top: 3rem;
+}
+
+/* You can add global styles to this file, and also import other style files */
+
+.mt-100px {
+  margin-top: 100px;
+}
+
+.mt-3rem {
+  margin-top: 3rem;
+}
+
+.mt-5rem {
+  margin-top: 5rem;
+}
+
+.mt-8rem {
+  margin-top: 8rem;
+}
+
+.mt-4rm {
+  margin-top: 4rem !important;
+}
+
+.mb-3rem {
+  margin-bottom: 3rem;
+}
+
+.mt-1rm {
+  margin-top: 1rem !important;
+}
+
+.mt-1-5rem {
+  margin-top: 1.5rem;
+}
+
+.mt-08rem {
+  margin-top: 0.8rem;
+}
+
+
+.node-active{
+  color: white !important;
+  background-color: #009688;
+}
+
+.background-proxiwallet {
+  background: #009688;
+  background: -moz-linear-gradient(-45deg, #009688 0%, #23b3a5 55%, #129a8e 100%);
+  background: -webkit-linear-gradient(-45deg, #009688 0%, #23b3a5 55%, #129a8e 100%);
+  background: linear-gradient(135deg, #009688 0%, #23b3a5 55%, #129a8e 100%);
+  color: white;
+}
+
+.border-proxiWallet {
+  border: 1px solid -webkit-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 33%, rgb(120, 182, 228) 100%);
+}
+
+.t-a-r {
+  text-align: right;
+}
+
+.text-gris {
+  color: #757575 !important;
+}
+
+.btn-reverse {
+  background-color: white !important;
+  color: #757575 !important;
+}
+
+.title-form {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  color: #757575;
+}
+
+.toastSuccess {
+  opacity: 1.0 !important;
+  background-color: #35af8d;
+}
+
+.toastError {
+  opacity: 1.0 !important;
+  background-color: #e42c2c;
+}
+
+.toastWarning {
+  opacity: 1.0 !important;
+}
+
+.show-pvk {
+  text-align: center;
+  margin-top: 3rem;
+  font-weight: 600 !important;
+  color: #208f83;
+  cursor: pointer;
+}
+
+.detail-pvk {
+  text-align: center;
+}
+
+.font-header {
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.backg-beige {
+  background: #f5f7fa;
+}
+
+.check-sucess {
+  width: 260px;
+}
+
+.text-mild {
+  color: #636363;
+  font-weight: 600;
+}
+
+.text-mild-child {
+  color: #636363;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.text-right{
+  text-align: right;
+}
+
+/* font size**/
+
+.fs-08rem {
+  font-size: 0.8rem;
+}
+
+/***/
+
+.background-header {
+  background: #009688;
+  background: -moz-linear-gradient(-45deg, #009688 0%, #23b3a5 55%, #129a8e 100%);
+  background: -webkit-linear-gradient(-45deg, #009688 0%, #23b3a5 55%, #129a8e 100%);
+  background: linear-gradient(135deg, #009688 0%, #23b3a5 55%, #129a8e 100%);
+}
+
+.route-name {
+  text-transform: uppercase;
+  border-bottom: 1px solid #cfdbe2;
+  padding-top: 85px;
+  background: #f5f7fa;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  font-size: 18px;
+  opacity: .9;
+  line-height: 1.1;
+  color: #666;
+  font-weight: 700;
+}
+
+/*CARD ADMIN*/
+
+.cascading-admin-card .admin-up .data {
+  float: right;
+  margin-top: 2rem;
+  text-align: right;
+}
+
+.cascading-admin-card .admin-up .fa {
+  padding: 1.7rem;
+  font-size: 2rem;
+  color: #fff;
+  text-align: left;
+  margin-right: 1rem;
+  border-radius: 3px;
+  box-shadow: 0 2px 9px 0 rgba(0, 0, 0, .2), 0 2px 13px 0 rgba(0, 0, 0, .19);
+}
+
+.cascading-admin-card .admin-up {
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-top: -20px;
+}
+
+.classic-admin-card .card-body h4 {
+  margin-top: 10px;
+}
+
+.classic-admin-card .card-body {
+  color: #fff;
+  margin-bottom: 0;
+  padding: .9rem;
+}
+
+.classic-admin-card .card-body p {
+  font-size: 15px;
+  opacity: .7;
+  margin-bottom: 0;
+}
+
+.logo-item-classic-card {
+  font-size: 50px;
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.height-body-card {
+  height: 95px;
+}
+
+.background-gris{
+  background-color: #f5f7fa !important
+}
+
+.align-right{
+  text-align: right !important;
+}
+
+
+.mouse-pointer{
+  cursor: pointer;
+}
+
+/* THEME FONT */
+
+/* FOR MODAL */
+.fs-08rem {
+  font-size: 0.8rem;
+}
+
+.fw-bolder{
+  font-weight: bolder;
+}
+
+.w-w-b-w{
+  word-wrap: break-word;
+}
+
+.font-size-08rem{
+  font-size: 0.8rem;
+}
+/* FIN FOR MODAL */
+

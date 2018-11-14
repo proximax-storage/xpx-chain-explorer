@@ -1,0 +1,127 @@
+<container>
+  <div class="row">
+    <div class="col-md-3">
+      <span class="fs-08rem fw-bolder"><b>Type transaction:</b></span>
+    </div>
+    <div class="col-md-9">
+      <span class="fs-08rem fw-bolder">{{nameTransaction}}</span>
+    </div>
+  </div>
+  <hr>
+</container>
+
+<!-- FEE INFO -->
+<container>
+  <div class="mt-3">
+    <div class="row">
+      <div class="col-md-3">
+        <span class="fs-08rem fw-bolder"><b>Fee:</b></span>
+      </div>
+      <div class="col-md-9">
+        <span class="fs-08rem fw-bolder">{{dataSelected?.fee.compact()}}</span>
+      </div>
+    </div>
+  </div>
+  <hr>
+</container>
+
+<!-- minApprovalDelta & minRemovalDelta-->
+<container>
+  <div class="mt-3">
+    <div class="row">
+      <div class="col-md-3">
+        <span class="fs-08rem fw-bolder"><b>Minimmium Approval Delta:</b></span>
+      </div>
+      <div class="col-md-9">
+        <span class="fs-08rem fw-bolder">{{dataSelected?.minApprovalDelta}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <div class="row">
+      <div class="col-md-3">
+        <span class="fs-08rem fw-bolder"><b>Minimum Removal Delta:</b></span>
+      </div>
+      <div class="col-md-9">
+        <span class="fs-08rem fw-bolder">{{dataSelected?.minRemovalDelta}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <div class="row">
+      <div class="col-md-3">
+        <span class="fs-08rem fw-bolder"><b>Multisig Cosignatory Modification:</b></span>
+      </div>
+      <div class="col-md-9">
+        <ng-container *ngFor="let item of MultisigCosignatoryModification">
+          <span class="fs-08rem fw-bolder">
+            {{item?.cosignatoryPublicAccount.publicKey}}
+          </span> <br>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <div class="row">
+      <div class="col-md-3">
+        <span class="fs-08rem fw-bolder"><b>Versión:</b></span>
+      </div>
+      <div class="col-md-9">
+        <span class="fs-08rem fw-bolder">{{dataSelected?.version}}</span>
+      </div>
+    </div>
+  </div>
+  <hr>
+</container>
+
+<!-- SIGNER INFO -->
+<container>
+  <div class="mt-3">
+    <div class="row">
+      <div class="col-md-3">
+        <span class="fs-08rem fw-bolder"><b>Signer:</b></span>
+      </div>
+      <div class="col-md-9">
+        <span class="fs-08rem fw-bolder">{{dataSelected?.signer.publicKey}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="mt-3">
+    <div class="row">
+      <div class="col-md-3">
+        <span class="fs-08rem fw-bolder"><b>Signature:</b></span>
+      </div>
+      <div class="col-md-9">
+        <span class="fs-08rem fw-bolder">{{dataSelected?.signature}}</span>
+      </div>
+    </div>
+  </div>
+  <hr>
+</container>
+
+<!-- TIMESTAMP & HASH INFO -->
+<container>
+  <div class="mt-3">
+    <div class="row">
+      <div class="col-md-3">
+        <span class="fs-08rem fw-bolder"><b>Deadline:</b></span>
+      </div>
+      <div class="col-md-9">
+        <span class="fs-08rem fw-bolder">{{dataSelected?.deadline.value.toString()}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="mt-3">
+    <div class="row">
+      <div class="col-md-3">
+        <span class="fs-08rem fw-bolder"><b>Hash:</b></span>
+      </div>
+      <div class="col-md-9">
+        <span class="fs-08rem fw-bolder">{{dataSelected?.transactionInfo.hash}}</span>
+      </div>
+    </div>
+  </div>
+</container>
