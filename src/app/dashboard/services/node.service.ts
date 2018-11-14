@@ -14,7 +14,7 @@ export class NodeService {
   nameItemsArrayStorage = 'proxi-nodes';
   nameItemSelectedStorage = 'node-selected';
   listNodes = [
-    '13.229.111.23:3000'
+    '192.168.10.38:3000'
   ];
 
   constructor(

@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   elements = [];
   transactionType: TransactionType;
   dataSelected: Transaction;
-  blockInfo: BlockInfo;
+  blockInfo = [];
   headElements = ['Block Height', 'Timestamp', 'Harvester', 'Amount', 'Fees'];
   optionTypeSearch = [
     {
@@ -95,17 +95,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
             // });
             this.blockInfo = blockInfo;
             console.log(this.blockInfo);
-            this.buildBlockInfo(blockInfo);
           }
         );
       }
     );
   }
 
-
-  buildBlockInfo(blockInfo: BlockInfo) {
-
-  }
 
   searchData() {
     this.elements = [];
