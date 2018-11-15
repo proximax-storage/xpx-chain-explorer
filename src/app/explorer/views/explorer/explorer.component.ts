@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { MdbTablePaginationComponent, MdbTableService } from 'ng-uikit-pro-standard';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { MosaicId, Transaction, Address, TransactionType, BlockInfo, Deadline } from 'nem2-sdk';
+import { MosaicId, Transaction, Address, TransactionType, BlockInfo, Deadline } from 'proximax-nem2-sdk';
 import { AppConfig } from '../../../config/app.config';
 import { NemProvider } from '../../../shared/services/nem.provider';
 import { NodeService } from '../../../dashboard/services/node.service';
