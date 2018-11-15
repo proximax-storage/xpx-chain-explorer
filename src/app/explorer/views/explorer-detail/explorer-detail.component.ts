@@ -24,7 +24,7 @@ export class ExplorerDetailComponent implements OnInit {
   showAccountInfo = false;
   accountInfo = {};
   showRecentTransaction = false;
-  observables = ['numberBlock'];
+  observables = [];
 
   constructor(
     private nemProvider: NemProvider,

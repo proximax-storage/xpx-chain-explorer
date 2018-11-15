@@ -13,6 +13,9 @@ import { RegisterNamespaceComponent } from './components/info-transactions/regis
 import { ModifyMultisigAccountComponent } from './components/info-transactions/modify-multisig-account/modify-multisig-account.component';
 import { RecentTransactionsComponent } from './components/recent-transactions/recent-transactions.component';
 import { SearchByFilterComponent } from './components/search-by-filter/search-by-filter.component';
+import { ExplorerHashComponent } from './views/explorer-hash/explorer-hash.component';
+import { ExplorerMosaicComponent } from './views/explorer-mosaic/explorer-mosaic.component';
+import { ExplorerNamespaceComponent } from './views/explorer-namespace/explorer-namespace.component';
 
 @NgModule({
   imports: [
@@ -29,7 +32,10 @@ import { SearchByFilterComponent } from './components/search-by-filter/search-by
     ModifyMultisigAccountComponent,
     ExplorerBlockComponent,
     RecentTransactionsComponent,
-    SearchByFilterComponent
+    SearchByFilterComponent,
+    ExplorerHashComponent,
+    ExplorerMosaicComponent,
+    ExplorerNamespaceComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

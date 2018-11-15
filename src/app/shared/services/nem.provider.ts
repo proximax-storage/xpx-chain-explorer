@@ -28,7 +28,8 @@ import {
   XEM,
   TransactionStatusError,
   TransactionStatus,
-  BlockchainHttp
+  BlockchainHttp,
+  NamespaceId
 } from 'nem2-sdk';
 
 import { crypto } from 'nem2-library';
@@ -56,7 +57,7 @@ export class NemProvider {
   blockchainHttp: BlockchainHttp;
   url: any;
 
-  constructor() {}
+  constructor() { }
 
   initInstances(url) {
     console.log('initInstances', url);
@@ -268,9 +269,8 @@ export class NemProvider {
    * Return getTransaction from id or hash
    * @param param
    */
-  getTransactionInformation(hash, node = ''): Observable<Transaction> {
-    const transaction: TransactionHttp = (node === '') ? this.transactionHttp : new TransactionHttp(`https://${node}`);
-    return transaction.getTransaction(hash);
+  getTransactionInformation(hash): Observable<Transaction> {
+    return this.transactionHttp.getTransaction(hash);
   }
 
   /**
@@ -316,6 +316,16 @@ export class NemProvider {
 
   getBlocksHeightLocal() {
     return this.blocksHeight$;
+  }
+
+  getMosaicId(id) {
+    const instance = new MosaicId(id);
+    return instance;
+  }
+
+  getNamespaceId(id) {
+    const instance = new NamespaceId(id);
+    return instance;
   }
 
 
