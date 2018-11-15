@@ -12,6 +12,7 @@ import { MosaicDefinitionComponent } from './components/info-transactions/mosaic
 import { RegisterNamespaceComponent } from './components/info-transactions/register-namespace/register-namespace.component';
 import { ModifyMultisigAccountComponent } from './components/info-transactions/modify-multisig-account/modify-multisig-account.component';
 import { RecentTransactionsComponent } from './components/recent-transactions/recent-transactions.component';
+import { SearchByFilterComponent } from './components/search-by-filter/search-by-filter.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { RecentTransactionsComponent } from './components/recent-transactions/re
     RegisterNamespaceComponent,
     ModifyMultisigAccountComponent,
     ExplorerBlockComponent,
-    RecentTransactionsComponent
+    RecentTransactionsComponent,
+    SearchByFilterComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

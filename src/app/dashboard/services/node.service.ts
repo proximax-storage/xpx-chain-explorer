@@ -11,10 +11,13 @@ export class NodeService {
 
   nodeObsSelected: BehaviorSubject<any>;
   // nodeObsSelected$: Observable<any> = this.nodeObsSelected.asObservable();
-  nameItemsArrayStorage = 'proxi-nodes';
+  nameItemsArrayStorage = 'proximax-explorer-nodes';
   nameItemSelectedStorage = 'node-selected';
   listNodes = [
-    '192.168.10.38:3000'
+    '190.216.224.11:3000',
+    environment.nodeDefault,
+    '192.168.10.38:3000',
+    'testnet1.proximax.io:3000'
   ];
 
   constructor(
