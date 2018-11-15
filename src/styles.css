@@ -71,6 +71,10 @@ body {
   margin-bottom: 3rem;
 }
 
+.mt-7rem{
+  margin-top: 0.7rem;
+}
+
 .mt-1rm {
   margin-top: 1rem !important;
 }
@@ -289,3 +293,24 @@ body {
 }
 /* FIN FOR MODAL */
 
+
+mdb-select.by-search > label {
+  color: white !important;
+  font-weight: 400;
+  font-size: 0.9rem !important;
+}
+
+mdb-select.by-search > div > div.single > div.placeholder,
+mdb-select.by-search > div > div.single > div.value {
+  font-weight: 400;
+  color: white !important;
+}
+
+mdb-select.by-search > div > div.single > div.toggle {
+  color: white;
+}
+
+mdb-select.by-search > div{
+  margin-top: 0.8rem;
+  margin-bottom: 1rem;
+}
