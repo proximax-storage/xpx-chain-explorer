@@ -25,7 +25,7 @@ export const NameRoute = {
   [AppConfig.routes.explorerHash]: 'Explorer transaction - Block',
   [AppConfig.routes.explorerAccount]: 'Explorer transaction - Account',
   [AppConfig.routes.explorerNamespace]: 'Explorer transaction - Namespace',
-  [AppConfig.routes.explorerNamespace]: 'Explorer transaction - Mosaic',
+  [AppConfig.routes.explorerMosaic]: 'Explorer transaction - Mosaic',
   [AppConfig.routes.addNode]: 'Add node',
   [AppConfig.routes.selectNode]: 'Select node',
   [AppConfig.routes.notFound]: '404 not found'

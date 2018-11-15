@@ -156,23 +156,6 @@ export class NemProvider {
     return PublicAccount.createFromPublicKey(publicKey, network);
   }
 
-  /**
-   * Create transaction
-   *
-   * @param recipientAddress
-   * @param message
-   * @param network
-   */
-  createTransaction(recipient, amount, message, network) {
-    const recipientAddress = this.createFromRawAddress(recipient);
-    return TransferTransaction.create(
-      Deadline.create(5),
-      recipientAddress,
-      [new Mosaic(new MosaicId(this.mosaic), UInt64.fromUint(Number(amount)))],
-      PlainMessage.create(message),
-      network
-    );
-  }
 
   /**
    * Create an Address from a given raw address.
@@ -295,16 +278,7 @@ export class NemProvider {
     return Account.generateNewAccount(network);
   }
 
-  sendTransaction(network, address: string, message?: string, amount: number = 0): TransferTransaction {
-    return TransferTransaction.create(
-      Deadline.create(23),
-      Address.createFromRawAddress(address),
-      [new Mosaic(new MosaicId(this.mosaic), UInt64.fromUint(Number(amount)))],
-      PlainMessage.create(message),
-      network,
-    );
 
-  }
 
   announce(signedTransaction: SignedTransaction): Observable<TransactionAnnounceResponse> {
     return this.transactionHttp.announce(signedTransaction);

@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { SharedService } from '../../shared/services/shared.service';
 import { NemProvider } from '../../shared/services/nem.provider';
+import * as data from '../../../assets/json/nodes.json';
 
 @Injectable({
   providedIn: 'root'
@@ -10,20 +11,14 @@ import { NemProvider } from '../../shared/services/nem.provider';
 export class NodeService {
 
   nodeObsSelected: BehaviorSubject<any>;
-  // nodeObsSelected$: Observable<any> = this.nodeObsSelected.asObservable();
   nameItemsArrayStorage = 'proximax-explorer-nodes';
   nameItemSelectedStorage = 'node-selected';
-  listNodes = [
-    '190.216.224.11:3000',
-    environment.nodeDefault,
-    '192.168.10.38:3000',
-    'testnet1.proximax.io:3000'
-  ];
+  listNodes = data['nodes'];
 
   constructor(
     private sharedService: SharedService,
     private nemProvider: NemProvider
-  ) { }
+  ) {}
 
   /**
    *
@@ -32,7 +27,6 @@ export class NodeService {
    * @memberof NodeService
    */
   addNewNodeSelected(url) {
-    console.log('addNewNodeSelected');
     this.nodeObsSelected.next(url);
   }
 
@@ -43,9 +37,10 @@ export class NodeService {
      * @memberof NodeService
      */
   initNode() {
+    this.setArrayNode([]);
     // validates if a selected node exists in the storage
     const constSelectedStorage = this.getNodeSelected();
-    const nodeSelected = (constSelectedStorage === null) ? environment.nodeDefault : constSelectedStorage;
+    const nodeSelected = (constSelectedStorage === null) ? this.listNodes[0] : constSelectedStorage;
     // creates a new observable
     this.nodeObsSelected = new BehaviorSubject<any>(nodeSelected);
     // Start the subscription function to the selected node.
@@ -66,7 +61,6 @@ export class NodeService {
   subscribeNodeSelected() {
     this.nodeObsSelected.subscribe(
       next => {
-        console.log('Subscribe nodo seleccionado: ', next);
         this.setSelectedNodeStorage(next);
         this.nemProvider.initInstances(next);
       }
@@ -88,6 +82,7 @@ export class NodeService {
     const dataStorage = this.getAllNodes();
     const data = { value: node, label: node };
 
+    const arrayNode = Object.keys(dataStorage).filter(item => dataStorage[item].value === node);
     // if there is no data in the storage, proceed to create a new node array in the storage
     if (dataStorage === null) {
       // Add an array of nodes in the storage
