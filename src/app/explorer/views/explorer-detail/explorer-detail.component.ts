@@ -24,7 +24,7 @@ export class ExplorerDetailComponent implements OnInit {
   showAccountInfo = false;
   accountInfo = {};
   showRecentTransaction = false;
-  observables = ['numberBlock'];
+  observables = [];
 
   constructor(
     private nemProvider: NemProvider,
@@ -110,9 +110,10 @@ export class ExplorerDetailComponent implements OnInit {
    * @memberof ExplorerDetailComponent
    */
   viewTransactionsFromPublicAccount(publicAccount) {
+    console.log('view all transaction');
     this.nemProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
       transactions => {
-        console.log('mis transactions', transactions);
+        console.log('my transactions', transactions);
         transactions.forEach(element => {
           if (element.type === TransactionType.TRANSFER) {
             element['isSigner'] = (this.address === element['signer'].address['address']);
@@ -120,6 +121,9 @@ export class ExplorerDetailComponent implements OnInit {
         });
         this.elements = transactions;
         this.showRecentTransaction = true;
+      },
+      error => {
+        console.log('error', error);
       }
     );
   }

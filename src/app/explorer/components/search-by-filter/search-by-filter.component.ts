@@ -25,6 +25,9 @@ export class SearchByFilterComponent implements OnInit {
     },
     explorerBlock: {
       'link': `/${AppConfig.routes.explorerBlock.split(':')[0]}`
+    },
+    hash: {
+      'link': `/${AppConfig.routes.explorerHash.split(':')[0]}`
     }
   };
 
@@ -75,12 +78,14 @@ export class SearchByFilterComponent implements OnInit {
     }
 
     if (this.typeSearch === 'address') {
-     this.router.navigate([this.linkRoute.explorerAccount.link, this.paramSearch]);
+      this.router.navigate([this.linkRoute.explorerAccount.link, this.paramSearch]);
     } else if (this.typeSearch === 'block') {
       this.router.navigate([this.linkRoute.explorerBlock.link, this.paramSearch]);
     } else if (this.typeSearch === 'publickey') {
        const publicAccount = this.nemProvider.createPublicAccount(this.paramSearch, NetworkType.TEST_NET);
        this.router.navigate([this.linkRoute.explorerAccount.link, publicAccount.address['address']]);
+    } else if (this.typeSearch === 'hash') {
+      this.router.navigate([this.linkRoute.hash.link, this.paramSearch]);
     }
   }
 

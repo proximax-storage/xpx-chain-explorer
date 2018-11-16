@@ -28,7 +28,8 @@ import {
   XEM,
   TransactionStatusError,
   TransactionStatus,
-  BlockchainHttp
+  BlockchainHttp,
+  NamespaceId
 } from 'proximax-nem2-sdk';
 
 import { crypto } from 'proximax-nem2-library';
@@ -56,7 +57,7 @@ export class NemProvider {
   blockchainHttp: BlockchainHttp;
   url: any;
 
-  constructor() {}
+  constructor() { }
 
   initInstances(url) {
     console.log('initInstances', url);
@@ -155,23 +156,6 @@ export class NemProvider {
     return PublicAccount.createFromPublicKey(publicKey, network);
   }
 
-  /**
-   * Create transaction
-   *
-   * @param recipientAddress
-   * @param message
-   * @param network
-   */
-  createTransaction(recipient, amount, message, network) {
-    const recipientAddress = this.createFromRawAddress(recipient);
-    return TransferTransaction.create(
-      Deadline.create(5),
-      recipientAddress,
-      [new Mosaic(new MosaicId(this.mosaic), UInt64.fromUint(Number(amount)))],
-      PlainMessage.create(message),
-      network
-    );
-  }
 
   /**
    * Create an Address from a given raw address.
@@ -268,9 +252,8 @@ export class NemProvider {
    * Return getTransaction from id or hash
    * @param param
    */
-  getTransactionInformation(hash, node = ''): Observable<Transaction> {
-    const transaction: TransactionHttp = (node === '') ? this.transactionHttp : new TransactionHttp(`https://${node}`);
-    return transaction.getTransaction(hash);
+  getTransactionInformation(hash): Observable<Transaction> {
+    return this.transactionHttp.getTransaction(hash);
   }
 
   /**
@@ -295,16 +278,7 @@ export class NemProvider {
     return Account.generateNewAccount(network);
   }
 
-  sendTransaction(network, address: string, message?: string, amount: number = 0): TransferTransaction {
-    return TransferTransaction.create(
-      Deadline.create(23),
-      Address.createFromRawAddress(address),
-      [new Mosaic(new MosaicId(this.mosaic), UInt64.fromUint(Number(amount)))],
-      PlainMessage.create(message),
-      network,
-    );
 
-  }
 
   announce(signedTransaction: SignedTransaction): Observable<TransactionAnnounceResponse> {
     return this.transactionHttp.announce(signedTransaction);
@@ -316,6 +290,16 @@ export class NemProvider {
 
   getBlocksHeightLocal() {
     return this.blocksHeight$;
+  }
+
+  getMosaicId(id) {
+    const instance = new MosaicId(id);
+    return instance;
+  }
+
+  getNamespaceId(id) {
+    const instance = new NamespaceId(id);
+    return instance;
   }
 
 

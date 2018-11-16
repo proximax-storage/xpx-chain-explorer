@@ -1,0 +1,6 @@
+{
+  "nodes": [
+    "bctestnet1.sirius.io:3000",
+    "bctestnet2.sirius.io:3000"
+  ]
+}
