@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { Address, NetworkType } from 'nem2-sdk';
+import { Address, NetworkType } from 'proximax-nem2-sdk';
 import { SharedService } from '../../../shared';
 import { NemProvider } from '../../../shared/services/nem.provider';
 import { NodeService } from '../../../dashboard/services/node.service';
@@ -79,7 +79,7 @@ export class SearchByFilterComponent implements OnInit {
     } else if (this.typeSearch === 'block') {
       this.router.navigate([this.linkRoute.explorerBlock.link, this.paramSearch]);
     } else if (this.typeSearch === 'publickey') {
-       const publicAccount = this.nemProvider.createPublicAccount(this.paramSearch, NetworkType.MIJIN_TEST);
+       const publicAccount = this.nemProvider.createPublicAccount(this.paramSearch, NetworkType.TEST_NET);
        this.router.navigate([this.linkRoute.explorerAccount.link, publicAccount.address['address']]);
     }
   }

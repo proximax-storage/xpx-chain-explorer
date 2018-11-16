@@ -14,10 +14,8 @@ export class NodeService {
   nameItemsArrayStorage = 'proximax-explorer-nodes';
   nameItemSelectedStorage = 'node-selected';
   listNodes = [
-    '190.216.224.11:3000',
-    environment.nodeDefault,
-    '192.168.10.38:3000',
-    'testnet1.proximax.io:3000'
+    'bctestnet1.xpxsirius.io:3000',
+    'bctestnet2.xpxsirius.io:3000'
   ];
 
   constructor(
