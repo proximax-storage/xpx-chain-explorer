@@ -5,6 +5,8 @@ import { ExplorerComponent } from './views/explorer/explorer.component';
 import { ExplorerDetailComponent } from './views/explorer-detail/explorer-detail.component';
 import { ExplorerBlockComponent } from './views/explorer-block/explorer-block.component';
 import { ExplorerHashComponent } from './views/explorer-hash/explorer-hash.component';
+import { ExplorerMosaicComponent } from './views/explorer-mosaic/explorer-mosaic.component';
+import { ExplorerNamespaceComponent } from './views/explorer-namespace/explorer-namespace.component';
 
 const routes: Routes = [
   {
@@ -19,6 +21,12 @@ const routes: Routes = [
   }, {
     path: `${AppConfig.routes.explorerHash}`,
     component: ExplorerHashComponent
+  }, {
+    path: `${AppConfig.routes.explorerMosaic}`,
+    component: ExplorerMosaicComponent
+  }, {
+    path: `${AppConfig.routes.explorerNamespace}`,
+    component: ExplorerNamespaceComponent
   }
 ];
 

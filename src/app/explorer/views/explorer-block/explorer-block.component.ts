@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BlockInfo } from 'proximax-nem2-sdk';
+import { BlockInfo } from 'nem2-sdk';
 import { NemProvider } from '../../../shared/services/nem.provider';
 import { AppConfig } from '../../../config/app.config';
 import { NodeService } from '../../../dashboard/services/node.service';

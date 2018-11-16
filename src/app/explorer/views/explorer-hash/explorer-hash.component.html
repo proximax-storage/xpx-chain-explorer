@@ -3,6 +3,7 @@
     <div class="row">
       <div class="col-xl-12 mx-auto">
         <div class="mt-3r">
+          <app-search-by-filter></app-search-by-filter>
           <mdb-card>
             <mdb-card-header class="background-explorer white-text text-align-center py-4">
               <img src="assets/images/logo/proximax-black.png" style="width: 150px;">
@@ -18,45 +19,49 @@
 
               <ng-container *ngIf="showTransactionInfo">
                 <div class="row mt-1-5rem">
-                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Address:</span></div>
-                  <!-- <div class="col-sm-8 col-md-9"><span class="fs-08rem"><b>{{transactionInfo?.signer.pretty()}}</b></span></div> -->
-                </div>
-              </ng-container>
-              <!-- <ng-container *ngIf="showAccountInfo">
-                <div class="row mt-1-5rem">
-                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Address:</span></div>
-                  <div class="col-sm-8 col-md-9"><span class="fs-08rem"><b>{{accountInfo?.address.pretty()}}</b></span></div>
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Signer:</span></div>
+                  <div class="col-sm-8 col-md-9"><span class="fs-08rem"><b>{{transactionInfo?.signer.address.pretty()}}</b></span></div>
                 </div>
 
                 <div class="row mt-1-5rem">
                   <div class="col-sm-4 col-md-3"><span class="fs-08rem">Public key:</span></div>
-                  <ng-container *ngIf="accountInfo?.publicKey === '0000000000000000000000000000000000000000000000000000000000000000'; else publicKeyTemplate">
+                  <ng-container *ngIf="transactionInfo?.signer?.publicKey === '0000000000000000000000000000000000000000000000000000000000000000'; else publicKeyTemplate">
                     <div class="col-sm-8 col-md-9"><span class="fs-08rem">You need to make a transaction to get a public key</span></div>
                   </ng-container>
                   <ng-template #publicKeyTemplate>
-                    <div class="col-sm-8 col-md-9"><span class="fs-08rem">{{accountInfo?.publicKey}}</span></div>
+                    <div class="col-sm-8 col-md-9"><span class="fs-08rem">{{transactionInfo?.signer?.publicKey}}</span></div>
                   </ng-template>
                 </div>
 
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Signature:</span></div>
+                  <div class="col-sm-8 col-md-9"><span class="fs-08rem">{{transactionInfo?.signature}}</span></div>
+                </div>
 
-                <ng-container *ngIf="showInfoMosaic">
-                  <div class="row mt-1-5rem">
-                    <div class="col-6">
-                      <h4>Owned mosaics</h4>
-                    </div>
-                  </div>
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Hash:</span></div>
+                  <div class="col-sm-8 col-md-9"><span class="fs-08rem">{{transactionInfo?.transactionInfo?.hash}}</span></div>
+                </div>
+              </ng-container>
 
-                  <div class="row mt-1-5rem">
-                    <div class="col-sm-4 offset-sm-2 col-md-3 offset-md-3 col-lg-2 offset-lg-1"><span class="fs-08rem">Id:</span></div>
-                    <div class="col-sm-6 col-md-6 col-lg-9"><span class="fs-08rem">{{accountInfo?.mosaics[0].id.toHex()}} ({{accountInfo?.nameMosaic}})</span></div>
-                  </div>
 
-                  <div class="row mt-1-5rem">
-                    <div class="col-sm-4 offset-sm-2 col-md-3 offset-md-3 col-lg-2 offset-lg-1"><span class="fs-08rem">Quantity:</span></div>
-                    <div class="col-sm-6 col-md-6 col-lg-9"><span class="fs-08rem">{{accountInfo?.mosaics[0].amount.compact()}}</span></div>
+              <ng-container *ngIf="showInfoMosaic">
+                <div class="row mt-1-5rem">
+                  <div class="col-6">
+                    <h4>Owned mosaics</h4>
                   </div>
-                </ng-container>
-              </ng-container> -->
+                </div>
+
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 offset-sm-2 col-md-3 offset-md-3 col-lg-2 offset-lg-1"><span class="fs-08rem">Id:</span></div>
+                  <div class="col-sm-6 col-md-6 col-lg-9"><span class="fs-08rem">{{accountInfo?.mosaics[0].id.toHex()}} ({{accountInfo?.nameMosaic}})</span></div>
+                </div>
+
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 offset-sm-2 col-md-3 offset-md-3 col-lg-2 offset-lg-1"><span class="fs-08rem">Quantity:</span></div>
+                  <div class="col-sm-6 col-md-6 col-lg-9"><span class="fs-08rem">{{accountInfo?.mosaics[0].amount.compact()}}</span></div>
+                </div>
+              </ng-container>
             </mdb-card-body>
           </mdb-card>
         </div>

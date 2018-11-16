@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ChangeDetectorRef, Input, AfterViewInit } from '@angular/core';
-import { TransactionType } from 'proximax-nem2-sdk';
+import { TransactionType } from 'nem2-sdk';
 import { MdbTablePaginationComponent, MdbTableService } from 'ng-uikit-pro-standard';
 import { AppConfig } from '../../../config/app.config';
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NodeService } from '../../../dashboard/services/node.service';
 import { NemProvider } from '../../../shared/services/nem.provider';
+import { UInt64, MosaicId, Id } from 'nem2-sdk';
 
 @Component({
   selector: 'app-explorer-mosaic',
@@ -35,12 +36,25 @@ export class ExplorerMosaicComponent implements OnInit {
   }
 
   getInfoMosaic() {
-    const mosaicId = this.nemProvider.getMosaicId(this.mosaicId);
+    console.log('******************* getInfoMosaic ************************');
+    const idFromHex = Id.fromHex(this.mosaicId);
+    const mosaicId = new MosaicId([idFromHex.lower, idFromHex.higher]);
     this.nemProvider.mosaicHttp.getMosaic(mosaicId).subscribe(
       next => {
-        console.log('mosaicId', mosaicId);
+        console.log('getMosaic', next);
+        this.mosaicInfo = next;
+        this.nemProvider.mosaicHttp.getMosaicsName([mosaicId]).subscribe(
+          name => {
+            this.mosaicInfo['nameMosaic'] = name[0].name;
+          }
+        );
+
+        this.nemProvider.namespaceHttp.getNamespacesName([next.namespaceId]).subscribe(
+          name => {
+            this.mosaicInfo['namespaceName'] = name[0].name;
+          }
+        );
       }
     );
   }
-
 }

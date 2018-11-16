@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { MosaicId, Transaction, Address, TransactionType, BlockInfo } from 'proximax-nem2-sdk';
+import { MosaicId, Transaction, Address, TransactionType, BlockInfo } from 'nem2-sdk';
 import { AppConfig } from '../../../config/app.config';
 import { NemProvider } from '../../../shared/services/nem.provider';
 import { NodeService } from '../../../dashboard/services/node.service';
@@ -32,6 +32,7 @@ export class ExplorerDetailComponent implements OnInit {
     private sharedService: SharedService,
     private route: ActivatedRoute
   ) {
+    console.log('explorer account');
   }
 
 

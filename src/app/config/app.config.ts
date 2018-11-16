@@ -9,8 +9,8 @@ export const AppConfig: Config = {
     explorerAccount: 'explorer-transaction/account/:account',
     explorerBlock: 'explorer-transaction/block/:block',
     explorerHash: 'explorer-transaction/transaction/:hash',
-    explorerNamespace: 'explorer-transaction/transaction/:namespaceId',
-    explorerMosaic: 'explorer-transaction/transaction/:namespaceId',
+    explorerNamespace: 'explorer-transaction/namespace/:namespaceId',
+    explorerMosaic: 'explorer-transaction/mosaic/:mosaicId',
     addNode: 'add-node',
     selectNode: 'select-node',
     notFound: 'not-found'

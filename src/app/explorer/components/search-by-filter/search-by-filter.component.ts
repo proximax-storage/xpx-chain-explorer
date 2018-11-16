@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { Address, NetworkType } from 'proximax-nem2-sdk';
+import { Address, NetworkType } from 'nem2-sdk';
 import { SharedService } from '../../../shared';
 import { NemProvider } from '../../../shared/services/nem.provider';
 import { NodeService } from '../../../dashboard/services/node.service';
@@ -28,6 +28,12 @@ export class SearchByFilterComponent implements OnInit {
     },
     hash: {
       'link': `/${AppConfig.routes.explorerHash.split(':')[0]}`
+    },
+    namespace: {
+      'link': `/${AppConfig.routes.explorerNamespace.split(':')[0]}`
+    },
+    mosaic: {
+      'link': `/${AppConfig.routes.explorerMosaic.split(':')[0]}`
     }
   };
 
@@ -52,6 +58,12 @@ export class SearchByFilterComponent implements OnInit {
       }, {
         'value': 'block',
         'label': 'Block'
+      }, {
+        'value': 'mosaic',
+        'label': 'Mosaic Id'
+      }, {
+        'value': 'namespace',
+        'label': 'Namespace Id'
       }
     ];
   }
@@ -70,8 +82,10 @@ export class SearchByFilterComponent implements OnInit {
         tp = 'a hash';
       } else if (this.typeSearch === 'publickey') {
         tp = 'a publickey';
-      } else if (this.typeSearch === 'block') {
-        tp = 'a block';
+      } else if (this.typeSearch === 'mosaic') {
+        tp = 'a mosaic';
+      } else if (this.typeSearch === 'namespace') {
+        tp = 'a namespace';
       }
       this.sharedService.showError('', `Please, add ${tp}`);
       return;
@@ -86,6 +100,10 @@ export class SearchByFilterComponent implements OnInit {
       this.router.navigate([this.linkRoute.explorerAccount.link, publicAccount.address['address']]);
     } else if (this.typeSearch === 'hash') {
       this.router.navigate([this.linkRoute.hash.link, this.paramSearch]);
+    } else if (this.typeSearch === 'mosaic') {
+      this.router.navigate([this.linkRoute.mosaic.link, this.paramSearch]);
+    } else if (this.typeSearch === 'namespace') {
+      this.router.navigate([this.linkRoute.namespace.link, this.paramSearch]);
     }
   }
 

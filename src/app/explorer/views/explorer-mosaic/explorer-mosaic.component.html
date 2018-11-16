@@ -1,25 +1,186 @@
 <div class="w-w-b-w mb-3rem">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xl-12 mx-auto">
-          <div class="mt-3r">
-            <mdb-card>
-              <mdb-card-header class="background-explorer white-text text-align-center py-4">
-                <img src="assets/images/logo/proximax-black.png" style="width: 150px;">
-              </mdb-card-header>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-12 mx-auto">
+        <div class="mt-3r">
+          <app-search-by-filter></app-search-by-filter>
+          <mdb-card>
+            <mdb-card-header class="background-explorer white-text text-align-center py-4">
+              <img src="assets/images/logo/proximax-black.png" style="width: 150px;">
+            </mdb-card-header>
 
-              <mdb-card-body class="backg-beige">
+            <mdb-card-body class="backg-beige">
+              <ng-container *ngIf="showFilter">
                 <div class="row">
-                  <div class="col-12">
-                    <h4>Mosaic Info</h4>
+                  <div class="col-6">
+                    <div class="md-form">
+                      <mdb-select placeholder="Select type search" [(ngModel)]="typeSearch" [options]="optionTypeSearch" required class="colorful-select dropdown-default"
+                        mdbInputDirective [mdbValidate]="false"></mdb-select>
+                    </div>
+                  </div>
+
+                  <div class="col-4">
+                    <div class="md-form" id="container-walletname">
+                      <input [(ngModel)]="paramSearch" type="text" autocomplete="off" id="walletname" class="form-control" mdbInputDirective [mdbValidate]="false">
+                      <label for="walletname">Add</label>
+                    </div>
+                  </div>
+                  <div class="col-1">
+                    <div class="mt-3">
+                      <a style="background: #565656" mdbBtn floating="true" size="sm" mdbWavesEffect (click)="searchData()">
+                        <mdb-icon icon="search"></mdb-icon>
+                      </a>
+                    </div>
                   </div>
                 </div>
-                <hr>
+              </ng-container>
 
-              </mdb-card-body>
-            </mdb-card>
-          </div>
+              <div class="row">
+                <div class="col-12">
+                  <h4>Mosaic Info</h4>
+                </div>
+              </div>
+              <hr>
+
+              <!-- INFO BASIC -->
+              <ng-container>
+                <!-- MOSAIC NAME -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Mosaic:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.nameMosaic}}</span>
+                  </div>
+                </div>
+
+                <!-- MOSAIC ID -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Mosaic Id:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.mosaicId?.id.toHex()}}</span>
+                  </div>
+                </div>
+
+                <!-- Namespace NAME -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Namespace:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.namespaceName}}</span>
+                  </div>
+                </div>
+
+                <!-- Namespace ID -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Namespace Id:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.namespaceId?.id.toHex()}}</span>
+                  </div>
+                </div>
+
+                <!-- height -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Height:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.height?.compact()}}</span>
+                  </div>
+                </div>
+
+                <!-- active -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Active:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.active}}</span>
+                  </div>
+                </div>
+
+              </ng-container>
+
+              <!-- PROPERTIES -->
+              <ng-container>
+                <div class="row mt-2rem">
+                  <div class="col-6">
+                    <h4>Properties</h4>
+                  </div>
+                </div>
+
+                <!-- Divisibility -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Divisibility:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.properties?.divisibility}}</span>
+                  </div>
+                </div>
+
+                <!-- levyMutable -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Levy Mutable:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.properties?.levyMutable}}</span>
+                  </div>
+                </div>
+
+                <!-- supplyMutable -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Supply Mutable:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.properties?.supplyMutable}}</span>
+                  </div>
+                </div>
+
+                <!-- transferable -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Transferable:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.properties?.transferable}}</span>
+                  </div>
+                </div>
+
+                <!-- duration -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Duration:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.duration?.compact()}}</span>
+                  </div>
+                </div>
+
+                <!-- <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Public key:</span></div>
+                  <ng-container *ngIf="accountInfo?.publicKey === '0000000000000000000000000000000000000000000000000000000000000000'; else publicKeyTemplate">
+                    <div class="col-sm-8 col-md-9"><span class="fs-08rem">You need to make a transaction to get a public key</span></div>
+                  </ng-container>
+                  <ng-template #publicKeyTemplate>
+                    <div class="col-sm-8 col-md-9"><span class="fs-08rem">{{accountInfo?.publicKey}}</span></div>
+                  </ng-template>
+                </div> -->
+              </ng-container>
+
+              <!-- OWNER -->
+              <ng-container>
+                <div class="row mt-2rem">
+                  <div class="col-6">
+                    <h4>Owner</h4>
+                  </div>
+                </div>
+
+                <!-- Address -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Address:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.owner?.address.pretty()}}</span>
+                  </div>
+                </div>
+
+                <!-- Public key -->
+                <div class="row mt-1-5rem">
+                  <div class="col-sm-4 col-md-3"><span class="fs-08rem">Public key:</span></div>
+                  <div class="col-sm-8 col-md-9">
+                    <span class="fs-08rem">{{mosaicInfo?.owner?.publicKey}}</span>
+                  </div>
+                </div>
+              </ng-container>
+            </mdb-card-body>
+          </mdb-card>
         </div>
       </div>
     </div>
   </div>
+</div>

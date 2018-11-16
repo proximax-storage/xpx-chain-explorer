@@ -29,10 +29,10 @@ import {
   TransactionStatusError,
   TransactionStatus,
   BlockchainHttp,
-  NamespaceId
-} from 'proximax-nem2-sdk';
+  NamespaceId,
+} from 'nem2-sdk';
 
-import { crypto } from 'proximax-nem2-library';
+import { crypto } from 'nem2-library';
 import { environment } from '../../../environments/environment';
 import { CommonInterface, WalletInterface } from '../interfaces/shared.interfaces';
 import { mergeMap } from 'rxjs/operators';
