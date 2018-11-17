@@ -96,8 +96,8 @@ export class SearchByFilterComponent implements OnInit {
     } else if (this.typeSearch === 'block') {
       this.router.navigate([this.linkRoute.explorerBlock.link, this.paramSearch]);
     } else if (this.typeSearch === 'publickey') {
-      const publicAccount = this.nemProvider.createPublicAccount(this.paramSearch, NetworkType.MIJIN_TEST);
-      this.router.navigate([this.linkRoute.explorerAccount.link, publicAccount.address['address']]);
+       const publicAccount = this.nemProvider.createPublicAccount(this.paramSearch, NetworkType.TEST_NET);
+       this.router.navigate([this.linkRoute.explorerAccount.link, publicAccount.address['address']]);
     } else if (this.typeSearch === 'hash') {
       this.router.navigate([this.linkRoute.hash.link, this.paramSearch]);
     } else if (this.typeSearch === 'mosaic') {

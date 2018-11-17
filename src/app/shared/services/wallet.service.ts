@@ -39,7 +39,7 @@ export class WalletService {
     // Decrypt / generate and check primary
     if (!this.decrypt(common, wallet.accounts[0], wallet.accounts[0].algo, wallet.accounts[0].network)) { return false; }
 
-    if (wallet.accounts[0].network === NetworkType.MAIN_NET && wallet.accounts[0].algo === 'pass:6k' && common.password.length < 40) {
+    if (wallet.accounts[0].network === NetworkType.TEST_NET && wallet.accounts[0].algo === 'pass:6k' && common.password.length < 40) {
       this.sharedService.showError('Error', '¡Dear user, the wallet is missing!');
     }
     this.use(wallet);

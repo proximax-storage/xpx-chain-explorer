@@ -34,6 +34,8 @@
     "font-awesome": "^4.7.0",
     "hammerjs": "^2.0.8",
     "jquery": "^1.9.1",
+    "proximax-nem2-library": "^0.9.11",
+    "proximax-nem2-sdk": "^0.10.11",
     "js-joda": "^1.9.2",
     "js-sha3": "^0.8.0",
     "nem2-library": "^0.9.5",

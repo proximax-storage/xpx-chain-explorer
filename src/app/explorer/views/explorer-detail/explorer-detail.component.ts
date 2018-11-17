@@ -62,6 +62,7 @@ export class ExplorerDetailComponent implements OnInit {
    * @memberof ExplorerDetailComponent
    */
   getInfoAccountAndViewTransactions(account) {
+    console.log(account);
     this.nemProvider.getAccountInfo(Address.createFromRawAddress(account)).subscribe(
       resp => {
         console.log('INFO ACCOUNT', resp);

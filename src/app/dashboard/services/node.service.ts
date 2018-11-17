@@ -13,6 +13,7 @@ export class NodeService {
   nodeObsSelected: BehaviorSubject<any>;
   nameItemsArrayStorage = 'proximax-explorer-nodes';
   nameItemSelectedStorage = 'node-selected';
+
   listNodes = data['nodes'];
 
   constructor(
