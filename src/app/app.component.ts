@@ -19,7 +19,7 @@ export class AppComponent {
   ) { }
 
   ngOnInit() {
-    this.initParticle();
+    // this.initParticle();
     const nodeSelected = this.nodeService.initNode();
   }
 

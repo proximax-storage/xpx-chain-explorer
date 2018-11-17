@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, HostListener, AfterViewInit, ChangeDetect
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { MdbTablePaginationComponent, MdbTableService } from 'ng-uikit-pro-standard';
-import { MosaicId, Transaction, Address, TransactionType, BlockInfo } from 'nem2-sdk';
+import { MosaicId, Transaction, Address, TransactionType, BlockInfo } from 'proximax-nem2-sdk';
 import { AppConfig } from '../../../config/app.config';
 import { NemProvider } from '../../../shared/services/nem.provider';
 import { NodeService } from '../../services/node.service';
@@ -84,17 +84,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   viewAllTransactions() {
     this.nemProvider.blockchainHttp.getBlockchainHeight().subscribe(
       next => {
-        console.log('ALTURA DEL BLOQUE =====> ', next); // next.lower
         this.nemProvider.blockchainHttp.getBlocksByHeightWithLimit(63901, 100).subscribe(
           blockInfo => {
-            // const data  = [];
-            // blockInfo.forEach(element => {
-            //   const d = element;
-            //   d['typeName'] = 'cualquiera';
-            //   data.push(d);
-            // });
             this.blockInfo = blockInfo;
-            console.log(this.blockInfo);
           }
         );
       }

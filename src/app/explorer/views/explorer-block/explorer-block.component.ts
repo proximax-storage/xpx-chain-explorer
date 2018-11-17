@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BlockInfo } from 'nem2-sdk';
+import { BlockInfo } from 'proximax-nem2-sdk';
 import { NemProvider } from '../../../shared/services/nem.provider';
 import { AppConfig } from '../../../config/app.config';
 import { NodeService } from '../../../dashboard/services/node.service';
@@ -56,13 +56,11 @@ export class ExplorerBlockComponent implements OnInit {
           blockTransactions => {
             this.showRecentTransaction = true;
             this.blockTransactions = blockTransactions;
-            console.log(blockTransactions);
           }
         );
       },
       error => {
         this.showInfo = false;
-        console.log(error);
       }
     );
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ChangeDetectorRef, Input, AfterViewInit } from '@angular/core';
-import { TransactionType } from 'nem2-sdk';
+import { TransactionType } from 'proximax-nem2-sdk';
 import { MdbTablePaginationComponent, MdbTableService } from 'ng-uikit-pro-standard';
 import { AppConfig } from '../../../config/app.config';
 
@@ -11,6 +11,7 @@ import { AppConfig } from '../../../config/app.config';
 })
 export class RecentTransactionsComponent implements OnInit, AfterViewInit {
 
+  @Input() elements = [];
   @ViewChild(MdbTablePaginationComponent) mdbTablePagination: MdbTablePaginationComponent;
   searchText: string;
   firstItemIndex;
@@ -69,21 +70,19 @@ export class RecentTransactionsComponent implements OnInit, AfterViewInit {
     }
   };
 
-  @Input() elements = [];
-  @HostListener('input') oninput() {
-    this.mdbTablePagination.searchText = this.searchText;
-  }
-
   constructor(
     private tableService: MdbTableService,
     private cdRef: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
+    this.tableService.setDataSource(this.elements);
+    this.elements = this.tableService.getDataSource();
+    this.previous = this.tableService.getDataSource();
   }
 
   ngAfterViewInit() {
-    this.mdbTablePagination.setMaxVisibleItemsNumberTo(100);
+    this.mdbTablePagination.setMaxVisibleItemsNumberTo(10);
     this.firstItemIndex = this.mdbTablePagination.firstItemIndex;
     this.lastItemIndex = this.mdbTablePagination.lastItemIndex;
 
@@ -105,7 +104,6 @@ export class RecentTransactionsComponent implements OnInit, AfterViewInit {
 
   viewInfoTransaction(item, transaction) {
     const type = Object.keys(this.arraTypeTransaction).find(element => this.arraTypeTransaction[element].id === item['type']);
-    console.log(type);
     this.dataSelected = transaction;
     this.nameTransaction = this.arraTypeTransaction[type].name;
     this.typeTransaction = item['type'];

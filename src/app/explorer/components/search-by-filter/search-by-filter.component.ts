@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { Address, NetworkType } from 'nem2-sdk';
+import { PlatformLocation } from '@angular/common';
+import { Address, NetworkType } from 'proximax-nem2-sdk';
 import { SharedService } from '../../../shared';
 import { NemProvider } from '../../../shared/services/nem.provider';
 import { NodeService } from '../../../dashboard/services/node.service';
@@ -14,6 +15,7 @@ import { AppConfig } from '../../../config/app.config';
 })
 export class SearchByFilterComponent implements OnInit {
 
+  host = `${(this.platformLocation as any).location.origin}#`;
   optionsSelect = [];
   elements = [];
   typeSearch = '';
@@ -41,8 +43,10 @@ export class SearchByFilterComponent implements OnInit {
     private sharedService: SharedService,
     private nemProvider: NemProvider,
     private nodeService: NodeService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private platformLocation: PlatformLocation
+  ) {
+  }
 
   ngOnInit() {
     this.optionsSelect = [
@@ -54,7 +58,7 @@ export class SearchByFilterComponent implements OnInit {
         'label': 'Public Key'
       }, {
         'value': 'hash',
-        'label': 'Hash'
+        'label': 'Hash transaction'
       }, {
         'value': 'block',
         'label': 'Block'
@@ -69,7 +73,6 @@ export class SearchByFilterComponent implements OnInit {
   }
 
   searchData() {
-    console.log(this.typeSearch);
     this.elements = [];
     if (this.typeSearch === '') {
       this.sharedService.showError('', 'Please, select a type search');
@@ -92,18 +95,24 @@ export class SearchByFilterComponent implements OnInit {
     }
 
     if (this.typeSearch === 'address') {
-      this.router.navigate([this.linkRoute.explorerAccount.link, this.paramSearch]);
+      window.open(`${this.host}${this.linkRoute.explorerAccount.link}${this.paramSearch}`, '_blank');
+      // this.router.navigate([this.linkRoute.explorerAccount.link, this.paramSearch]);
     } else if (this.typeSearch === 'block') {
-      this.router.navigate([this.linkRoute.explorerBlock.link, this.paramSearch]);
+      window.open(`${this.host}${this.linkRoute.explorerBlock.link}${this.paramSearch}`, '_blank');
+      // this.router.navigate([this.linkRoute.explorerBlock.link, this.paramSearch]);
     } else if (this.typeSearch === 'publickey') {
-       const publicAccount = this.nemProvider.createPublicAccount(this.paramSearch, NetworkType.TEST_NET);
-       this.router.navigate([this.linkRoute.explorerAccount.link, publicAccount.address['address']]);
+      const publicAccount = this.nemProvider.createPublicAccount(this.paramSearch, NetworkType.TEST_NET);
+      window.open(`${this.host}${this.linkRoute.explorerAccount.link}${this.paramSearch}`, '_blank');
+      // this.router.navigate([this.linkRoute.explorerAccount.link, publicAccount.address['address']]);
     } else if (this.typeSearch === 'hash') {
-      this.router.navigate([this.linkRoute.hash.link, this.paramSearch]);
+      window.open(`${this.host}${this.linkRoute.hash.link}${this.paramSearch}`, '_blank');
+      // this.router.navigate([this.linkRoute.hash.link, this.paramSearch]);
     } else if (this.typeSearch === 'mosaic') {
-      this.router.navigate([this.linkRoute.mosaic.link, this.paramSearch]);
+      window.open(`${this.host}${this.linkRoute.mosaic.link}${this.paramSearch}`, '_blank');
+      // this.router.navigate([this.linkRoute.mosaic.link, this.paramSearch]);
     } else if (this.typeSearch === 'namespace') {
-      this.router.navigate([this.linkRoute.namespace.link, this.paramSearch]);
+      window.open(`${this.host}${this.linkRoute.namespace.link}${this.paramSearch}`, '_blank');
+      // this.router.navigate([this.linkRoute.namespace.link, this.paramSearch]);
     }
   }
 

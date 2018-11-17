@@ -130,7 +130,6 @@ export class NodeService {
    * @memberof NodeService
    */
   setSelectedNodeStorage(node) {
-    console.log('agrega nodo seleccionado en el localstorage');
     localStorage.setItem(this.nameItemSelectedStorage, JSON.stringify(node));
   }
 

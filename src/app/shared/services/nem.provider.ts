@@ -30,9 +30,9 @@ import {
   TransactionStatus,
   BlockchainHttp,
   NamespaceId,
-} from 'nem2-sdk';
+  Id,
+} from 'proximax-nem2-sdk';
 
-import { crypto } from 'nem2-library';
 import { environment } from '../../../environments/environment';
 import { CommonInterface, WalletInterface } from '../interfaces/shared.interfaces';
 import { mergeMap } from 'rxjs/operators';
@@ -60,7 +60,6 @@ export class NemProvider {
   constructor() { }
 
   initInstances(url) {
-    console.log('initInstances', url);
     this.url = `http://${url}`;
     this.transactionHttp = new TransactionHttp(this.url);
     this.accountHttp = new AccountHttp(this.url);
@@ -169,27 +168,6 @@ export class NemProvider {
   }
 
   /**
-   * Decrypt and return private key
-   * @param password
-   * @param encryptedKey
-   * @param iv
-   */
-  decryptPrivateKey(password: Password, encryptedKey: string, iv): string {
-    const common: CommonInterface = {
-      password: password.value,
-      privateKey: ''
-    };
-
-    const wallet: WalletInterface = {
-      encrypted: encryptedKey,
-      iv: iv,
-    };
-
-    crypto.passwordToPrivatekey(common, wallet, 'pass:bip32');
-    return common.privateKey;
-  }
-
-  /**
    *Gets an AccountInfo for an account.
    *
    * @param {Address} address
@@ -292,14 +270,72 @@ export class NemProvider {
     return this.blocksHeight$;
   }
 
-  getMosaicId(id) {
-    const instance = new MosaicId(id);
-    return instance;
+  /**
+   * Get mosaic from hex
+   *
+   * @param {any} id
+   * @returns
+   * @memberof NemProvider
+   */
+  getMosaicFromHex(id) {
+    const idFromHex = Id.fromHex(id);
+    const mosaicId = new MosaicId([idFromHex.lower, idFromHex.higher]);
+    return this.mosaicHttp.getMosaic(mosaicId);
   }
 
-  getNamespaceId(id) {
-    const instance = new NamespaceId(id);
-    return instance;
+
+
+
+  /**
+   * Get  mosaics information for a given namespace.
+   *
+   * @param {any} id
+   * @returns
+   * @memberof NemProvider
+   */
+  getMosaicsFromNamespace(id) {
+    const idFromHex = Id.fromHex(id);
+    const namespaceId = new MosaicId([idFromHex.lower, idFromHex.higher]);
+    return this.mosaicHttp.getMosaicsFromNamespace(namespaceId);
+  }
+
+  /**
+   * Get name mosaic from hex
+   *
+   * @param {any} id
+   * @returns
+   * @memberof NemProvider
+   */
+  getNameMosaicFromHex(id) {
+    const idFromHex = Id.fromHex(id);
+    const mosaicId = new MosaicId([idFromHex.lower, idFromHex.higher]);
+    return this.mosaicHttp.getMosaicsName([mosaicId]);
+  }
+
+  /**
+   * Get namespace from hex
+   *
+   * @param {any} id
+   * @returns
+   * @memberof NemProvider
+   */
+  getNamespaceFromHex(id) {
+    const idFromHex = Id.fromHex(id);
+    const namespaceId = new NamespaceId([idFromHex.lower, idFromHex.higher]);
+    return this.namespaceHttp.getNamespace(namespaceId);
+  }
+
+  /**
+   * Get name of namespace
+   *
+   * @param {any} namespaceId
+   * @returns
+   * @memberof NemProvider
+   */
+  getNamespacesName(id) {
+    const idFromHex = Id.fromHex(id);
+    const namespaceId = new NamespaceId([idFromHex.lower, idFromHex.higher]);
+    return this.namespaceHttp.getNamespacesName([namespaceId]);
   }
 
 

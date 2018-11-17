@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { NodeService } from '../../../dashboard/services/node.service';
 import { NemProvider } from '../../../shared/services/nem.provider';
-import { UInt64, MosaicId, Id } from 'nem2-sdk';
+import { SharedService } from '../../../shared/services/shared.service';
+import { AppConfig } from '../../../config/app.config';
 
 @Component({
   selector: 'app-explorer-mosaic',
@@ -11,6 +13,7 @@ import { UInt64, MosaicId, Id } from 'nem2-sdk';
 })
 export class ExplorerMosaicComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   mosaicId = this.route.snapshot.paramMap.get('mosaicId');
   mosaicInfo = {};
   observables = [];
@@ -19,12 +22,13 @@ export class ExplorerMosaicComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private nodeService: NodeService,
-    private nemProvider: NemProvider
+    private nemProvider: NemProvider,
+    private router: Router,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit() {
     this.observables['mosaicObs'] = this.nodeService.getNodeObservable().subscribe(next => {
-      console.log('changeNodo', next);
       this.mosaicInfo = {};
       this.showMosaicInfo = false;
       this.getInfoMosaic();
@@ -36,24 +40,27 @@ export class ExplorerMosaicComponent implements OnInit {
   }
 
   getInfoMosaic() {
-    console.log('******************* getInfoMosaic ************************');
-    const idFromHex = Id.fromHex(this.mosaicId);
-    const mosaicId = new MosaicId([idFromHex.lower, idFromHex.higher]);
-    this.nemProvider.mosaicHttp.getMosaic(mosaicId).subscribe(
+    this.blockUI.start('Loading...');
+    this.nemProvider.getMosaicFromHex(this.mosaicId).subscribe(
       next => {
-        console.log('getMosaic', next);
+        this.blockUI.stop();
         this.mosaicInfo = next;
-        this.nemProvider.mosaicHttp.getMosaicsName([mosaicId]).subscribe(
+        this.showMosaicInfo = true;
+        this.nemProvider.getNameMosaicFromHex(this.mosaicId).subscribe(
           name => {
             this.mosaicInfo['nameMosaic'] = name[0].name;
           }
         );
 
-        this.nemProvider.namespaceHttp.getNamespacesName([next.namespaceId]).subscribe(
+        this.nemProvider.getNamespacesName(next.namespaceId.toHex()).subscribe(
           name => {
             this.mosaicInfo['namespaceName'] = name[0].name;
           }
         );
+      }, error => {
+        this.router.navigate([`/${AppConfig.routes.explorer}`]);
+        this.sharedService.showError('', `Resource not found`);
+        this.blockUI.stop();
       }
     );
   }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { MosaicId, Transaction, Address, TransactionType, BlockInfo } from 'nem2-sdk';
+import { MosaicId, Transaction, Address, TransactionType, BlockInfo } from 'proximax-nem2-sdk';
 import { AppConfig } from '../../../config/app.config';
 import { NemProvider } from '../../../shared/services/nem.provider';
 import { NodeService } from '../../../dashboard/services/node.service';
@@ -10,11 +10,11 @@ import { SharedService } from '../../../shared';
 
 
 @Component({
-  selector: 'app-explorer-detail',
-  templateUrl: './explorer-detail.component.html',
-  styleUrls: ['./explorer-detail.component.scss']
+  selector: 'app-explorer-account',
+  templateUrl: './explorer-account.component.html',
+  styleUrls: ['./explorer-account.component.scss']
 })
-export class ExplorerDetailComponent implements OnInit {
+export class ExplorerAccountComponent implements OnInit {
 
   address = this.route.snapshot.paramMap.get('account');
   blocksHeight = null;
@@ -30,9 +30,9 @@ export class ExplorerDetailComponent implements OnInit {
     private nemProvider: NemProvider,
     private nodeService: NodeService,
     private sharedService: SharedService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
-    console.log('explorer account');
   }
 
 
@@ -62,21 +62,24 @@ export class ExplorerDetailComponent implements OnInit {
    * @memberof ExplorerDetailComponent
    */
   getInfoAccountAndViewTransactions(account) {
-    console.log(account);
     this.nemProvider.getAccountInfo(Address.createFromRawAddress(account)).subscribe(
       resp => {
-        console.log('INFO ACCOUNT', resp);
         this.accountInfo = resp;
-        console.log(resp.mosaics.length);
         if (resp.mosaics.length > 0) {
           this.showInfoMosaic = true;
+          this.nemProvider.getNameMosaicFromHex(this.accountInfo['mosaics'][0].id.toHex()).subscribe(
+            name => {
+              this.accountInfo['nameMosaic'] = name[0].name;
+            }
+          );
         }
 
         this.showAccountInfo = true;
         this.viewTransactionsFromPublicAccount(resp.publicAccount);
       },
       error => {
-        console.log('error', error);
+        this.router.navigate([`/${AppConfig.routes.explorer}`]);
+        this.sharedService.showError('', `Resource not found`);
       }
     );
   }
@@ -111,10 +114,8 @@ export class ExplorerDetailComponent implements OnInit {
    * @memberof ExplorerDetailComponent
    */
   viewTransactionsFromPublicAccount(publicAccount) {
-    console.log('view all transaction');
     this.nemProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
       transactions => {
-        console.log('my transactions', transactions);
         transactions.forEach(element => {
           if (element.type === TransactionType.TRANSFER) {
             element['isSigner'] = (this.address === element['signer'].address['address']);
@@ -124,7 +125,8 @@ export class ExplorerDetailComponent implements OnInit {
         this.showRecentTransaction = true;
       },
       error => {
-        console.log('error', error);
+        this.router.navigate([`/${AppConfig.routes.explorer}`]);
+        this.sharedService.showError('', `Resource not found`);
       }
     );
   }

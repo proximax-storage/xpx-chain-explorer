@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NetworkType, PublicAccount } from 'nem2-sdk';
-import { crypto } from 'nem2-library';
+import { NetworkType, PublicAccount } from 'proximax-nem2-sdk';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CommonInterface, WalletInterface, AccountsInterface } from '../interfaces/shared.interfaces';
@@ -29,24 +28,6 @@ export class WalletService {
 
   }
 
-  public login(common, wallet) {
-    if (!wallet) {
-      this.sharedService.showError('Error', '¡Dear user, the wallet is missing!');
-      return false;
-    }
-
-
-    // Decrypt / generate and check primary
-    if (!this.decrypt(common, wallet.accounts[0], wallet.accounts[0].algo, wallet.accounts[0].network)) { return false; }
-
-    if (wallet.accounts[0].network === NetworkType.TEST_NET && wallet.accounts[0].algo === 'pass:6k' && common.password.length < 40) {
-      this.sharedService.showError('Error', '¡Dear user, the wallet is missing!');
-    }
-    this.use(wallet);
-    return true;
-  }
-
-
   /**
    * Build and return a json with account structure
    *
@@ -66,7 +47,7 @@ export class WalletService {
       'address': address,
       'label': 'Primary',
       'network': network
-    }
+    };
     return accounts;
   }
 
@@ -96,52 +77,6 @@ export class WalletService {
     return true;
   }
 
-  /**
-   *
-   *
-   * @param {*} common
-   * @param {*} [account='']
-   * @param {*} [algo='']
-   * @param {*} [network='']
-   * @returns
-   * @memberof WalletService
-   */
-
-  decrypt(common: any, account: any = '', algo: any = '', network: any = '') {
-
-    const acct = account || this.currentAccount;
-    const net = network || this.network;
-    const alg = algo || this.algo;
-    // Try to generate or decrypt key
-
-
-    if (!crypto.passwordToPrivatekey(common, acct, alg)) {
-
-      setTimeout(() => {
-        this.sharedService.showError('Error', '¡Invalid password!');
-      }, 500);
-      return false;
-    }
-
-    if (common.isHW) {
-      // this._mdboostrap.closeToastr();
-
-      return true;
-    }
-
-
-    if (!this.isPrivateKeyValid(common.privateKey) || !this.nemProvider.checkAddress(common.privateKey, net, acct.address)) {
-      //   this._mdboostrap.closeToastr();
-      setTimeout(() => {
-        this.sharedService.showError('Error', '¡Invalid password!');
-      }, 500);
-      return false;
-    }
-
-    //Get public account from private key
-    this.publicAccount = this.nemProvider.getPublicAccountFromPrivateKey(common.privateKey, net)
-    return true;
-  }
 
   /**
    *

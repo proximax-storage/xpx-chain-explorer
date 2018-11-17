@@ -2,7 +2,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CoreModule } from '../core/core.module';
 import { ExplorerRoutingModule } from './explorer-routing.module';
 import { ExplorerComponent } from './views/explorer/explorer.component';
-import { ExplorerDetailComponent } from './views/explorer-detail/explorer-detail.component';
+import { ExplorerAccountComponent } from './views/explorer-account/explorer-account.component';
 import { TransferTypeComponent } from './components/info-transactions/transfer-type/transfer-type.component';
 import { ExplorerBlockComponent } from './views/explorer-block/explorer-block.component';
 import {
@@ -16,6 +16,7 @@ import { SearchByFilterComponent } from './components/search-by-filter/search-by
 import { ExplorerHashComponent } from './views/explorer-hash/explorer-hash.component';
 import { ExplorerMosaicComponent } from './views/explorer-mosaic/explorer-mosaic.component';
 import { ExplorerNamespaceComponent } from './views/explorer-namespace/explorer-namespace.component';
+import { AllTransactionsComponent } from './components/all-transactions/all-transactions.component';
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import { ExplorerNamespaceComponent } from './views/explorer-namespace/explorer-
   ],
   declarations: [
     ExplorerComponent,
-    ExplorerDetailComponent,
+    ExplorerAccountComponent,
     TransferTypeComponent,
     TypeMosaicSupplyChangeComponent,
     MosaicDefinitionComponent,
@@ -35,7 +36,8 @@ import { ExplorerNamespaceComponent } from './views/explorer-namespace/explorer-
     SearchByFilterComponent,
     ExplorerHashComponent,
     ExplorerMosaicComponent,
-    ExplorerNamespaceComponent
+    ExplorerNamespaceComponent,
+    AllTransactionsComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AppConfig } from '../config/app.config';
 import { ExplorerComponent } from './views/explorer/explorer.component';
-import { ExplorerDetailComponent } from './views/explorer-detail/explorer-detail.component';
+import { ExplorerAccountComponent } from './views/explorer-account/explorer-account.component';
 import { ExplorerBlockComponent } from './views/explorer-block/explorer-block.component';
 import { ExplorerHashComponent } from './views/explorer-hash/explorer-hash.component';
 import { ExplorerMosaicComponent } from './views/explorer-mosaic/explorer-mosaic.component';
@@ -14,7 +14,7 @@ const routes: Routes = [
     component: ExplorerComponent
   }, {
     path: `${AppConfig.routes.explorerAccount}`,
-    component: ExplorerDetailComponent
+    component: ExplorerAccountComponent
   }, {
     path: `${AppConfig.routes.explorerBlock}`,
     component: ExplorerBlockComponent
