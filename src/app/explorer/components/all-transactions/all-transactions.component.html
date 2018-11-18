@@ -21,8 +21,8 @@
         </td>
         <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">{{item.difficulty.compact()}}</td>
         <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">{{item.totalFee.compact()}}</td>
-        <td class="font-size-08rem text-align-center th-lg mouse-pointer" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex" (click)="viewInfoTransaction(item, elements[i]);">
-          <i style="font-size: 18px; color: #118a81;" class="fa fa-search-plus" aria-hidden="true"></i>
+        <td class="font-size-08rem text-align-center th-lg mouse-pointer" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex" (click)="exportCSV(item.height.lower);">
+          <i style="font-size: 18px; color: #118a81;" class="fa fa-download" aria-hidden="true"></i>
         </td>
       </tr>
     </tbody>
@@ -35,4 +35,10 @@
       </tr>
     </tfoot>
   </table>
+</div>
+
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+  <a class="btn-floating btn-large background-theme-origin waves-light" mdbWavesEffect (click)="exportCSV('00')">
+    <i class="fa fa-download"></i>
+  </a>
 </div>

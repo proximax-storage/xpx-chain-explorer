@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { MdbTablePaginationComponent, MdbTableService } from 'ng-uikit-pro-standard';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MosaicId, Transaction, Address, TransactionType, BlockInfo, Deadline } from 'proximax-nem2-sdk';
 import { AppConfig } from '../../../config/app.config';
@@ -35,11 +36,20 @@ export class AllTransactionsComponent implements OnInit, AfterViewInit {
   searchText: string;
   elements = [];
   headElements = ['Block Height', 'Timestamp', 'Harvester/Forger', 'Difficulty', 'Fees', 'Export CSV'];
+  options = {
+    showLabels: true,
+    showTitle: false,
+    useBom: true,
+    noDownload: false,
+    headers: ['Block Height', 'Address', 'Harvester/Forger', 'Difficulty', 'Signature', 'Fees', 'Hash', 'Network type', 'Date']
+  };
 
   constructor(
     private tableService: MdbTableService,
     private cdRef: ChangeDetectorRef
-  ) { }
+  ) {
+
+  }
 
   @HostListener('input') oninput() {
     this.mdbTablePagination.searchText = this.searchText;
@@ -69,5 +79,44 @@ export class AllTransactionsComponent implements OnInit, AfterViewInit {
   onPreviousPageClick(data: any) {
     this.firstItemIndex = data.first;
     this.lastItemIndex = data.last;
+  }
+
+  exportCSV(blockH) {
+    console.log('blockH', blockH);
+    const data = [];
+    if (blockH.toString() === '00') {
+      blockH = 'all';
+      this.blockInfo.forEach(element => {
+        data.push(
+          {
+            'blockH': element.height.lower,
+            'address': element.signer.address.pretty(),
+            'harvester': element.signer.publicKey,
+            'difficulty': element.difficulty.compact(),
+            'signature': element.signature,
+            'fees': element.totalFee.compact(),
+            'hash': element.hash,
+            'networkType': element.networkType,
+            'date': element.date
+          }
+        );
+      });
+    } else {
+      console.log('2');
+      const array = this.blockInfo.find(element => element.height.lower === blockH);
+      console.log('array', blockH);
+      data.push({
+        'blockH': array.height.lower,
+        'address': array.signer.address.pretty(),
+        'harvester': array.signer.publicKey,
+        'difficulty': array.difficulty.compact(),
+        'signature': array.signature,
+        'fees': array.totalFee.compact(),
+        'hash': array.hash,
+        'networkType': array.networkType,
+        'date': array.date
+      });
+    }
+    const csv = new Angular5Csv(data, `Info block ${blockH}`, this.options);
   }
 }

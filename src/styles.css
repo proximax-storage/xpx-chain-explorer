@@ -194,6 +194,10 @@ body {
 
 /***/
 
+.background-theme-origin{
+  background: #009688;
+}
+
 .background-header {
   background: #009688;
   background: -moz-linear-gradient(-45deg, #009688 0%, #23b3a5 55%, #129a8e 100%);

@@ -49,7 +49,7 @@ export class ExplorerBlockComponent implements OnInit {
     this.nemProvider.blockchainHttp.getBlockByHeight(Number(this.blockParam)).subscribe(
       next => {
         const d = new Date(next.timestamp.compact());
-        next['date'] = d;
+        next['date'] = d.toUTCString();
         this.blockInfo = next;
         this.showInfo = true;
         this.nemProvider.blockchainHttp.getBlockTransactions(Number(this.blockParam)).subscribe(
