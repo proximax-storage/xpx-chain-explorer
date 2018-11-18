@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   transactionType: TransactionType;
   dataSelected: Transaction;
   blockInfo = [];
-  headElements = ['Block Height', 'Timestamp', 'Harvester', 'Amount', 'Fees'];
+  headElements = ['Block Height', 'Timestamp', 'Harvester/Forger', 'Amount', 'Fees'];
   optionTypeSearch = [
     {
       'value': 'address',

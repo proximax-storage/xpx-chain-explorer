@@ -21,6 +21,10 @@
         </td>
         <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">{{item.difficulty.compact()}}</td>
         <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">{{item.totalFee.compact()}}</td>
+        <td class="font-size-08rem text-align-center th-lg mouse-pointer" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex" (click)="viewInfoTransaction(item, elements[i]);">
+          <angular2csv [data]="data" filename="test.csv" [options]="options"></angular2csv>
+          <i style="font-size: 18px; color: #118a81;" class="fa fa-search-plus" aria-hidden="true"></i>
+        </td>
       </tr>
     </tbody>
     <tfoot class="background-gris w-100">

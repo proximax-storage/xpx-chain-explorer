@@ -1,5 +1,6 @@
 import { NgModule, ModuleWithProviders, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Angular2CsvModule } from 'angular2-csv';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MdbModule } from '../shared/moduls/mdb/mdb.module';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +13,8 @@ const modules = [
   ReactiveFormsModule,
   FormsModule,
   HttpClientModule,
-  ParticlesModule
+  ParticlesModule,
+  Angular2CsvModule
 ];
 
 @NgModule({

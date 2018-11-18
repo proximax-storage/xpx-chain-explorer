@@ -49,6 +49,7 @@ export class SearchByFilterComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.typeSearch = 'address';
     this.optionsSelect = [
       {
         'value': 'address',
@@ -70,6 +71,7 @@ export class SearchByFilterComponent implements OnInit {
         'label': 'Namespace Id'
       }
     ];
+
   }
 
   searchData() {
