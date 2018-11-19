@@ -70,80 +70,6 @@ export class NemProvider {
     this.blockchainHttp = new BlockchainHttp(this.url);
   }
 
-  openConnectionWs() {
-    this.websocketIsOpen = true;
-    const listener = new Listener(environment.socket, WebSocket);
-    return listener;
-  }
-
-  getConnectionWs() {
-    if (!this.websocketIsOpen) {
-      this.connectionWs = this.openConnectionWs();
-      return this.connectionWs;
-    }
-    return this.connectionWs;
-  }
-
-  /**
-   * Create account simple
-   *
-   * @param {string} user
-   * @param {Password} password
-   * @param {number} network
-   * @returns {SimpleWallet}
-   * @memberof NemProvider
-   */
-  createAccountSimple(user: string, password: Password, network: number): SimpleWallet {
-    return SimpleWallet.create(user, password, network);
-  }
-
-  /**
-   * Create account simple
-   *
-   * @param {string} nameWallet
-   * @param {Password} password
-   * @param {string} privateKey
-   * @param {number} network
-   * @returns {SimpleWallet}
-   * @memberof NemProvider
-   */
-  createAccountFromPrivateKey(nameWallet: string, password: Password, privateKey: string, network: number): SimpleWallet {
-    return SimpleWallet.createFromPrivateKey(nameWallet, password, privateKey, network);
-  }
-
-  /**
-   * Check if Address it is correct
-   * @param privateKey privateKey
-   * @param address address
-   * @return checkAddress
-   */
-  checkAddress(privateKey: string, net: NetworkType, address: string): boolean {
-    return (Account.createFromPrivateKey(privateKey, net).address.plain() === address) ? true : false;
-  }
-
-  /**
-   * get
-   *
-   * @param {string} privateKey
-   * @param {*} net
-   * @returns {PublicAccount}
-   * @memberof NemProvider
-   */
-  getPublicAccountFromPrivateKey(privateKey: string, net: NetworkType): PublicAccount {
-    return Account.createFromPrivateKey(privateKey, net).publicAccount;
-  }
-
-  /**
-   * Create a password with at least 8 characters
-   *
-   * @param {string} value
-   * @returns {Password}
-   * @memberof NemProvider
-   */
-  createPassword(value: string): Password {
-    const password = new Password(value);
-    return password;
-  }
 
   /**
  * createPublicAccount
@@ -179,17 +105,6 @@ export class NemProvider {
   }
 
   /**
-   *Get balance mosaics in form of MosaicAmountViews for a given account address
-   *
-   * @param {Address} address
-   * @returns {Observable<MosaicAmountView[]>}
-   * @memberof NemProvider
-   */
-  getBalance(address: Address): Observable<MosaicAmountView[]> {
-    return this.mosaicService.mosaicsAmountViewFromAddress(address);
-  }
-
-  /**
    *Gets an array of confirmed transactions for which an account is signer or receiver.
    *
    * @param {*} publicKey
@@ -213,18 +128,6 @@ export class NemProvider {
     return this.transactionHttp.getTransaction(transactionId);
   }
 
-  /**
-   *Gets the array of transactions for which an account is the sender or receiver and which have not yet been included in a block.
-   *
-   * @param {*} publicKey
-   * @param {NetworkType} network
-   * @param {QueryParams} [queryParams]
-   * @returns {Observable<Transaction[]>}
-   * @memberof NemProvider
-   */
-  getUnconfirmedTransactionsFromAnAccount(publicAccount, queryParams?): Observable<Transaction[]> {
-    return this.accountHttp.unconfirmedTransactions(publicAccount, queryParams);
-  }
 
   /**
    * Return getTransaction from id or hash
@@ -234,38 +137,23 @@ export class NemProvider {
     return this.transactionHttp.getTransaction(hash);
   }
 
-  /**
-   *Gets a transaction status for a transaction hash
-   *
-   * @param {string} hash
-   * @returns {Observable<TransactionStatus>}
-   * @memberof NemProvider
-   */
-  getTransactionStatusError(hash: string): Observable<TransactionStatus> {
-    return this.transactionHttp.getTransactionStatus(hash);
-  }
 
   /**
-   * Gnenerate account simple
+   * Set blocks height local
    *
-   * @param {*} network
-   * @returns {Account}
+   * @param {any} param
    * @memberof NemProvider
    */
-  generateNewAccount(network): Account {
-    return Account.generateNewAccount(network);
-  }
-
-
-
-  announce(signedTransaction: SignedTransaction): Observable<TransactionAnnounceResponse> {
-    return this.transactionHttp.announce(signedTransaction);
-  }
-
   setBlocksHeightLocal(param) {
     this.blocksHeight.next(param.compact());
   }
 
+  /**
+   * Get blocks height local
+   *
+   * @returns
+   * @memberof NemProvider
+   */
   getBlocksHeightLocal() {
     return this.blocksHeight$;
   }
@@ -282,9 +170,6 @@ export class NemProvider {
     const mosaicId = new MosaicId([idFromHex.lower, idFromHex.higher]);
     return this.mosaicHttp.getMosaic(mosaicId);
   }
-
-
-
 
   /**
    * Get  mosaics information for a given namespace.

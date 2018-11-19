@@ -6,6 +6,8 @@
     "204.13.161.111:3000",
     "192.168.10.38:3000",
     "bctestnet1.sirius.io:3000",
-    "bctestnet2.sirius.io:3000"
+    "bctestnet2.sirius.io:3000",
+    "bctestnet2.xpxsirius.io:3000",
+    "bctestnet1.xpxsirius.io:3000"
   ]
 }

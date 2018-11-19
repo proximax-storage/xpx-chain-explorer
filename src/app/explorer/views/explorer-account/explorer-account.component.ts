@@ -78,6 +78,7 @@ export class ExplorerAccountComponent implements OnInit {
         this.viewTransactionsFromPublicAccount(resp.publicAccount);
       },
       error => {
+        console.log('getAccountInfo', error);
         this.router.navigate([`/${AppConfig.routes.explorer}`]);
         this.sharedService.showError('', `Resource not found`);
       }
@@ -125,6 +126,7 @@ export class ExplorerAccountComponent implements OnInit {
         this.showRecentTransaction = true;
       },
       error => {
+        console.log('transactions', error);
         this.router.navigate([`/${AppConfig.routes.explorer}`]);
         this.sharedService.showError('', `Resource not found`);
       }
