@@ -92,25 +92,4 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     );
   }
-
-
-  buildTransaction(param) {
-    this.blockInput = false;
-    param.forEach(element => {
-      if (element.type === TransactionType.TRANSFER) {
-        const date = `${element.deadline.value.monthValue()}/${element.deadline.value.dayOfMonth()}/${element.deadline.value.year()}`;
-        this.elements.push({
-          address: element.signer.address['address'],
-          amount: element['mosaics'][0].amount.compact(),
-          message: element['message'],
-          transactionInfo: element.transactionInfo,
-          fee: element.fee.compact(),
-          mosaic: this.nemProvider.mosaic,
-          date: date,
-          recipient: element['recipient'],
-          signer: element.signer
-        });
-      }
-    });
-  }
 }

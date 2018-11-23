@@ -65,10 +65,10 @@ export class SearchByFilterComponent implements OnInit {
         'label': 'Block'
       }, {
         'value': 'mosaic',
-        'label': 'Mosaic Id'
+        'label': 'Mosaic name'
       }, {
         'value': 'namespace',
-        'label': 'Namespace Id'
+        'label': 'Namespace name'
       }
     ];
 

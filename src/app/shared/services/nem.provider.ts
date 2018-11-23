@@ -42,10 +42,9 @@ import { mergeMap } from 'rxjs/operators';
 })
 export class NemProvider {
 
-
   blocksHeight: BehaviorSubject<number> = new BehaviorSubject<number>(null);
   blocksHeight$: Observable<number> = this.blocksHeight.asObservable();
-  mosaic = 'prx:xpx';
+  nameSpace = 'prx';
   transactionHttp: TransactionHttp;
   websocketIsOpen = false;
   connectionWs: Listener;
@@ -101,6 +100,7 @@ export class NemProvider {
    * @memberof NemProvider
    */
   getAccountInfo(address: Address): Observable<AccountInfo> {
+    console.log('address', address);
     return this.accountHttp.getAccountInfo(address);
   }
 
@@ -167,8 +167,10 @@ export class NemProvider {
    */
   getMosaicFromHex(id) {
     const idFromHex = Id.fromHex(id);
+    console.log('idFromHex', idFromHex);
     const mosaicId = new MosaicId([idFromHex.lower, idFromHex.higher]);
-    return this.mosaicHttp.getMosaic(mosaicId);
+    console.log('mosaicId', mosaicId);
+    return this.mosaicHttp.getMosaic(id);
   }
 
   /**
@@ -221,6 +223,12 @@ export class NemProvider {
     const idFromHex = Id.fromHex(id);
     const namespaceId = new NamespaceId([idFromHex.lower, idFromHex.higher]);
     return this.namespaceHttp.getNamespacesName([namespaceId]);
+  }
+
+
+  createMosaicIdFromMosaicAndNamespace(id: string | number[]): MosaicId {
+    const mosaicId = new MosaicId(id);
+    return mosaicId;
   }
 
 

@@ -53,19 +53,30 @@ export class ExplorerComponent implements OnInit {
     this.subscribes['getNodeObservable'].unsubscribe();
   }
 
-  viewAllTransactions() {
+  viewAllTransactions(event = []) {
     this.nemProvider.blockchainHttp.getBlockchainHeight().subscribe(
       next => {
+        let total = null;
+        let heightWS = '';
+        let totalHeight = '';
         this.nemProvider.setBlocksHeightLocal(next);
-        const totalHeight =  next.lower.toString();
-        const heightWS = next.lower.toString().slice(0, -2) + '01';
-        const total = (25 >= Number(totalHeight)) ? Number(heightWS) : Number(heightWS) - 100;
+        if (event.length === 0) {
+          totalHeight = next.lower.toString();
+        } else {
+          totalHeight = event[event.length - 1].height.lower.toString();
+        }
+
+        heightWS = totalHeight.slice(0, -2) + '01';
+        total = (25 >= Number(totalHeight)) ? Number(heightWS) : Number(heightWS) - 100;
+
         this.nemProvider.blockchainHttp.getBlocksByHeightWithLimit(total, 100).subscribe(
           blockInfo => {
+            this.blockInfo = [];
             blockInfo.forEach(element => {
               element['date'] = new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)).toUTCString();
+              if (event.length > 0) { event.push(element); }
             });
-            this.blockInfo = blockInfo;
+            this.blockInfo = (event.length === 0) ? blockInfo : event;
             this.viewTransactions = true;
           },
           error => {
@@ -76,5 +87,10 @@ export class ExplorerComponent implements OnInit {
         );
       }
     );
+  }
+
+  getMoreTransaction(event) {
+    console.log(event);
+    this.viewAllTransactions(event);
   }
 }
