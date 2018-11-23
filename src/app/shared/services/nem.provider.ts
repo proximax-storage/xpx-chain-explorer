@@ -42,7 +42,6 @@ import { mergeMap } from 'rxjs/operators';
 })
 export class NemProvider {
 
-
   blocksHeight: BehaviorSubject<number> = new BehaviorSubject<number>(null);
   blocksHeight$: Observable<number> = this.blocksHeight.asObservable();
   nameSpace = 'prx';

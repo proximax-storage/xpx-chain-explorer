@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener, AfterViewInit, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, AfterViewInit, ChangeDetectorRef, Input, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
@@ -22,6 +22,8 @@ export class AllTransactionsComponent implements OnInit, AfterViewInit {
   @Input() blockInfo = [];
   @BlockUI() blockUI: NgBlockUI;
   @ViewChild(MdbTablePaginationComponent) mdbTablePagination: MdbTablePaginationComponent;
+  @Output() getMoreTransaction = new EventEmitter();
+
   linkRoute = {
     explorerAccount: {
       'link': `/${AppConfig.routes.explorerAccount.split(':')[0]}`
@@ -34,7 +36,6 @@ export class AllTransactionsComponent implements OnInit, AfterViewInit {
   lastItemIndex;
   previous: any;
   searchText: string;
-  elements = [];
   headElements = ['Block Height', 'Timestamp', 'Harvester/Forger', 'Difficulty', 'Fees', 'Export CSV'];
   options = {
     showLabels: true,
@@ -56,8 +57,9 @@ export class AllTransactionsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    console.log(this.blockInfo);
     this.tableService.setDataSource(this.blockInfo);
-    this.elements = this.tableService.getDataSource();
+    this.blockInfo = this.tableService.getDataSource();
     this.previous = this.tableService.getDataSource();
   }
 
@@ -74,6 +76,9 @@ export class AllTransactionsComponent implements OnInit, AfterViewInit {
   onNextPageClick(data: any) {
     this.firstItemIndex = data.first;
     this.lastItemIndex = data.last;
+    if (this.mdbTablePagination.lastVisibleItemIndex === this.mdbTablePagination.allItemsLength) {
+      this.getMoreTransaction.emit(this.blockInfo);
+    }
   }
 
   onPreviousPageClick(data: any) {
@@ -102,9 +107,7 @@ export class AllTransactionsComponent implements OnInit, AfterViewInit {
         );
       });
     } else {
-      console.log('2');
       const array = this.blockInfo.find(element => element.height.lower === blockH);
-      console.log('array', blockH);
       data.push({
         'blockH': array.height.lower,
         'address': array.signer.address.pretty(),

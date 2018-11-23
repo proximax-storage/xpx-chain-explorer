@@ -11,7 +11,7 @@
 
             <mdb-card-body class="backg-beige">
               <ng-container *ngIf="viewTransactions">
-                <app-all-transactions [blockInfo]=blockInfo></app-all-transactions>
+                <app-all-transactions [blockInfo]=blockInfo (getMoreTransaction)="getMoreTransaction($event)"></app-all-transactions>
               </ng-container>
             </mdb-card-body>
           </mdb-card>
