@@ -38,7 +38,7 @@
     "js-joda": "^1.9.2",
     "js-sha3": "^0.8.0",
     "proximax-nem2-library": "^0.9.11",
-    "proximax-nem2-sdk": "^0.10.14",
+    "proximax-nem2-sdk": "^0.10.15",
     "ng-block-ui": "^1.0.6",
     "ng-uikit-pro-standard": "git+https://oauth2:xds7fpVXkw8SnNJdDtUE@git.mdbootstrap.com/mdb/angular/ng-uikit-pro-standard.git",
     "ngx-mask": "^6.5.18",
