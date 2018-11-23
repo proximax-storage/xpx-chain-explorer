@@ -7,8 +7,10 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ModifyMultisigAccountComponent implements OnInit {
 
-  @Input() dataSelected = {};
+  @Input() dataSelected;
   @Input() nameTransaction = '';
+  modifyMultisigAccount;
+
   constructor() { }
 
   ngOnInit() {

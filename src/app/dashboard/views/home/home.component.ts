@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   searchText: string;
   elements = [];
   transactionType: TransactionType;
-  dataSelected: Transaction;
+  dataSelected: any;
   blockInfo = [];
   headElements = ['Block Height', 'Timestamp', 'Harvester/Forger', 'Amount', 'Fees'];
   optionTypeSearch = [

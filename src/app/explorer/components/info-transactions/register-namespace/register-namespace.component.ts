@@ -8,7 +8,7 @@ import { NemProvider } from '../../../../shared/services/nem.provider';
 })
 export class RegisterNamespaceComponent implements OnInit {
 
-  @Input() dataSelected = {};
+  @Input() dataSelected;
   @Input() nameTransaction = '';
   constructor(
     private nemProvider: NemProvider
