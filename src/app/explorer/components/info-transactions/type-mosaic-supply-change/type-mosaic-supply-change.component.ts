@@ -9,7 +9,7 @@ import { NemProvider } from '../../../../shared/services/nem.provider';
 export class TypeMosaicSupplyChangeComponent implements OnInit {
 
   @Input() accountInfo = {};
-  @Input() dataSelected = {};
+  @Input() dataSelected;
   @Input() nameTransaction = '';
 
   constructor(

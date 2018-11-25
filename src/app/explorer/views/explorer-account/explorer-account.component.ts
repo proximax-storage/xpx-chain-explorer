@@ -65,6 +65,7 @@ export class ExplorerAccountComponent implements OnInit {
     this.nemProvider.getAccountInfo(Address.createFromRawAddress(account)).subscribe(
       resp => {
         this.accountInfo = resp;
+        console.log(this.accountInfo);
         if (resp.mosaics.length > 0) {
           this.showInfoMosaic = true;
           this.nemProvider.getNameMosaicFromHex(this.accountInfo['mosaics'][0].id.toHex()).subscribe(
