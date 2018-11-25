@@ -8,6 +8,7 @@ import { NemProvider } from '../../../../shared/services/nem.provider';
 })
 export class TransferTypeComponent implements OnInit {
 
+  // @Input() infoMosaic = {};
   @Input() dataSelected;
   @Input() nameTransaction = '';
 
@@ -27,6 +28,13 @@ export class TransferTypeComponent implements OnInit {
    */
   getNameMosaic() {
     if (this.dataSelected['mosaics'].length > 0) {
+      // if (Object.keyts) {
+
+      // }
+      // if (this.infoMosaic[]) {
+
+      // }
+
       this.nemProvider.mosaicHttp.getMosaicsName([this.dataSelected['mosaics'][0].id]).subscribe(
         name => {
           if (name.length > 0) {

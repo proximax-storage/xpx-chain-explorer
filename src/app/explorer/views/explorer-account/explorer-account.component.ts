@@ -18,13 +18,14 @@ export class ExplorerAccountComponent implements OnInit {
 
   address = this.route.snapshot.paramMap.get('account');
   blocksHeight = null;
-  showInfoMosaic = false;
+  showInfoMosaic = 0;
   elements = [];
   dataSelected = {};
   showAccountInfo = false;
   accountInfo = {};
   showRecentTransaction = false;
   observables = [];
+  infoMosaic = {};
 
   constructor(
     private nemProvider: NemProvider,
@@ -39,7 +40,7 @@ export class ExplorerAccountComponent implements OnInit {
   ngOnInit() {
     this.observables['getNodeObservable'] = this.nodeService.getNodeObservable().subscribe(next => {
       this.blocksHeight = null;
-      this.showInfoMosaic = false;
+      this.showInfoMosaic = 0;
       this.elements = [];
       this.dataSelected = {};
       this.showAccountInfo = false;
@@ -58,6 +59,8 @@ export class ExplorerAccountComponent implements OnInit {
   /**
    * Obtain account information and search for all transactions from the public account
    *
+   *
+   *
    * @param {any} account
    * @memberof ExplorerDetailComponent
    */
@@ -67,12 +70,8 @@ export class ExplorerAccountComponent implements OnInit {
         this.accountInfo = resp;
         console.log(this.accountInfo);
         if (resp.mosaics.length > 0) {
-          this.showInfoMosaic = true;
-          this.nemProvider.getNameMosaicFromHex(this.accountInfo['mosaics'][0].id.toHex()).subscribe(
-            name => {
-              this.accountInfo['nameMosaic'] = name[0].name;
-            }
-          );
+          this.getMosaic();
+          this.getNameMosaic();
         }
 
         this.showAccountInfo = true;
@@ -134,5 +133,33 @@ export class ExplorerAccountComponent implements OnInit {
     );
   }
 
+  getMosaic() {
+    this.nemProvider.getMosaic(this.accountInfo['mosaics'][0].id).subscribe(
+      next => {
+        console.log('info mosaic', next);
+        this.infoMosaic = next;
+        const amount = Number(this.accountInfo['mosaics'][0].amount.compact() / Math.pow(10, next.divisibility));
+        this.accountInfo['quantity'] = (amount).toLocaleString('en-us', { minimumFractionDigits: next.divisibility });
+        this.showInfoMosaic = this.showInfoMosaic + 1;
+        console.log('sumo 1');
+      }, error => {
+        this.accountInfo['quantity'] = '';
+        this.infoMosaic = {};
+        this.getMosaic();
+      }
+    );
+  }
 
+  getNameMosaic() {
+    this.nemProvider.getNameMosaicFromHex(this.accountInfo['mosaics'][0].id.toHex()).subscribe(
+      name => {
+        this.accountInfo['nameMosaic'] = name[0].name;
+        this.showInfoMosaic = this.showInfoMosaic + 1;
+        console.log('sumo 1 mas');
+      }, error => {
+        this.accountInfo['nameMosaic'] = '';
+        this.getNameMosaic();
+      }
+    );
+  }
 }

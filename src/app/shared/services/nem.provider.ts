@@ -179,7 +179,7 @@ export class NemProvider {
    * @returns
    * @memberof NemProvider
    */
-  getMosaic(mosaicId): Observable<MosaicInfo> {
+  getMosaic(mosaicId: MosaicId): Observable<MosaicInfo> {
     return this.mosaicHttp.getMosaic(mosaicId);
   }
 

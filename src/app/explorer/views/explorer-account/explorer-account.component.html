@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-xl-12 mx-auto">
         <div class="mt-3r">
-            <app-search-by-filter></app-search-by-filter>
+          <app-search-by-filter></app-search-by-filter>
           <mdb-card>
             <!-- <mdb-card-header class="background-explorer white-text text-align-center py-4">
               <img src="assets/images/logo/proximax-black.png" style="width: 150px;">
@@ -42,21 +42,23 @@
                   </div>
 
                   <div class="row mt-1-5rem">
-                    <div class="col-sm-4 offset-sm-2 col-md-3 offset-md-3 col-lg-2 offset-lg-1"><span class="fs-08rem">Id:</span></div>
-                    <div class="col-sm-6 col-md-6 col-lg-9"><span class="fs-08rem">{{accountInfo?.mosaics[0].id.toHex()}} ({{accountInfo?.nameMosaic}})</span></div>
+                    <div class="col-sm-4 offset-sm-2 col-md-3 offset-md-3 col-lg-2 offset-lg-1"><span class="fs-08rem">Mosaic:</span></div>
+                    <div class="col-sm-6 col-md-6 col-lg-9"><span class="fs-08rem">{{accountInfo?.nameMosaic}}</span></div>
                   </div>
 
-                  <div class="row mt-1-5rem">
-                    <div class="col-sm-4 offset-sm-2 col-md-3 offset-md-3 col-lg-2 offset-lg-1"><span class="fs-08rem">Quantity:</span></div>
-                    <div class="col-sm-6 col-md-6 col-lg-9"><span class="fs-08rem">{{accountInfo?.mosaics[0].amount.compact()}}</span></div>
-                  </div>
+                  <ng-container *ngIf="accountInfo?.quantity">
+                    <div class="row mt-1-5rem">
+                      <div class="col-sm-4 offset-sm-2 col-md-3 offset-md-3 col-lg-2 offset-lg-1"><span class="fs-08rem">Quantity:</span></div>
+                      <div class="col-sm-6 col-md-6 col-lg-9"><span class="fs-08rem">{{accountInfo?.quantity}}</span></div>
+                    </div>
+                  </ng-container>
                 </ng-container>
 
               </ng-container>
 
-              <!-- RECENT TRANSACTIONS -->
+              <!-- RECENT TRANSACTIONS     Amount / math.pow(10,<divisibility>) -->
               <ng-container *ngIf="showRecentTransaction">
-                <app-recent-transactions [elements]=elements></app-recent-transactions>
+                <app-recent-transactions [elements]=elements ></app-recent-transactions>
               </ng-container>
             </mdb-card-body>
           </mdb-card>

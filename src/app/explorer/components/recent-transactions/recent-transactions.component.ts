@@ -11,6 +11,7 @@ import { AppConfig } from '../../../config/app.config';
 })
 export class RecentTransactionsComponent implements OnInit, AfterViewInit {
 
+  // @Input() infoMosaic = {};
   @Input() elements = [];
   @ViewChild(MdbTablePaginationComponent) mdbTablePagination: MdbTablePaginationComponent;
   searchText: string;
