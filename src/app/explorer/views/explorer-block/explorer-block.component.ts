@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BlockInfo } from 'proximax-nem2-sdk';
+import { BlockInfo, Deadline } from 'proximax-nem2-sdk';
 import { NemProvider } from '../../../shared/services/nem.provider';
 import { AppConfig } from '../../../config/app.config';
 import { NodeService } from '../../../dashboard/services/node.service';
@@ -48,9 +48,12 @@ export class ExplorerBlockComponent implements OnInit {
   getBlockByHeight() {
     this.nemProvider.blockchainHttp.getBlockByHeight(Number(this.blockParam)).subscribe(
       next => {
-        const d = new Date(next.timestamp.compact());
-        next['date'] = d.toUTCString();
+        const d = new Date(next.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)).toUTCString();
+        next['date'] = d;
         this.blockInfo = next;
+        // (Object.keys(this.blockInfo)).forEach(element => {
+        //   element['date'] = new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)).toUTCString();
+        // });
         this.showInfo = true;
         this.nemProvider.blockchainHttp.getBlockTransactions(Number(this.blockParam)).subscribe(
           blockTransactions => {
