@@ -18,6 +18,14 @@ export class ExplorerMosaicComponent implements OnInit {
   mosaicInfo = {};
   observables = [];
   showMosaicInfo = false;
+  linkRoute = {
+    explorerAccount: {
+      'link': `/${AppConfig.routes.explorerAccount.split(':')[0]}`
+    },
+    explorerBlock: {
+      'link': `/${AppConfig.routes.explorerBlock.split(':')[0]}`
+    }
+  };
 
   constructor(
     private route: ActivatedRoute,
