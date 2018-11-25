@@ -158,20 +158,21 @@ export class NemProvider {
     return this.blocksHeight$;
   }
 
+  getMosaicId(param) {
+    return new MosaicId(param);
+  }
+
   /**
-   * Get mosaic from hex
+   * Get mosaic
    *
-   * @param {any} id
+   * @param {any} mosaicId
    * @returns
    * @memberof NemProvider
    */
-  getMosaicFromHex(id) {
-    const idFromHex = Id.fromHex(id);
-    console.log('idFromHex', idFromHex);
-    const mosaicId = new MosaicId([idFromHex.lower, idFromHex.higher]);
-    console.log('mosaicId', mosaicId);
-    return this.mosaicHttp.getMosaic(id);
+  getMosaic(mosaicId) {
+    return this.mosaicHttp.getMosaic(mosaicId);
   }
+
 
   /**
    * Get  mosaics information for a given namespace.
@@ -230,6 +231,7 @@ export class NemProvider {
     const mosaicId = new MosaicId(id);
     return mosaicId;
   }
+
 
 
 }

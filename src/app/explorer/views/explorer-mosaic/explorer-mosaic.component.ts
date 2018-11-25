@@ -41,32 +41,18 @@ export class ExplorerMosaicComponent implements OnInit {
 
   getInfoMosaic() {
     this.blockUI.start('Loading...');
-    const mosaicId = this.nemProvider.createMosaicIdFromMosaicAndNamespace(`${this.nemProvider.nameSpace}:${this.mosaicId}`);
-    console.log(mosaicId.id.toHex());
-    this.nemProvider.getMosaicFromHex(mosaicId.id.toHex()).subscribe(
+    this.nemProvider.getMosaic(this.nemProvider.getMosaicId(`${this.nemProvider.nameSpace}:${this.mosaicId}`)).subscribe(
       next => {
         this.blockUI.stop();
         this.mosaicInfo = next;
         this.showMosaicInfo = true;
-        this.nemProvider.getNameMosaicFromHex(mosaicId.id.toHex()).subscribe(
-          name => {
-            this.mosaicInfo['nameMosaic'] = name[0].name;
-          }
-        );
-
-        this.nemProvider.getNamespacesName(next.namespaceId.toHex()).subscribe(
-          name => {
-            this.mosaicInfo['namespaceName'] = name[0].name;
-          }
-        );
+        this.mosaicInfo['nameMosaic'] = this.mosaicId;
+        this.mosaicInfo['namespaceName'] = this.nemProvider.nameSpace;
       }, error => {
-        console.log('error', error);
         this.router.navigate([`/${AppConfig.routes.explorer}`]);
         this.sharedService.showError('', `Resource not found`);
         this.blockUI.stop();
       }
     );
   }
-
-
 }
