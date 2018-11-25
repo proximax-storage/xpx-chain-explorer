@@ -19,6 +19,9 @@ export class ExplorerMosaicComponent implements OnInit {
   observables = [];
   showMosaicInfo = false;
   linkRoute = {
+    explorerNamespace: {
+      'link': `/${AppConfig.routes.explorerNamespace.split(':')[0]}`
+    },
     explorerAccount: {
       'link': `/${AppConfig.routes.explorerAccount.split(':')[0]}`
     },

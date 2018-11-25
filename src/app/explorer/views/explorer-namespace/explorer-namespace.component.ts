@@ -17,14 +17,21 @@ export class ExplorerNamespaceComponent implements OnInit {
   namespaceInfo = {};
   observables = [];
   showNamespaceInfo = false;
-  itHasMosaic = false;
+  viewMosaics = false;
   mosaicsArray = [];
   headElements = ['ID', 'Name', 'Divisibility', 'Levy Mutable', 'Supply Mutable', 'Transferable', 'View More'];
   linkRoute = {
+    explorerAccount: {
+      'link': `/${AppConfig.routes.explorerAccount.split(':')[0]}`
+    },
+    explorerBlock: {
+      'link': `/${AppConfig.routes.explorerBlock.split(':')[0]}`
+    },
     explorerMosaic: {
       'link': `/${AppConfig.routes.explorerMosaic.split(':')[0]}`,
     }
   };
+
 
   constructor(
     private router: Router,
@@ -47,36 +54,41 @@ export class ExplorerNamespaceComponent implements OnInit {
   }
 
   getInfoNamespace() {
-    this.nemProvider.getNamespaceFromHex(this.namespaceId).subscribe(
+    const nameSpaceId = this.nemProvider.getNameSpaceId(this.namespaceId);
+    this.nemProvider.getNamespace(nameSpaceId).subscribe(
       next => {
         this.namespaceInfo = next;
         this.showNamespaceInfo = true;
-        this.nemProvider.getNamespacesName(this.namespaceId).subscribe(
-          name => {
-            this.namespaceInfo['namespaceName'] = name[0].name;
-          }
-        );
-
-        this.nemProvider.getMosaicsFromNamespace(this.namespaceId).subscribe(
-          mosaicInfo => {
-            this.mosaicsArray = mosaicInfo;
-            this.itHasMosaic = true;
-            mosaicInfo.forEach(element => {
-              this.nemProvider.getNameMosaicFromHex(element.mosaicId.id.toHex()).subscribe(
-                name => {
-                  element['nameMosaic'] = name[0].name;
-                }
-              );
-            });
-          }
-        );
+        this.getMosaicsFromNamespace(nameSpaceId);
       }, error => {
         this.namespaceInfo = {};
         this.showNamespaceInfo = false;
         this.mosaicsArray = [];
-        this.itHasMosaic = false;
+        this.viewMosaics = false;
         this.router.navigate([`/${AppConfig.routes.explorer}`]);
         this.sharedService.showError('', `Resource not found`);
+      }
+    );
+  }
+
+  getMosaicsFromNamespace(nameSpaceId) {
+    this.nemProvider.getMosaicsFromNamespace(nameSpaceId).subscribe(
+      next => {
+        this.mosaicsArray = next;
+        if (this.mosaicsArray.length > 0) {
+          this.mosaicsArray.forEach(element => {
+            const id = this.nemProvider.getMosaicId([element.namespaceId.id.toHex(), element.mosaicId.id.toHex()]);
+            this.nemProvider.getNameMosaicFromHex(element.mosaicId.id.toHex()).subscribe(
+              response => {
+                element['nameMosaic'] = response[0].name;
+              }
+            );
+          });
+        }
+        this.viewMosaics = true;
+      }, error => {
+        this.mosaicsArray = [];
+        this.viewMosaics = false;
       }
     );
   }

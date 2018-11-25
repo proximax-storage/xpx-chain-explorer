@@ -5,36 +5,7 @@
         <div class="mt-3r">
           <app-search-by-filter></app-search-by-filter>
           <mdb-card>
-            <!-- <mdb-card-header class="background-explorer white-text text-align-center py-4">
-              <img src="assets/images/logo/proximax-black.png" style="width: 150px;">
-            </mdb-card-header> -->
-
             <mdb-card-body class="backg-beige">
-              <ng-container *ngIf="showNamespaceInfo">
-                <div class="row">
-                  <div class="col-6">
-                    <div class="md-form">
-                      <mdb-select placeholder="Select type search" [(ngModel)]="typeSearch" [options]="optionTypeSearch" required class="colorful-select dropdown-default"
-                        mdbInputDirective [mdbValidate]="false"></mdb-select>
-                    </div>
-                  </div>
-
-                  <div class="col-4">
-                    <div class="md-form" id="container-walletname">
-                      <input [(ngModel)]="paramSearch" type="text" autocomplete="off" id="walletname" class="form-control" mdbInputDirective [mdbValidate]="false">
-                      <label for="walletname">Add</label>
-                    </div>
-                  </div>
-                  <div class="col-1">
-                    <div class="mt-3">
-                      <a style="background: #565656" mdbBtn floating="true" size="sm" mdbWavesEffect (click)="searchData()">
-                        <mdb-icon icon="search"></mdb-icon>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
-
               <div class="row">
                 <div class="col-12">
                   <h4>Namespace Info</h4>
@@ -65,7 +36,9 @@
                   <div class="row mt-1-5rem">
                     <div class="col-sm-4 col-md-3"><span class="fs-08rem">Start Height:</span></div>
                     <div class="col-sm-8 col-md-9">
-                      <span class="fs-08rem">{{namespaceInfo?.startHeight?.compact()}}</span>
+                      <span class="fs-08rem">
+                          <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerBlock.link, namespaceInfo?.startHeight?.compact()]">{{namespaceInfo?.startHeight?.compact()}}</a>
+                        </span>
                     </div>
                   </div>
 
@@ -99,7 +72,9 @@
                   <div class="row mt-1-5rem">
                     <div class="col-sm-4 col-md-3"><span class="fs-08rem">Address:</span></div>
                     <div class="col-sm-8 col-md-9">
-                      <span class="fs-08rem">{{namespaceInfo?.owner?.address.pretty()}}</span>
+                      <span class="fs-08rem">
+                          <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerAccount.link, namespaceInfo?.owner?.address['address']]">{{namespaceInfo?.owner?.address.pretty()}}</a>
+                        </span>
                     </div>
                   </div>
 
@@ -113,7 +88,7 @@
                 </ng-container>
 
                 <!-- MOSAICS -->
-                <ng-container *ngIf="itHasMosaic">
+                <ng-container *ngIf="viewMosaics">
                   <div class="row mt-3rem">
                     <div class="col-6">
                       <h4>Mosaics info</h4>
@@ -129,15 +104,15 @@
                       </thead>
                       <tbody>
                         <tr mdbTableCol *ngFor="let element of mosaicsArray">
-                          <th scope="row" class="font-size-08rem text-align-center">
-                            <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerMosaic.link, element.mosaicId.id.toHex()]">{{element.mosaicId.id.toHex()}}</a>
-                          </th>
-                          <td class="font-size-08rem text-align-center">{{element.nameMosaic}}</td>
+                          <th scope="row" class="font-size-08rem text-align-center"> {{element.mosaicId.id.toHex()}} </th>
+                          <td class="font-size-08rem text-align-center">
+                            <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerMosaic.link, element.nameMosaic]">{{element.nameMosaic}}</a>
+                          </td>
                           <td class="font-size-08rem text-align-center">{{element.properties.divisibility}}</td>
                           <td class="font-size-08rem text-align-center">{{element.properties.levyMutable}}</td>
                           <td class="font-size-08rem text-align-center">{{element.properties.supplyMutable}}</td>
                           <td class="font-size-08rem text-align-center">{{element.properties.transferable}}</td>
-                          <td class="font-size-08rem text-align-center mouse-pointer th-lg" [routerLink]="[linkRoute.explorerMosaic.link, element.mosaicId.id.toHex()]">
+                          <td class="font-size-08rem text-align-center mouse-pointer th-lg" [routerLink]="[linkRoute.explorerMosaic.link, element.nameMosaic]">
                             <i style="font-size: 18px; color: #118a81;" class="fa fa-search-plus" aria-hidden="true"></i>
                           </td>
                         </tr>

@@ -36,7 +36,9 @@
                   <div class="row mt-1-5rem">
                     <div class="col-sm-4 col-md-3"><span class="fs-08rem">Namespace:</span></div>
                     <div class="col-sm-8 col-md-9">
-                      <span class="fs-08rem">{{mosaicInfo?.namespaceName}}</span>
+                      <span class="fs-08rem">
+                        <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerNamespace.link, mosaicInfo?.namespaceName]">{{mosaicInfo?.namespaceName}}</a>
+                      </span>
                     </div>
                   </div>
 
@@ -54,7 +56,6 @@
                     <div class="col-sm-8 col-md-9">
                       <span class="fs-08rem">
                           <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerBlock.link, mosaicInfo?.height?.compact()]">{{mosaicInfo?.height?.compact()}}</a>
-
                       </span>
                     </div>
                   </div>

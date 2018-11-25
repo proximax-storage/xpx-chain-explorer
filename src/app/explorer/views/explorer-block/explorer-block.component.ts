@@ -48,12 +48,8 @@ export class ExplorerBlockComponent implements OnInit {
   getBlockByHeight() {
     this.nemProvider.blockchainHttp.getBlockByHeight(Number(this.blockParam)).subscribe(
       next => {
-        const d = new Date(next.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)).toUTCString();
-        next['date'] = d;
+        next['date'] = new Date(next.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)).toUTCString();
         this.blockInfo = next;
-        // (Object.keys(this.blockInfo)).forEach(element => {
-        //   element['date'] = new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)).toUTCString();
-        // });
         this.showInfo = true;
         this.nemProvider.blockchainHttp.getBlockTransactions(Number(this.blockParam)).subscribe(
           blockTransactions => {
