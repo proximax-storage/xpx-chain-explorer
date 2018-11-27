@@ -11,7 +11,7 @@ import { AppConfig } from '../../../config/app.config';
 })
 export class RecentTransactionsComponent implements OnInit, AfterViewInit {
 
-  // @Input() infoMosaic = {};
+  @Input() infoMosaic = {};
   @Input() elements = [];
   @ViewChild(MdbTablePaginationComponent) mdbTablePagination: MdbTablePaginationComponent;
   searchText: string;
@@ -83,7 +83,7 @@ export class RecentTransactionsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.mdbTablePagination.setMaxVisibleItemsNumberTo(10);
+    this.mdbTablePagination.setMaxVisibleItemsNumberTo(4);
     this.firstItemIndex = this.mdbTablePagination.firstItemIndex;
     this.lastItemIndex = this.mdbTablePagination.lastItemIndex;
 

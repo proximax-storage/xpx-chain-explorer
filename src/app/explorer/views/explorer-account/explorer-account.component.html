@@ -32,33 +32,17 @@
                     <div class="col-sm-8 col-md-9"><span class="fs-08rem">{{accountInfo?.publicKey}}</span></div>
                   </ng-template>
                 </div>
-
-
-                <ng-container *ngIf="showInfoMosaic">
-                  <div class="row mt-1-5rem">
-                    <div class="col-6">
-                      <h4>Owned mosaics</h4>
-                    </div>
-                  </div>
-
-                  <div class="row mt-1-5rem">
-                    <div class="col-sm-4 offset-sm-2 col-md-3 offset-md-3 col-lg-2 offset-lg-1"><span class="fs-08rem">Mosaic:</span></div>
-                    <div class="col-sm-6 col-md-6 col-lg-9"><span class="fs-08rem">{{accountInfo?.nameMosaic}}</span></div>
-                  </div>
-
-                  <ng-container *ngIf="accountInfo?.quantity">
-                    <div class="row mt-1-5rem">
-                      <div class="col-sm-4 offset-sm-2 col-md-3 offset-md-3 col-lg-2 offset-lg-1"><span class="fs-08rem">Quantity:</span></div>
-                      <div class="col-sm-6 col-md-6 col-lg-9"><span class="fs-08rem">{{accountInfo?.quantity}}</span></div>
-                    </div>
-                  </ng-container>
-                </ng-container>
-
               </ng-container>
 
-              <!-- RECENT TRANSACTIONS     Amount / math.pow(10,<divisibility>) -->
+              <!-- Show info mosaic -->
+              <ng-container *ngIf="showInfoMosaic">
+                <app-mosaics-info [mosaicsArray]=mosaicsArray [viewAmount]=true></app-mosaics-info>
+              </ng-container>
+
+
+              <!-- RECENT TRANSACTIONS -->
               <ng-container *ngIf="showRecentTransaction">
-                <app-recent-transactions [elements]=elements ></app-recent-transactions>
+                <app-recent-transactions [elements]=transactionsFromPublicAccount [infoMosaic]=infoMosaic></app-recent-transactions>
               </ng-container>
             </mdb-card-body>
           </mdb-card>

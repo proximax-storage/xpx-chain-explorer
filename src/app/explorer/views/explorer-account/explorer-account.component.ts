@@ -18,14 +18,15 @@ export class ExplorerAccountComponent implements OnInit {
 
   address = this.route.snapshot.paramMap.get('account');
   blocksHeight = null;
-  showInfoMosaic = 0;
-  elements = [];
+  showInfoMosaic = false;
+  transactionsFromPublicAccount = [];
   dataSelected = {};
   showAccountInfo = false;
   accountInfo = {};
   showRecentTransaction = false;
   observables = [];
   infoMosaic = {};
+  mosaicsArray = [];
 
   constructor(
     private nemProvider: NemProvider,
@@ -40,8 +41,8 @@ export class ExplorerAccountComponent implements OnInit {
   ngOnInit() {
     this.observables['getNodeObservable'] = this.nodeService.getNodeObservable().subscribe(next => {
       this.blocksHeight = null;
-      this.showInfoMosaic = 0;
-      this.elements = [];
+      this.showInfoMosaic = false;
+      this.transactionsFromPublicAccount = [];
       this.dataSelected = {};
       this.showAccountInfo = false;
       this.accountInfo = {};
@@ -57,8 +58,8 @@ export class ExplorerAccountComponent implements OnInit {
 
 
   /**
-   * Obtain account information and search for all transactions from the public account
-   *
+   * Obtain account information and search for
+   * all transactions from the public account
    *
    *
    * @param {any} account
@@ -68,17 +69,18 @@ export class ExplorerAccountComponent implements OnInit {
     this.nemProvider.getAccountInfo(Address.createFromRawAddress(account)).subscribe(
       resp => {
         this.accountInfo = resp;
-        console.log(this.accountInfo);
-        if (resp.mosaics.length > 0) {
-          this.getMosaic();
-          this.getNameMosaic();
-        }
-
         this.showAccountInfo = true;
         this.viewTransactionsFromPublicAccount(resp.publicAccount);
+        if (resp.mosaics.length > 0) {
+          // for (let index = 0; index < 5; index++) {
+            resp.mosaics.forEach(element => {
+              this.buildMosaic(element);
+            });
+          // }
+
+        }
       },
       error => {
-        console.log('getAccountInfo', error);
         this.router.navigate([`/${AppConfig.routes.explorer}`]);
         this.sharedService.showError('', `Resource not found`);
       }
@@ -119,46 +121,39 @@ export class ExplorerAccountComponent implements OnInit {
       transactions => {
         transactions.forEach(element => {
           if (element.type === TransactionType.TRANSFER) {
-            element['isSigner'] = (this.address === element['signer'].address['address']);
+            element['isSigner'] = this.address === element['signer'].address['address'];
           }
         });
-        this.elements = transactions;
+        this.transactionsFromPublicAccount = transactions;
         this.showRecentTransaction = true;
       },
       error => {
-        console.log('transactions', error);
-        this.router.navigate([`/${AppConfig.routes.explorer}`]);
-        this.sharedService.showError('', `Resource not found`);
+        this.showRecentTransaction = false;
+        // this.router.navigate([`/${AppConfig.routes.explorer}`]);
+        // this.sharedService.showError('', `Resource not found`);
       }
     );
   }
 
-  getMosaic() {
-    this.nemProvider.getMosaic(this.accountInfo['mosaics'][0].id).subscribe(
+  /**
+   * build a mosaic, obtaining mosaic information, name and format the amount.
+   *
+   * @param {any} infoBasicMosaic
+   * @memberof ExplorerAccountComponent
+   */
+  buildMosaic(infoBasicMosaic) {
+    this.nemProvider.getMosaic(infoBasicMosaic.id).subscribe(
       next => {
-        console.log('info mosaic', next);
-        this.infoMosaic = next;
-        const amount = Number(this.accountInfo['mosaics'][0].amount.compact() / Math.pow(10, next.divisibility));
-        this.accountInfo['quantity'] = (amount).toLocaleString('en-us', { minimumFractionDigits: next.divisibility });
-        this.showInfoMosaic = this.showInfoMosaic + 1;
-        console.log('sumo 1');
-      }, error => {
-        this.accountInfo['quantity'] = '';
-        this.infoMosaic = {};
-        this.getMosaic();
-      }
-    );
-  }
-
-  getNameMosaic() {
-    this.nemProvider.getNameMosaicFromHex(this.accountInfo['mosaics'][0].id.toHex()).subscribe(
-      name => {
-        this.accountInfo['nameMosaic'] = name[0].name;
-        this.showInfoMosaic = this.showInfoMosaic + 1;
-        console.log('sumo 1 mas');
-      }, error => {
-        this.accountInfo['nameMosaic'] = '';
-        this.getNameMosaic();
+        const arrayMosaic = next;
+        arrayMosaic['formattedAmount'] = this.nemProvider.formatterAmount(infoBasicMosaic.amount.compact(), next.divisibility);
+        arrayMosaic['infoBasicMosaic'] = infoBasicMosaic;
+        this.nemProvider.getNameMosaicFromHex(infoBasicMosaic.id.toHex()).subscribe(
+          response => {
+            arrayMosaic['nameMosaic'] = response[0].name;
+            this.mosaicsArray.push(arrayMosaic);
+            if (!this.showInfoMosaic) { this.showInfoMosaic = true; }
+          }
+        );
       }
     );
   }

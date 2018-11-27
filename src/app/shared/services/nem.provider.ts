@@ -108,6 +108,20 @@ export class NemProvider {
 
 
   /**
+   *
+   *
+   * @param {any} amount
+   * @param {any} divisibility
+   * @returns
+   * @memberof NemProvider
+   */
+  formatterAmount(amount, divisibility) {
+    const amountDivisibility = Number(amount / Math.pow(10, divisibility));
+    return (amountDivisibility).toLocaleString('en-us', { minimumFractionDigits: divisibility });
+  }
+
+
+  /**
    *Gets an AccountInfo for an account.
    *
    * @param {Address} address

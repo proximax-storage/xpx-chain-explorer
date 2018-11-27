@@ -17,6 +17,7 @@ import { ExplorerHashComponent } from './views/explorer-hash/explorer-hash.compo
 import { ExplorerMosaicComponent } from './views/explorer-mosaic/explorer-mosaic.component';
 import { ExplorerNamespaceComponent } from './views/explorer-namespace/explorer-namespace.component';
 import { AllTransactionsComponent } from './components/all-transactions/all-transactions.component';
+import { MosaicsInfoComponent } from './components/mosaics-info/mosaics-info.component';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { AllTransactionsComponent } from './components/all-transactions/all-tran
     ExplorerHashComponent,
     ExplorerMosaicComponent,
     ExplorerNamespaceComponent,
-    AllTransactionsComponent
+    AllTransactionsComponent,
+    MosaicsInfoComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

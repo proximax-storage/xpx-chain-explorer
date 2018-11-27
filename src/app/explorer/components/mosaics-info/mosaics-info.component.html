@@ -1,0 +1,47 @@
+<!-- MOSAICS -->
+<div class="row mt-3rem">
+  <div class="col-6">
+    <h4>Mosaics info</h4>
+  </div>
+</div>
+
+<div class="table-responsive table-striped ">
+  <table mdbTable id="tablePreview" class="table table-hover table-bordered table-striped table-sm z-depth-0">
+    <thead>
+      <tr>
+        <th *ngFor="let head of headElements" scope="col" class="text-align-center"><b>{{head}}</b></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr mdbTableCol *ngFor="let element of mosaicsArray; let i = index">
+        <td *ngIf="i+1 >= itemIndex && i < itemIndexLast" class="font-size-08rem text-align-center">
+          <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerMosaic.link, element.nameMosaic]">{{element.nameMosaic}}</a>
+        </td>
+        <td *ngIf="i+1 >= itemIndex && i < itemIndexLast" class="font-size-08rem text-align-center">{{element.properties.divisibility}}</td>
+        <td *ngIf="i+1 >= itemIndex && i < itemIndexLast" class="font-size-08rem text-align-center">{{element.properties.levyMutable}}</td>
+        <td *ngIf="i+1 >= itemIndex && i < itemIndexLast" class="font-size-08rem text-align-center">{{element.properties.supplyMutable}}</td>
+        <td *ngIf="i+1 >= itemIndex && i < itemIndexLast" class="font-size-08rem text-align-center">{{element.properties.transferable}}</td>
+        <td *ngIf="i+1 >= itemIndex && i < itemIndexLast && viewAmount" class="font-size-08rem text-align-center">{{element.formattedAmount}}</td>
+        <td *ngIf="i+1 >= itemIndex && i < itemIndexLast" class="font-size-08rem text-align-center mouse-pointer th-lg"
+          [routerLink]="[linkRoute.explorerMosaic.link, element.nameMosaic]">
+          <i style="font-size: 18px; color: #118a81;" class="fa fa-search-plus" aria-hidden="true"></i>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot class="background-gris w-100">
+      <tr>
+        <ng-container *ngIf="colspanNumber === 6">
+          <td colspan="7">
+            <mdb-table-pagination (nextPageClick)="onNextPageClick($event)" (previousPageClick)="onPreviousPageClick($event)"></mdb-table-pagination>
+          </td>
+        </ng-container>
+
+        <ng-container *ngIf="colspanNumber === 7">
+          <td colspan="8">
+            <mdb-table-pagination (nextPageClick)="onNextPageClick($event)" (previousPageClick)="onPreviousPageClick($event)"></mdb-table-pagination>
+          </td>
+        </ng-container>
+      </tr>
+    </tfoot>
+  </table>
+</div>

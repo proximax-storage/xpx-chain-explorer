@@ -19,7 +19,7 @@
             <span class="fs-08rem fw-bolder">{{item?.deadline.value.toString()}}</span>
           </td>
           <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">
-            <ng-container *ngIf="item?.mosaics !== undefined; else notAmount">
+            <ng-container *ngIf="item?.mosaics.length > 0; else notAmount">
               {{item?.mosaics[0].amount.compact()}}
             </ng-container>
 
@@ -80,7 +80,7 @@
       <div class="modal-body w-w-b-w">
         <!-- TYPE TRANSFER -->
         <ng-container *ngIf="typeTransaction === arraTypeTransaction.transfer.id">
-          <app-transfer-type [nameTransaction]=nameTransaction [dataSelected]=dataSelected></app-transfer-type>
+          <app-transfer-type [nameTransaction]=nameTransaction [dataSelected]=dataSelected [infoMosaic]=infoMosaic></app-transfer-type>
         </ng-container>
 
         <!-- REGISTER NAMESPACE -->

@@ -57,7 +57,6 @@
                       <span class="fs-08rem">{{namespaceInfo?.active}}</span>
                     </div>
                   </div>
-
                 </ng-container>
 
                 <!-- OWNER -->
@@ -87,38 +86,9 @@
                   </div>
                 </ng-container>
 
-                <!-- MOSAICS -->
+                <!-- MOSAICS INFO -->
                 <ng-container *ngIf="viewMosaics">
-                  <div class="row mt-3rem">
-                    <div class="col-6">
-                      <h4>Mosaics info</h4>
-                    </div>
-                  </div>
-
-                  <div class="table-responsive table-striped ">
-                    <table mdbTable id="tablePreview" class="table table-hover table-bordered table-striped table-sm z-depth-0">
-                      <thead>
-                        <tr>
-                          <th *ngFor="let head of headElements" scope="col" class="text-align-center"><b>{{head}}</b></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr mdbTableCol *ngFor="let element of mosaicsArray">
-                          <th scope="row" class="font-size-08rem text-align-center"> {{element.mosaicId.id.toHex()}} </th>
-                          <td class="font-size-08rem text-align-center">
-                            <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerMosaic.link, element.nameMosaic]">{{element.nameMosaic}}</a>
-                          </td>
-                          <td class="font-size-08rem text-align-center">{{element.properties.divisibility}}</td>
-                          <td class="font-size-08rem text-align-center">{{element.properties.levyMutable}}</td>
-                          <td class="font-size-08rem text-align-center">{{element.properties.supplyMutable}}</td>
-                          <td class="font-size-08rem text-align-center">{{element.properties.transferable}}</td>
-                          <td class="font-size-08rem text-align-center mouse-pointer th-lg" [routerLink]="[linkRoute.explorerMosaic.link, element.nameMosaic]">
-                            <i style="font-size: 18px; color: #118a81;" class="fa fa-search-plus" aria-hidden="true"></i>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                  <app-mosaics-info [mosaicsArray]=mosaicsArray></app-mosaics-info>
                 </ng-container>
               </ng-container>
             </mdb-card-body>

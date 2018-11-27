@@ -19,7 +19,6 @@ export class ExplorerNamespaceComponent implements OnInit {
   showNamespaceInfo = false;
   viewMosaics = false;
   mosaicsArray = [];
-  headElements = ['ID', 'Name', 'Divisibility', 'Levy Mutable', 'Supply Mutable', 'Transferable', 'View More'];
   linkRoute = {
     explorerAccount: {
       'link': `/${AppConfig.routes.explorerAccount.split(':')[0]}`
