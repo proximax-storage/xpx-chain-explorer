@@ -90,7 +90,6 @@ export class ExplorerComponent implements OnInit {
   }
 
   getMoreTransaction(event) {
-    console.log(event);
     this.viewAllTransactions(event);
   }
 }

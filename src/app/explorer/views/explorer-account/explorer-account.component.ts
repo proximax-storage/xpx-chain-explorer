@@ -64,7 +64,6 @@ export class ExplorerAccountComponent implements OnInit {
   viewTransactionsFromPublicAccount(publicAccount) {
     this.nemProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
       transactions => {
-        console.log(transactions);
         transactions.forEach(element => {
           if (element.type === TransactionType.TRANSFER) { element['isSigner'] = this.address === element['signer'].address['address']; }
           if ((element['mosaics'] !== undefined && element['mosaics'] !== null) && element['mosaics'].length > 0) {
@@ -74,7 +73,6 @@ export class ExplorerAccountComponent implements OnInit {
                   element['formattedAmount'] = this.nemProvider.formatterAmount(mosaic.amount.compact(), next.divisibility);
                   this.transactionsFromPublicAccount.push(element);
                   this.showRecentTransaction = true;
-                  console.log('elementelementelementelementelement', this.transactionsFromPublicAccount);
                 }
               );
             });
@@ -128,7 +126,6 @@ export class ExplorerAccountComponent implements OnInit {
    * @memberof ExplorerAccountComponent
    */
   buildMosaic(infoBasicMosaic) {
-    console.log(infoBasicMosaic);
     this.nemProvider.getMosaic(infoBasicMosaic.id).subscribe(
       next => {
         const arrayMosaic = next;
