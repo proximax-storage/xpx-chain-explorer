@@ -64,6 +64,7 @@ export class ExplorerAccountComponent implements OnInit {
   viewTransactionsFromPublicAccount(publicAccount) {
     this.nemProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
       transactions => {
+        console.log('transactions', transactions);
         transactions.forEach(element => {
           if (element.type === TransactionType.TRANSFER) { element['isSigner'] = this.address === element['signer'].address['address']; }
           if (element['mosaics'] !== undefined && element['mosaics'] !== null) {
@@ -77,6 +78,9 @@ export class ExplorerAccountComponent implements OnInit {
                   }
                 );
               });
+            } else {
+              this.transactionsFromPublicAccount.push(element);
+              this.showRecentTransaction = true;
             }
           } else {
             this.transactionsFromPublicAccount.push(element);

@@ -86,7 +86,7 @@ export class RecentTransactionsComponent implements OnInit, OnChanges, AfterView
 
 
   ngAfterViewInit() {
-    this.mdbTablePagination.setMaxVisibleItemsNumberTo(4);
+    this.mdbTablePagination.setMaxVisibleItemsNumberTo(10);
     this.firstItemIndex = this.mdbTablePagination.firstItemIndex;
     this.lastItemIndex = this.mdbTablePagination.lastItemIndex;
 
