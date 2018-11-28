@@ -15,7 +15,7 @@
     <tbody>
       <tr mdbTableCol *ngFor="let element of mosaicsArray; let i = index">
         <td class="font-size-08rem text-align-center">
-          <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerMosaic.link, element.nameMosaic]">{{element.nameMosaic}}</a>
+          <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerMosaic.link, element.nameMosaic.split(':')[1]]">{{element.nameMosaic}}</a>
         </td>
         <td class="font-size-08rem text-align-center">{{element.properties.divisibility}}</td>
         <td class="font-size-08rem text-align-center">{{element.properties.levyMutable}}</td>
