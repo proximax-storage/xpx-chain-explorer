@@ -20,7 +20,7 @@
           </td>
           <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">
             <ng-container *ngIf="item?.mosaics.length > 0; else notAmount">
-              {{item?.mosaics[0].amount.compact()}}
+              {{item?.formattedAmount}}
             </ng-container>
 
             <ng-template #notAmount>

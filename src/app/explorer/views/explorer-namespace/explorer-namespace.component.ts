@@ -77,7 +77,7 @@ export class ExplorerNamespaceComponent implements OnInit {
         if (this.mosaicsArray.length > 0) {
           this.mosaicsArray.forEach(element => {
             const id = this.nemProvider.getMosaicId([element.namespaceId.id.toHex(), element.mosaicId.id.toHex()]);
-            this.nemProvider.getNameMosaicFromHex(element.mosaicId.id.toHex()).subscribe(
+            this.nemProvider.getMosaicNameFromHex(element.mosaicId.id.toHex()).subscribe(
               response => {
                 element['nameMosaic'] = response[0].name;
               }

@@ -51,11 +51,48 @@ export class ExplorerAccountComponent implements OnInit {
     });
   }
 
-
   ngOnDestroy() {
     this.observables['getNodeObservable'].unsubscribe();
   }
 
+  /**
+   * Search all transactions from the public account
+   *
+   * @param {any} publicAccount
+   * @memberof ExplorerDetailComponent
+   */
+  viewTransactionsFromPublicAccount(publicAccount) {
+    this.nemProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
+      transactions => {
+        console.log(transactions);
+        transactions.forEach(element => {
+          if (element.type === TransactionType.TRANSFER) { element['isSigner'] = this.address === element['signer'].address['address']; }
+          if ((element['mosaics'] !== undefined && element['mosaics'] !== null) && element['mosaics'].length > 0) {
+            element['mosaics'].forEach(mosaic => {
+              this.nemProvider.getMosaic(mosaic.id).subscribe(
+                next => {
+                  element['formattedAmount'] = this.nemProvider.formatterAmount(mosaic.amount.compact(), next.divisibility);
+                  this.transactionsFromPublicAccount.push(element);
+                  this.showRecentTransaction = true;
+                  console.log('elementelementelementelementelement', this.transactionsFromPublicAccount);
+                }
+              );
+            });
+          } else {
+            this.transactionsFromPublicAccount.push(element);
+            this.showRecentTransaction = true;
+          }
+        });
+
+        // this.transactionsFromPublicAccount = transactions;
+        // this.showRecentTransaction = true;
+      },
+      error => {
+        this.transactionsFromPublicAccount = [];
+        this.showRecentTransaction = false;
+      }
+    );
+  }
 
   /**
    * Obtain account information and search for
@@ -72,65 +109,14 @@ export class ExplorerAccountComponent implements OnInit {
         this.showAccountInfo = true;
         this.viewTransactionsFromPublicAccount(resp.publicAccount);
         if (resp.mosaics.length > 0) {
-          // for (let index = 0; index < 5; index++) {
-            resp.mosaics.forEach(element => {
-              this.buildMosaic(element);
-            });
-          // }
-
+          resp.mosaics.forEach(element => {
+            this.buildMosaic(element);
+          });
         }
       },
       error => {
         this.router.navigate([`/${AppConfig.routes.explorer}`]);
         this.sharedService.showError('', `Resource not found`);
-      }
-    );
-  }
-
-
-  /**
-   * Verify if there is an observable variable that has the number of blocks,
-   * if it does not exist, consult the blocks and assign it to the observable variable
-   *
-   * @memberof ExplorerDetailComponent
-   */
-  viewBlockHeight() {
-    this.observables['numberBlock'] = this.nemProvider.getBlocksHeightLocal().subscribe(
-      next => {
-        if (next === null) {
-          this.nemProvider.blockchainHttp.getBlockchainHeight().subscribe(
-            rsp => {
-              this.nemProvider.setBlocksHeightLocal(rsp);
-            }
-          );
-        } else {
-          this.blocksHeight = next;
-        }
-      }
-    );
-  }
-
-  /**
-   * Search all transactions from the public account
-   *
-   * @param {any} publicAccount
-   * @memberof ExplorerDetailComponent
-   */
-  viewTransactionsFromPublicAccount(publicAccount) {
-    this.nemProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
-      transactions => {
-        transactions.forEach(element => {
-          if (element.type === TransactionType.TRANSFER) {
-            element['isSigner'] = this.address === element['signer'].address['address'];
-          }
-        });
-        this.transactionsFromPublicAccount = transactions;
-        this.showRecentTransaction = true;
-      },
-      error => {
-        this.showRecentTransaction = false;
-        // this.router.navigate([`/${AppConfig.routes.explorer}`]);
-        // this.sharedService.showError('', `Resource not found`);
       }
     );
   }
@@ -142,16 +128,21 @@ export class ExplorerAccountComponent implements OnInit {
    * @memberof ExplorerAccountComponent
    */
   buildMosaic(infoBasicMosaic) {
+    console.log(infoBasicMosaic);
     this.nemProvider.getMosaic(infoBasicMosaic.id).subscribe(
       next => {
         const arrayMosaic = next;
         arrayMosaic['formattedAmount'] = this.nemProvider.formatterAmount(infoBasicMosaic.amount.compact(), next.divisibility);
         arrayMosaic['infoBasicMosaic'] = infoBasicMosaic;
-        this.nemProvider.getNameMosaicFromHex(infoBasicMosaic.id.toHex()).subscribe(
+        this.nemProvider.getMosaicNameFromHex(infoBasicMosaic.id.toHex()).subscribe(
           response => {
-            arrayMosaic['nameMosaic'] = response[0].name;
-            this.mosaicsArray.push(arrayMosaic);
-            if (!this.showInfoMosaic) { this.showInfoMosaic = true; }
+            this.nemProvider.getNamespacesName([response[0]['namespaceId']]).subscribe(
+              namespace => {
+                arrayMosaic['nameMosaic'] = `${namespace[0].name}:${response[0].name}`;
+                this.mosaicsArray.push(arrayMosaic);
+                if (!this.showInfoMosaic) { this.showInfoMosaic = true; }
+              }
+            );
           }
         );
       }

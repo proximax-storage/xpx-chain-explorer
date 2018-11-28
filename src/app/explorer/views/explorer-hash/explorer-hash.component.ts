@@ -46,7 +46,7 @@ export class ExplorerHashComponent implements OnInit {
         this.showTransactionInfo = true;
         if (Object.keys(this.transactionInfo).length > 0) {
           if (resp['mosaics'] !== undefined && resp['mosaics'].length > 0) {
-            this.nemProvider.getNameMosaicFromHex(resp['mosaics'][0].id.toHex()).subscribe(
+            this.nemProvider.getMosaicNameFromHex(resp['mosaics'][0].id.toHex()).subscribe(
               name => {
                 this.transactionInfo['mosaics'][0]['nameMosaic'] = name[0].name;
                 this.showInfoMosaic = true;
