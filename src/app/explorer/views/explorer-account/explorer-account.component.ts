@@ -66,16 +66,18 @@ export class ExplorerAccountComponent implements OnInit {
       transactions => {
         transactions.forEach(element => {
           if (element.type === TransactionType.TRANSFER) { element['isSigner'] = this.address === element['signer'].address['address']; }
-          if ((element['mosaics'] !== undefined && element['mosaics'] !== null) && element['mosaics'].length > 0) {
-            element['mosaics'].forEach(mosaic => {
-              this.nemProvider.getMosaic(mosaic.id).subscribe(
-                next => {
-                  element['formattedAmount'] = this.nemProvider.formatterAmount(mosaic.amount.compact(), next.divisibility);
-                  this.transactionsFromPublicAccount.push(element);
-                  this.showRecentTransaction = true;
-                }
-              );
-            });
+          if (element['mosaics'] !== undefined && element['mosaics'] !== null) {
+            if (element['mosaics'].length > 0) {
+              element['mosaics'].forEach(mosaic => {
+                this.nemProvider.getMosaic(mosaic.id).subscribe(
+                  next => {
+                    element['formattedAmount'] = this.nemProvider.formatterAmount(mosaic.amount.compact(), next.divisibility);
+                    this.transactionsFromPublicAccount.push(element);
+                    this.showRecentTransaction = true;
+                  }
+                );
+              });
+            }
           } else {
             this.transactionsFromPublicAccount.push(element);
             this.showRecentTransaction = true;

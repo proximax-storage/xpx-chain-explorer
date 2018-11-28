@@ -19,7 +19,7 @@
             <span class="fs-08rem fw-bolder">{{item?.deadline.value.toString()}}</span>
           </td>
           <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">
-            <ng-container *ngIf="item?.mosaics.length > 0; else notAmount">
+            <ng-container *ngIf="item?.mosaics !== undefined; else notAmount">
               {{item?.formattedAmount}}
             </ng-container>
 
@@ -32,15 +32,15 @@
           </td>
           <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">
             <span class="font-size-08rem">
-              <i *ngIf="item.type === arraTypeTransaction.transfer.id; else notRecipient" [ngStyle]="{'color': item.isSigner === true ? 'red' : 'green' }" style="padding-right: 10px;" class="fa fa-send" aria-hidden="true"></i>
-              <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerAccount.link, item.signer?.address['address']]" target="_blank">{{item.signer?.address.pretty()}}</a>
-            </span>
+                <i *ngIf="item.type === arraTypeTransaction.transfer.id; else notRecipient" [ngStyle]="{'color': item.isSigner === true ? 'red' : 'green' }" style="padding-right: 10px;" class="fa fa-send" aria-hidden="true"></i>
+                <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerAccount.link, item.signer?.address['address']]" target="_blank">{{item.signer?.address.pretty()}}</a>
+              </span>
           </td>
           <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">
             <ng-container *ngIf="item.type === arraTypeTransaction.transfer.id; else notRecipient">
               <span class="font-size-08rem">
-                <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerAccount.link, item.recipient?.address]" target="_blank">{{item?.recipient.pretty()}}</a>
-              </span>
+                  <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerAccount.link, item.recipient?.address]" target="_blank">{{item?.recipient.pretty()}}</a>
+                </span>
             </ng-container>
             <ng-template #notRecipient>
               XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -72,8 +72,8 @@
       <div class="modal-header background-header">
         <p class="heading lead" style="font-weight: 500;">Transaction info</p>
         <button type="button" class="close" data-dismiss="modal" (click)="basicModal.hide()">
-            <span aria-hidden="true" class="white-text">&times;</span>
-        </button>
+              <span aria-hidden="true" class="white-text">&times;</span>
+          </button>
       </div>
 
       <!--Body-->
