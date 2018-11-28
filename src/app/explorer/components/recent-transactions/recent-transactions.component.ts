@@ -112,7 +112,4 @@ export class RecentTransactionsComponent implements OnInit, AfterViewInit {
     this.typeTransaction = item['type'];
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    //  placeholder ngOnChanges
-  }
 }
