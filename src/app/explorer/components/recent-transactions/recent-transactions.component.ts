@@ -111,4 +111,8 @@ export class RecentTransactionsComponent implements OnInit, OnChanges, AfterView
     this.nameTransaction = this.arraTypeTransaction[type].name;
     this.typeTransaction = item['type'];
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    //  placeholder ngOnChanges
+  }
 }
