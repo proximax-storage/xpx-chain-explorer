@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, ChangeDetectorRef, Input, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ChangeDetectorRef, Input, AfterViewInit } from '@angular/core';
 import { TransactionType } from 'proximax-nem2-sdk';
 import { MdbTablePaginationComponent, MdbTableService } from 'ng-uikit-pro-standard';
 import { AppConfig } from '../../../config/app.config';
@@ -10,7 +10,7 @@ import { NemProvider } from '../../../shared/services/nem.provider';
   templateUrl: './recent-transactions.component.html',
   styleUrls: ['./recent-transactions.component.scss']
 })
-export class RecentTransactionsComponent implements OnInit, OnChanges, AfterViewInit {
+export class RecentTransactionsComponent implements OnInit, AfterViewInit {
 
   @Input() infoMosaic = {};
   @Input() elements = [];
