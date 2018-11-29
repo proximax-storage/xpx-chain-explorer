@@ -76,6 +76,7 @@ export class ExplorerComponent implements OnInit {
               element['date'] = new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)).toUTCString();
               if (event.length > 0) { event.push(element); }
             });
+
             this.blockInfo = (event.length === 0) ? blockInfo : event;
             this.viewTransactions = true;
           },
