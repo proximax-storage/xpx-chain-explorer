@@ -40,6 +40,14 @@ pipeline {
           echo 'Leaving Container'
 
         }
+
+        post {
+          failure {
+            slackSend channel: '#devops',
+              color: 'bad',
+              message: "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* FAILED :scream:"
+          }
+        }
       }
 
       stage('Deploy Testnet Tag') {
@@ -67,23 +75,20 @@ pipeline {
             echo 'Invalidating CloudFront'
             cfInvalidate distribution: 'E1RZY6CIY8D6XA', paths: ['/*']
           }
+        }
 
-          echo 'Completed Deployment'
-
+        post {
+          success {
+            slackSend channel: '#devops',
+              color: 'good',
+              message: "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nDeployed to http://bctestnetexplorer.xpxsirius.io"
+          }
+          failure {
+            slackSend channel: '#devops',
+              color: 'bad',
+              message: "Branch *${env.GIT_BRANCH}* of *${currentBuild.fullDisplayName}* FAILED :scream:"
+          }
         }
       }
     }
-
-  post {
-    success {
-      slackSend channel: '#devops',
-        color: 'good',
-        message: "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:"
-    }
-    failure {
-      slackSend channel: '#devops',
-        color: 'bad',
-        message: "Branch *${env.GIT_BRANCH}* of *${currentBuild.fullDisplayName}* FAILED :scream:"
-    }
-  }
 }
