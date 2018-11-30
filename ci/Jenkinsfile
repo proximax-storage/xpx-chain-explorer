@@ -17,9 +17,6 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        echo 'Checking out git repo'
-        git url: "git@github.com:proximax-storage/proximax-catapult-explorer", credentialsId: 'github-proximax'
-
         echo 'Writing Nexus Credentials'
         script {
           // Writes a multi-line .npmrc file with the authentication hash for Nexus
@@ -45,7 +42,7 @@ pipeline {
         }
       }
 
-      stage('Deploy Testnet Branch') {
+      stage('Deploy Testnet Tag') {
         when {
           tag 'release-testnet*' // Deploy only if tagged with release-testnet*
         }
@@ -70,17 +67,23 @@ pipeline {
             echo 'Invalidating CloudFront'
             cfInvalidate distribution: 'E1RZY6CIY8D6XA', paths: ['/*']
           }
-            echo 'Completed Deployment'
+
+          echo 'Completed Deployment'
+
         }
       }
     }
 
   post {
     success {
-      echo 'Process Success'
+      slackSend channel: '#devops',
+        color: 'good',
+        message: "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:"
     }
     failure {
-      echo 'Process failure'
+      slackSend channel: '#devops',
+        color: 'bad',
+        message: "Branch *${env.GIT_BRANCH}* of *${currentBuild.fullDisplayName}* FAILED :scream:"
     }
   }
 }
