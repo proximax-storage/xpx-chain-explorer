@@ -31,7 +31,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ### TESTNET
 Automated build and deployment to testnet environment
 
-1. Commit and pusth a git tag with prefix `release-testnet-`
+1. Commit and pusth a git tag with prefix `release-testnet-`. Example `release-testnet-v0.0.1`
 2. Go to the [proximax-catapult-explorer Jenkins Job](https://jenkins.internal.proximax.io/view/Catapult/job/proximax-catapult-explorer/view/tags/) and trigger the build for this release tag
 3. The Jenkins job will checkout the project based on the tag, build and create distribution files, upload the distibution files to S3, and invalidate the Cloudfront objects
 4. Wait for around 15 minutes or until the Cloudfront invalidation process completes
