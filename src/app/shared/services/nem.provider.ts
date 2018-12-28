@@ -285,6 +285,10 @@ export class NemProvider {
     return this.namespaceHttp.getNamespacesName(namespaceIds);
   }
 
+  getNamespacesLocal() {
+
+  }
+
 
   /**
    * Set blocks height local

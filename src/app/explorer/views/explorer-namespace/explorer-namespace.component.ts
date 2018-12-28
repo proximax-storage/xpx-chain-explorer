@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NodeService } from '../../../dashboard/services/node.service';
 import { NemProvider } from '../../../shared/services/nem.provider';
@@ -11,7 +11,7 @@ import { AppConfig } from '../../../config/app.config';
   templateUrl: './explorer-namespace.component.html',
   styleUrls: ['./explorer-namespace.component.scss']
 })
-export class ExplorerNamespaceComponent implements OnInit {
+export class ExplorerNamespaceComponent implements OnInit, OnDestroy {
 
   namespaceId = this.route.snapshot.paramMap.get('namespaceId');
   namespaceInfo = {};

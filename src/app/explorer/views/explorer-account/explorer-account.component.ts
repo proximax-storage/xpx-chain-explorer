@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { SharedService } from '../../../shared';
   templateUrl: './explorer-account.component.html',
   styleUrls: ['./explorer-account.component.scss']
 })
-export class ExplorerAccountComponent implements OnInit {
+export class ExplorerAccountComponent implements OnInit, OnDestroy {
 
   address = this.route.snapshot.paramMap.get('account');
   blocksHeight = null;
@@ -56,49 +56,6 @@ export class ExplorerAccountComponent implements OnInit {
   }
 
   /**
-   * Search all transactions from the public account
-   *
-   * @param {any} publicAccount
-   * @memberof ExplorerDetailComponent
-   */
-  viewTransactionsFromPublicAccount(publicAccount) {
-    this.nemProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
-      transactions => {
-        console.log('transactions', transactions);
-        transactions.forEach(element => {
-          if (element.type === TransactionType.TRANSFER) { element['isSigner'] = this.address === element['signer'].address['address']; }
-          if (element['mosaics'] !== undefined && element['mosaics'] !== null) {
-            if (element['mosaics'].length > 0) {
-              element['mosaics'].forEach(mosaic => {
-                this.nemProvider.getMosaic(mosaic.id).subscribe(
-                  next => {
-                    element['formattedAmount'] = this.nemProvider.formatterAmount(mosaic.amount.compact(), next.divisibility);
-                    this.transactionsFromPublicAccount.push(element);
-                    this.showRecentTransaction = true;
-                  }
-                );
-              });
-            } else {
-              this.transactionsFromPublicAccount.push(element);
-              this.showRecentTransaction = true;
-            }
-          } else {
-            this.transactionsFromPublicAccount.push(element);
-            this.showRecentTransaction = true;
-          }
-        });
-
-        // this.transactionsFromPublicAccount = transactions;
-        // this.showRecentTransaction = true;
-      },
-      error => {
-        this.transactionsFromPublicAccount = [];
-        this.showRecentTransaction = false;
-      }
-    );
-  }
-
-  /**
    * Obtain account information and search for
    * all transactions from the public account
    *
@@ -109,18 +66,73 @@ export class ExplorerAccountComponent implements OnInit {
   getInfoAccountAndViewTransactions(account) {
     this.nemProvider.getAccountInfo(Address.createFromRawAddress(account)).subscribe(
       resp => {
+        // Assign the response to accountInfo and show the account information
         this.accountInfo = resp;
         this.showAccountInfo = true;
-        this.viewTransactionsFromPublicAccount(resp.publicAccount);
-        if (resp.mosaics.length > 0) {
-          resp.mosaics.forEach(element => {
+
+        // Search all transactions in the public account and show the table of recent transactions
+        this.viewTransactionsFromPublicAccount(this.accountInfo['publicAccount']);
+
+        // If your account information has tiles, look up your information and name to display them in the tile table
+        if (this.accountInfo['mosaics'].length > 0) {
+          this.accountInfo['mosaics'].forEach(element => {
             this.buildMosaic(element);
           });
         }
+
       },
       error => {
+        console.log('dio error23....', error);
         this.router.navigate([`/${AppConfig.routes.explorer}`]);
         this.sharedService.showError('', `Resource not found`);
+      }
+    );
+  }
+
+  /**
+   * Search all transactions from the public account
+   *
+   * @param {any} publicAccount
+   * @memberof ExplorerDetailComponent
+   */
+  viewTransactionsFromPublicAccount(publicAccount) {
+    this.nemProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
+      transactions => {
+        transactions.forEach(element => {
+          if (element.type === TransactionType.TRANSFER) { element['isSigner'] = this.address === element['signer'].address['address']; }
+
+        // Find the name of the mosaic of the transaction and consult the mosaic information.
+          if (element['mosaics'] !== undefined && element['mosaics'] !== null) {
+            if (element['mosaics'].length > 0) {
+              element['mosaics'].forEach(mosaic => {
+                this.nemProvider.getMosaic(mosaic.id).subscribe(
+                  next => {
+                    element['formattedAmount'] = this.nemProvider.formatterAmount(mosaic.amount.compact(), next.divisibility);
+                    this.transactionsFromPublicAccount.push(element);
+                    this.showRecentTransaction = true;
+                  }, error => {
+                    console.log('dio error....', mosaic);
+                  }
+                );
+              });
+            } else {
+              this.transactionsFromPublicAccount.push(element);
+              this.showRecentTransaction = true;
+            }
+
+          } else {
+            this.transactionsFromPublicAccount.push(element);
+            this.showRecentTransaction = true;
+          }
+        });
+
+        // this.transactionsFromPublicAccount = transactions;
+        // this.showRecentTransaction = true;
+      },
+      error => {
+        console.log('dio error2....', error);
+        this.transactionsFromPublicAccount = [];
+        this.showRecentTransaction = false;
       }
     );
   }
@@ -132,23 +144,52 @@ export class ExplorerAccountComponent implements OnInit {
    * @memberof ExplorerAccountComponent
    */
   buildMosaic(infoBasicMosaic) {
-    this.nemProvider.getMosaic(infoBasicMosaic.id).subscribe(
-      next => {
-        const arrayMosaic = next;
-        arrayMosaic['formattedAmount'] = this.nemProvider.formatterAmount(infoBasicMosaic.amount.compact(), next.divisibility);
-        arrayMosaic['infoBasicMosaic'] = infoBasicMosaic;
-        this.nemProvider.getMosaicNameFromHex(infoBasicMosaic.id.toHex()).subscribe(
-          response => {
-            this.nemProvider.getNamespacesName([response[0]['namespaceId']]).subscribe(
-              namespace => {
-                arrayMosaic['nameMosaic'] = `${namespace[0].name}:${response[0].name}`;
-                this.mosaicsArray.push(arrayMosaic);
-                if (!this.showInfoMosaic) { this.showInfoMosaic = true; }
-              }
-            );
-          }
-        );
+    // console.log('infoBasicMosaic', infoBasicMosaic);
+    this.nemProvider.getMosaicNameFromHex(infoBasicMosaic.id.toHex()).subscribe(
+      rsp => {
+        console.log('rsp', rsp);
+      },
+      err => {
+        console.log('err', err);
       }
     );
+
+
+
+
+
+
+
+    // this.nemProvider.getMosaic(infoBasicMosaic.id).subscribe(
+    //   next => {
+    //     const arrayMosaic = next;
+    //     arrayMosaic['formattedAmount'] = this.nemProvider.formatterAmount(infoBasicMosaic.amount.compact(), next.divisibility);
+    //     arrayMosaic['infoBasicMosaic'] = infoBasicMosaic;
+    //     this.nemProvider.getMosaicNameFromHex(infoBasicMosaic.id.toHex()).subscribe(
+    //       response => {
+    //         this.nemProvider.getNamespacesName([response[0]['namespaceId']]).subscribe(
+    //           namespace => {
+    //             arrayMosaic['nameMosaic'] = `${namespace[0].name}:${response[0].name}`;
+    //             this.mosaicsArray.push(arrayMosaic);
+    //             if (!this.showInfoMosaic) { this.showInfoMosaic = true; }
+    //           }, error => {
+    //             // console.log('dio error....', infoBasicMosaic);
+    //           }
+    //         );
+    //       }
+    //     );
+    //   },
+    //   error => {
+    //     this.nemProvider.getMosaicNameFromHex(infoBasicMosaic.id.toHex()).subscribe(
+    //       rsp => {
+    //         console.log('rsp', rsp);
+    //       },
+    //       err => {
+    //         console.log('err', err);
+    //       }
+    //     );
+    //     // console.log('dio error244....', error);
+    //   }
+    // );
   }
 }
