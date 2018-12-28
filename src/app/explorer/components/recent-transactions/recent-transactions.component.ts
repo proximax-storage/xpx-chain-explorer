@@ -111,4 +111,5 @@ export class RecentTransactionsComponent implements OnInit, AfterViewInit {
     this.nameTransaction = this.arraTypeTransaction[type].name;
     this.typeTransaction = item['type'];
   }
+
 }

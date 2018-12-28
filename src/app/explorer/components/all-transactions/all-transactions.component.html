@@ -19,6 +19,8 @@
             <a class="text-link mouse-pointer" [routerLink]="[linkRoute.explorerAccount.link, item.signer.address['address']]">{{item.signer.publicKey}}</a>
           </span>
         </td>
+
+        <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">{{item.numTransactions}}</td>
         <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">{{item.difficulty.compact()}}</td>
         <td class="font-size-08rem text-center th-lg" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex">{{item.totalFee.compact()}}</td>
         <td class="font-size-08rem text-align-center th-lg mouse-pointer" *ngIf="i+1 >= firstItemIndex && i < lastItemIndex" (click)="exportCSV(item.height.lower);">

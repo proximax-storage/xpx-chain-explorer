@@ -36,7 +36,7 @@ export class AllTransactionsComponent implements OnInit, AfterViewInit {
   lastItemIndex;
   previous: any;
   searchText: string;
-  headElements = ['Block Height', 'Timestamp', 'Harvester/Forger', 'Difficulty', 'Fees', 'Export CSV'];
+  headElements = ['Block Height', 'Timestamp', 'Harvester/Forger', 'Number of Transactions', 'Difficulty', 'Fees', 'Export CSV'];
   options = {
     showLabels: true,
     showTitle: false,
@@ -57,7 +57,7 @@ export class AllTransactionsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    console.log(this.blockInfo);
+
     this.tableService.setDataSource(this.blockInfo);
     this.blockInfo = this.tableService.getDataSource();
     this.previous = this.tableService.getDataSource();
