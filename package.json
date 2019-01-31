@@ -7,9 +7,13 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "mdbvue": "./mdbvue",
+    "nem2-sdk": "^0.10.1",
+    "rxjs": "^6.4.0",
     "vue": "^2.5.21",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
     "@vue/cli-service": "^3.3.0",

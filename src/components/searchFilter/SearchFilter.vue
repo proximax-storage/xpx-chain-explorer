@@ -3,11 +3,11 @@
     <br>
     <mdb-row class="align-items-center">
       <mdb-col sm="12" md="4">
-        <mdb-select id="select" @getValue="getSelectValue" :options="basicOptions"/>
+        <mdb-select id="select" @getValue="getSelectValue" :options="optionSelect"/>
         <label for="select">Type searh</label>
       </mdb-col>
       <mdb-col sm="12" md="7">
-        <mdb-input label="Material input"/>
+        <mdb-input label="Enter"/>
       </mdb-col>
       <mdb-col sm="12" md="1">
         <mdb-btn tag="a" class="background-explorer" floating size="sm"><mdb-icon icon="search" /></mdb-btn>
@@ -17,6 +17,7 @@
 </template>
 <script>
 import { mdbSelect, mdbContainer, mdbInput, mdbRow, mdbCol, mdbIcon, mdbBtn } from 'mdbvue';
+import requestService from '@/services/requestService'
 
 export default {
   name: 'SearchFilter',
@@ -31,17 +32,22 @@ export default {
   },
   data() {
     return {
-      basicOptions: [
-        { text: 'Choose your option', value: null, disabled: true, selected: true },
-        { text: 'Option nr 1', value: 'Option 1' },
-        { text: 'Option nr 2', value: 'Option 2' },
-        { text: 'Option nr 3', value: 'Option 3' }
-      ]
+      optionSelect: [
+        { text: 'Address', value: 'address', selected: true },
+        { text: 'Public Key', value: 'publickey' },
+        { text: 'Hast transaction', value: 'hash' },
+        { text: 'Block', value: 'block' },
+        { text: 'Mosaic name', value: 'mosaic' },
+        { text: 'Namespace name', value: 'namespace' }
+      ],
+      nodes: requestService.getNodes()
     };
   },
   methods: {
     getSelectValue(value, text) {
       console.log(value);
+      console.log(this.nodes);
+      
     }
   }
 };
