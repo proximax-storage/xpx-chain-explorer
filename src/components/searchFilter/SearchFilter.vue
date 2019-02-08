@@ -10,14 +10,17 @@
         <mdb-input label="Enter"/>
       </mdb-col>
       <mdb-col sm="12" md="1">
-        <mdb-btn tag="a" class="background-explorer" floating size="sm"><mdb-icon icon="search" /></mdb-btn>
+        <div style="text-align: center">
+          <mdb-btn tag="a" class="background-explorer" floating size="sm"><mdb-icon icon="search" /></mdb-btn>
+        </div>
       </mdb-col>
     </mdb-row>
   </mdb-container>
 </template>
 <script>
 import { mdbSelect, mdbContainer, mdbInput, mdbRow, mdbCol, mdbIcon, mdbBtn } from 'mdbvue';
-import requestService from '@/services/requestService'
+import requestService from '@/services/RequestService'
+import Service from '@/services/Service'
 
 export default {
   name: 'SearchFilter',
@@ -31,6 +34,7 @@ export default {
     mdbBtn
   },
   data() {
+    const service = new Service()
     return {
       optionSelect: [
         { text: 'Address', value: 'address', selected: true },
@@ -40,14 +44,11 @@ export default {
         { text: 'Mosaic name', value: 'mosaic' },
         { text: 'Namespace name', value: 'namespace' }
       ],
-      nodes: requestService.getNodes()
-    };
+      service: service
+    }
   },
   methods: {
-    getSelectValue(value, text) {
-      console.log(value);
-      console.log(this.nodes);
-      
+    getSelectValue(value, text) {      
     }
   }
 };

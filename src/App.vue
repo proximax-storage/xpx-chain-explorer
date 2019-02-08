@@ -17,6 +17,15 @@ export default {
 
 <style lang="scss">
 
+  .card {
+    padding: 10px;
+    margin: 20px;
+  }
+
+  .background-app {
+    background: #eee;
+  }
+
   .background-explorer {
     background-image: -webkit-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
     background-image: -moz-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
