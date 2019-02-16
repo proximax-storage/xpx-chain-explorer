@@ -3,25 +3,31 @@
     <br>
     <mdb-row class="align-items-center">
       <mdb-col sm="12" md="4">
-        <mdb-select id="select" @getValue="getSelectValue" :options="optionSelect"/>
+        <mdb-select id="select" @getValue="getSelectValue" :options="options"/>
         <label for="select">Type searh</label>
       </mdb-col>
       <mdb-col sm="12" md="7">
-        <mdb-input label="Enter"/>
+        <mdb-input label="Enter" :disabled="disabledInput" v-model="input"/>
       </mdb-col>
       <mdb-col sm="12" md="1">
         <div style="text-align: center">
-          <mdb-btn tag="a" class="background-explorer" floating size="sm"><mdb-icon icon="search" /></mdb-btn>
+          <mdb-btn tag="a" class="background-explorer" floating size="sm" :disabled="disabledView" @click="search()"><mdb-icon icon="search" /></mdb-btn>
         </div>
       </mdb-col>
     </mdb-row>
   </mdb-container>
 </template>
 <script>
-import { mdbSelect, mdbContainer, mdbInput, mdbRow, mdbCol, mdbIcon, mdbBtn } from 'mdbvue';
-import requestService from '@/services/RequestService'
-import Service from '@/services/Service'
+import { mdbSelect, mdbContainer, mdbInput, mdbRow, mdbCol, mdbIcon, mdbBtn } from 'mdbvue'
+import { Address, NetworkType } from 'proximax-nem2-sdk'
+import proximaxProvider from '@/services/proximaxProvider'
 
+const _proximaxProvider = new proximaxProvider()
+
+// { text: 'Namespace Name', value: 'namespaceName' },
+// { text: 'Namespace Id', value: 'namespaceId' },
+// { text: 'Mosaic Name', value: 'mosaicName' },
+// { text: 'Mosaic Id', value: 'mosaicId' },
 export default {
   name: 'SearchFilter',
   components: {
@@ -34,21 +40,52 @@ export default {
     mdbBtn
   },
   data() {
-    const service = new Service()
     return {
-      optionSelect: [
-        { text: 'Address', value: 'address', selected: true },
-        { text: 'Public Key', value: 'publickey' },
-        { text: 'Hast transaction', value: 'hash' },
-        { text: 'Block', value: 'block' },
-        { text: 'Mosaic name', value: 'mosaic' },
-        { text: 'Namespace name', value: 'namespace' }
+      options: [
+        { text: 'Select type search', value: ''},
+        { text: 'Account Address', value: 'address' },
+        { text: 'Account Public Key', value: 'publickey' },
+        { text: 'Block Height', value: 'block' },
+        { text: 'Transaction Hash', value: 'hash' }
       ],
-      service: service
+      host: location.origin,
+      disabledInput: true,
+      disabledView: true,
+      typeSearch: '',
+      input: ''
+    }
+  },
+  watch: {
+    input: function (val) {
+      this.disabledView = (val !== '') ? false : true ;
     }
   },
   methods: {
-    getSelectValue(value, text) {      
+    getSelectValue: function(value, text) {     
+      this.optionSelect = value
+      this.input = ''
+      this.disabledInput = (value !== '') ? false : true 
+    },
+
+    search: function () {      
+      switch (this.optionSelect) {
+        case 'address':
+          this.$router.push({ path: `/account-info/${this.input}` })
+          break
+
+        case 'publickey':
+          const publicAccount = _proximaxProvider.createPublicAccount(this.input, NetworkType.TEST_NET)          
+          this.$router.push({ path: `/account-info/${publicAccount.address.address}` })
+          break
+
+        case 'block':
+          this.$router.push({ path: `/block-info/${this.input}` })
+          break
+        
+        case 'hash':        
+          this.$router.push({ path: `/transactions/hast/${this.input}` })
+          break
+      }
     }
   }
 };

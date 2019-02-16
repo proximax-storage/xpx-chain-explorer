@@ -4,11 +4,11 @@
     <img src="@/assets/logo/proximax-white.png" height="30">
     <mdb-navbar-toggler>
       <mdb-navbar-nav nav right>
-        <mdb-nav-item href="#" @click.prevent="navExplorer()">Explorer</mdb-nav-item>
+        <a href="#" class="nav-link navbar-link text-white" @click="navExplorer()">Explorer</a>
         <mdb-dropdown tag="li">
           <mdb-dropdown-toggle tag="a" navLink class="background-explorer" slot="toggle">Select Node</mdb-dropdown-toggle>
           <mdb-dropdown-menu right>
-            <mdb-dropdown-item v-for="node in nodes" :key="node">{{node}}</mdb-dropdown-item>
+            <a href="#" class="dropdown-item" :class="{ active : nodeSelected === node}"  v-for="node in nodes" :key="node" @click="changeNode(node)">{{node}}</a>
           </mdb-dropdown-menu>
         </mdb-dropdown>
       </mdb-navbar-nav>
@@ -18,7 +18,6 @@
 
 <script>
 import { mdbNavbar, mdbNavbarNav, mdbNavItem, mdbNavbarToggler, mdbDropdown, mdbDropdownToggle, mdbDropdownMenu, mdbDropdownItem } from 'mdbvue'
-import requestService from '@/services/RequestService'
 
 export default {
   name: 'Menu',
@@ -33,16 +32,28 @@ export default {
     mdbDropdownItem
   },
   data () {
-    let nodes = requestService.getAllNodes()
+    let nodes = [
+      "http://bctestnet1.xpxsirius.io:3000",
+      "http://bctestnet2.xpxsirius.io:3000",
+      "https://catapult.mocd.gov.ae/"
+    ]
+
+    const nodeSelected = localStorage.getItem('nodeSelected')
 
     return {
-      nodes: nodes.nodes
+      nodes: nodes,
+      nodeSelected: nodeSelected
     }
   },
   methods: {
-    navExplorer () {
+    navExplorer: function() {
       this.$router.push('/explorer')
       return
+    },
+    changeNode: function (node) {
+      localStorage.setItem('nodeSelected', node)  
+      this.nodeSelected = node
+      this.$router.push('/explorer')
     }
   }
 }
@@ -50,5 +61,18 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  
+  .dropdown .active {
+    background: #18ada3 !important;
+    color: white;
+  }
+
+  .dropdown-item:hover {
+    background: #18ada3 !important;
+    color: white !important;
+  }
+
+  .nav-link:hover {
+    background: white !important;
+  }
+
 </style>

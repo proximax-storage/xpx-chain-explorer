@@ -14,124 +14,153 @@
         </tr>
       </mdb-tbl-head>
       <mdb-tbl-body>
-        <tr v-for="(transaction, i) in transactions" :key="i">
-          <td class="th-lg text-center" v-if="i+1 >= firstItemIndex && i < lastItemIndex">
+        <tr v-for="(transaction, i) in transactions" :key="i" v-show="(pag - 1) * NUM_RESULTS <= i  && pag * NUM_RESULTS > i">
+          <td class="th-lg text-center">
             <span class="fs-08rem fw-bolder">{{transaction.deadline.value.toString()}}</span>
           </td>
-          <td class="font-size-08rem text-center th-lg" v-if="i+1 >= firstItemIndex && i < lastItemIndex">
-            <div v-if="transaction.mosaics !== undefined">
-              {{transaction.formattedAmount}}
-            </div>
-            <div v-else>
-              0
-            </div>
-          </td>
-          <td class="font-size-08rem text-center th-lg" v-if="i+1 >= firstItemIndex && i < lastItemIndex">
+          <td class="font-size-08rem text-center th-lg">
             {{transaction.fee.compact()}}
           </td>
-          <td class="font-size-08rem text-center th-lg" v-if="i+1 >= firstItemIndex && i < lastItemIndex">
+          <td class="font-size-08rem th-lg">
             <span class="font-size-08rem">
-              <i v-if="transaction.type === arraTypeTransaction.transfer.id"  style="padding-right: 10px;" :style="{'color': transaction.signer.publicKey === publicKeyAddress ? 'red' : 'green' }" class="fa fa-send" aria-hidden="true"></i>
-              <a class="text-link mouse-pointer" target="_blank">{{transaction.signer.address.pretty()}}</a>
+              <i v-if="transaction.type === typeTransfer"  style="padding-right: 10px;" :style="{'color': transaction.recipient.address === address ? 'green' : 'red' }" class="fa fa-send" aria-hidden="true"></i>
+              <router-link target="_blank" :to="`/account-info/${transaction.signer.address['address']}`" class="text-link mouse-pointer">{{transaction.signer.address.pretty()}}</router-link>
             </span>
           </td>
-          <td class="font-size-08rem text-center th-lg" v-if="i+1 >= firstItemIndex && i < lastItemIndex">
-            <div v-if="transaction.type === arraTypeTransaction.transfer.id">
+          <td class="font-size-08rem th-lg" :class="{'text-center': transaction.type !== typeTransfer}">
+            <div v-if="transaction.type === typeTransfer">
               <span class="font-size-08rem">
-                  <a class="text-link mouse-pointer" target="_blank">{{transaction.recipient.pretty()}}</a>
-                </span>
+                <router-link target="_blank" :to="`/account-info/${transaction.recipient.address}`" class="text-link mouse-pointer">{{transaction.recipient.pretty()}}</router-link>
+              </span>
             </div>
             <div v-else>
               ---
             </div>
           </td>
-          <td class="font-size-08rem text-align-center th-lg mouse-pointer" v-if="i+1 >= firstItemIndex && i < lastItemIndex">
-            <i style="font-size: 18px; color: #118a81;" class="fa fa-search-plus" aria-hidden="true"></i>
+          <td class="font-size-08rem th-lg mouse-pointer text-center">
+            <i style="font-size: 18px; color: #118a81;" class="fa fa-search-plus" @click="viewInfo(transaction); showModal = true" aria-hidden="true"></i>
           </td>
         </tr>
       </mdb-tbl-body>
-      <!-- <mdb-pagination circle>
-        <mdb-page-item disabled>First</mdb-page-item>
-        <mdb-page-nav prev disabled></mdb-page-nav>
-        <mdb-page-item active>1</mdb-page-item>
-        <mdb-page-item>2</mdb-page-item>
-        <mdb-page-item>3</mdb-page-item>
-        <mdb-page-item>4</mdb-page-item>
-        <mdb-page-item>5</mdb-page-item>
-        <mdb-page-nav next></mdb-page-nav>
-        <mdb-page-item>Last</mdb-page-item>
-      </mdb-pagination> -->
     </mdb-tbl>
+    <Pagination :quantity="transactions.length" :numResults="NUM_RESULTS" @changePage="changePage" />
+
+    <modal size="lg" v-if="showModal" @close="showModal = false">
+        <modal-header class="background-explorer text-white">
+          <modal-title>Type {{typeTransaction[0].name}}</modal-title>
+        </modal-header>
+        <modal-body>
+          <section>
+            <type-transfer v-if="typeTransaction[0].id === arraTypeTransaction[0].id" :transactionSelected="transactionSelected" ></type-transfer>
+            <type-register-namespace v-if="typeTransaction[0].id === arraTypeTransaction[1].id" :transactionSelected="transactionSelected" ></type-register-namespace>
+            <type-mosaic-definition v-if="typeTransaction[0].id === arraTypeTransaction[2].id" :transactionSelected="transactionSelected" ></type-mosaic-definition>
+            <type-mosaic-supply-change v-if="typeTransaction[0].id === arraTypeTransaction[3].id" :transactionSelected="transactionSelected" ></type-mosaic-supply-change>
+            <type-modify-multisign v-if="typeTransaction[0].id === arraTypeTransaction[4].id" :transactionSelected="transactionSelected" ></type-modify-multisign>
+          </section>
+        </modal-body>
+      </modal>
   </div>
 </template>
 
 <script>
-import { mdbTbl, mdbTblHead, mdbTblBody, mdbPagination, mdbPageItem, mdbPageNav } from 'mdbvue'
+import { mdbTbl, mdbTblHead, mdbTblBody, Modal, ModalHeader, ModalTitle, ModalBody, mdbRow, mdbCol } from 'mdbvue'
 import { TransactionType } from 'proximax-nem2-sdk'
+import Pagination from '@/components/shared/Pagination'
+import TypeTransfer from '@/components/explorer/views/infoTransactions/TypeTransfer'
+import TypeRegisterNamespace from '@/components/explorer/views/infoTransactions/TypeRegisterNamespace'
+import TypeMosaicDefinition from '@/components/explorer/views/infoTransactions/TypeMosaicDefinition'
+import TypeMosaicSupplyChange from '@/components/explorer/views/infoTransactions/TypeMosaicSupplyChange'
+import TypeModifyMultisign from '@/components/explorer/views/infoTransactions/TypeModifyMultisign'
+
 export default {
   name: 'RecentTransactions',
   props: {
     transactions: Array,
-    publicKeyAddress: String
+    address: String
   },
   components: {
     mdbTbl,
     mdbTblHead,
     mdbTblBody,
-    mdbPagination,
-    mdbPageItem,
-    mdbPageNav,
-    mdbPageNav
+    Pagination,
+    Modal,
+    ModalHeader,
+    ModalTitle,
+    ModalBody,
+    mdbRow,
+    mdbCol,
+    TypeTransfer,
+    TypeRegisterNamespace,
+    TypeMosaicDefinition,
+    TypeMosaicSupplyChange,
+    TypeModifyMultisign
   },
   data () {
     console.log(this.transactions)
 
     return {
-      headElements: ['Timestamp', 'Amount', 'Fee',  'Sender', 'Recipient', 'View more'],
-      firstItemIndex: 0,
-      lastItemIndex: 10,
-      arraTypeTransaction: {
-        transfer: {
+      headElements: ['Timestamp', 'Fee',  'Sender', 'Recipient', 'View more'],
+      NUM_RESULTS: 5, // Numero de resultados por página
+      pag: 1, // Página inicial
+      showModal: false,
+      typeTransaction: null,
+      typeTransfer: TransactionType.TRANSFER,
+      arraTypeTransaction: [
+        {
           id: TransactionType.TRANSFER,
           name: 'Transfer'
         },
-        registerNameSpace: {
+        {
           id: TransactionType.REGISTER_NAMESPACE,
           name: 'Register namespace'
         },
-        mosaicDefinition: {
+        {
           id: TransactionType.MOSAIC_DEFINITION,
           name: 'Mosaic definition'
         },
-        mosaicSupplyChange: {
+        {
           id: TransactionType.MOSAIC_SUPPLY_CHANGE,
           name: 'Mosaic supply change'
         },
-        modifyMultisigAccount: {
+        {
           id: TransactionType.MODIFY_MULTISIG_ACCOUNT,
           name: 'Modify multisig account'
         },
-        aggregateComplete: {
+        {
           id: TransactionType.AGGREGATE_COMPLETE,
           name: 'Aggregate complete'
         },
-        aggregateBonded: {
+        {
           id: TransactionType.AGGREGATE_BONDED,
           name: 'Aggregate bonded'
         },
-        lock: {
+        {
           id: TransactionType.LOCK,
           name: 'Lock'
         },
-        secretLock: {
+        {
           id: TransactionType.SECRET_LOCK,
           name: 'Secret lock'
         },
-        secretProof: {
+        {
           id: TransactionType.SECRET_PROOF,
           name: 'Secret proof'
         }
-      }
+      ]
+    }
+  },
+  methods: {
+    changePage: function(event) {
+      this.pag = event    
+    },
+    viewInfo: function(transaction) {
+      this.typeTransaction = this.arraTypeTransaction.filter( element => element.id === transaction.type )
+      this.transactionSelected = transaction
+      console.log(this.arraTypeTransaction);
+      
+      console.log(this.typeTransaction);
+      console.log(this.transactionSelected);
+      
     }
   }
 

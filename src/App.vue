@@ -1,21 +1,32 @@
 <template>
   <div id="app">
     <Menu/>
+    <search-filter/>
     <router-view/>
   </div>
 </template>
 
 <script>
 import Menu from '@/components/menu/Menu'
+import SearchFilter from '@/components/searchFilter/SearchFilter'
+
 export default {
   components: {
-    Menu
+    Menu,
+    SearchFilter
   }  
 }
 </script>
 
 
 <style lang="scss">
+  html {
+    background: #eee
+  }
+
+  #app {
+    background: #eee
+  }
 
   .card {
     padding: 10px;
@@ -57,8 +68,38 @@ export default {
     border-bottom: 1px solid #fff !important;
   }
 
+  .text-center {
+    text-align: center;
+  }
+
   .text-white {
     color: white !important;
+  }
+
+  .page-link {
+    border: 0px !important;
+    color: grey
+  }
+
+  .page-link:hover {
+    border-radius: 50% !important;
+    color: #18ada3 !important;
+  }
+
+  a:hover {
+    color: #18ada3 !important;
+  }
+
+  .info {
+    padding: 10px;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .green-back {
+    background: #00968833;
   }
 
 </style>

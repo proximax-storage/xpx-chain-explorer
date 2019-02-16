@@ -5,13 +5,12 @@
   </div>
 </template>
 <script>
-import { mdbContainer, mdbRow } from 'mdbvue'
+import { mdbContainer } from 'mdbvue'
 
 export default {
-  name: 'Explorer',
+  name: 'Transactions',
   components: {
-    mdbContainer,
-    mdbRow
+    mdbContainer
   },
   data () {
     return {}

@@ -7,8 +7,8 @@ const explorerRouter = {
   children: [
     {
       path: '/',
-      component: () => import('./views/allTransactions.vue'),
-      name: 'allTransactions',
+      component: () => import('./views/Blocks.vue'),
+      name: 'Blocks',
       meta: { title: 'All Transactions', noCache: true }
     },
     {

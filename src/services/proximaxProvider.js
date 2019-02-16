@@ -14,7 +14,7 @@ import {
   TransactionHttp
 } from 'proximax-nem2-sdk'
 
-export default class Service {
+export default class proximaxProvider {
 
   constructor() {
     this.Url = localStorage.getItem('nodeSelected')    
@@ -89,7 +89,7 @@ export default class Service {
    *
    * @param {*} address
    * @returns {Address}
-   * @memberof NemProvider
+   * @memberof proximaxProvider
    */
   createFromRawAddress(address) {
     console.log("desde el servicio",Address.createFromRawAddress(address));
@@ -100,7 +100,7 @@ export default class Service {
    * Get blocks height local
    *
    * @returns
-   * @memberof Service
+   * @memberof proximaxProvider
    */
   getBlocksHeightLocal() {
     return this.blocksHeight$
@@ -111,7 +111,7 @@ export default class Service {
    * Set blocks height local
    *
    * @param param
-   * @memberof Service
+   * @memberof proximaxProvider
    */
   setBlocksHeightLocal(param) {
     this.blocksHeight.next(param.compact())
@@ -122,7 +122,7 @@ export default class Service {
    *
    * @param {Address} address
    * @returns {Observable}
-   * @memberof Service
+   * @memberof proximaxProvider
    */
   getAccountInfo(address) {
     return this.accountHttp.getAccountInfo(address)
@@ -138,7 +138,7 @@ export default class Service {
    *
    * @param {any} mosaicId
    * @returns
-   * @memberof NemProvider
+   * @memberof proximaxProvider
    */
   getMosaic(mosaicId) {
     return this.mosaicHttp.getMosaic(mosaicId)
@@ -149,7 +149,7 @@ export default class Service {
    *
    * @param {any} param
    * @returns
-   * @memberof NemProvider
+   * @memberof proximaxProvider
    */
   getMosaicId(id) {
     return new MosaicId(id)
@@ -164,7 +164,7 @@ export default class Service {
    *
    * @param {any} id
    * @returns {Observable<MosaicName[]>}
-   * @memberof NemProvider
+   * @memberof proximaxProvider
    */
   getNamespacesNameFromHex(id) {
     const idFromHex = Id.fromHex(id)
@@ -177,7 +177,7 @@ export default class Service {
    *
    * @param {any} id
    * @returns
-   * @memberof NemProvider
+   * @memberof proximaxProvider
    */
   getNamespacesName(namespaceIds) {
     return this.namespaceHttp.getNamespacesName(namespaceIds)
@@ -198,7 +198,7 @@ export default class Service {
    * @param {any} amount
    * @param {any} divisibility
    * @returns
-   * @memberof NemProvider
+   * @memberof proximaxProvider
    */
   formatterAmount(amount, divisibility) {
     const amountDivisibility = parseFloat(amount / Math.pow(10, divisibility))
@@ -210,7 +210,7 @@ export default class Service {
    *
    * @param {any} id
    * @returns
-   * @memberof NemProvider
+   * @memberof proximaxProvider
    */
   getMosaicNameFromHex(id) {
     const idFromHex = Id.fromHex(id);
