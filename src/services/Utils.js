@@ -19,8 +19,8 @@ export default class Utils {
     } else {
       let a = data / 1000000
       let b = a.toFixed(6).split('.')
-      let r = "<span class='sep'><b>" +b[0].split(/(?=(?:...)*$)/).join("</span><span class='sep'>") + "</span>"
-      return r + ".</b><span class='dim'>" + b[1] + "</span>"
+      let r = "<span class='sep'><strong>" +b[0].split(/(?=(?:...)*$)/).join("</span><span class='sep'>") + "</span>"
+      return r + ".</strong><span class='dim'>" + b[1] + "</span>"
     }
   }
   
@@ -34,12 +34,22 @@ export default class Utils {
   }
 
   static fmtUptime(data, end) {
-    var start = data._fmt;
-    var end = end;
-    var hours = Math.floor((end - start) / 3600);
-    var days = Math.floor(hours / 24);
-    hours = hours -  24 * days;
-    return days + 'd, ' + hours + 'h ';
+    var start = data._fmt
+    var end = end
+    var hours = Math.floor((end - start) / 3600)
+    var days = Math.floor(hours / 24)
+    hours = hours -  24 * days
+    return days + 'd, ' + hours + 'h '
+  }
+  
+  static fmtNemImportanceScore(data) {
+		var o = this.long2val(data)
+		if (o) {
+			o /= 90000
+			o = o.toFixed(4).split('.')
+			o = o[0] + ".<span class='dim'>" + o[1] + "</span>"
+		}
+		return o
 	}
 }
 

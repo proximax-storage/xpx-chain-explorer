@@ -4,7 +4,8 @@
     <img src="@/assets/logo/proximax-white.png" height="30">
     <mdb-navbar-toggler>
       <mdb-navbar-nav nav right>
-        <a href="#" class="nav-link navbar-link text-white" @click="navExplorer()">Explorer</a>
+        <span class="text-white block">Current Block: <strong>7487876</strong></span>
+        <a href="#" class="nav-link navbar-link text-white" @click="navExplorer()">Blocks</a>
         <mdb-dropdown tag="li">
           <mdb-dropdown-toggle tag="a" navLink class="background-explorer" slot="toggle">Select Node</mdb-dropdown-toggle>
           <mdb-dropdown-menu right>
@@ -18,6 +19,7 @@
 
 <script>
 import { mdbNavbar, mdbNavbarNav, mdbNavItem, mdbNavbarToggler, mdbDropdown, mdbDropdownToggle, mdbDropdownMenu, mdbDropdownItem } from 'mdbvue'
+import { Listener } from "proximax-nem2-sdk"
 
 export default {
   name: 'Menu',
@@ -33,28 +35,32 @@ export default {
   },
   data () {
     let nodes = [
-      "http://bctestnet1.xpxsirius.io:3000",
-      "http://bctestnet2.xpxsirius.io:3000",
-      "https://catapult.mocd.gov.ae/"
+      "bctestnet1.xpxsirius.io:3000",
+      "bctestnet2.xpxsirius.io:3000"
     ]
-
     const nodeSelected = localStorage.getItem('nodeSelected')
-
+    this.connectWS(nodeSelected)
     return {
       nodes: nodes,
-      nodeSelected: nodeSelected
+      nodeSelected: nodeSelected,
+      connector: null
     }
   },
   methods: {
-    navExplorer: function() {
-      this.$router.push('/explorer')
-      return
-    },
     changeNode: function (node) {
-      localStorage.setItem('nodeSelected', node)  
-      this.nodeSelected = node
+      localStorage.setItem('nodeSelected', node)
       this.$router.push('/explorer')
+    },
+    connectWS: function (node) {
+      this.connector = new Listener(`ws://${node}`)
+      // Try to open the connection
+      this.connector.open().then(() => {
+        listener
+          .newBlock()
+          .subscribe(block => console.log(block), err => console.error(err))
+      })
     }
+
   }
 }
 </script>
@@ -73,6 +79,13 @@ export default {
 
   .nav-link:hover {
     background: white !important;
+  }
+
+  .block {
+    display: block;
+    padding: .5rem 1rem;
+    padding-right: 0;
+    padding-left: 0;
   }
 
 </style>

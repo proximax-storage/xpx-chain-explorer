@@ -11,13 +11,14 @@ import {
   NamespaceHttp,
   PublicAccount,
   TransactionType,
-  TransactionHttp
+  TransactionHttp,
+  MosaicInfo
 } from 'proximax-nem2-sdk'
 
 export default class proximaxProvider {
 
   constructor() {
-    this.Url = localStorage.getItem('nodeSelected')    
+    this.Url = `http://${localStorage.getItem('nodeSelected')}`
     this.blocksHeight = new BehaviorSubject(null)
     this.blocksHeight$ = this.blocksHeight.asObservable()
     this.nodeSelecteds = data
@@ -26,7 +27,17 @@ export default class proximaxProvider {
     this.accountHttp = new AccountHttp(this.Url)
     this.namespaceHttp = new NamespaceHttp(this.Url)
     this.transactionHttp = new TransactionHttp(this.Url)
+    this.MosaicInfo = new MosaicInfo()
     this.accountInfo = {}
+  }
+
+  static mosaicXpx(){
+    return {
+      id: {
+        higher: 3559101211,
+        lower: 3530084852
+      }
+    }
   }
 
   static typeTransactions() {
@@ -213,7 +224,7 @@ export default class proximaxProvider {
    * @memberof proximaxProvider
    */
   getMosaicNameFromHex(id) {
-    const idFromHex = Id.fromHex(id);
+    const idFromHex = Id.fromHex(id)   
     const mosaicId = this.getMosaicId([idFromHex.lower, idFromHex.higher]);
     return this.getMosaicsName([mosaicId]);
   }

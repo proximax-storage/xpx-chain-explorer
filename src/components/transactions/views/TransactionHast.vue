@@ -1,11 +1,16 @@
 <template>
   <mdb-card class="card">
     <mdb-card-body>
-      <div class="d-flex align-items-center" v-if="!this.typeTransaction">
+      <div class="d-flex align-items-center" v-if="!showInfo">
         <strong>Loading...</strong>
         <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
       </div>
-      <div v-else>
+      <div v-if="showError">
+        <mdb-alert color="danger">
+          {{msg}}
+        </mdb-alert>
+      </div>
+      <div v-if="!showError && showInfo">
         <mdb-card-title>{{typeTransaction}}</mdb-card-title>
         <hr>
         <info-transactions v-if="this.typeTransaction" :transactionSelected="infoTransaction" :classGreen="classGreen" :classInfo="classInfo" ></info-transactions>
@@ -16,7 +21,7 @@
 
 <script>
 import proximaxProvider from '@/services/Service'
-import { mdbCard, mdbCardBody, mdbCardTitle, mdbCardText, mdbRow, mdbCol } from 'mdbvue'
+import { mdbCard, mdbCardBody, mdbCardTitle, mdbCardText, mdbRow, mdbCol, mdbAlert } from 'mdbvue'
 import infoTransactions from '@/components/shared/infoTransactions'
 const _proximaxProvider = new proximaxProvider()
 
@@ -29,6 +34,7 @@ export default {
     mdbCardText,
     mdbRow,
     mdbCol,
+    mdbAlert,
     infoTransactions
   },
   data () {
@@ -36,7 +42,10 @@ export default {
       infoTransaction: {},
       typeTransaction: '',
       classGreen: 2,
-      classInfo: true
+      classInfo: true,
+      showInfo: false,
+      showError: false,
+      msg: ''
     }
   },
   created: function () {
@@ -47,7 +56,6 @@ export default {
       _proximaxProvider.getTransactionInformation(hast).subscribe(
         resp => {
           const typeTransactions = proximaxProvider.typeTransactions()
-
           switch (resp.type) {
             case typeTransactions.transfer.id:
               this.typeTransaction = typeTransactions.transfer.name
@@ -55,10 +63,17 @@ export default {
               break;
           
             default:
+              this.msg = 'Unexpected error try later!'
+              this.showInfo = true
+              this.showError = true
               break;
           }
+          this.showInfo = true
         },
-        error => {
+        error => {          
+          this.msg = 'Communication error with the node!'
+          this.showInfo = true
+          this.showError = true
           console.log("Errrorrrrrr");
         }
       )
@@ -79,13 +94,13 @@ export default {
       }
 
       this.infoTransaction = [
-        { label: 'From',          value: transaction.signer.address.pretty(),     classLabel: 'col-md-2', classValue: 'col-md-10'},
-        { label: 'To',            value: transaction.recipient.pretty(),          classLabel: 'col-md-2', classValue: 'col-md-10'},
-        { label: 'Message',       value: transaction.message.payload,             classLabel: 'col-md-2', classValue: 'col-md-10'},
-        { label: 'Timestamp',     value: transaction.deadline.value.toString(),   classLabel: 'col-md-2', classValue: 'col-md-10'},
-        { label: 'Block Height',  value: transaction.transactionInfo.height.lower,classLabel: 'col-md-2', classValue: 'col-md-10'},
-        { label: 'Hash',          value: transaction.transactionInfo.hash,        classLabel: 'col-md-2', classValue: 'col-md-10'},
-        { label: 'Signature',     value: transaction.signature,                   classLabel: 'col-md-2', classValue: 'col-md-10'}
+        { label: 'From',          value: transaction.signer.address.pretty(),           classLabel: 'col-md-2', classValue: 'col-md-10'},
+        { label: 'To',            value: transaction.recipient.pretty(),                classLabel: 'col-md-2', classValue: 'col-md-10'},
+        { label: 'Message',       value: transaction.message.payload,                   classLabel: 'col-md-2', classValue: 'col-md-10'},
+        { label: 'Timestamp',     value: transaction.deadline.value.toString(),         classLabel: 'col-md-2', classValue: 'col-md-10'},
+        { label: 'Block Height',  value: transaction.transactionInfo.height.compact(),  classLabel: 'col-md-2', classValue: 'col-md-10'},
+        { label: 'Hash',          value: transaction.transactionInfo.hash,              classLabel: 'col-md-2', classValue: 'col-md-10'},
+        { label: 'Signature',     value: transaction.signature,                         classLabel: 'col-md-2', classValue: 'col-md-10'}
       ]
     }
   }

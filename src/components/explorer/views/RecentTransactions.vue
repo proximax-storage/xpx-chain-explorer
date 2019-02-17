@@ -37,8 +37,8 @@
               ---
             </div>
           </td>
-          <td class="font-size-08rem th-lg mouse-pointer text-center">
-            <i style="font-size: 18px; color: #118a81;" class="fa fa-search-plus" @click="viewInfo(transaction); showModal = true" aria-hidden="true"></i>
+          <td class="font-size-08rem th-lg text-center" @click="viewInfo(transaction); showModal = true">
+            <i style="font-size: 18px; color: #118a81; cursor:pointer;" class="fa fa-search-plus" aria-hidden="true"></i>
           </td>
         </tr>
       </mdb-tbl-body>
@@ -47,15 +47,15 @@
 
     <modal size="lg" v-if="showModal" @close="showModal = false">
         <modal-header class="background-explorer text-white">
-          <modal-title>Type {{typeTransaction[0].name}}</modal-title>
+          <modal-title>{{typeTransaction.name}}</modal-title>
         </modal-header>
         <modal-body>
           <section>
-            <type-transfer v-if="typeTransaction[0].id === arraTypeTransaction[0].id" :transactionSelected="transactionSelected" ></type-transfer>
-            <type-register-namespace v-if="typeTransaction[0].id === arraTypeTransaction[1].id" :transactionSelected="transactionSelected" ></type-register-namespace>
-            <type-mosaic-definition v-if="typeTransaction[0].id === arraTypeTransaction[2].id" :transactionSelected="transactionSelected" ></type-mosaic-definition>
-            <type-mosaic-supply-change v-if="typeTransaction[0].id === arraTypeTransaction[3].id" :transactionSelected="transactionSelected" ></type-mosaic-supply-change>
-            <type-modify-multisign v-if="typeTransaction[0].id === arraTypeTransaction[4].id" :transactionSelected="transactionSelected" ></type-modify-multisign>
+            <type-transfer v-if="typeTransaction.id === typeTransactions.transfer.id" :transactionSelected="transactionSelected" ></type-transfer>
+            <type-register-namespace v-if="typeTransaction.id === typeTransactions.registerNamespace.id" :transactionSelected="transactionSelected" ></type-register-namespace>
+            <type-mosaic-definition v-if="typeTransaction.id === typeTransactions.mosaicDefinition.id" :transactionSelected="transactionSelected" ></type-mosaic-definition>
+            <type-mosaic-supply-change v-if="typeTransaction.id === typeTransactions.mosaicSupplyChange.id" :transactionSelected="transactionSelected" ></type-mosaic-supply-change>
+            <type-modify-multisign v-if="typeTransaction.id === typeTransactions.modifyMultisigAccount.id" :transactionSelected="transactionSelected" ></type-modify-multisign>
           </section>
         </modal-body>
       </modal>
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import proximaxProvider from '@/services/proximaxProvider'
 import { mdbTbl, mdbTblHead, mdbTblBody, Modal, ModalHeader, ModalTitle, ModalBody, mdbRow, mdbCol } from 'mdbvue'
 import { TransactionType } from 'proximax-nem2-sdk'
 import Pagination from '@/components/shared/Pagination'
@@ -105,62 +106,19 @@ export default {
       showModal: false,
       typeTransaction: null,
       typeTransfer: TransactionType.TRANSFER,
-      arraTypeTransaction: [
-        {
-          id: TransactionType.TRANSFER,
-          name: 'Transfer'
-        },
-        {
-          id: TransactionType.REGISTER_NAMESPACE,
-          name: 'Register namespace'
-        },
-        {
-          id: TransactionType.MOSAIC_DEFINITION,
-          name: 'Mosaic definition'
-        },
-        {
-          id: TransactionType.MOSAIC_SUPPLY_CHANGE,
-          name: 'Mosaic supply change'
-        },
-        {
-          id: TransactionType.MODIFY_MULTISIG_ACCOUNT,
-          name: 'Modify multisig account'
-        },
-        {
-          id: TransactionType.AGGREGATE_COMPLETE,
-          name: 'Aggregate complete'
-        },
-        {
-          id: TransactionType.AGGREGATE_BONDED,
-          name: 'Aggregate bonded'
-        },
-        {
-          id: TransactionType.LOCK,
-          name: 'Lock'
-        },
-        {
-          id: TransactionType.SECRET_LOCK,
-          name: 'Secret lock'
-        },
-        {
-          id: TransactionType.SECRET_PROOF,
-          name: 'Secret proof'
-        }
-      ]
+      typeTransactions: proximaxProvider.typeTransactions()
     }
   },
   methods: {
     changePage: function(event) {
-      this.pag = event    
+      this.pag = event
     },
     viewInfo: function(transaction) {
-      this.typeTransaction = this.arraTypeTransaction.filter( element => element.id === transaction.type )
-      this.transactionSelected = transaction
-      console.log(this.arraTypeTransaction);
+      console.log(this.typeTransactions);
       
-      console.log(this.typeTransaction);
-      console.log(this.transactionSelected);
-      
+      const type = Object.keys(this.typeTransactions).find(element => this.typeTransactions[element].id === transaction.type)
+      this.typeTransaction = this.typeTransactions[type]
+      this.transactionSelected = transaction      
     }
   }
 

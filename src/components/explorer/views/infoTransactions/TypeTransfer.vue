@@ -41,7 +41,7 @@
         <span class="fs-08rem fw-bolder"><b>Height:</b></span>
       </mdb-col>
       <mdb-col md="10">
-        <span class="fs-08rem fw-bolder">{{transactionSelected.transactionInfo.height.lower}}</span>
+        <span class="fs-08rem fw-bolder">{{transactionSelected.transactionInfo.height.compact()}}</span>
       </mdb-col>
     </mdb-row>
     <mdb-row>

@@ -5,7 +5,12 @@
         <strong>Loading...</strong>
         <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
       </div>
-      <div v-else>
+      <div v-if="showError">
+        <mdb-alert color="danger">
+          {{msg}}
+        </mdb-alert>
+      </div>
+      <div v-if="!showError && showInfo">
       <mdb-card-title>Block Info</mdb-card-title>
       <hr>
         <mdb-card-text>
@@ -19,7 +24,7 @@
           </mdb-row>
           <mdb-row class="info green-back">
             <mdb-col sm="4" md="3"><span class="fs-08rem bold">Difficulty:</span></mdb-col>
-            <mdb-col sm="8" md="9"><span class="fs-08rem">{{blockInfo.difficulty.compact()}}</span></mdb-col>
+            <mdb-col sm="8" md="9"><span class="fs-08rem">{{blockInfo.difficulty}}</span></mdb-col>
           </mdb-row>
           <mdb-row class="info">
             <mdb-col sm="4" md="3"><span class="fs-08rem bold">Txes:</span></mdb-col>
@@ -27,7 +32,7 @@
           </mdb-row>
           <mdb-row class="info green-back">
             <mdb-col sm="4" md="3"><span class="fs-08rem bold">Fees:</span></mdb-col>
-            <mdb-col sm="8" md="9"><span class="fs-08rem">{{blockInfo.totalFee.compact()}}</span></mdb-col>
+            <mdb-col sm="8" md="9"><span class="fs-08rem" v-html="blockInfo.totalFee"></span></mdb-col>
           </mdb-row>
           <mdb-row class="info">
             <mdb-col sm="4" md="3"><span class="fs-08rem bold">Harvester/Forger:</span></mdb-col>
@@ -43,6 +48,13 @@
           <strong>Loading Recent Transactions...</strong>
           <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
         </div>
+        <br>
+        <div class="row mt-3rem" v-if="noShowTransactions">
+          <div class="col-6">
+            <h4>Recent transactions</h4>
+            <h6>nothing to show</h6>
+          </div>
+        </div>
         <recent-transactions v-if="showRecentTransaction" :transactions='blockTransactions' ></recent-transactions>
       </div>      
     </mdb-card-body>
@@ -50,9 +62,10 @@
 </template>
 <script>
 import proximaxProvider from '@/services/proximaxProvider'
+import Utils from '@/services/Utils'
 import { Deadline, BlockInfo } from 'proximax-nem2-sdk'
 import RecentTransactions from '@/components/explorer/views/RecentTransactions'
-import { mdbCard, mdbCardBody, mdbCardTitle, mdbCardText, mdbRow, mdbCol } from 'mdbvue'
+import { mdbCard, mdbCardBody, mdbCardTitle, mdbCardText, mdbRow, mdbCol, mdbAlert } from 'mdbvue'
 
 const _proximaxProvider = new proximaxProvider()
 
@@ -65,6 +78,7 @@ export default {
     mdbCardText,
     mdbRow,
     mdbCol,
+    mdbAlert,
     RecentTransactions
   },
   data () {
@@ -74,8 +88,10 @@ export default {
       blockInfo: {},
       blockTransactions: [],
       showRecentTransaction: false,
-      showInfo: false
-
+      showInfo: false,
+      showError: false,
+      noShowTransactions: false,
+      msg: ''
     }
   },
   methods: {
@@ -84,22 +100,27 @@ export default {
         next => {
         let time = new Date(next.timestamp.compact() + Deadline.timestampNemesisBlock * 1000)
         next.date = time.toUTCString()
-        console.log((Math.pow(10, 14)*100).toFixed(2))
-        
-        console.log((next.difficulty.compact()/Math.pow(10, 14)*100).toFixed(2) + "%")
-        
+        next.difficulty = (next.difficulty.compact()/Math.pow(10, 14)*100).toFixed(2) + "%"
+        next.totalFee = Utils.fmtAmountValue(next.totalFee.compact())
         this.blockInfo = next
+        this.noShowTransactions = (this.blockInfo.numTransactions > 0) ? false : true
         this.showInfo = true
         _proximaxProvider.blockchainHttp.getBlockTransactions(parseInt(block)).subscribe(
           blockTransactions => {
             this.showRecentTransaction = true
             this.blockTransactions = blockTransactions
+            this.noShowTransactions = (this.blockTransactions.length > 0) ? false : true
+          },
+          error => {
+            this.noShowTransactions = true
           }
         )
       },
       error => {
         console.log("Errorrrrr")
-        this.showInfo = false;
+        this.showInfo = true
+        this.msg = 'Communication error with the node!'
+        this.showError = true
       })
     }
   }

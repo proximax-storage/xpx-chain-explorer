@@ -67,23 +67,32 @@ export default {
       this.disabledInput = (value !== '') ? false : true 
     },
 
-    search: function () {      
+    search: function () {
+      let routeData
       switch (this.optionSelect) {
         case 'address':
-          this.$router.push({ path: `/account-info/${this.input}` })
+          routeData = this.$router.resolve({path: `/account-info/${this.input}`})
+          window.open(routeData.href, '_blank')
+          // this.$router.push({ path: `/account-info/${this.input}` })
           break
 
         case 'publickey':
-          const publicAccount = _proximaxProvider.createPublicAccount(this.input, NetworkType.TEST_NET)          
-          this.$router.push({ path: `/account-info/${publicAccount.address.address}` })
+          const publicAccount = _proximaxProvider.createPublicAccount(this.input, NetworkType.TEST_NET)
+          routeData = this.$router.resolve({path: `/account-info/${publicAccount.address.address}`})
+          window.open(routeData.href, '_blank')        
+          // this.$router.push({ path: `/account-info/${publicAccount.address.address}` })
           break
 
         case 'block':
-          this.$router.push({ path: `/block-info/${this.input}` })
+          routeData = this.$router.resolve({path: `/block-info/${this.input}`})
+          window.open(routeData.href, '_blank') 
+          // this.$router.push({ path: `/block-info/${this.input}` })
           break
         
-        case 'hash':        
-          this.$router.push({ path: `/transactions/hast/${this.input}` })
+        case 'hash':
+          routeData = this.$router.resolve({path: `/transactions/hast/${this.input}`})
+          window.open(routeData.href, '_blank')    
+          // this.$router.push({ path: `/transactions/hast/${this.input}` })
           break
       }
     }
