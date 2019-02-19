@@ -16,11 +16,9 @@
       <mdb-tbl-body>
         <tr v-for="(transaction, i) in transactions" :key="i" v-show="(pag - 1) * NUM_RESULTS <= i  && pag * NUM_RESULTS > i">
           <td class="th-lg text-center">
-            <span class="fs-08rem fw-bolder">{{transaction.deadline.value.toString()}}</span>
+            <span class="fs-08rem fw-bolder">{{transaction.deadline}}</span>
           </td>
-          <td class="font-size-08rem text-center th-lg">
-            {{transaction.fee.compact()}}
-          </td>
+          <td class="font-size-08rem text-center th-lg" v-html="transaction.fee"></td>
           <td class="font-size-08rem th-lg">
             <span class="font-size-08rem">
               <i v-if="transaction.type === typeTransfer"  style="padding-right: 10px;" :style="{'color': transaction.recipient.address === address ? 'green' : 'red' }" class="fa fa-send" aria-hidden="true"></i>
@@ -34,7 +32,9 @@
               </span>
             </div>
             <div v-else>
-              ---
+              <span v-if="transaction.type === typeTransactions.mosaicDefinition.id" class="fs-08rem fw-bolder">New Mosaic</span>
+              <span v-if="transaction.type === typeTransactions.mosaicSupplyChange.id" class="fs-08rem fw-bolder">New Mosaic Supply</span>
+              <span v-if="transaction.type === typeTransactions.registerNamespace.id" class="fs-08rem fw-bolder">Root NS</span>
             </div>
           </td>
           <td class="font-size-08rem th-lg text-center" @click="viewInfo(transaction); showModal = true">
@@ -97,8 +97,6 @@ export default {
     TypeModifyMultisign
   },
   data () {
-    console.log(this.transactions)
-
     return {
       headElements: ['Timestamp', 'Fee',  'Sender', 'Recipient', 'View more'],
       NUM_RESULTS: 5, // Numero de resultados por página
@@ -106,16 +104,15 @@ export default {
       showModal: false,
       typeTransaction: null,
       typeTransfer: TransactionType.TRANSFER,
-      typeTransactions: proximaxProvider.typeTransactions()
+      typeTransactions: proximaxProvider.typeTransactions(),
+      transactionSelected: []
     }
   },
   methods: {
     changePage: function(event) {
       this.pag = event
     },
-    viewInfo: function(transaction) {
-      console.log(this.typeTransactions);
-      
+    viewInfo: function(transaction) {      
       const type = Object.keys(this.typeTransactions).find(element => this.typeTransactions[element].id === transaction.type)
       this.typeTransaction = this.typeTransactions[type]
       this.transactionSelected = transaction      

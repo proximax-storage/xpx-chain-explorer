@@ -13,7 +13,7 @@ import SearchFilter from '@/components/searchFilter/SearchFilter'
 export default {
   components: {
     Menu,
-    SearchFilter
+    SearchFilter,
   }  
 }
 </script>
@@ -74,6 +74,14 @@ export default {
 
   .text-white {
     color: white !important;
+  }
+
+  .text-green {
+    color: green !important;
+  }
+
+  .text-red {
+    color: red !important;
   }
 
   .page-link {

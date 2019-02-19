@@ -6,12 +6,12 @@
       <a href="#" class="page-link" @click.prevent="changePage(--pag)" :class="{'disabled':(pag == 1)}"><span>«</span></a>
         <!-- buttons of pages -->
         <span v-if="showPrev">...</span>
-        <a href="#" class="page-link" v-for="page in Math.round(quantity/numResults)" :key="page" v-show="page === pag || page === prevPag || page === nextPag" :class="{'active':(page === pag)}" @click.prevent="changePage(page)">{{page}}</a>
+        <a href="#" class="page-link" v-for="page in numberPag" :key="page" v-show="page === pag || page === prevPag || page === nextPag" :class="{'active':(page === pag)}" @click.prevent="changePage(page)">{{page}}</a>
         <span v-if="showNext">...</span>
       <!-- button of next pagination -->
-      <a href="#" class="page-link" @click.prevent="changePage(++pag)" :class="{'disabled':(pag == Math.round(quantity/numResults))}"><span>»</span></a>
+      <a href="#" class="page-link" @click.prevent="changePage(++pag)" :class="{'disabled':(pag == numberPag)}"><span>»</span></a>
     <!-- button of last pagination -->
-    <a class="page-link" :class="{'disabled':(pag == Math.round(quantity/numResults))}" @click.prevent="changePage(Math.round(quantity/numResults))">Last</a>
+    <a class="page-link" :class="{'disabled':(pag == numberPag)}" @click.prevent="changePage(numberPag)">Last</a>
   </mdb-pagination>
 </template>
 
@@ -28,12 +28,21 @@ export default {
     numResults: Number
   },
   data () {
+    let number = Math.round(this.quantity/this.numResults)
     return {
       showPrev: false,
       showNext: false,
       pag: 1,
       prevPag: 0,
-      nextPag: 2
+      nextPag: 2,
+      numberPag: number
+    }
+  },
+  watch: {
+    quantity: function (val) {
+      console.log("Valor paginado",val);
+      this.numberPag = Math.round(val/this.numResults)
+      console.log("Valor de Cantiad de Paginas", this.numberPag);
     }
   },
   methods: {

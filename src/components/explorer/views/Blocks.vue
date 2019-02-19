@@ -54,8 +54,9 @@ import Utils from '@/services/Utils'
 import { Deadline, BlockInfo } from 'proximax-nem2-sdk'
 import { mdbTbl, mdbTblHead, mdbTblBody, mdbCard, mdbCardBody, mdbAlert } from 'mdbvue'
 import Pagination from '@/components/shared/Pagination'
+import EventBus from '@/eventBus'
 
-const _proximaxProvider = new proximaxProvider()
+var _proximaxProvider
 
 export default {
   name: 'Blocks',
@@ -69,6 +70,7 @@ export default {
     mdbAlert
   },
   data () {
+    _proximaxProvider = new proximaxProvider()
     this.viewAllTransactions()
     return {
       headElements: ['Block Height', 'Harvester/Forger', 'Txes', 'Fee', 'Timestamp', 'Export CSV'],
@@ -76,8 +78,22 @@ export default {
       NUM_RESULTS: 10, // Numero de resultados por página
       pag: 1, // Página inicial
       showInfo: false,
+      quantity: 0,
       msg: '',
-      countPet: 0
+      BlockC: null
+    }
+  },
+  mounted: function() {
+    EventBus.$on('CurrentBlock', (block) => {
+      this.BlockC = block
+    })
+  },
+  watch: {
+    BlockC: function (val) {
+            console.log(val);
+
+      this.blockInfo.unshift(val)
+      this.quantity = this.blockInfo.length
     }
   },
   methods: {
@@ -90,37 +106,27 @@ export default {
           _proximaxProvider.blockchainHttp.getBlocksByHeightWithLimit(next.compact(), 100).subscribe(
             blockInfo => {
               blockInfo.forEach(element => {
-                element.totalFee = Utils.fmtAmountValue(element.totalFee.compact())
-                element.date = new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)).toUTCString()
-                if (event.length > 0) { event.push(element) }
+                element.totalFee = Utils.fmtAmountValue(element.totalFee.compact())                
+                element.date = Utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+                this.blockInfo.push(element)
               })
-              this.blockInfo = (event.length === 0) ? blockInfo : event
-              this.showInfo = true          
+              this.quantity = this.blockInfo.length
+              this.showInfo = true
             },
             error => {
-              if (this.countPet < 3) {
-                this.countPet = this.countPet + 1
-                this.viewAllTransactions()
-              } else {
-                this.msg = 'Communication error with the node!'
-                this.showInfo = true
-              }
+              this.msg = 'Communication error with the node!'
+              this.showInfo = true
             }
           )
         },
         error => {
-          if (this.countPet < 3) {
-            this.countPet = this.countPet + 1
-            this.viewAllTransactions()
-          } else {
-            this.msg = 'Communication error with the node!'
-            this.showInfo = true
-          }
+          this.msg = 'Communication error with the node!'
+          this.showInfo = true
         }
       )
     },
     changePage: function(event) {
-      this.pag = event      
+      this.pag = event  
     }
   }
 }

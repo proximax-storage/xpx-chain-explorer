@@ -1,10 +1,10 @@
 <template>
   <!--Navbar-->
-  <mdb-navbar class="background-explorer" scrolling dark spand>
+  <mdb-navbar class="background-explorer nav-xplorer" scrolling dark spand>
     <img src="@/assets/logo/proximax-white.png" height="30">
+    <span class="text-white block">Current Block: <strong v-html="currentBlock"></strong></span>
     <mdb-navbar-toggler>
       <mdb-navbar-nav nav right>
-        <span class="text-white block">Current Block: <strong>7487876</strong></span>
         <a href="#" class="nav-link navbar-link text-white" @click="navExplorer()">Blocks</a>
         <mdb-dropdown tag="li">
           <mdb-dropdown-toggle tag="a" navLink class="background-explorer" slot="toggle">Select Node</mdb-dropdown-toggle>
@@ -19,7 +19,9 @@
 
 <script>
 import { mdbNavbar, mdbNavbarNav, mdbNavItem, mdbNavbarToggler, mdbDropdown, mdbDropdownToggle, mdbDropdownMenu, mdbDropdownItem } from 'mdbvue'
-import { Listener } from "proximax-nem2-sdk"
+import { Listener, Deadline } from "proximax-nem2-sdk"
+import Utils from '@/services/Utils'
+import EventBus from '@/eventBus'
 
 export default {
   name: 'Menu',
@@ -33,17 +35,34 @@ export default {
     mdbDropdownMenu,
     mdbDropdownItem
   },
+  mounted: function() {
+    let getEl = () => {
+      let el = document.querySelector("#navbarSupportedContent")
+      if (el == null || el == undefined) {
+        getEl()
+      } else {
+        el.classList.remove("navbar-collapse")
+        el.classList.remove("collapse")        
+      }
+    }
+    getEl()
+  },
   data () {
     let nodes = [
       "bctestnet1.xpxsirius.io:3000",
       "bctestnet2.xpxsirius.io:3000"
     ]
-    const nodeSelected = localStorage.getItem('nodeSelected')
+    let nodeSelected = localStorage.getItem('nodeSelected')
+    if (nodeSelected == null) {
+      nodeSelected = nodes[0]
+      localStorage.setItem('nodeSelected', nodes[0])
+    }
     this.connectWS(nodeSelected)
     return {
       nodes: nodes,
       nodeSelected: nodeSelected,
-      connector: null
+      connector: null,
+      currentBlock: null
     }
   },
   methods: {
@@ -51,13 +70,21 @@ export default {
       localStorage.setItem('nodeSelected', node)
       this.$router.push('/explorer')
     },
+    navExplorer: function () {
+      this.$router.push('/explorer')
+    },
     connectWS: function (node) {
-      this.connector = new Listener(`ws://${node}`)
-      // Try to open the connection
-      this.connector.open().then(() => {
+      const listener = new Listener(`ws://${node}`, WebSocket)
+      listener.open().then(() => {
         listener
           .newBlock()
-          .subscribe(block => console.log(block), err => console.error(err))
+          .subscribe(block => {
+            block.numTransactions = (block.numTransactions === undefined) ? 0 : block.numTransactions
+            block.totalFee = Utils.fmtAmountValue(block.totalFee.compact())
+            block.date = Utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+            EventBus.$emit('CurrentBlock', block)
+            this.currentBlock = block.height.compact()
+          }, err => console.error(err))
       })
     }
 
@@ -86,6 +113,11 @@ export default {
     padding: .5rem 1rem;
     padding-right: 0;
     padding-left: 0;
+  }
+
+  .nav-xplorer {
+    display: flex;
+    justify-content: space-between;
   }
 
 </style>

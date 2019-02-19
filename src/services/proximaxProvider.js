@@ -12,7 +12,8 @@ import {
   PublicAccount,
   TransactionType,
   TransactionHttp,
-  MosaicInfo
+  MosaicInfo,
+  MosaicService
 } from 'proximax-nem2-sdk'
 
 export default class proximaxProvider {
@@ -28,15 +29,25 @@ export default class proximaxProvider {
     this.namespaceHttp = new NamespaceHttp(this.Url)
     this.transactionHttp = new TransactionHttp(this.Url)
     this.MosaicInfo = new MosaicInfo()
+    this.mosaicService = new MosaicService(this.accountHttp, this.mosaicHttp, this.namespaceHttp)
     this.accountInfo = {}
   }
 
   static mosaicXpx(){
+    return 'd423931bd268d1f4'
+  }
+
+  static mosaicFullXpx(){
     return {
-      id: {
-        higher: 3559101211,
-        lower: 3530084852
-      }
+      id: 'd423931bd268d1f4',
+      name: 'prx:xpx'
+    }
+  }
+
+  static namespaceXpx(){
+    return {
+      id: '316d77fd8b6fb3be',
+      name: 'prx'
     }
   }
 
@@ -229,8 +240,22 @@ export default class proximaxProvider {
     return this.getMosaicsName([mosaicId]);
   }
 
-  getAllNodes () {
-    return this.nodes.nodes
+  /**
+   * GET INFO MOSAICS, RETURN PROMISE
+   *
+   * @param {MosaicId} mosaicsId
+   * @returns
+   * @memberof NemProvider
+   */
+  async getMosaicViewPromise(mosaicsId) {
+    const promise = await new Promise(async (resolve, reject) => {
+      console.warn("********** GET INFO MOSAICS TO PROMISE **********")
+      const mosaicsView = await this.mosaicService.mosaicsView(mosaicsId).toPromise()
+      resolve(mosaicsView)
+    });
+
+    console.log("***RESPUESTA CONSULTA DE MOSAICOS****", promise);
+    return await promise;
   }
 
 }

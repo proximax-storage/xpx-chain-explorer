@@ -22,7 +22,7 @@ import { mdbSelect, mdbContainer, mdbInput, mdbRow, mdbCol, mdbIcon, mdbBtn } fr
 import { Address, NetworkType } from 'proximax-nem2-sdk'
 import proximaxProvider from '@/services/proximaxProvider'
 
-const _proximaxProvider = new proximaxProvider()
+var _proximaxProvider
 
 // { text: 'Namespace Name', value: 'namespaceName' },
 // { text: 'Namespace Id', value: 'namespaceId' },
@@ -40,6 +40,7 @@ export default {
     mdbBtn
   },
   data() {
+    _proximaxProvider = new proximaxProvider()
     return {
       options: [
         { text: 'Select type search', value: ''},

@@ -67,7 +67,7 @@ import { Deadline, BlockInfo } from 'proximax-nem2-sdk'
 import RecentTransactions from '@/components/explorer/views/RecentTransactions'
 import { mdbCard, mdbCardBody, mdbCardTitle, mdbCardText, mdbRow, mdbCol, mdbAlert } from 'mdbvue'
 
-const _proximaxProvider = new proximaxProvider()
+var _proximaxProvider
 
 export default {
   name: 'BlockInfo',
@@ -82,6 +82,7 @@ export default {
     RecentTransactions
   },
   data () {
+    _proximaxProvider =  new proximaxProvider()
     this.getBlockByHeight(this.$route.params.block)
     return {
       block: this.$route.params.block,
@@ -98,8 +99,7 @@ export default {
     getBlockByHeight: function (block) {
       _proximaxProvider.blockchainHttp.getBlockByHeight(parseInt(block)).subscribe(
         next => {
-        let time = new Date(next.timestamp.compact() + Deadline.timestampNemesisBlock * 1000)
-        next.date = time.toUTCString()
+        next.date = Utils.fmtTime(new Date(next.timestamp.compact() + Deadline.timestampNemesisBlock * 1000))
         next.difficulty = (next.difficulty.compact()/Math.pow(10, 14)*100).toFixed(2) + "%"
         next.totalFee = Utils.fmtAmountValue(next.totalFee.compact())
         this.blockInfo = next
@@ -107,8 +107,12 @@ export default {
         this.showInfo = true
         _proximaxProvider.blockchainHttp.getBlockTransactions(parseInt(block)).subscribe(
           blockTransactions => {
-            this.showRecentTransaction = true
             this.blockTransactions = blockTransactions
+            for (const index in this.blockTransactions) {              
+              this.blockTransactions[index].fee = Utils.fmtAmountValue(this.blockTransactions[index].fee.compact())
+              this.blockTransactions[index].deadline = Utils.fmtTime(new Date(this.blockTransactions[index].deadline.value.toString()))              
+            }
+            this.showRecentTransaction = true
             this.noShowTransactions = (this.blockTransactions.length > 0) ? false : true
           },
           error => {
