@@ -1,20 +1,24 @@
 <template>
-  <!--Navbar-->
-  <mdb-navbar class="background-explorer nav-xplorer" scrolling dark spand>
-    <img src="@/assets/logo/proximax-white.png" height="30">
+<div>
+  <!-- Navbar-->
+  <mdb-navbar class="background-explorer nav-xplorer" dark spand>
+    <div class="row">
+      <img src="@/assets/logo/proximax-white.png" height="30">
+      <mdb-navbar-toggler>
+        <mdb-navbar-nav nav>
+          <a href="#" class="nav-link navbar-link text-white" @click="navExplorer()">Blocks</a>
+          <mdb-dropdown tag="li">
+            <mdb-dropdown-toggle tag="a" navLink class="background-explorer" slot="toggle">Select Node</mdb-dropdown-toggle>
+            <mdb-dropdown-menu>
+              <a href="#" class="dropdown-item" :class="{ active : nodeSelected === node}"  v-for="node in nodes" :key="node" @click="changeNode(node)">{{node}}</a>
+            </mdb-dropdown-menu>
+          </mdb-dropdown>
+        </mdb-navbar-nav>
+      </mdb-navbar-toggler>
+    </div>
     <span class="text-white block">Current Block: <strong v-html="currentBlock"></strong></span>
-    <mdb-navbar-toggler>
-      <mdb-navbar-nav nav right>
-        <a href="#" class="nav-link navbar-link text-white" @click="navExplorer()">Blocks</a>
-        <mdb-dropdown tag="li">
-          <mdb-dropdown-toggle tag="a" navLink class="background-explorer" slot="toggle">Select Node</mdb-dropdown-toggle>
-          <mdb-dropdown-menu right>
-            <a href="#" class="dropdown-item" :class="{ active : nodeSelected === node}"  v-for="node in nodes" :key="node" @click="changeNode(node)">{{node}}</a>
-          </mdb-dropdown-menu>
-        </mdb-dropdown>
-      </mdb-navbar-nav>
-    </mdb-navbar-toggler>
   </mdb-navbar>
+</div>
 </template>
 
 <script>
@@ -22,6 +26,9 @@ import { mdbNavbar, mdbNavbarNav, mdbNavItem, mdbNavbarToggler, mdbDropdown, mdb
 import { Listener, Deadline } from "proximax-nem2-sdk"
 import Utils from '@/services/Utils'
 import EventBus from '@/eventBus'
+import proximaxProvider from '@/services/proximaxProvider'
+
+var _proximaxProvider
 
 export default {
   name: 'Menu',
@@ -36,16 +43,17 @@ export default {
     mdbDropdownItem
   },
   mounted: function() {
-    let getEl = () => {
-      let el = document.querySelector("#navbarSupportedContent")
-      if (el == null || el == undefined) {
-        getEl()
-      } else {
-        el.classList.remove("navbar-collapse")
-        el.classList.remove("collapse")        
+    _proximaxProvider = new proximaxProvider()
+    _proximaxProvider.blockchainHttp.getBlockchainHeight().subscribe(
+      next => {
+        _proximaxProvider.setBlocksHeightLocal(next)
+        this.currentBlock = next.compact()
+      },
+      error => {
+        console.log("Errorrrrr");
+        
       }
-    }
-    getEl()
+    )
   },
   data () {
     let nodes = [
@@ -118,6 +126,10 @@ export default {
   .nav-xplorer {
     display: flex;
     justify-content: space-between;
+  }
+
+  img {
+    margin: 5px 10px 5px 10px;
   }
 
 </style>

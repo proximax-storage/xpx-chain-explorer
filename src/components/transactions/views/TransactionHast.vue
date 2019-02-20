@@ -226,7 +226,7 @@ export default {
       this.infoTransaction = [
         { label: 'Namespace',          value: transaction.namespaceName,           classLabel: 'col-md-2', classValue: 'col-md-10'},
         { label: 'Fee',            value: Utils.fmtAmountValue(transaction.fee.compact()),                classLabel: 'col-md-2', classValue: 'col-md-10'},
-        { label: 'Duration',       value: Utils.calculateDuration(transaction.duration.compact()),                   classLabel: 'col-md-2', classValue: 'col-md-10'},
+        { label: 'Duration',       value: `<span><b>(Blocks: ${transaction.duration.compact()})</b> ${Utils.calculateDuration(transaction.duration.compact())}</span>`,                   classLabel: 'col-md-2', classValue: 'col-md-10'},
         { label: 'Signer',     value: transaction.signer.address.pretty(),         classLabel: 'col-md-2', classValue: 'col-md-10'},
         { label: 'Deadline',          value: Utils.fmtTime(new Date(transaction.deadline.value.toString())) ,              classLabel: 'col-md-2', classValue: 'col-md-10'},
         { label: 'Block Height',     value: transaction.transactionInfo.height.compact(),                         classLabel: 'col-md-2', classValue: 'col-md-10'},

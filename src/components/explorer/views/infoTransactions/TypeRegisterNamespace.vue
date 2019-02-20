@@ -22,7 +22,7 @@
         <span class="fs-08rem fw-bolder"><b>Duration: </b></span>
       </mdb-col>
       <mdb-col md="10">
-        <span class="fs-08rem fw-bolder">{{duration}}</span>
+        <span class="fs-08rem fw-bolder" v-html="duration"></span>
       </mdb-col>
     </mdb-row>
     <hr>
@@ -87,7 +87,7 @@ export default {
   },
   data () {
     return {
-      duration: Utils.calculateDuration(this.transactionSelected.duration.compact())
+      duration: `<b>(Blocks: ${this.transactionSelected.duration.compact()})</b> ${Utils.calculateDuration(this.transactionSelected.duration.compact())}`
     }
   }
 }

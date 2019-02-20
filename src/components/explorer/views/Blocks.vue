@@ -35,9 +35,9 @@
               <td class="font-size-08rem text-center th-lg" v-html="item.totalFee"></td>
               <td class="text-center th-lg">{{item.date}}</td>
 
-              <td class="font-size-08rem text-center th-lg mouse-pointer">
+              <!-- <td class="font-size-08rem text-center th-lg mouse-pointer">
                 <i style="font-size: 18px; color: #118a81;" class="fa fa-download" aria-hidden="true"></i>
-              </td>
+              </td> -->
             </tr>
           </mdb-tbl-body>
         </mdb-tbl>
@@ -73,7 +73,7 @@ export default {
     _proximaxProvider = new proximaxProvider()
     this.viewAllTransactions()
     return {
-      headElements: ['Block Height', 'Harvester/Forger', 'Txes', 'Fee', 'Timestamp', 'Export CSV'],
+      headElements: ['Block Height', 'Harvester/Forger', 'Txes', 'Fee', 'Timestamp'],
       blockInfo: [],
       NUM_RESULTS: 10, // Numero de resultados por página
       pag: 1, // Página inicial

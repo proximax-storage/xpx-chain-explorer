@@ -30,7 +30,7 @@
             </mdb-col>
           </mdb-row>
           <mdb-row class="info green-back">
-            <mdb-col sm="4" md="3"><span class="fs-08rem bold">XPX Balance::</span></mdb-col>
+            <mdb-col sm="4" md="3"><span class="fs-08rem bold">XPX Balance:</span></mdb-col>
             <mdb-col sm="8" md="9"><span class="fs-08rem" v-html="mosaicXpx"></span></mdb-col>
           </mdb-row>
         </mdb-card-text>
