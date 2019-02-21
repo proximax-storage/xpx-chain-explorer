@@ -2,23 +2,23 @@
   <div>
     <mdb-card class="card">
     <mdb-card-body>
-      <div class="d-flex align-items-center" v-if="!showInfo">
+      <div class="d-flex align-items-center" v-if="!showInfo && !showError">
         <strong>Loading...</strong>
         <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
       </div>
-      <div v-if="showInfo && blockInfo.length === 0">
+      <div v-if="showError">
         <mdb-alert color="danger">
           {{msg}}
         </mdb-alert>
       </div>
-      <div v-if="showInfo && blockInfo.length > 0">
+      <div v-if="showInfo">
         <mdb-tbl striped responsiveXl responsiveLg responsiveMd responsiveSm>
           <mdb-tbl-head class="background-explorer" textWhite>
             <tr>
               <th v-for="(head, index) in headElements" :key="index" class="text-center">{{head}}</th>
             </tr>
           </mdb-tbl-head>
-          <mdb-tbl-body>
+          <mdb-tbl-body v-if="blockInfo.length > 0">
             <tr v-for="(item, i) in blockInfo" :key="i" v-show="(pag - 1) * NUM_RESULTS <= i  && pag * NUM_RESULTS > i">
               <th class="font-size-08rem text-center th-sm">
                 <span class="font-size-08rem">
@@ -38,6 +38,13 @@
               <!-- <td class="font-size-08rem text-center th-lg mouse-pointer">
                 <i style="font-size: 18px; color: #118a81;" class="fa fa-download" aria-hidden="true"></i>
               </td> -->
+            </tr>
+          </mdb-tbl-body>
+          <mdb-tbl-body v-if="blockInfo.length === 0">
+            <tr>
+              <td class="th-lg text-center" colspan="5">
+                <span>nothing to show</span>
+              </td>
             </tr>
           </mdb-tbl-body>
         </mdb-tbl>
@@ -75,9 +82,11 @@ export default {
     return {
       headElements: ['Block Height', 'Harvester/Forger', 'Txes', 'Fee', 'Timestamp'],
       blockInfo: [],
+      node: null,
       NUM_RESULTS: 10, // Numero de resultados por página
       pag: 1, // Página inicial
       showInfo: false,
+      showError: false,
       quantity: 0,
       msg: '',
       BlockC: null
@@ -86,6 +95,15 @@ export default {
   mounted: function() {
     EventBus.$on('CurrentBlock', (block) => {
       this.BlockC = block
+    })
+
+    EventBus.$on('ChangeNode', (node) => {
+      if (this.node != node) {
+        this.showInfo = false
+        this.showError = false
+        this.blockInfo = []
+        this.viewAllTransactions()
+      }
     })
   },
   watch: {
@@ -115,13 +133,13 @@ export default {
             },
             error => {
               this.msg = 'Communication error with the node!'
-              this.showInfo = true
+              this.showError = true
             }
           )
         },
         error => {
           this.msg = 'Communication error with the node!'
-          this.showInfo = true
+          this.showError = true
         }
       )
     },

@@ -33,10 +33,20 @@ export default class proximaxProvider {
     this.accountInfo = {}
   }
 
+  /**
+   * Get id mosaic xpx
+   *
+   * @memberof proximaxProvider
+   */
   static mosaicXpx(){
     return 'd423931bd268d1f4'
   }
 
+  /**
+   * Get id,name mosaic xpx
+   *
+   * @memberof proximaxProvider
+   */
   static mosaicFullXpx(){
     return {
       id: 'd423931bd268d1f4',
@@ -44,6 +54,11 @@ export default class proximaxProvider {
     }
   }
 
+  /**
+   * Get id,name namespace xpx
+   *
+   * @memberof proximaxProvider
+   */
   static namespaceXpx(){
     return {
       id: '316d77fd8b6fb3be',
@@ -51,6 +66,11 @@ export default class proximaxProvider {
     }
   }
 
+  /**
+   * Get type transactions
+   *
+   * @memberof proximaxProvider
+   */
   static typeTransactions() {
     return {
       transfer: {
@@ -97,10 +117,12 @@ export default class proximaxProvider {
   }
 
   /**
-   * createPublicAccount
+   * Create public account
+   * 
    * @param publicKey
    * @param network
-   * @returns {PublicAccount}
+   * @returns {Observable} PublicAccount
+   * @memberof proximaxProvider
    */
   createPublicAccount(publicKey, network) {
     return PublicAccount.createFromPublicKey(publicKey, network);
@@ -109,19 +131,18 @@ export default class proximaxProvider {
   /**
    * Create an Address from a given raw address.
    *
-   * @param {*} address
-   * @returns {Address}
+   * @param address
+   * @returns {Observable} Address
    * @memberof proximaxProvider
    */
   createFromRawAddress(address) {
-    console.log("desde el servicio",Address.createFromRawAddress(address));
     return Address.createFromRawAddress(address)
   }
 
   /**
-   * Get blocks height local
+   * Get block height
    *
-   * @returns
+   * @returns {Observable} Address
    * @memberof proximaxProvider
    */
   getBlocksHeightLocal() {
@@ -133,6 +154,7 @@ export default class proximaxProvider {
    * Set blocks height local
    *
    * @param param
+   * @returns {Observable} BlockHeight
    * @memberof proximaxProvider
    */
   setBlocksHeightLocal(param) {
@@ -140,17 +162,23 @@ export default class proximaxProvider {
   }
 
   /**
-   *Gets an AccountInfo for an account.
+   * Gets an AccountInfo for an account.
    *
-   * @param {Address} address
-   * @returns {Observable}
+   * @param address
+   * @returns {Observable} accountHttp
    * @memberof proximaxProvider
    */
   getAccountInfo(address) {
     return this.accountHttp.getAccountInfo(address)
   }
 
-
+  /**
+   * Get all transactions from an account
+   *
+   * @param address
+   * @returns {Observable} accountHttp
+   * @memberof proximaxProvider
+   */
   getAllTransactionsFromAccount(publicAccount, queryParams = 10) {
     return this.accountHttp.transactions(publicAccount, new QueryParams(queryParams))
   }
@@ -158,8 +186,8 @@ export default class proximaxProvider {
   /**
    * Get mosaic
    *
-   * @param {any} mosaicId
-   * @returns
+   * @param mosaicId
+   * @returns {Observable} mosaicHttp
    * @memberof proximaxProvider
    */
   getMosaic(mosaicId) {
@@ -167,16 +195,23 @@ export default class proximaxProvider {
   }
 
   /**
+   * Get mosaic Class
    *
-   *
-   * @param {any} param
-   * @returns
+   * @param id
+   * @returns {Class} MosaicId
    * @memberof proximaxProvider
    */
   getMosaicId(id) {
     return new MosaicId(id)
   }
 
+  /**
+   * Get mosaics name
+   *
+   * @param mosaicIds
+   * @returns {Observable} mosaicHttp
+   * @memberof proximaxProvider
+   */
   getMosaicsName(mosaicIds) {
     return this.mosaicHttp.getMosaicsName(mosaicIds)
   }
@@ -184,8 +219,8 @@ export default class proximaxProvider {
   /**
    * Get Namespaces Name From Hexadecimal
    *
-   * @param {any} id
-   * @returns {Observable<MosaicName[]>}
+   * @param id
+   * @returns {Observable} getNamespacesName
    * @memberof proximaxProvider
    */
   getNamespacesNameFromHex(id) {
@@ -195,10 +230,10 @@ export default class proximaxProvider {
   }
 
   /**
-   * Get namespaces name
+   * Get namespace name
    *
-   * @param {any} id
-   * @returns
+   * @param namespaceIds
+   * @returns {Observable} namespaceHttp
    * @memberof proximaxProvider
    */
   getNamespacesName(namespaceIds) {
@@ -206,56 +241,27 @@ export default class proximaxProvider {
   }
 
   /**
-   * Return getTransaction from id or hash
-   * @param param
+   * Get transaction for hash
+   *
+   * @param hash
+   * @returns {Observable} transactionHttp
+   * @memberof proximaxProvider
    */
   getTransactionInformation(hash) {
     return this.transactionHttp.getTransaction(hash)
   }
 
-
-  /**
-   *
-   *
-   * @param {any} amount
-   * @param {any} divisibility
-   * @returns
-   * @memberof proximaxProvider
-   */
-  formatterAmount(amount, divisibility) {
-    const amountDivisibility = parseFloat(amount / Math.pow(10, divisibility))
-    return (amountDivisibility).toLocaleString('en-us', { minimumFractionDigits: divisibility })
-  }
-
   /**
    * Get mosaic name from hexadecimal
    *
-   * @param {any} id
-   * @returns
+   * @param id
+   * @returns MosaicName
    * @memberof proximaxProvider
    */
   getMosaicNameFromHex(id) {
     const idFromHex = Id.fromHex(id)   
     const mosaicId = this.getMosaicId([idFromHex.lower, idFromHex.higher]);
     return this.getMosaicsName([mosaicId]);
-  }
-
-  /**
-   * GET INFO MOSAICS, RETURN PROMISE
-   *
-   * @param {MosaicId} mosaicsId
-   * @returns
-   * @memberof NemProvider
-   */
-  async getMosaicViewPromise(mosaicsId) {
-    const promise = await new Promise(async (resolve, reject) => {
-      console.warn("********** GET INFO MOSAICS TO PROMISE **********")
-      const mosaicsView = await this.mosaicService.mosaicsView(mosaicsId).toPromise()
-      resolve(mosaicsView)
-    });
-
-    console.log("***RESPUESTA CONSULTA DE MOSAICOS****", promise);
-    return await promise;
   }
 
 }

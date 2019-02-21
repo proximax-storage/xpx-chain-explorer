@@ -15,6 +15,16 @@ export default class Utils {
     }
   }
 
+  static fmtIntValue(data) {
+    if (!data) {
+      return "<b>0</b>"
+    } else {
+      let a = data.toString()
+      let r = "<span class='sep'><strong>" + a.split(/(?=(?:...)*$)/).join("<span class='sep'>,")
+      return r + "</strong>"
+    }
+  }
+
   static fmtDivisibility(quantity, divisibility) {
     let init = '1'
     for(let i = 0; i < divisibility; i++) {

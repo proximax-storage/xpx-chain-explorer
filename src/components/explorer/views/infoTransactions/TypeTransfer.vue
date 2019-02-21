@@ -126,6 +126,7 @@ export default {
       mosaicXpx: null,
       showAmount: false,
       showInfoMosaic: false,
+      mosaics: [],
       mosaicExist: [],
       mosaicSource: [],
       transaction: this.transactionSelected
@@ -135,28 +136,32 @@ export default {
     _localService = new localService()
     _proximaxProvider = new proximaxProvider()
     const xpx = proximaxProvider.mosaicXpx()
-    console.log(this.transactionSelected);
-    if (this.transactionSelected.mosaics.length > 0) {
-      this.mosaicXpx = this.transactionSelected.mosaics.filter(element => {
-        return element.id.toHex() === xpx
-      })
-        console.log(this.mosaicXpx.length > 0);
-      
-      if (this.mosaicXpx.length > 0) {        
-        this.mosaicXpx = Utils.fmtAmountValue(this.mosaicXpx[0].amount.compact())
-        this.showAmount = true
-      }
+    _proximaxProvider.getTransactionInformation(this.transactionSelected.transactionInfo.hash).subscribe(
+      resp => {
+        this.mosaics = resp.mosaics
+        if (this.mosaics.length > 0) {
+          console.log("Pruebassss",this.mosaics);
+          
+          this.mosaicXpx = this.mosaics.filter(element => {
+            return element.id.toHex() === xpx
+          })
+            console.log(this.mosaicXpx.length > 0);
+          
+          if (this.mosaicXpx.length > 0) {        
+            this.mosaicXpx = Utils.fmtAmountValue(this.mosaicXpx[0].amount.compact())
+            this.showAmount = true
+          }
 
-      this.transactionSelected.mosaics = this.transactionSelected.mosaics.filter(element => {
-        return element.id.toHex() !== xpx
-      })
+          this.mosaics = this.mosaics.filter(element => {
+            return element.id.toHex() !== xpx
+          })
 
-      if (this.transactionSelected.mosaics.length > 0) {
-        this.searchMosaics(this.transactionSelected.mosaics)
+          if (this.mosaics.length > 0) {
+            this.searchMosaics(this.mosaics)
+          }
+        }
       }
-    } else {
-      this.showInfoMosaic = false
-    }
+    )    
   },
   methods: {
 

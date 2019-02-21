@@ -277,8 +277,10 @@ export default {
           this.continueTransaction(this.transaction)
         },
         err => {
-          this.msg = 'not found mosaic info!'
-          this.showError = true
+          this.mosaicInfo = null
+          this.continueTransaction(this.transaction)
+          // this.msg = 'not found mosaic info!'
+          // this.showError = true
           console.log('Errroooooooooooooooooor', err);
         }
       )
@@ -306,17 +308,31 @@ export default {
     },
 
     continueTransaction: function (transaction) {
+      console.log(transaction);
+      
       this.infoTransaction = [
         { label: 'Mosaic',          value: this.mosaicName,           classLabel: 'col-md-2', classValue: 'col-md-10'}
       ]
       if (transaction.direction === 1) {
-        this.infoTransaction.push(
-          { label: 'Increase',          value: `+ ${Utils.fmtDivisibility(transaction.delta.compact(), this.mosaicInfo.properties.divisibility)}`,           classLabel: 'col-md-2', classValue: 'col-md-10 text-green'}
-        )
+        if (this.mosaicInfo === null) {
+          this.infoTransaction.push(
+            { label: 'Increase',          value: `+ ${Utils.fmtIntValue(transaction.delta.compact())}`,           classLabel: 'col-md-2', classValue: 'col-md-10 text-green'}
+          )
+        } else {
+          this.infoTransaction.push(
+            { label: 'Increase',          value: `+ ${Utils.fmtDivisibility(transaction.delta.compact(), this.mosaicInfo.properties.divisibility)}`,           classLabel: 'col-md-2', classValue: 'col-md-10 text-green'}
+          )
+        }
       } else {
-        this.infoTransaction.push(
-          { label: 'Decrease',          value: `- ${Utils.fmtDivisibility(transaction.delta.compact(), this.mosaicInfo.properties.divisibility)}`,           classLabel: 'col-md-2', classValue: 'col-md-10 text-red'}
-        )
+        if (this.mosaicInfo === null) {
+          this.infoTransaction.push(
+            { label: 'Decrease',          value: `- ${Utils.fmtIntValue(transaction.delta.compact())}`,           classLabel: 'col-md-2', classValue: 'col-md-10 text-red'}
+          )
+        } else {
+          this.infoTransaction.push(
+            { label: 'Decrease',          value: `- ${Utils.fmtDivisibility(transaction.delta.compact(), this.mosaicInfo.properties.divisibility)}`,           classLabel: 'col-md-2', classValue: 'col-md-10 text-red'}
+          )
+        }
       }
       this.infoTransaction = this.infoTransaction.concat([
         { label: 'Fee',            value: Utils.fmtAmountValue(transaction.fee.compact()),                classLabel: 'col-md-2', classValue: 'col-md-10'},

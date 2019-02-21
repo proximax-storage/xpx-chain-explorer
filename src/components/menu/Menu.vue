@@ -76,7 +76,10 @@ export default {
   methods: {
     changeNode: function (node) {
       localStorage.setItem('nodeSelected', node)
+      this.nodeSelected = node
       this.$router.push('/explorer')
+      EventBus.$emit('ChangeNode', node)
+      // location.reload()
     },
     navExplorer: function () {
       this.$router.push('/explorer')

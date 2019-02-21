@@ -103,6 +103,7 @@ export default {
       pag: 1, // Página inicial
       showModal: false,
       typeTransaction: null,
+      mosaicInfo: null,
       typeTransfer: TransactionType.TRANSFER,
       typeTransactions: proximaxProvider.typeTransactions(),
       transactionSelected: []
@@ -112,7 +113,7 @@ export default {
     changePage: function(event) {
       this.pag = event
     },
-    viewInfo: function(transaction) {      
+    viewInfo: function(transaction) {
       const type = Object.keys(this.typeTransactions).find(element => this.typeTransactions[element].id === transaction.type)
       this.typeTransaction = this.typeTransactions[type]
       this.transactionSelected = transaction      

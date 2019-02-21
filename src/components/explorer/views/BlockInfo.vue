@@ -45,13 +45,13 @@
         </mdb-card-text>
 
         <div class="d-flex align-items-center" v-if="!showRecentTransaction && blockInfo.numTransactions > 0">
-          <strong>Loading Recent Transactions...</strong>
+          <strong>Loading Transactions...</strong>
           <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
         </div>
         <br>
         <div class="row mt-3rem" v-if="noShowTransactions">
           <div class="col-6">
-            <h4>Recent transactions</h4>
+            <h4>Transactions</h4>
             <h6>nothing to show</h6>
           </div>
         </div>

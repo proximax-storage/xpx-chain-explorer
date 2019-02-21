@@ -9,13 +9,13 @@
         <span class="fs-08rem fw-bolder">{{transactionSelected.name}}</span>
       </mdb-col>
     </mdb-row>
-    <mdb-row v-if="showDelta">
+    <mdb-row v-if="this.delta">
       <mdb-col md="2">
         <span class="fs-08rem fw-bolder" v-if="transactionSelected.direction === 1"><b>Increase: </b></span>
         <span class="fs-08rem fw-bolder" v-else><b>Decrease: </b></span>
       </mdb-col>
       <mdb-col md="10">
-        <span class="fs-08rem fw-bolder"   :style="{'color': transactionSelected.direction === 1 ? 'green' : 'red' }" v-html="transactionSelected.delta"></span>
+        <span class="fs-08rem fw-bolder"   :style="{'color': transactionSelected.direction === 1 ? 'green' : 'red' }" v-html="this.delta"></span>
       </mdb-col>
     </mdb-row>
     <mdb-row>
@@ -92,14 +92,13 @@ export default {
   created: function () {
     _localService = new localService()
     _proximaxProvider = new proximaxProvider()
-    console.log(this.transactionSelected);
-    this.getNameMosaic()
     this.getInfo(this.transactionSelected.mosaicId)
+    this.getNameMosaic()
   },
   data () {
     return {
       nameSource: null,
-      showDelta: false
+      delta: null
     }
   },
   methods: {
@@ -108,13 +107,20 @@ export default {
       
       _proximaxProvider.getMosaic(mosaic).subscribe(
         resp => {
-          console.log(resp);
-          let delta = this.transactionSelected.delta.compact()          
-          this.showDelta = true
-          this.transactionSelected.delta = Utils.fmtDivisibility(delta, resp.properties.divisibility)
+          let delta = this.transactionSelected.delta.compact()
+          if (this.transactionSelected.direction === 1) {
+            this.delta = `+ ${Utils.fmtDivisibility(delta, this.transactionSelected.properties.divisibility)}`
+          } else {
+            this.delta = `- ${Utils.fmtDivisibility(delta, this.transactionSelected.properties.divisibility)}`
+          }
         },
         err => {
-          console.log('Errroooooooooooooooooor', err);
+          let delta = this.transactionSelected.delta.compact() 
+          if (this.transactionSelected.direction === 1) {
+            this.delta = `+ ${Utils.fmtIntValue(delta)}`
+          } else {
+            this.delta = `- ${Utils.fmtIntValue(delta)}`
+          }
         }
       )
     },
