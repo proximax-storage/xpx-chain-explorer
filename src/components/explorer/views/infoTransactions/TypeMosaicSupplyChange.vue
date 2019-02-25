@@ -102,16 +102,14 @@ export default {
     }
   },
   methods: {
-    getInfo: function (mosaic) {
-      console.log(mosaic);
-      
+    getInfo: function (mosaic) {      
       _proximaxProvider.getMosaic(mosaic).subscribe(
-        resp => {
+        resp => {          
           let delta = this.transactionSelected.delta.compact()
           if (this.transactionSelected.direction === 1) {
-            this.delta = `+ ${Utils.fmtDivisibility(delta, this.transactionSelected.properties.divisibility)}`
+            this.delta = `+ ${Utils.fmtDivisibility(delta, resp.properties.divisibility)}`
           } else {
-            this.delta = `- ${Utils.fmtDivisibility(delta, this.transactionSelected.properties.divisibility)}`
+            this.delta = `- ${Utils.fmtDivisibility(delta, resp.properties.divisibility)}`
           }
         },
         err => {
