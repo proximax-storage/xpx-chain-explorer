@@ -1,8 +1,13 @@
+/**
+ * Class to format the data in the explorer
+ */
 export default class Utils {
 
-  constructor() {
-  }
-
+  /**
+   * Method to format coin
+   * @param data
+   * @memberof Utils
+   */
   static fmtAmountValue(data) {
     if (data===null) { return }
     if (!data) {
@@ -15,6 +20,11 @@ export default class Utils {
     }
   }
 
+  /**
+   * Method to format integer with thousands separator
+   * @param data
+   * @memberof Utils   
+   */
   static fmtIntValue(data) {
     if (!data) {
       return "<b>0</b>"
@@ -24,7 +34,13 @@ export default class Utils {
       return r + "</strong>"
     }
   }
-
+  
+  /**
+   * Method for currency format depending on the divisibility
+   * @param quantity 
+   * @param divisibility 
+   * @memberof Utils
+   */
   static fmtDivisibility(quantity, divisibility) {
     let init = '1'
     for(let i = 0; i < divisibility; i++) {
@@ -43,6 +59,11 @@ export default class Utils {
     }
   }
   
+  /**
+   * Method for data format
+   * @param format date with class date of js
+   * @memberof Utils
+   */
   static fmtTime(format) {
     let date = new Date(format),
     day = (date.getDate() < 10) ? `0${date.getDate()}` : date.getDate(),
@@ -53,26 +74,11 @@ export default class Utils {
     final = `${date.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`
     return final
   }
-
-  static fmtUptime(data, end) {
-    var start = data._fmt
-    var end = end
-    var hours = Math.floor((end - start) / 3600)
-    var days = Math.floor(hours / 24)
-    hours = hours -  24 * days
-    return days + 'd, ' + hours + 'h '
-  }
-  
-  static fmtNemImportanceScore(data) {
-		var o = this.long2val(data)
-		if (o) {
-			o /= 90000
-			o = o.toFixed(4).split('.')
-			o = o[0] + ".<span class='dim'>" + o[1] + "</span>"
-		}
-		return o
-  }
    
+  /**
+   * Method to calculate the duration of a namespace
+   * @param duration of namespace
+   */
   static calculateDuration(duration) {
     let seconds = duration * 15;
     let days = Math.floor(seconds / (3600 * 24))

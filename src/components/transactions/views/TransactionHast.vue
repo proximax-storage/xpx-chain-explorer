@@ -70,11 +70,13 @@ export default {
     this.getInfoTransaction(this.$route.params.hast)
   },
   methods: {
+    /**
+     * Method for get the information of the transaction.
+     * @param hash of the transaction
+     */
     getInfoTransaction: function (hast) {
       _proximaxProvider.getTransactionInformation(hast).subscribe(
-        resp => {
-          console.log(resp);
-          
+        resp => {          
           const typeTransactions = proximaxProvider.typeTransactions()
           switch (resp.type) {
             case typeTransactions.transfer.id:
@@ -113,11 +115,14 @@ export default {
           this.msg = 'Communication error with the node!'
           this.showInfo = true
           this.showError = true
-          console.log("Errrorrrrrr");
         }
       )
     },
 
+    /**
+     * Method to look for the mosaics of the transaction.
+     * @param mosaicsIds of the transaction
+     */
     searchMosaic: function (mosaicsIds) {
       if (_localService.mosaicsName !== null) {
         const mosaicSearch = []
@@ -136,7 +141,6 @@ export default {
         this.mosaicsSource = mosaicsIds.map(mosaic => { return mosaic.id })
       }
       if (this.mosaicsSource.length > 0) {
-        console.log(this.mosaicsSource);
         
         _proximaxProvider.getMosaicsName(this.mosaicsSource).subscribe(
           resp => {
@@ -166,6 +170,10 @@ export default {
       }
     },
 
+    /**
+     * Method for searching the name of a mosaic.
+     * @param mosaic
+     */
     sourceMosaic: function (mosaic) {
       _proximaxProvider.getMosaicsName([mosaic]).subscribe(
           resp => {
@@ -178,6 +186,11 @@ export default {
         )
     },
 
+    /**
+     * Method for searching the namespace of a mosaic.
+     * @param namespace
+     * @param setMosaic
+     */
     sourceNamespace: function (namespace, setMosaic) {
       _proximaxProvider.namespaceHttp.getNamespacesName([namespace]).subscribe(
         namespaceName => {
@@ -188,7 +201,11 @@ export default {
           }
         })
     },
-
+    
+    /**
+     * Method to show information in transfer type transactions.
+     * @param transaction
+     */
     transferTransaction: function (transaction) {
       this.infoTransaction = [
         { label: 'From',          value: transaction.signer.address.pretty(),           classLabel: 'col-md-2', classValue: 'col-md-10'},
@@ -222,6 +239,11 @@ export default {
         { label: 'Signature',     value: transaction.signature,                         classLabel: 'col-md-2', classValue: 'col-md-10'}
       ])
     },
+
+    /**
+     * Method to show information in Register Namespace type transactions.
+     * @param transaction
+     */
     registerNamespaceTransaction: function (transaction) {
       this.infoTransaction = [
         { label: 'Namespace',          value: transaction.namespaceName,           classLabel: 'col-md-2', classValue: 'col-md-10'},
@@ -235,6 +257,10 @@ export default {
       ]
     },
 
+    /**
+     * Method to show information in Mosaic Definition type transactions.
+     * @param transaction
+     */
     mosaicDefinitionTransaction: function (transaction) {
       const namespaceXpx = proximaxProvider.namespaceXpx()
       if (transaction.parentId.toHex() === namespaceXpx.id) {
@@ -270,6 +296,10 @@ export default {
       ]
     },
 
+    /**
+     * Method to search the mosaic information
+     * @param mosaicsIds of the transaction
+     */
     getInfoMosaic: function (mosaic) {
       _proximaxProvider.getMosaic(mosaic).subscribe(
         resp => {
@@ -286,6 +316,10 @@ export default {
       )
     },
 
+    /**
+     * Method to show information in Mosaic Supply change type transactions.
+     * @param transaction
+     */
     mosaicSupplyChangeTransaction: function (transaction) {
       this.getInfoMosaic(transaction.mosaicId)
       const mosaicXpx = proximaxProvider.mosaicFullXpx()
@@ -307,9 +341,11 @@ export default {
       this.transaction = transaction
     },
 
-    continueTransaction: function (transaction) {
-      console.log(transaction);
-      
+    /**
+     * Method to continue with the Mosaic Supply change type transactions.
+     * @param transaction
+     */
+    continueTransaction: function (transaction) {      
       this.infoTransaction = [
         { label: 'Mosaic',          value: this.mosaicName,           classLabel: 'col-md-2', classValue: 'col-md-10'}
       ]
