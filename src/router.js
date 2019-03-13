@@ -6,8 +6,6 @@ import transactionsRouter from './components/transactions/router_transactions'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
   routes: [
     explorerRouter,
     transactionsRouter
