@@ -34,6 +34,9 @@ pipeline {
 
           echo 'Leaving Container'
 
+          echo 'Compressing Artifacts'
+          // Creates an XZ compressed archive
+          sh 'tar cJfv proximax-catapult-explorer-${env.GIT_BRANCH}.tar.xz dist'
         }
 
         post {
@@ -45,44 +48,25 @@ pipeline {
         }
       }
 
-      stage('Deploy Testnet Tag') {
-        when {
-          tag 'release-testnet*' // Deploy only if tagged with release-testnet*
-        }
-
+      stage('Publish Artifact') {
         steps {
-          echo 'Deploying'
-
-          echo 'Managing S3'
-
-          // AWS Plugin cannot sync. It must clear the bucket then reupload
-          withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
-            echo 'Deleting old files'
-            s3Delete bucket: 'bctestnetexplorer.xpxsirius.io', path: './'
-
-            echo 'Uploading new files'
-            s3Upload bucket: 'bctestnetexplorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
-          }
-
-          echo 'Managing CloudFront'
-
-          withAWS(credentials: 'jenkins-ecr') {
-            echo 'Invalidating CloudFront'
-            cfInvalidate distribution: 'E1RZY6CIY8D6XA', paths: ['/*']
-          }
-        }
-
-        post {
-          success {
-            slackSend channel: '#devops',
-              color: 'good',
-              message: "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nDeployed to http://bctestnetexplorer.xpxsirius.io"
-          }
-          failure {
-            slackSend channel: '#devops',
-              color: 'bad',
-              message: "Branch *${env.GIT_BRANCH}* of *${currentBuild.fullDisplayName}* FAILED :scream:"
-          }
+          echo 'Publishing Artifact to Nexus'
+          nexusArtifactUploader(
+            nexusVersion: 'nexus3',
+            protocol: 'https',
+            nexusUrl: 'nexus.internal.proximax.io',
+            version: "${env.GIT_BRANCH}",
+            repository: 'raw-repo',
+            credentials: 'jenkins-nexus',
+            artifacts: [
+              [
+                artifactId: 'proximax-catapult-explorer',
+                classifier: '',
+                file: 'proximax-catapult-explorer-' + "${env.GIT_BRANCH}" + '.tar.xz',
+                type: 'xz'
+              ]
+            ]
+          )
         }
       }
     }
