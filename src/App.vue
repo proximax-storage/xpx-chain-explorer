@@ -14,7 +14,7 @@ export default {
   components: {
     Menu,
     SearchFilter,
-  }  
+  }
 }
 </script>
 

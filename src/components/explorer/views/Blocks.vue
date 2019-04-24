@@ -97,14 +97,17 @@ export default {
       this.BlockC = block
     })
 
-    EventBus.$on('ChangeNode', (node) => {
-      if (this.node != node) {
-        this.showInfo = false
-        this.showError = false
-        this.blockInfo = []
-        this.viewAllTransactions()
-      }
-    })
+    // EventBus.$on('ChangeNode', (node) => {
+    //   if (this.node != node) {
+    //     console.log("Pruebaaaa", localStorage.getItem('nodeSelected'));
+        
+    //     _proximaxProvider.Url = `http://${localStorage.getItem('nodeSelected')}`
+    //     this.showInfo = false
+    //     this.showError = false
+    //     this.blockInfo = []
+    //     this.viewAllTransactions()
+    //   }
+    // })
   },
   watch: {
     BlockC: function (val) {

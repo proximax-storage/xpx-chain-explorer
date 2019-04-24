@@ -27,6 +27,7 @@ import { Listener, Deadline } from "proximax-nem2-sdk"
 import Utils from '@/services/Utils'
 import EventBus from '@/eventBus'
 import proximaxProvider from '@/services/proximaxProvider'
+import json from '@/assets/json/nodes.json'
 
 var _proximaxProvider
 
@@ -56,10 +57,7 @@ export default {
     )
   },
   data () {
-    let nodes = [
-      "bctestnet1.xpxsirius.io:3000",
-      "bctestnet2.xpxsirius.io:3000"
-    ]
+    let nodes = json.nodes
     let nodeSelected = localStorage.getItem('nodeSelected')
     if (nodeSelected == null) {
       nodeSelected = nodes[0]
@@ -77,12 +75,12 @@ export default {
     changeNode: function (node) {
       localStorage.setItem('nodeSelected', node)
       this.nodeSelected = node
-      this.$router.push('/explorer')
-      EventBus.$emit('ChangeNode', node)
-      // location.reload()
+      this.$router.push('/')
+      // EventBus.$emit('ChangeNode', node)
+      location.reload()
     },
     navExplorer: function () {
-      this.$router.push('/explorer')
+      this.$router.push('/')
     },
     connectWS: function (node) {
       const listener = new Listener(`ws://${node}`, WebSocket)

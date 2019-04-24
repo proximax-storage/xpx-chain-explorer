@@ -6,12 +6,6 @@ const explorerRouter = {
   name: 'Explorer',
   children: [
     {
-      path: '/',
-      component: () => import('./views/Blocks.vue'),
-      name: 'Blocks',
-      meta: { title: 'All Transactions', noCache: true }
-    },
-    {
       path: '/block-info/:block',
       component: () => import('./views/BlockInfo.vue'),
       name: 'BlockInfo',
