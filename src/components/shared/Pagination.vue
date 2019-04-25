@@ -40,9 +40,7 @@ export default {
   },
   watch: {
     quantity: function (val) {
-      console.log("Valor paginado",val);
       this.numberPag = Math.round(val/this.numResults)
-      console.log("Valor de Cantiad de Paginas", this.numberPag);
     }
   },
   methods: {

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Menu/>
+    <Menu />
     <search-filter/>
     <router-view/>
   </div>
@@ -9,8 +9,16 @@
 <script>
 import Menu from '@/components/menu/Menu'
 import SearchFilter from '@/components/searchFilter/SearchFilter'
+import axios from 'axios'
+import eventBus from '@/eventBus'
 
 export default {
+  mounted() {
+    axios.get('./json/nodes.json')
+      .then(function (response) {
+        eventBus.$emit('ActivateNodes', response.data.nodes)
+      })
+  },
   components: {
     Menu,
     SearchFilter,

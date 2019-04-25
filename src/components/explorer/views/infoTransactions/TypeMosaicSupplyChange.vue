@@ -133,13 +133,7 @@ export default {
       if (this.transactionSelected.mosaicId.toHex() === mosaicXpx.id) {
         this.transactionSelected.name = mosaicXpx.name
       } else {
-        console.log("toHex", this.transactionSelected.mosaicId.toHex());
-        
-        console.log("CUMPLEEEEEEE", _localService.mosaicsName !== null);
-        
         if (_localService.mosaicsName !== null) {
-          console.log("LLEEEEEEEEEEEEEGAAAAAAAAAA", _localService.mosaicsName);
-          
           if (_localService.mosaicsName.hasOwnProperty(this.transactionSelected.mosaicId.toHex())) {
             this.transactionSelected.name = _localService.mosaicsName[this.transactionSelected.mosaicId.toHex()]
           } else {
@@ -155,8 +149,6 @@ export default {
     sourceMosaic: function (mosaic) {
       _proximaxProvider.getMosaicsName([mosaic]).subscribe(
           resp => {
-            console.log('Respuestaaaaa', resp);
-            
             this.transactionSelected.name = resp[0].name
             this.sourceNamespace(resp.namespaceId)
           },

@@ -24,10 +24,6 @@ import proximaxProvider from '@/services/proximaxProvider'
 
 var _proximaxProvider
 
-// { text: 'Namespace Name', value: 'namespaceName' },
-// { text: 'Namespace Id', value: 'namespaceId' },
-// { text: 'Mosaic Name', value: 'mosaicName' },
-// { text: 'Mosaic Id', value: 'mosaicId' },
 export default {
   name: 'SearchFilter',
   components: {
@@ -74,26 +70,22 @@ export default {
         case 'address':
           routeData = this.$router.resolve({path: `/account-info/${this.input}`})
           window.open(routeData.href, '_blank')
-          // this.$router.push({ path: `/account-info/${this.input}` })
           break
 
         case 'publickey':
           const publicAccount = _proximaxProvider.createPublicAccount(this.input, NetworkType.TEST_NET)
           routeData = this.$router.resolve({path: `/account-info/${publicAccount.address.address}`})
-          window.open(routeData.href, '_blank')        
-          // this.$router.push({ path: `/account-info/${publicAccount.address.address}` })
+          window.open(routeData.href, '_blank')
           break
 
         case 'block':
           routeData = this.$router.resolve({path: `/block-info/${this.input}`})
-          window.open(routeData.href, '_blank') 
-          // this.$router.push({ path: `/block-info/${this.input}` })
+          window.open(routeData.href, '_blank')
           break
         
         case 'hash':
           routeData = this.$router.resolve({path: `/transactions/hast/${this.input}`})
-          window.open(routeData.href, '_blank')    
-          // this.$router.push({ path: `/transactions/hast/${this.input}` })
+          window.open(routeData.href, '_blank')
           break
       }
     }

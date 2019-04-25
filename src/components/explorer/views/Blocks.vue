@@ -34,10 +34,6 @@
               <td class="font-size-08rem text-center th-lg">{{item.numTransactions}}</td>
               <td class="font-size-08rem text-center th-lg" v-html="item.totalFee"></td>
               <td class="text-center th-lg">{{item.date}}</td>
-
-              <!-- <td class="font-size-08rem text-center th-lg mouse-pointer">
-                <i style="font-size: 18px; color: #118a81;" class="fa fa-download" aria-hidden="true"></i>
-              </td> -->
             </tr>
           </mdb-tbl-body>
           <mdb-tbl-body v-if="blockInfo.length === 0">
@@ -96,23 +92,9 @@ export default {
     EventBus.$on('CurrentBlock', (block) => {
       this.BlockC = block
     })
-
-    // EventBus.$on('ChangeNode', (node) => {
-    //   if (this.node != node) {
-    //     console.log("Pruebaaaa", localStorage.getItem('nodeSelected'));
-        
-    //     _proximaxProvider.Url = `http://${localStorage.getItem('nodeSelected')}`
-    //     this.showInfo = false
-    //     this.showError = false
-    //     this.blockInfo = []
-    //     this.viewAllTransactions()
-    //   }
-    // })
   },
   watch: {
     BlockC: function (val) {
-            console.log(val);
-
       this.blockInfo.unshift(val)
       this.quantity = this.blockInfo.length
     }

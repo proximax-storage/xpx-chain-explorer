@@ -1,4 +1,3 @@
-import data from '../assets/json/nodes.json'
 import { Observable, BehaviorSubject } from 'rxjs'
 import {
   BlockchainHttp,
@@ -22,7 +21,6 @@ export default class proximaxProvider {
     this.Url = `http://${localStorage.getItem('nodeSelected')}`
     this.blocksHeight = new BehaviorSubject(null)
     this.blocksHeight$ = this.blocksHeight.asObservable()
-    this.nodeSelecteds = data
     this.mosaicHttp = new MosaicHttp(this.Url)
     this.blockchainHttp = new BlockchainHttp(this.Url)
     this.accountHttp = new AccountHttp(this.Url)

@@ -27,7 +27,7 @@ import { Listener, Deadline } from "proximax-nem2-sdk"
 import Utils from '@/services/Utils'
 import EventBus from '@/eventBus'
 import proximaxProvider from '@/services/proximaxProvider'
-import json from '@/assets/json/nodes.json'
+import axios from 'axios'
 
 var _proximaxProvider
 
@@ -44,29 +44,31 @@ export default {
     mdbDropdownItem
   },
   mounted: function() {
-    _proximaxProvider = new proximaxProvider()
+    EventBus.$on('ActivateNodes', (nodes) => {
+      this.nodes = nodes
+    })
+    _proximaxProvider = new proximaxProvider()    
+    let nodeSelected = localStorage.getItem('nodeSelected')
+    if (nodeSelected == null) {
+      nodeSelected = this.nodes[0]
+      localStorage.setItem('nodeSelected', this.nodes[0])
+    }
+    this.connectWS(nodeSelected)
+    this.nodeSelected = nodeSelected
     _proximaxProvider.blockchainHttp.getBlockchainHeight().subscribe(
       next => {
         _proximaxProvider.setBlocksHeightLocal(next)
         this.currentBlock = next.compact()
       },
       error => {
-        console.log("Errorrrrr");
-        
+        console.log("Errorrrrr")        
       }
     )
   },
   data () {
-    let nodes = json.nodes
-    let nodeSelected = localStorage.getItem('nodeSelected')
-    if (nodeSelected == null) {
-      nodeSelected = nodes[0]
-      localStorage.setItem('nodeSelected', nodes[0])
-    }
-    this.connectWS(nodeSelected)
     return {
-      nodes: nodes,
-      nodeSelected: nodeSelected,
+      nodes: null,
+      nodeSelected: null,
       connector: null,
       currentBlock: null
     }
@@ -76,7 +78,6 @@ export default {
       localStorage.setItem('nodeSelected', node)
       this.nodeSelected = node
       this.$router.push('/')
-      // EventBus.$emit('ChangeNode', node)
       location.reload()
     },
     navExplorer: function () {
@@ -96,7 +97,6 @@ export default {
           }, err => console.error(err))
       })
     }
-
   }
 }
 </script>

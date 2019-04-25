@@ -155,9 +155,7 @@ export default {
         
       } else {
         if (_localService.namespaceName !== null) {
-          if (_localService.namespaceName.hasOwnProperty(this.transaction.parentId.toHex())) {
-            console.log("LLLEGGGOOOOOOOOOOOOOOOOOO");
-            
+          if (_localService.namespaceName.hasOwnProperty(this.transaction.parentId.toHex())) {            
             this.mosaicName = `${_localService.namespaceName[this.transaction.parentId.toHex()]}:${this.transaction.mosaicName}`
           } else {
             this.mosaicName = this.transactionSelected.mosaicName
