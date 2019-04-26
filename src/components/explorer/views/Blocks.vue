@@ -73,8 +73,6 @@ export default {
     mdbAlert
   },
   data () {
-    _proximaxProvider = new proximaxProvider()
-    this.viewAllTransactions()
     return {
       headElements: ['Block Height', 'Harvester/Forger', 'Txes', 'Fee', 'Timestamp'],
       blockInfo: [],
@@ -91,6 +89,11 @@ export default {
   mounted: function() {
     EventBus.$on('CurrentBlock', (block) => {
       this.BlockC = block
+    })
+
+    EventBus.$on('ActivateNodes', (nodes) => {
+      _proximaxProvider = new proximaxProvider()
+      this.viewAllTransactions()
     })
   },
   watch: {

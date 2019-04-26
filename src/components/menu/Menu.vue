@@ -46,24 +46,25 @@ export default {
   mounted: function() {
     EventBus.$on('ActivateNodes', (nodes) => {
       this.nodes = nodes
-    })
-    _proximaxProvider = new proximaxProvider()    
-    let nodeSelected = localStorage.getItem('nodeSelected')
-    if (nodeSelected == null) {
-      nodeSelected = this.nodes[0]
-      localStorage.setItem('nodeSelected', this.nodes[0])
-    }
-    this.connectWS(nodeSelected)
-    this.nodeSelected = nodeSelected
-    _proximaxProvider.blockchainHttp.getBlockchainHeight().subscribe(
-      next => {
-        _proximaxProvider.setBlocksHeightLocal(next)
-        this.currentBlock = next.compact()
-      },
-      error => {
-        console.log("Errorrrrr")        
+      _proximaxProvider = new proximaxProvider()    
+      let nodeSelected = localStorage.getItem('nodeSelected')
+      console.log("Esta es una prueba", nodeSelected)
+      if (nodeSelected === null) {
+        nodeSelected = this.nodes[0]
+        localStorage.setItem('nodeSelected', this.nodes[0])
       }
-    )
+      this.connectWS(nodeSelected)
+      this.nodeSelected = nodeSelected
+      _proximaxProvider.blockchainHttp.getBlockchainHeight().subscribe(
+        next => {
+          _proximaxProvider.setBlocksHeightLocal(next)
+          this.currentBlock = next.compact()
+        },
+        error => {
+          console.log("Errorrrrr")        
+        }
+      )
+    })
   },
   data () {
     return {
