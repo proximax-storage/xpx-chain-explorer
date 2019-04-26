@@ -1,0 +1,116 @@
+.time-picker-clock {
+  border-radius: 100%;
+  position: relative;
+  /* transition: 0.3s cubic-bezier(.25,.8,.50,1); */
+  user-select: none;
+  background: #f0f0f0;
+  animation: show-up-clock .2s linear;
+}
+@keyframes show-up-clock {
+  0% {
+    opacity: 0;
+    transform: scale(.7);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.time-picker-clock__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+.time-picker-clock__hand {
+    height: calc(50% - 28px);
+    width: 2px;
+    bottom: 50%;
+    left: calc(50% - 1px);
+    transform-origin: center bottom;
+    position: absolute;
+    will-change: transform;
+    z-index: 1;
+}
+
+.time-picker-clock__hand:before{
+  background: inherit;
+  border-color: inherit;
+  border-radius: 100%;
+  width: 10px;
+  height: 10px;
+  content: '';
+  position: absolute;
+  top: -3%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.time-picker-clock__hand:after{
+  content: '';
+  position: absolute;
+  height: 6px;
+  width: 6px;
+  top: 100%;
+  left: 50%;
+  border-radius: 50%;
+  background-color: inherit;
+  opacity: 0.75;
+  transform: translate(-50%, -50%);
+}
+.time-picker-clock > span {
+    align-items: center;
+    border-radius: 100%;
+    cursor: default;
+    display: flex;
+    font-size: 1rem;
+    line-height: 1.2;
+    justify-content: center;
+    left: calc(50% - 40px / 2);
+    height: 40px;
+    position: absolute;
+    text-align: center;
+    top: calc(50% - 40px / 2);
+    width: 40px;
+    user-select: none;
+}
+.time-picker-clock > span:hover,
+.time-picker-clock > span.active:hover {
+  cursor: pointer;
+}
+.time-picker-clock > span:active:hover,
+.time-picker-clock > span.active:active:hover {
+  cursor: move;
+}
+.time-picker-clock:active:hover {
+  cursor: move;
+}
+.time-picker-clock > span > span {
+      z-index: 1;
+}
+
+.time-picker-clock > span:before,
+.time-picker-clock > span:after{
+  content: '';
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 14px;
+  width: 14px;
+  transform: translate(-50%, -50%);
+}
+.time-picker-clock > span > span:after, .time-picker-clock > span > span:before{
+  height: 40px;
+  width: 40px;
+}
+.time-picker-clock > span.active{
+  color: #fff;
+  cursor: default;
+  z-index: 2;
+}
+.time-picker-clock > span > span.disabled{
+  pointer-events: none;
+}
+.picker .picker__box {
+  border: none;
+}

@@ -1,81 +1,42 @@
 {
   "name": "proximax-catapult-explorer",
-  "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
-  },
+  "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
   "dependencies": {
-    "@agm/core": "^1.0.0-beta.5",
-    "@angular/animations": "^7.0.1",
-    "@angular/common": "^7.0.1",
-    "@angular/compiler": "^7.0.1",
-    "@angular/core": "^7.0.1",
-    "@angular/forms": "^7.0.1",
-    "@angular/http": "^7.0.1",
-    "@angular/platform-browser": "^7.0.1",
-    "@angular/platform-browser-dynamic": "^7.0.1",
-    "@angular/router": "^7.0.1",
-    "@types/chart.js": "^2.7.38",
-    "angular-particle": "^1.0.4",
-    "angular5-csv": "^0.2.10",
-    "bootstrap": "^4.1.3",
-    "bufferutil": "^4.0.0",
-    "but": "^2.0.1",
-    "chart.js": "^2.5.0",
-    "core-js": "^2.5.4",
+    "axios": "^0.18.0",
     "crypto-js": "^3.1.9-1",
-    "easy-pie-chart": "^2.1.7",
+    "file-saver": "^2.0.1",
     "flatbuffers": "^1.10.2",
-    "font-awesome": "^4.7.0",
-    "hammerjs": "^2.0.8",
-    "jquery": "^1.9.1",
+    "fs": "0.0.1-security",
     "js-joda": "^1.9.2",
     "js-sha3": "^0.8.0",
+    "mdbvue": "./mdbvue",
     "proximax-nem2-library": "^0.9.11",
     "proximax-nem2-sdk": "^0.10.15",
-    "ng-block-ui": "^1.0.6",
-    "ng-uikit-pro-standard": "git+https://oauth2:xds7fpVXkw8SnNJdDtUE@git.mdbootstrap.com/mdb/angular/ng-uikit-pro-standard.git",
-    "ngx-mask": "^6.5.18",
-    "popper.js": "^1.14.4",
-    "request-promise-native": "^1.0.5",
-    "rxjs": "^6.0.0",
-    "rxjs-compat": "^6.3.3",
-    "screenfull": "^3.3.0",
-    "superagent": "^4.0.0-beta.5",
-    "utf-8-validate": "^5.0.1",
-    "utf8": "^2.1.2",
-    "zone.js": "~0.8.26"
+    "rxjs": "^6.4.0",
+    "superagent": "^4.1.0",
+    "utf8": "^3.0.0",
+    "vue": "^2.5.21",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.7.0",
-    "@angular/cli": "~6.1.5",
-    "@angular/compiler-cli": "^7.0.1",
-    "@angular/language-service": "^7.0.1",
-    "@types/jasmine": "~2.8.6",
-    "@types/jasminewd2": "~2.0.3",
-    "@types/node": "~8.9.4",
-    "codelyzer": "~4.2.1",
-    "jasmine-core": "~2.99.1",
-    "jasmine-spec-reporter": "~4.2.1",
-    "karma": "~1.7.1",
-    "karma-chrome-launcher": "~2.2.0",
-    "karma-coverage-istanbul-reporter": "~2.0.0",
-    "karma-jasmine": "~1.1.1",
-    "karma-jasmine-html-reporter": "^0.2.2",
-    "protractor": "~5.4.0",
-    "ts-node": "~5.0.1",
-    "tslint": "~5.9.1",
-    "typescript": "~3.1.1"
+    "@vue/cli-service": "^3.3.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "vue-template-compiler": "^2.5.21"
   },
-  "peerDependencies": {
-    "js-joda": "^1.6.2",
-    "utf8": "^2.1.2",
-    "rxjs": "^6.2.1"
-  }
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
 }
