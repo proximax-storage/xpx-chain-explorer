@@ -36,14 +36,14 @@ pipeline {
 
                 echo 'Compressing Artifacts'
                 // Creates an XZ compressed archive
-                sh "tar cJfv proximax-catapult-explorer-${env.GIT_BRANCH}.tar.xz dist"
+                sh "tar cJfv proximax-catapult-explorer-staging-deploy.tar.xz dist"
             }
 
             post {
                 failure {
                     slackSend channel: '#devops',
                             color: 'bad',
-                            message: "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* FAILED :scream:"
+                            message: "Branch *staging-deploy* build of *${currentBuild.fullDisplayName}* FAILED :scream:"
                 }
             }
         }
@@ -56,14 +56,14 @@ pipeline {
                         protocol: 'https',
                         nexusUrl: 'nexus.internal.proximax.io',
                         groupId: 'group1',
-                        version: "${env.GIT_BRANCH}",
+                        version: "staging-deploy",
                         repository: 'raw-repo',
                         credentialsId: 'jenkins-nexus',
                         artifacts: [
                                 [
                                         artifactId: 'proximax-catapult-explorer',
                                         classifier: '',
-                                        file      : 'proximax-catapult-explorer-staging-deploy' + "${env.GIT_BRANCH}" + '.tar.xz',
+                                        file      : 'proximax-catapult-explorer-staging-deploy' + "staging-deploy" + '.tar.xz',
                                         type      : 'xz'
                                 ]
                         ]
@@ -71,16 +71,16 @@ pipeline {
             }
 
             post {
-                 success {
-                   slackSend channel: '#devops',
-                     color: 'good',
-                     message:  "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nArtifact stored in Nexus"
-                 }
+                success {
+                    slackSend channel: '#devops',
+                            color: 'good',
+                            message:  "Branch *staging-deploy* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nArtifact stored in Nexus"
+                }
 
                 failure {
                     slackSend channel: '#devops',
                             color: 'bad',
-                            message: "Branch *${env.GIT_BRANCH}* of *${currentBuild.fullDisplayName}* FAILED :scream:"
+                            message: "Branch *staging-deploy* of *${currentBuild.fullDisplayName}* FAILED :scream:"
                 }
             }
         }
@@ -112,13 +112,13 @@ pipeline {
                 success {
                     slackSend channel: '#devops',
                             color: 'good',
-                            message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
+                            message: "Branch *staging-deploy* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
                 }
 
                 failure {
                     slackSend channel: '#devops',
                             color: 'bad',
-                            message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
+                            message: "Branch *staging-deploy* STAGING deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
                 }
             }
         }
