@@ -85,14 +85,7 @@ pipeline {
             }
         }
 
-        stage('Wait for QA') {
-            steps {
-                timeout(time: 1, unit: 'HOURS') {
-                    input message: "Ready to deploy to Testnet?",
-                            ok: "Deploy"
-                }
-            }
-        }
+
 
         stage('Deploy to Testnet') {
             steps {
