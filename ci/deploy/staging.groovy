@@ -48,41 +48,41 @@ pipeline {
             }
         }
 
-         stage('Publish Artifact') {
-           steps {
-             echo 'Publishing Artifact to Nexus'
-             nexusArtifactUploader(
-               nexusVersion: 'nexus3',
-               protocol: 'https',
-               nexusUrl: 'nexus.internal.proximax.io',
-               version: "${env.GIT_BRANCH}",
-               repository: 'raw-repo',
-               credentialsId: 'jenkins-nexus',
-               artifacts: [
-                 [
-                   artifactId: 'proximax-catapult-explorer',
-                   classifier: '',
-                   file: 'proximax-catapult-explorer-staging-deploy' + "${env.GIT_BRANCH}" + '.tar.xz',
-                   type: 'xz'
-                 ]
-               ]
-             )
-           }
+        stage('Publish Artifact') {
+            steps {
+                echo 'Publishing Artifact to Nexus'
+                nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'https',
+                        nexusUrl: 'nexus.internal.proximax.io',
+                        version: "${env.GIT_BRANCH}",
+                        repository: 'raw-repo',
+                        credentialsId: 'jenkins-nexus',
+                        artifacts: [
+                                [
+                                        artifactId: 'proximax-catapult-explorer',
+                                        classifier: '',
+                                        file      : 'proximax-catapult-explorer-staging-deploy' + "${env.GIT_BRANCH}" + '.tar.xz',
+                                        type      : 'xz'
+                                ]
+                        ]
+                )
+            }
 
-           post {
-             // success {
-             //   slackSend channel: '#devops',
-             //     color: 'good',
-             //     message:  "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nArtifact stored in Nexus"
-             // }
+            post {
+                // success {
+                //   slackSend channel: '#devops',
+                //     color: 'good',
+                //     message:  "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nArtifact stored in Nexus"
+                // }
 
-             failure {
-               slackSend channel: '#devops',
-                 color: 'bad',
-                 message: "Branch *${env.GIT_BRANCH}* of *${currentBuild.fullDisplayName}* FAILED :scream:"
-             }
-           }
-         }
+                failure {
+                    slackSend channel: '#devops',
+                            color: 'bad',
+                            message: "Branch *${env.GIT_BRANCH}* of *${currentBuild.fullDisplayName}* FAILED :scream:"
+                }
+            }
+        }
 
         stage('Deploy to Staging') {
             steps {
@@ -121,3 +121,5 @@ pipeline {
                 }
             }
         }
+    }
+}
