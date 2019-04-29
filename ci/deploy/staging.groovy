@@ -55,6 +55,7 @@ pipeline {
                         nexusVersion: 'nexus3',
                         protocol: 'https',
                         nexusUrl: 'nexus.internal.proximax.io',
+                        groupId: 'group1',
                         version: "${env.GIT_BRANCH}",
                         repository: 'raw-repo',
                         credentialsId: 'jenkins-nexus',
