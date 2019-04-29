@@ -36,8 +36,7 @@ pipeline {
 
                 echo 'Compressing Artifacts'
                 // Creates an XZ compressed archive
-//                sh "tar cJfv proximax-catapult-explorer-staging-deploy.tar.xz dist"
-                sh 'tar -cvf proximax-catapult-explorer-staging-deploy.tar dist'
+                sh "tar cJfv proximax-catapult-explorer-staging-deploy.tar.xz dist"
             }
 
             post {
@@ -56,7 +55,7 @@ pipeline {
                         nexusVersion: 'nexus3',
                         protocol: 'https',
                         nexusUrl: 'nexus.internal.proximax.io',
-                        groupId: 'group01',
+                        groupId: 'group1',
                         version: "staging-deploy",
                         repository: 'raw-repo',
                         credentialsId: 'jenkins-nexus',
@@ -64,8 +63,8 @@ pipeline {
                                 [
                                         artifactId: 'proximax-catapult-explorer',
                                         classifier: '',
-                                        file      : 'proximax-catapult-explorer-staging-deploy.tar',
-                                        type      : 'tar'
+                                        file      : 'proximax-catapult-explorer-staging-deploy.tar.xz',
+                                        type      : 'xz'
                                 ]
                         ]
                 )
