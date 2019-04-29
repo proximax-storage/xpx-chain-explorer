@@ -63,7 +63,7 @@ pipeline {
                                 [
                                         artifactId: 'proximax-catapult-explorer',
                                         classifier: '',
-                                        file      : 'proximax-catapult-explorer-staging-deploy' + "staging-deploy" + '.tar.xz',
+                                        file      : 'proximax-catapult-explorer-staging-deploy.tar.xz',
                                         type      : 'xz'
                                 ]
                         ]
