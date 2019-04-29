@@ -70,11 +70,11 @@ pipeline {
             }
 
             post {
-                // success {
-                //   slackSend channel: '#devops',
-                //     color: 'good',
-                //     message:  "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nArtifact stored in Nexus"
-                // }
+                 success {
+                   slackSend channel: '#devops',
+                     color: 'good',
+                     message:  "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nArtifact stored in Nexus"
+                 }
 
                 failure {
                     slackSend channel: '#devops',
