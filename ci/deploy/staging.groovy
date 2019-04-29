@@ -36,7 +36,8 @@ pipeline {
 
                 echo 'Compressing Artifacts'
                 // Creates an XZ compressed archive
-                sh "tar cJfv proximax-catapult-explorer-staging-deploy.tar.xz dist"
+//                sh "tar cJfv proximax-catapult-explorer-staging-deploy.tar.xz dist"
+                sh 'tar -czf proximax-catapult-explorer-staging-deploy.tar.gz dist'
             }
 
             post {
