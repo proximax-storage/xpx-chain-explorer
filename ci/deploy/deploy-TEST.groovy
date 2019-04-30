@@ -23,6 +23,10 @@ pipeline {
                     writeFile file: '.npmrc', text: 'registry=https://nexus.internal.proximax.io/repository/npm-group/\n@scope:registry=https://nexus.internal.proximax.io/repository/npm-private/\nemail=jenkins@proximax.io\nalways-auth=true\n_auth=' + env.nexusAuth + '\n'
                 }
 
+                echo 'Download from Nexus'
+                sh "wget -r https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/ "
+                sh "tar xJfv proximax-catapult-explorer-*.xz* "
+
 
             }
 
