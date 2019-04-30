@@ -89,9 +89,6 @@ pipeline {
             steps {
                 echo 'Deploying to Staging'
 
-                echo 'Rename artifact targets'
-                sh 'sed -i "s/bctestnet/bcstage/g" dist/json/nodes.json'
-
                 echo 'Managing S3'
                 withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
                     echo 'Deleting old files'
