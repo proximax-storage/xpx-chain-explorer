@@ -15,6 +15,20 @@ pipeline {
     }
 
     stages {
+        stage('Authenticate to Nexus') {
+            steps {
+                echo 'Writing Nexus Credentials'
+                script {
+                    // Writes a multi-line .npmrc file with the authentication hash for Nexus
+                    writeFile file: '.npmrc', text: 'registry=https://nexus.internal.proximax.io/repository/npm-group/\n@scope:registry=https://nexus.internal.proximax.io/repository/npm-private/\nemail=jenkins@proximax.io\nalways-auth=true\n_auth=' + env.nexusAuth + '\n'
+                }
+
+
+            }
+
+
+        }
+
         stage('Deploy to Staging') {
             steps {
                 echo 'Download from Nexus'
