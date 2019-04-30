@@ -112,13 +112,13 @@ pipeline {
                 success {
                     slackSend channel: '#devops',
                             color: 'good',
-                            message: "Branch *staging-deploy* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
+                            message: "Job *staging-deploy* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
                 }
 
                 failure {
                     slackSend channel: '#devops',
                             color: 'bad',
-                            message: "Branch *staging-deploy* STAGING deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
+                            message: "Job *staging-deploy* STAGING deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
                 }
             }
         }

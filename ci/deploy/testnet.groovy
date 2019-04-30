@@ -111,13 +111,13 @@ pipeline {
                 success {
                     slackSend channel: '#devops',
                             color: 'good',
-                            message: "Branch *testnet-deploy* TESTNET deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bctestnetexplorer.xpxsirius.io"
+                            message: "Job *testnet-deploy* TESTNET deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bctestnetexplorer.xpxsirius.io"
                 }
 
                 failure {
                     slackSend channel: '#devops',
                             color: 'bad',
-                            message: "Branch *testnet-deploy* TESTNET deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
+                            message: "Job *testnet-deploy* TESTNET deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
                 }
             }
         }
