@@ -15,16 +15,11 @@ pipeline {
     }
 
     stages {
-
-        stage('Deploy') {
-            sh "wget -O rx-latest.zip  \"192.168.240.249:8082/nexus/service/local/artifact/maven/content?g=com.corero&a=${env.PACKAGE_NAME}&v=LATEST&r=coreroSnapshot&p=zip\""
-            sh "unzip rx-latest.zip -d ./build"
-            ansiblePlaybook credentialsId: 'sshroot', installation: 'ansible 2.2.0.0', inventory: "${env.WORKSPACE}@script/jenkins/ansible/frontend/hosts", playbook: "${env.WORKSPACE}@script/jenkins/ansible/frontend/webservers.yml", extraVars: [build_path: "${env.WORKSPACE}/build/"], sudoUser: null
-        }
-
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying to Staging'
+                echo 'Download from Nexus'
+                sh "wget -r https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/ "
+                sh "tar xJfv proximax-catapult-explorer-*.xz* "
 
                 echo 'Rename artifact targets'
                 sh 'sed -i "s/bctestnet/bcstage/g" dist/json/nodes.json'
