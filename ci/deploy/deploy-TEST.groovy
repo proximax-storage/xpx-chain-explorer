@@ -20,7 +20,7 @@ pipeline {
 
                 withCredentials([string(credentialsId: 'nexustasker', variable: 'PW1')]) {
                     //echo "My password is '${PW1}'!"
-                    sh "wget -r --user nexustasker --password '${PW1}' https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/ "
+                    sh "curl -O https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/proximax-catapult-explorer-v0.0.2.xz "
                     sh "tar xJfv proximax-catapult-explorer-*.xz* "
                 }
 
