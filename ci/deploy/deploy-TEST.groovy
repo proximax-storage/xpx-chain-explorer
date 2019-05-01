@@ -6,37 +6,18 @@ pipeline {
     }
 
     environment {
-        npm_config_cache = "npm-cache"
-        nexusAuth = credentials('jenkins-nexus-npm')
+        nexusAuth = credentials('nexustasker')
     }
 
     options {
         timestamps()
     }
 
-    stages {
-        stage('Authenticate to Nexus') {
-            steps {
-                echo 'Writing Nexus Credentials'
-                script {
-                    // Writes a multi-line .npmrc file with the authentication hash for Nexus
-                    writeFile file: '.npmrc', text: 'registry=https://nexus.internal.proximax.io/repository/npm-group/\n@scope:registry=https://nexus.internal.proximax.io/repository/npm-private/\nemail=jenkins@proximax.io\nalways-auth=true\n_auth=' + env.nexusAuth + '\n'
-                }
-
-                echo 'Download from Nexus'
-                sh "wget -r https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/ "
-                sh "tar xJfv proximax-catapult-explorer-*.xz* "
-
-
-            }
-
-
-        }
-
         stage('Deploy to Staging') {
             steps {
                 echo 'Download from Nexus'
-                sh "wget -r https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/ "
+
+                sh "wget -r --user nexustasker --password env.nexusAuth https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/ "
                 sh "tar xJfv proximax-catapult-explorer-*.xz* "
 
                 echo 'Rename artifact targets'
