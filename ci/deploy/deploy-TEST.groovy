@@ -18,8 +18,14 @@ pipeline {
             steps {
                 echo 'Download from Nexus'
 
-                sh "wget -r --user nexustasker --password env.nexusAuth https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/ "
-                sh "tar xJfv proximax-catapult-explorer-*.xz* "
+                withCredentials([string(credentialsId: 'nexustasker', variable: 'PW1')]) {
+                    //echo "My password is '${PW1}'!"
+                    sh "wget -r --user nexustasker --password '${PW1}' https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/ "
+                    sh "tar xJfv proximax-catapult-explorer-*.xz* "
+                }
+
+//                sh "wget -r --user nexustasker --password env.nexusAuth https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/ "
+//                sh "tar xJfv proximax-catapult-explorer-*.xz* "
 
                 echo 'Rename artifact targets'
                 sh 'sed -i "s/bctestnet/bcstage/g" dist/json/nodes.json'
