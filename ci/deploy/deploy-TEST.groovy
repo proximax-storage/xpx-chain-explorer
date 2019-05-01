@@ -13,6 +13,7 @@ pipeline {
         timestamps()
     }
 
+    stages {
         stage('Deploy to Staging') {
             steps {
                 echo 'Download from Nexus'
@@ -54,3 +55,4 @@ pipeline {
             }
         }
     }
+}
