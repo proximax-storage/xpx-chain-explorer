@@ -64,7 +64,7 @@ pipeline {
                                         artifactId: 'proximax-catapult-explorer',
                                         classifier: '',
                                         file      : 'proximax-catapult-explorer-v0.0.2.tar.xz',
-                                        type      : 'xz'
+                                        type      : 'tar.xz'
                                 ]
                         ]
                 )
