@@ -6,8 +6,7 @@ pipeline {
     }
 
     environment {
-        npm_config_cache = "npm-cache"
-        nexusAuth = credentials('jenkins-nexus-npm')
+        nexusAuth = credentials('nexustasker')
     }
 
     options {
@@ -15,64 +14,50 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Deploy to Staging') {
             steps {
-                echo 'Writing Nexus Credentials'
-                script {
-                    // Writes a multi-line .npmrc file with the authentication hash for Nexus
-                    writeFile file: '.npmrc', text: 'registry=https://nexus.internal.proximax.io/repository/npm-group/\n@scope:registry=https://nexus.internal.proximax.io/repository/npm-private/\nemail=jenkins@proximax.io\nalways-auth=true\n_auth=' + env.nexusAuth + '\n'
+                echo 'Download from Nexus'
+
+                withCredentials([string(credentialsId: 'nexustasker', variable: 'PW1')]) {
+                    //echo "My password is '${PW1}'!"
+                    sh "curl -u nexustasker:'${PW1}' -X GET \"https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/proximax-catapult-explorer/v0.0.2/proximax-catapult-explorer-v0.0.2.tar.xz\" -O -J"
+
                 }
 
-                echo 'Starting Docker Container'
-                withDockerContainer(image: 'node:8') {
-                    echo 'Installing dependencies'
-                    sh 'npm install'
+                sh "tar xJfv proximax-catapult-explorer-*tar.xz* "
 
-                    echo 'Building'
-                    sh 'npm run build'
+                echo 'Rename artifact targets'
+                sh 'sed -i "s/bctestnet/bcstage/g" dist/json/nodes.json'
+
+                echo 'Managing S3'
+                withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
+                    echo 'Deleting old files'
+                    s3Delete bucket: 'bcstagingexplorer.xpxsirius.io', path: './'
+
+                    echo 'Uploading new files'
+                    s3Upload bucket: 'bcstagingexplorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
                 }
 
-                echo 'Leaving Container'
-
-                echo 'Compressing Artifacts'
-                // Creates an XZ compressed archive
-                sh "tar cJfv proximax-catapult-explorer-v0.0.2.tar.xz dist"
+                echo 'Managing CloudFront'
+                withAWS(credentials: 'jenkins-ecr') {
+                    echo 'Invalidating CloudFront'
+                    cfInvalidate distribution: 'E373B3Y0NEN1OB', paths: ['/*']
+                }
             }
 
-            post {
-                failure {
-                    slackSend channel: '#devops',
-                            color: 'bad',
-                            message: "Branch *staging-deploy* build of *${currentBuild.fullDisplayName}* FAILED :scream:"
-                }
-            }
+//            post {
+//                success {
+//                    slackSend channel: '#devops',
+//                            color: 'good',
+//                            message: "Job *staging-deploy* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
+//                }
+//
+//                failure {
+//                    slackSend channel: '#devops',
+//                            color: 'bad',
+//                            message: "Job *staging-deploy* STAGING deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
+//                }
+//            }
         }
-
-        stage('Publish Artifact') {
-            steps {
-                echo 'Publishing Artifact to Nexus'
-                nexusArtifactUploader(
-                        nexusVersion: 'nexus3',
-                        protocol: 'https',
-                        nexusUrl: 'nexus.internal.proximax.io',
-//                        groupId: 'proximax-catapult-explorer',
-                        version: "v0.0.2",
-                        repository: 'raw-repo',
-                        credentialsId: 'jenkins-nexus',
-                        artifacts: [
-                                [
-                                        artifactId: 'proximax-catapult-explorer',
-                                        classifier: '',
-                                        file      : 'proximax-catapult-explorer-v0.0.2.tar.xz',
-                                        type      : 'tar.xz'
-                                ]
-                        ]
-                )
-            }
-
-
-        }
-
-
     }
 }
