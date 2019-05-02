@@ -6,7 +6,8 @@ pipeline {
     }
 
     environment {
-        nexusAuth = credentials('nexustasker')
+        npm_config_cache = "npm-cache"
+        nexusAuth = credentials('jenkins-nexus-npm')
     }
 
     options {
@@ -14,21 +15,78 @@ pipeline {
     }
 
     stages {
-        stage('Deploy to Staging') {
+        stage('Build') {
             steps {
-                echo 'Download from Nexus'
-
-                withCredentials([string(credentialsId: 'nexustasker', variable: 'PW1')]) {
-                    //echo "My password is '${PW1}'!"
-                    sh "curl -O https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/proximax-catapult-explorer-v0.0.2.xz "
-                    sh "tar xJfv proximax-catapult-explorer-*.xz* "
+                echo 'Writing Nexus Credentials'
+                script {
+                    // Writes a multi-line .npmrc file with the authentication hash for Nexus
+                    writeFile file: '.npmrc', text: 'registry=https://nexus.internal.proximax.io/repository/npm-group/\n@scope:registry=https://nexus.internal.proximax.io/repository/npm-private/\nemail=jenkins@proximax.io\nalways-auth=true\n_auth=' + env.nexusAuth + '\n'
                 }
 
-//                sh "wget -r --user nexustasker --password env.nexusAuth https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/v0.0.2/ "
-//                sh "tar xJfv proximax-catapult-explorer-*.xz* "
+                echo 'Starting Docker Container'
+                withDockerContainer(image: 'node:8') {
+                    echo 'Installing dependencies'
+                    sh 'npm install'
 
-                echo 'Rename artifact targets'
-                sh 'sed -i "s/bctestnet/bcstage/g" dist/json/nodes.json'
+                    echo 'Building'
+                    sh 'npm run build'
+                }
+
+                echo 'Leaving Container'
+
+                echo 'Compressing Artifacts'
+                // Creates an XZ compressed archive
+                sh "tar cJfv proximax-catapult-explorer-${env.GIT_BRANCH}.tar.xz dist"
+            }
+
+            post {
+                failure {
+                    slackSend channel: '#devops',
+                            color: 'bad',
+                            message: "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* FAILED :scream:"
+                }
+            }
+        }
+
+         stage('Publish Artifact') {
+           steps {
+             echo 'Publishing Artifact to Nexus'
+             nexusArtifactUploader(
+               nexusVersion: 'nexus3',
+               protocol: 'https',
+               nexusUrl: 'nexus.internal.proximax.io',
+               version: "${env.GIT_BRANCH}",
+               repository: 'raw-repo',
+               credentialsId: 'jenkins-nexus',
+               artifacts: [
+                 [
+                   artifactId: 'proximax-catapult-explorer',
+                   classifier: '',
+                   file: 'proximax-catapult-explorer-' + "${env.GIT_BRANCH}" + '.tar.xz',
+                   type: 'xz'
+                 ]
+               ]
+             )
+           }
+
+        //   post {
+        //     // success {
+        //     //   slackSend channel: '#devops',
+        //     //     color: 'good',
+        //     //     message:  "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nArtifact stored in Nexus"
+        //     // }
+
+        //     failure {
+        //       slackSend channel: '#devops',
+        //         color: 'bad',
+        //         message: "Branch *${env.GIT_BRANCH}* of *${currentBuild.fullDisplayName}* FAILED :scream:"
+        //     }
+        //   }
+        // }
+
+        stage('Deploy to Staging') {
+            steps {
+                echo 'Deploying to Staging'
 
                 echo 'Managing S3'
                 withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
@@ -50,13 +108,57 @@ pipeline {
                 success {
                     slackSend channel: '#devops',
                             color: 'good',
-                            message: "Job *staging-deploy* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
+                            message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
                 }
 
                 failure {
                     slackSend channel: '#devops',
                             color: 'bad',
-                            message: "Job *staging-deploy* STAGING deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
+                            message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
+                }
+            }
+        }
+
+        stage('Wait for QA') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    input message: "Ready to deploy to Testnet?",
+                            ok: "Deploy"
+                }
+            }
+        }
+
+        stage('Deploy to Testnet') {
+            steps {
+                echo 'Deploying to Testnet'
+
+                echo 'Managing S3'
+                withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
+                    echo 'Deleting old files'
+                    s3Delete bucket: 'bctestnetexplorer.xpxsirius.io', path: './'
+
+                    echo 'Uploading new files'
+                    s3Upload bucket: 'bctestnetexplorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
+                }
+
+                echo 'Managing CloudFront'
+                withAWS(credentials: 'jenkins-ecr') {
+                    echo 'Invalidating CloudFront'
+                    cfInvalidate distribution: 'E1RZY6CIY8D6XA', paths: ['/*']
+                }
+            }
+
+            post {
+                success {
+                    slackSend channel: '#devops',
+                            color: 'good',
+                            message: "Branch *${env.GIT_BRANCH}* TESTNET deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bctestnetexplorer.xpxsirius.io"
+                }
+
+                failure {
+                    slackSend channel: '#devops',
+                            color: 'bad',
+                            message: "Branch *${env.GIT_BRANCH}* TESTNET deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
                 }
             }
         }
