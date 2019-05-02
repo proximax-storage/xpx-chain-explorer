@@ -55,7 +55,7 @@ pipeline {
                         nexusVersion: 'nexus3',
                         protocol: 'https',
                         nexusUrl: 'nexus.internal.proximax.io',
-                        groupId: 'proximax-catapult-explorer',
+//                        groupId: 'proximax-catapult-explorer',
                         version: "v0.0.2",
                         repository: 'raw-repo',
                         credentialsId: 'jenkins-nexus',
