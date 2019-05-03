@@ -15,81 +15,17 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
-            steps {
-                echo 'Writing Nexus Credentials'
-                script {
-                    // Writes a multi-line .npmrc file with the authentication hash for Nexus
-                    writeFile file: '.npmrc', text: 'registry=https://nexus.internal.proximax.io/repository/npm-group/\n@scope:registry=https://nexus.internal.proximax.io/repository/npm-private/\nemail=jenkins@proximax.io\nalways-auth=true\n_auth=' + env.nexusAuth + '\n'
-                }
-
-                echo 'Starting Docker Container'
-                withDockerContainer(image: 'node:8') {
-                    echo 'Installing dependencies'
-                    sh 'npm install'
-
-                    echo 'Building'
-                    sh 'npm run build'
-                }
-
-                echo 'Leaving Container'
-
-                echo 'Compressing Artifacts'
-                // Creates an XZ compressed archive
-                sh "tar cJfv proximax-catapult-explorer-testnet-deploy.tar.xz dist"
-            }
-
-            post {
-                failure {
-                    slackSend channel: '#devops',
-                            color: 'bad',
-                            message: "Branch *testnet-deploy* build of *${currentBuild.fullDisplayName}* FAILED :scream:"
-                }
-            }
-        }
-
-        stage('Publish Artifact') {
-            steps {
-                echo 'Publishing Artifact to Nexus'
-                nexusArtifactUploader(
-                        nexusVersion: 'nexus3',
-                        protocol: 'https',
-                        nexusUrl: 'nexus.internal.proximax.io',
-                        groupId: 'group1',
-                        version: "testnet-deploy",
-                        repository: 'raw-repo',
-                        credentialsId: 'jenkins-nexus',
-                        artifacts: [
-                                [
-                                        artifactId: 'proximax-catapult-explorer',
-                                        classifier: '',
-                                        file      : 'proximax-catapult-explorer-testnet-deploy.tar.xz',
-                                        type      : 'xz'
-                                ]
-                        ]
-                )
-            }
-
-            post {
-                success {
-                    slackSend channel: '#devops',
-                            color: 'good',
-                            message:  "Branch *testnet-deploy* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nArtifact stored in Nexus"
-                }
-
-                failure {
-                    slackSend channel: '#devops',
-                            color: 'bad',
-                            message: "Branch *testnet-deploy* of *${currentBuild.fullDisplayName}* FAILED :scream:"
-                }
-            }
-        }
-
-
-
         stage('Deploy to Testnet') {
             steps {
-                echo 'Deploying to Testnet'
+                echo 'Download from Nexus'
+
+                withCredentials([string(credentialsId: 'nexustasker', variable: 'PW1')]) {
+                    //echo "My password is '${PW1}'!"
+                    sh "curl -u nexustasker:'${PW1}' -X GET \"https://nexus.internal.proximax.io/repository/raw-repo/proximax-catapult-explorer/proximax-catapult-explorer/v0.0.2/proximax-catapult-explorer-v0.0.2.tar.xz\" -O -J"
+
+                }
+
+                sh "tar xJfv proximax-catapult-explorer-*tar.xz* "
 
                 echo 'Managing S3'
                 withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
