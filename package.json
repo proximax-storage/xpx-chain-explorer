@@ -4,30 +4,42 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "axios": "^0.18.0",
-    "crypto-js": "^3.1.9-1",
-    "file-saver": "^2.0.1",
-    "flatbuffers": "^1.10.2",
-    "fs": "0.0.1-security",
-    "js-joda": "^1.9.2",
-    "js-sha3": "^0.8.0",
-    "mdbvue": "./mdbvue",
-    "proximax-nem2-library": "^0.9.11",
-    "proximax-nem2-sdk": "^0.10.15",
-    "rxjs": "^6.4.0",
-    "superagent": "^4.1.0",
-    "utf8": "^3.0.0",
-    "vue": "^2.5.21",
-    "vue-router": "^3.0.1"
+    "mdbvue": "git+https://oauth2:SyJaA8eSM2gkFZh4onhD@git.mdbootstrap.com/mdb/vue/vu-pro.git",
+    "postcss-import": "^12.0.1",
+    "register-service-worker": "^1.6.2",
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.3",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@vue/cli-service": "^3.3.0",
-    "node-sass": "^4.9.0",
-    "sass-loader": "^7.0.1",
+    "@vue/cli-plugin-eslint": "^3.7.0",
+    "@vue/cli-plugin-pwa": "^3.7.0",
+    "@vue/cli-service": "^3.7.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "sass": "^1.18.0",
+    "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.5.21"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/standard"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
   },
   "postcss": {
     "plugins": {
@@ -36,7 +48,6 @@
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
+    "last 2 versions"
   ]
 }

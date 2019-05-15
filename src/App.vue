@@ -1,121 +1,65 @@
 <template>
   <div id="app">
-    <Menu />
-    <search-filter/>
-    <router-view/>
+    <app-header/>
+    <div class="view-container">
+      <router-view class="view"/>
+    </div>
+    <app-footer/>
   </div>
 </template>
 
 <script>
-import Menu from '@/components/menu/Menu'
-import SearchFilter from '@/components/searchFilter/SearchFilter'
-import axios from 'axios'
-import eventBus from '@/eventBus'
+import AppHeader from '@/components/global/AppHeader.vue'
+import AppFooter from '@/components/global/AppFooter.vue'
 
 export default {
-  mounted() {
-    axios.get('./json/nodes.json')
-      .then(function (response) {
-        eventBus.$emit('ActivateNodes', response.data.nodes)
-      })
-  },
   components: {
-    Menu,
-    SearchFilter,
+    AppHeader,
+    AppFooter
   }
 }
 </script>
 
+<style lang="sass">
+@import url('https://fonts.googleapis.com/css?family=Roboto')
 
-<style lang="scss">
-  html {
-    background: #eee
-  }
+*
+  margin: 0px
+  padding: 0px
+  transition: .3s
+  box-sizing: border-box
 
-  #app {
-    background: #eee
-  }
+html
+  background-image: url('./assets/background-proximax-explorer.jpg')
+  background-position: top center
+  background-size: 100%
+  background-repeat: no-repeat
+  background-color: #004562
 
-  .card {
-    padding: 10px;
-    margin: 20px;
-  }
+body
+  background: transparent
 
-  .background-app {
-    background: #eee;
-  }
+#app
+  font-family: 'Roboto', sans-serif
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  color: white
+  background: transparent
 
-  .background-explorer {
-    background-image: -webkit-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
-    background-image: -moz-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
-    background-image: -o-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
-    background-image: -ms-linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
-    background-image: linear-gradient(140deg, rgb(32, 128, 115) 0%, rgb(32, 181, 172) 34%, #009688 100%);
-    background-attachment: fixed;
-    background-position: center center;
-  }
+@media screen and (max-width: 1366px)
+  .view-container
+    display: flex
+    width: 100%
+    justify-content: center
+    align-items: center
+    & > .view
+      width: 80%
 
-  .mdb-form input[type=text], .mdb-form input[type=password], .mdb-form input[type=email],
-  .mdb-form input[type=url], .mdb-form input[type=time], .mdb-form input[type=date],
-  .mdb-form input[type=datetime-local], .mdb-form input[type=tel], .mdb-form input[type=number],
-  .mdb-form input[type=search-md], .mdb-form input[type=search] {
-    color: white !important;
-  }
+@media screen and (max-width: 1024px)
+  .view-container > .view
+      width: 90%
 
-  .mdb-form label {
-    color: white !important;
-  }
-
-  .mdb-form input[type=text]:focus:not([readonly]), .md-form input[type=password]:focus:not([readonly]),
-  .mdb-form input[type=email]:focus:not([readonly]), .md-form input[type=url]:focus:not([readonly]),
-  .mdb-form input[type=time]:focus:not([readonly]), .md-form input[type=date]:focus:not([readonly]),
-  .mdb-form input[type=datetime-local]:focus:not([readonly]), .md-form input[type=tel]:focus:not([readonly]),
-  .mdb-form input[type=number]:focus:not([readonly]), .md-form input[type=search-md]:focus:not([readonly]),
-  .mdb-form input[type=search]:focus:not([readonly]), .md-form textarea.md-textarea:focus:not([readonly]){
-    box-shadow: 0 1px 0 0 #fff !important;
-    border-bottom: 1px solid #fff !important;
-  }
-
-  .text-center {
-    text-align: center;
-  }
-
-  .text-white {
-    color: white !important;
-  }
-
-  .text-green {
-    color: green !important;
-  }
-
-  .text-red {
-    color: red !important;
-  }
-
-  .page-link {
-    border: 0px !important;
-    color: grey
-  }
-
-  .page-link:hover {
-    border-radius: 50% !important;
-    color: #18ada3 !important;
-  }
-
-  a:hover {
-    color: #18ada3 !important;
-  }
-
-  .info {
-    padding: 10px;
-  }
-
-  .bold {
-    font-weight: bold;
-  }
-
-  .green-back {
-    background: #00968833;
-  }
-
+@media screen and (max-width: 960px)
+  .view-container > .view
+      width: 100%
 </style>
