@@ -67,7 +67,7 @@ export default class Utils {
   static fmtTime(format) {
     let date = new Date(format),
     day = (date.getDate() < 10) ? `0${date.getDate()}` : date.getDate(),
-    month = (date.getMonth() < 10) ? `0${date.getMonth()}` : date.getMonth(),
+    month = (date.getMonth() < 10) ? `0${date.getMonth() + 1}` : date.getMonth() + 1,
     hours = (date.getHours() < 10) ? `0${date.getHours()}` : date.getHours(),
     minutes = (date.getMinutes() < 10) ? `0${date.getMinutes()}` : date.getMinutes(),
     seconds = (date.getSeconds() < 10) ? `0${date.getSeconds()}` : date.getSeconds(),
