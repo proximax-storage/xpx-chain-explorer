@@ -6,13 +6,15 @@
           <mdb-dropdown-toggle slot="toggle" class="white-text blue"
           style="padding: 10px; box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%"
           >{{ typeSearch }}</mdb-dropdown-toggle>
-          <mdb-dropdown-menu>
-            <a class="searchLink" v-for="(item, index) in searchList" :key="index" @click="changeSearch(item)">{{ item.name }}</a>
+          <mdb-dropdown-menu style="height: auto">
+            <mdb-dropdown-item v-for="(item, index) in searchList" :key="index">
+              <a class="searchLink" @click="changeSearch(item)">{{ item.name }}</a>
+            </mdb-dropdown-item>
           </mdb-dropdown-menu>
         </mdb-dropdown>
       </div>
       <div class="search-input">
-        <mdb-input :label="typeSearch" style="width: 100%"></mdb-input>
+        <mdb-input :label="typeSearch" class="place-white" style="width: 100%"></mdb-input>
         <figure>
           <img :src="require('@/assets/search-details-white.svg')" alt="">
         </figure>
@@ -22,7 +24,7 @@
 </template>
 
 <script>
-import { mdbDropdown, mdbDropdownMenu, mdbDropdownToggle, mdbInput } from 'mdbvue'
+import { mdbDropdown, mdbDropdownMenu, mdbDropdownToggle, mdbDropdownItem, mdbInput } from 'mdbvue'
 
 export default {
   name: 'SearchBar',
@@ -30,6 +32,7 @@ export default {
     mdbDropdown,
     mdbDropdownMenu,
     mdbDropdownToggle,
+    mdbDropdownItem,
     mdbInput
   },
   data () {
@@ -37,7 +40,8 @@ export default {
       typeSearch: 'Search',
       searchList: [
         { name: 'Public Key' },
-        { name: 'Block Height' }
+        { name: 'Block Height' },
+        { name: 'Transaction Hash' }
       ]
     }
   },
@@ -49,10 +53,14 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
+.place-white
+  color: white !important
+  & > input
+    color: white !important
+
 .searchLink
   display: block
-  margin: 5px
   &:hover
     background: dodgerblue
     color: white !important
@@ -62,6 +70,7 @@ export default {
   flex-flow: row nowrap
   justify-content: center
   align-items: center
+  margin: 10px 0px
   & > .search-cont
     width: 100%
     display: flex
@@ -76,18 +85,23 @@ export default {
     & > .search-input
       display: flex
       flex-flow: row nowrap
+      align-items: center
       width: 60%
-      &> div
+      & > div
         margin: 0px
       & > figure
         display: flex
         flex-flow: row nowrap
         justify-content: center
         align-items: center
+        width: 30px
+        height: 30px
         margin: 0px
         padding: 5px
+        border-radius: 50%
+        &:hover
+          background: #ffffff80
         & > img
           margin: 0px
           width: 15px
-
 </style>

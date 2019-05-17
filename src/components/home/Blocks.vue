@@ -7,9 +7,9 @@
         <th>Fee</th>
         <th>Txes</th>
       </tr>
-      <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: silver' : 'background: white'">
-        <td>{{ item.block }}</td>
-        <td>{{ item.harFor }}</td>
+      <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
+        <td class="link-data" @click="analyzeItem">{{ item.block }}</td>
+        <td class="link-data" @click="analyzeItem">{{ item.harFor }}</td>
         <td>{{ item.fee }}</td>
         <td>{{ item.txes }}</td>
       </tr>
@@ -37,6 +37,11 @@ export default {
         { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 }
       ]
     }
+  },
+  methods: {
+    analyzeItem (e) {
+      console.log(e.target.textContent)
+    }
   }
 }
 </script>
@@ -50,6 +55,11 @@ td
 
 .grey-back
   background: silver
+
+.link-data
+  font-weight: normal
+  &:hover
+    font-weight: bold
 
 .block
   width: 100%

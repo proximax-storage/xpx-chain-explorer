@@ -62,7 +62,7 @@ export default {
   padding: 5px
   &:hover
     background: dodgerblue
-    color: white !important
+    color: #7ab5e280 !important
 
 .node-admin
   display: flex
@@ -70,7 +70,7 @@ export default {
   justify-content: space-evenly
   & > .admin-item
     flex-grow: 1
-    border: 1px solid grey
+    border: 1px solid #7ab5e280
     padding: 10px
     border-radius: 7px
     min-width: 200px
@@ -80,6 +80,8 @@ export default {
       margin: 0px
       font-weight: bold
       text-transform: uppercase
+      color: #7ab5e2
     & > p
       font-size: 30px
+      color: #f4f4f4
 </style>

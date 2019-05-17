@@ -5,7 +5,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './registerServiceWorker'
+import { Persistence } from '@/services/persistence.js'
 
+Vue.prototype.$storage = new Persistence()
 Vue.config.productionTip = false
 
 new Vue({

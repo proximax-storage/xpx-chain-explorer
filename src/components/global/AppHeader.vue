@@ -63,6 +63,7 @@ export default {
       color: orange
       font-weight: bold
       font-size: 15px
+      cursor: pointer
       &:hover
         border-bottom: 2px solid #7ab5e160
 
