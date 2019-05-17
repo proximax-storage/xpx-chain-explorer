@@ -1,0 +1,24 @@
+- hosts: localhost
+  tasks:
+    - name: Install PIP
+      apt: name=python-pip state=present
+
+    - name: Install lxml
+      pip: name=lxml
+
+    - name: download from artifactory
+      maven_artifact:
+        group_id: proximax-catapult-explorer
+        artifact_id: proximax-catapult-explorer
+        repository_url: 'https://nexus.internal.proximax.io/repository/raw-repo/'
+        username: mchua
+        password: Em8b2$Z00SqV3GL6JXF2rh
+        dest: /tmp/proxi.xz
+
+    - name: Extract proxi.xz
+      unarchive:
+        src: /tmp/proxi.xz
+        dest: /tmp/dist
+
+    - name: testing the unpack
+      shell: ls -la /tmp/dist
