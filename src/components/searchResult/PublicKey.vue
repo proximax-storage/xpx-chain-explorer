@@ -101,4 +101,13 @@ $radius: 5px
     border-radius: $radius
     padding: 10px
     margin: 0px
+
+@media screen and (max-width: 550px)
+  .publicKey
+    & > .pk-layout-up
+      flex-flow: column
+      & > div:first-child
+        margin: 0px 0px 10px 0px
+      & > div:last-child
+        margin: 0px 0px 10px 0px
 </style>

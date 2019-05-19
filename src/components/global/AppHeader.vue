@@ -4,7 +4,7 @@
       <img :src="require('@/assets/logo-proximax-sirius-bc-explorer-white.svg')" alt="logo">
     </figure>
     <nav>
-      <div class="nav-item" v-for="(item, index) in navItems" :key="index" :class="item.class" :route="item.route" @click="buttonAction(item)">
+      <div class="nav-item" v-for="(item, index) in navItems" :key="index" :class="item.class" :route="item.route" @click="buttonAction">
         {{ item.name }}
       </div>
     </nav>
@@ -17,19 +17,28 @@ export default {
   data () {
     return {
       navItems: [
-        { name: 'transaction', route: 'transaction', class: 'active' },
-        { name: 'network stats', route: 'network', class: 'unactive' },
+        { name: 'transaction', route: '', class: 'active' },
+        { name: 'network stats', route: 'networkStats', class: 'unactive' },
         { name: 'map', route: 'map', class: 'unactive' }
       ]
     }
   },
   methods: {
-    buttonAction (item) {
+    redirectAction (itemRoute) {
+      this.$router.push(itemRoute)
+    },
+
+    buttonAction (e) {
+      let objectRoute = e.target.getAttribute('route')
+
       this.navItems.forEach(el => {
         el.class = 'unactive'
+        if (el.route === objectRoute) {
+          el.class = 'active'
+        }
       })
-      item.class = 'active'
-      // this.router.push(`/${item.route}`)
+
+      this.redirectAction(`/${objectRoute}`)
     }
   }
 }

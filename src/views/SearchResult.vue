@@ -3,6 +3,8 @@
     <search-bar/>
     <div style="text-align: center; padding: 10px 0px">
       <h1 style="font-size: 20px">RESULT FOR SEARCH...</h1>
+      <div class="search-type">Public Key</div>
+      <div class="search-value">hd628ahakduw8263819xjs8274gfduw7682iw99q63r732j8y</div>
     </div>
     <public-key/>
     <block-info/>

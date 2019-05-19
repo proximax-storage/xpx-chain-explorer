@@ -27,19 +27,19 @@
     <div class="bi-layout-down">
       <div class="layout-down-children">
         <div class="down-radius">
-          <div class="title">Hash</div>
+          <div class="title">Difficulty</div>
           <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
         </div>
       </div>
       <div class="layout-down-children">
         <div class="down-radius">
-          <div class="title">Hash</div>
+          <div class="title">Txes</div>
           <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
         </div>
       </div>
       <div class="layout-down-children">
         <div class="down-radius">
-          <div class="title">Hash</div>
+          <div class="title">Fees</div>
           <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
         </div>
       </div>
@@ -113,7 +113,7 @@ $radius: 5px
       border-radius: $radius
   & > .bi-layout-down
     display: flex
-    flex-flow: row nowrap
+    flex-flow: row wrap
     justify-content: space-between
     align-items: center
     margin: 0px
@@ -123,4 +123,30 @@ $radius: 5px
       margin: 0px 5px
     & > div:last-child
       margin-left: 5px
+
+@media screen and (max-width: 741px)
+  .blockInfo
+    & > .bi-layout-up
+      flex-flow: column wrap
+      justify-content: space-evenly
+      margin: 0px
+      & > div:first-child
+        margin: 0px 0px 10px 0px
+      & > div:last-child
+        margin: 0px 0px 10px 0px
+        & > .supertitle
+          display: none
+    & > .bi-layout-down
+      flex-flow: column wrap
+      margin: 0px
+      justify-content: stretch
+      & > div:first-child
+        width: 100%
+        margin: 0px 0px 10px 0px
+      & > div:nth-child(2)
+        width: 100%
+        margin: 0px 0px 10px 0px
+      & > div:last-child
+        width: 100%
+        margin: 0px 0px 0px 0px
 </style>

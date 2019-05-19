@@ -143,4 +143,45 @@ $radius: 5px
     & > div:last-child
       margin-left: 5px
       flex-grow: 1
+
+@media screen and (max-width: 550px)
+  .transaction
+    & > .tran-layout-up
+      background: transparent
+      margin: 0px
+      display: flex
+      flex-flow: column wrap
+      justify-content: space-evenly
+      & > div:first-child
+        flex-grow: 4
+        margin: 0px 0px 10px 0px
+        border-radius: $radius
+      & > div:last-child
+        flex-grow: 1
+        background: transparent
+        margin: 0px 0px 10px 0px
+        border-radius: $radius
+        & > .supertitle
+          display: none
+    & > .tran-layout-middle
+      background:  #F4F4F4
+      display: flex
+      flex-flow: column wrap
+      justify-content: center
+      align-items: center
+      border-radius: $radius
+      padding: 10px
+      margin: 0px 0px 10px 0px
+    & > .tran-layout-down
+      display: flex
+      flex-flow: column wrap
+      justify-content: space-between
+      align-items: center
+      margin: 0px
+      & > div:first-child
+        width: 100%
+        margin: 0px 0px 10px 0px
+      & > div:last-child
+        width: 100%
+        margin: 0px 0px 0px 0px
 </style>

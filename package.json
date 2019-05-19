@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "chart.js": "^2.8.0",
     "mdbvue": "git+https://oauth2:SyJaA8eSM2gkFZh4onhD@git.mdbootstrap.com/mdb/vue/vu-pro.git",
     "postcss-import": "^12.0.1",
     "register-service-worker": "^1.6.2",

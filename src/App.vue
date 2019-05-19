@@ -54,6 +54,15 @@ body
   color: white
   background: transparent
 
+@media screen and (max-width: 1920px)
+  .view-container
+    display: flex
+    width: 100%
+    justify-content: center
+    align-items: center
+    & > .view
+      width: 70%
+
 @media screen and (max-width: 1366px)
   .view-container
     display: flex
@@ -64,7 +73,10 @@ body
       width: 80%
 
 @media screen and (max-width: 1024px)
-  .view-container > .view
+  .view-container
+    justify-content: center
+    align-items: center
+    & > .view
       width: 90%
 
 @media screen and (max-width: 960px)
