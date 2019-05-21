@@ -11,20 +11,20 @@
 <script>
 import AppHeader from '@/components/global/AppHeader.vue'
 import AppFooter from '@/components/global/AppFooter.vue'
-// import {
-//   Account,
-//   NetworkType
-// } from 'tsjs-xpx-catapult-sdk'
+import {
+  Account,
+  NetworkType
+} from 'tsjs-xpx-catapult-sdk'
 
 export default {
   components: {
     AppHeader,
     AppFooter
+  },
+  mounted () {
+    const account = Account.generateNewAccount(NetworkType.MIJIN_TEST);
+    console.log('Your new account address is:', account.address.pretty(), 'and its private key', account.privateKey)
   }
-  // mounted () {
-  //   const account = Account.generateNewAccount(NetworkType.MIJIN_TEST);
-  //   console.log('Your new account address is:', account.address.pretty(), 'and its private key', account.privateKey)
-  // }
 }
 </script>
 

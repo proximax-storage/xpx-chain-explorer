@@ -1,4 +1,4 @@
-# new-proximax-catapult
+# pruebaexplorer
 
 ## Project setup
 ```

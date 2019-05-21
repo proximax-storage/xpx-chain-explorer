@@ -18,8 +18,8 @@ export default {
     return {
       navItems: [
         { name: 'transaction', route: '', class: 'active' },
-        { name: 'network stats', route: 'networkStats', class: 'unactive' },
-        { name: 'map', route: 'map', class: 'unactive' }
+        { name: 'network stats', route: 'networkStats', class: 'inactive' },
+        { name: 'map', route: 'map', class: 'inactive' }
       ]
     }
   },
@@ -32,20 +32,38 @@ export default {
       let objectRoute = e.target.getAttribute('route')
 
       this.navItems.forEach(el => {
-        el.class = 'unactive'
+        el.class = 'inactive'
         if (el.route === objectRoute) {
           el.class = 'active'
         }
       })
 
       this.redirectAction(`/${objectRoute}`)
+    },
+    verifyRoute () {
+      let currentPath = window.location.hash
+      currentPath = currentPath.slice(2)
+      this.redirectAction(currentPath)
+      this.changeClass(currentPath)
+    },
+    changeClass (route) {
+      for (let i = 0; i < this.navItems.length; i++) {
+        // console.log(this.navItems[i])
+        this.navItems[i].class = 'inactive'
+        if (this.navItems[i].route === route) {
+          this.navItems[i].class = 'active'
+        }
+      }
     }
+  },
+  mounted () {
+    this.verifyRoute()
   }
 }
 </script>
 
 <style lang="sass" scoped>
-.unactive
+.inactive
   border-bottom: 2px solid #7ab5e1
 
 .active

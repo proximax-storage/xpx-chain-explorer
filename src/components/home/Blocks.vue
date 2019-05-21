@@ -96,5 +96,6 @@ td
     display: block
     overflow-x: auto
     & > table
+      margin: 10px
       width: 700px
 </style>

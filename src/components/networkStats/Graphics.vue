@@ -62,7 +62,8 @@ export default {
 .standard-canvas
   box-sizing: border-box
   padding: 10px
-  width: 100%
+  width: 100% !important
+  height: 250px !important
   background: white
   border-radius: 15px
 
