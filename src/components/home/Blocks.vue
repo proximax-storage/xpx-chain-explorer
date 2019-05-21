@@ -38,7 +38,39 @@ export default {
       ]
     }
   },
+  mounted () {
+    this.viewAllBlocks()
+  },
   methods: {
+    /**
+     * Method to see recently closed blocks
+     */
+    viewAllBlocks () {
+      this.$proxProvider.blockchainHttp.getBlockchainHeight().subscribe(
+        next => {
+          this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(next.compact(), 100).subscribe(
+            blockInfo => {
+              console.log('Pruebabaaaaaa', blockInfo) 
+              // blockInfo.forEach(element => {
+              //   element.totalFee = Utils.fmtAmountValue(element.totalFee.compact())                
+              //   element.date = Utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+              //   this.blockInfo.push(element)
+              // })
+              // this.quantity = this.blockInfo.length
+              // this.showInfo = true
+            },
+            error => {
+              this.msg = 'Communication error with the node!'
+              this.showError = true
+            }
+          )
+        },
+        error => {
+          this.msg = 'Communication error with the node!'
+          this.showError = true
+        }
+      )
+    },
     analyzeItem (e) {
       console.log(e.target.textContent)
     }

@@ -6,8 +6,10 @@ import router from './router'
 import store from './store'
 import './registerServiceWorker'
 import { Persistence } from '@/services/persistence.js'
+import proximaxProvider from '@/services/proximaxProviders.js'
 
 Vue.prototype.$storage = new Persistence()
+Vue.prototype.$proxProvider = new proximaxProvider()
 Vue.config.productionTip = false
 
 new Vue({

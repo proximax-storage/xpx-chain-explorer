@@ -22,7 +22,7 @@ export default {
     AppFooter
   },
   mounted () {
-    const account = Account.generateNewAccount(NetworkType.MIJIN_TEST);
+    const account = Account.generateNewAccount(NetworkType.MIJIN_TEST)
     console.log('Your new account address is:', account.address.pretty(), 'and its private key', account.privateKey)
   }
 }
