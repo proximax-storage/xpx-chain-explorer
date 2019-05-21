@@ -34,6 +34,14 @@ export default {
         { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
         { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
         { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
+        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
+        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
+        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
+        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
+        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
+        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
+        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
+        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
         { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 }
       ]
     }
@@ -57,9 +65,10 @@ td
   background: silver
 
 .link-data
-  font-weight: normal
+  font-weight: bold
   &:hover
-    font-weight: bold
+    color: dodgerblue
+    text-decoration-line: underline
 
 .block
   width: 100%
@@ -67,6 +76,7 @@ td
   flex-flow: row wrap
   justify-content: center
   align-items: center
+  padding: 10px
   &::-webkit-scrollbar
     background: transparent
   &::-webkit-scrollbar-thumb
@@ -84,8 +94,6 @@ td
         text-transform: uppercase
         font-weight: bold
         padding: 5px
-    & > tr
-      background: white
     & > .pagination
       background: red
       width: 100%
@@ -95,7 +103,8 @@ td
   .block
     display: block
     overflow-x: auto
+    padding: 10px
+    text-align: center
     & > table
-      margin: 10px
       width: 700px
 </style>

@@ -22,23 +22,21 @@ export default {
             label: '# of Votes',
             data: [12, 30, 3, 5, 2, 20],
             backgroundColor: [
-              'red',
-              'rgba(255, 159, 64, 0.2)'
+              'rgba(255, 0, 0, 0.2)'
             ],
             borderColor: [
+              'rgba(255, 0, 0, 1)'
             ],
             borderWidth: 3
           },
           {
             label: '# of Votes',
-            data: [12, 10, 3, 5, 2, 5, 7],
+            data: [12, 10, 3, 10, 7, 5, 7],
             backgroundColor: [
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
+              'rgba(0, 0, 255, 0.2)'
             ],
             borderColor: [
-              'rgba(54, 162, 235, 1)'
+              'rgba(0, 0, 235, 1)'
             ],
             borderWidth: 3
           }
@@ -61,12 +59,14 @@ export default {
 <style lang="sass" scoped>
 .standard-canvas
   box-sizing: border-box
-  padding: 10px
+  // padding: 10px
   width: 100% !important
   height: 250px !important
   background: white
-  border-radius: 15px
+  border-radius: 5px
+  flex-grow: 1
 
 .graphics
   padding: 10px
+  width: 100%
 </style>
