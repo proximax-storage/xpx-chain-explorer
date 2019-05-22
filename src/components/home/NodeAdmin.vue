@@ -62,7 +62,7 @@ export default {
   padding: 5px
   &:hover
     background: dodgerblue
-    color: #7ab5e280 !important
+    color: white !important
 
 .node-admin
   display: flex
