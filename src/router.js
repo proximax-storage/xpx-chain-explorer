@@ -29,7 +29,7 @@ export default new Router({
       component: load('Map')
     },
     {
-      path: '/searchResult/:id',
+      path: '/searchResult/:type/:id',
       name: 'searchResult',
       component: load('SearchResult')
     },

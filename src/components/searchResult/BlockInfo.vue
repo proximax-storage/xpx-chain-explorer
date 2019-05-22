@@ -5,22 +5,22 @@
         <h1 class="supertitle">Block Info</h1>
         <div class="up">
           <div class="title">Height</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value">{{ detail.height }}</div>
         </div>
         <div class="down">
           <div class="title">Timestamp</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value">{{ detail.timestamp }}</div>
         </div>
       </div>
       <div>
         <h1 class="supertitle" style="color: transparent">Harvester / Forger</h1>
         <div class="up">
           <div class="title">Harvester / Forger</div>
-          <div class="value">hd6638hfgwuw872yhj4</div>
+          <div class="value">{{ detail.publicKey }}</div>
         </div>
         <div class="down">
           <div class="title">Hash</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value">{{ detail.hash }}</div>
         </div>
       </div>
     </div>
@@ -28,19 +28,19 @@
       <div class="layout-down-children">
         <div class="down-radius">
           <div class="title">Difficulty</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value">{{ detail.difficulty }}</div>
         </div>
       </div>
       <div class="layout-down-children">
         <div class="down-radius">
           <div class="title">Txes</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value">{{ detail.txes }}</div>
         </div>
       </div>
       <div class="layout-down-children">
         <div class="down-radius">
           <div class="title">Fees</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value" v-html="detail.fee"></div>
         </div>
       </div>
     </div>
@@ -49,7 +49,10 @@
 
 <script>
 export default {
-  name: 'BlockInfo'
+  name: 'BlockInfo',
+  props: {
+    detail: Object
+  }
 }
 </script>
 
