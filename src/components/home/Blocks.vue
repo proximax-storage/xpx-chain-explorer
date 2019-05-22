@@ -8,7 +8,7 @@
         <th>Txes</th>
         <th>Timestamp</th>
       </tr>
-      <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
+      <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'"  v-show="(pag - 1) * limit <= index  && pag * limit > index">
         <td @click="analyzeItem"><router-link class="link-data" :to="{ path: '/searchResult/' + item.height }" target="_blank">{{ item.height }}</router-link></td>
         <td class="link-data" @click="analyzeItem"><router-link class="link-data" :to="{ path: '/searchResult/' + item.signer.publicKey }" target="_blank">{{ item.signer.publicKey }}</router-link></td>
         <td v-html="item.totalFee"></td>
@@ -17,7 +17,7 @@
       </tr>
     </table>
     <div class="pagination">
-      <paginator :arrayLength="dataTable.length"/>
+      <paginator :arrayLength="dataTable.length" :limit="limit" @changePage="changePage" />
     </div>
     <div style="display: none">
       {{ updateTable }}
@@ -37,7 +37,9 @@ export default {
   data () {
     return {
       currentBlock: this.$store.state.currentBlock,
-      dataTable: []
+      dataTable: [],
+      pag: 1,
+      limit: 10
     }
   },
   mounted () {
@@ -70,6 +72,13 @@ export default {
         }
       )
     },
+    /**
+     * Method to change page
+     * @param {number} page indicates the current page
+     */
+    changePage (page) {
+      this.pag = page
+    },
     analyzeItem (e) {
       console.log(e.target.textContent)
     }
@@ -80,8 +89,9 @@ export default {
       let block = this.$store.state.currentBlock
       console.log(height, block)
       if (height !== 'Loading') {
-        this.dataTable.unshift(block)
-        console.log('llego')
+        if (this.dataTable[0].height !== height) {
+          this.dataTable.unshift(block)
+        }
       }
       return this.$store.getters.getCurrentBlock
     }
