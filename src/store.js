@@ -19,7 +19,7 @@ export default new Vuex.Store({
   },
   getters: {
     getCurrentBlock: state => {
-      return state.currentBlock
+      return state.currentBlock.height
     }
   }
 })

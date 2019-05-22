@@ -9,7 +9,7 @@
         <th>Timestamp</th>
       </tr>
       <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
-        <td class="link-data" @click="analyzeItem">{{ item.height.compact() }}</td>
+        <td class="link-data" @click="analyzeItem">{{ item.height }}</td>
         <td class="link-data" @click="analyzeItem">{{ item.signer.publicKey }}</td>
         <td v-html="item.totalFee"></td>
         <td>{{ item.numTransactions }}</td>
@@ -18,6 +18,9 @@
     </table>
     <div class="pagination">
       <paginator :arrayLength="dataTable.length"/>
+    </div>
+    <div style="display: none">
+      {{ updateTable }}
     </div>
   </div>
 </template>
@@ -53,6 +56,7 @@ export default {
               blockInfo.forEach(element => {
                 element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())                
                 element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+                element.height = element.height.compact()
                 this.dataTable.push(element)
               })
             },
@@ -68,6 +72,18 @@ export default {
     },
     analyzeItem (e) {
       console.log(e.target.textContent)
+    }
+  },
+  computed: {
+    updateTable () {
+      let height = this.$store.getters.getCurrentBlock
+      let block = this.$store.state.currentBlock
+      console.log(height, block)
+      if (height !== 'Loading') {
+        this.dataTable.unshift(block)
+        console.log('llego')
+      }
+      return this.$store.getters.getCurrentBlock
     }
   }
 }

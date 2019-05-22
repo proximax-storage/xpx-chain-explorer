@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     updateBlock () {
-      return this.$store.getters.getCurrentBlock.height
+      return this.$store.getters.getCurrentBlock
     }
   },
   methods: {
