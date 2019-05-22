@@ -6,12 +6,14 @@
         <th>Harvester/Forger</th>
         <th>Fee</th>
         <th>Txes</th>
+        <th>Timestamp</th>
       </tr>
       <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
-        <td class="link-data" @click="analyzeItem">{{ item.block }}</td>
-        <td class="link-data" @click="analyzeItem">{{ item.harFor }}</td>
-        <td>{{ item.fee }}</td>
-        <td>{{ item.txes }}</td>
+        <td class="link-data" @click="analyzeItem">{{ item.height.compact() }}</td>
+        <td class="link-data" @click="analyzeItem">{{ item.signer.publicKey }}</td>
+        <td v-html="item.totalFee"></td>
+        <td>{{ item.numTransactions }}</td>
+        <td>{{ item.date }}</td>
       </tr>
     </table>
     <div class="pagination">
@@ -22,6 +24,7 @@
 
 <script>
 import Paginator from '@/components/global/Paginator.vue'
+import { Deadline } from 'tsjs-xpx-catapult-sdk'
 
 export default {
   name: 'Blocks',
@@ -30,24 +33,13 @@ export default {
   },
   data () {
     return {
-      dataTable: [
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 },
-        { block: '11111', harFor: 'DYEHW76328949373JKDJSHSIOWSJFYYR7362524436819LDIJRNLKSU35627W', fee: '0.00', txes: 0 }
-      ]
+      currentBlock: this.$store.state.currentBlock,
+      dataTable: []
     }
   },
   mounted () {
     this.viewAllBlocks()
+    console.log('Este es el current block', this.currentBlock)
   },
   methods: {
     /**
@@ -58,24 +50,19 @@ export default {
         next => {
           this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(next.compact(), 100).subscribe(
             blockInfo => {
-              console.log('Pruebabaaaaaa', blockInfo) 
-              // blockInfo.forEach(element => {
-              //   element.totalFee = Utils.fmtAmountValue(element.totalFee.compact())                
-              //   element.date = Utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
-              //   this.blockInfo.push(element)
-              // })
-              // this.quantity = this.blockInfo.length
-              // this.showInfo = true
+              blockInfo.forEach(element => {
+                element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())                
+                element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+                this.dataTable.push(element)
+              })
             },
             error => {
-              this.msg = 'Communication error with the node!'
-              this.showError = true
+              console.error('Communication error with the node!')
             }
           )
         },
         error => {
-          this.msg = 'Communication error with the node!'
-          this.showError = true
+          console.error('Communication error with the node!')
         }
       )
     },

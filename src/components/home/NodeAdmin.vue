@@ -2,7 +2,7 @@
   <div class="node-admin">
     <div class="admin-item">
       <h1>Current Block</h1>
-      <p>5000</p>
+      <p>{{ updateBlock }}</p>
     </div>
     <div class="admin-item" style="flex-grow: 3">
       <h1>Node</h1>
@@ -39,6 +39,11 @@ export default {
         { name: 'nodo-super--nodo1', route: 'route1' },
         { name: 'nodo-super--nodo2', route: 'route2' }
       ]
+    }
+  },
+  computed: {
+    updateBlock () {
+      return this.$store.getters.getCurrentBlock.height
     }
   },
   methods: {
