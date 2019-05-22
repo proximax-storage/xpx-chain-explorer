@@ -13,7 +13,9 @@ import AppHeader from '@/components/global/AppHeader.vue'
 import AppFooter from '@/components/global/AppFooter.vue'
 import {
   Account,
-  NetworkType
+  NetworkType,
+  Listener,
+  Deadline
 } from 'tsjs-xpx-catapult-sdk'
 
 export default {
@@ -22,6 +24,20 @@ export default {
     AppFooter
   },
   mounted () {
+    const listener = new Listener(`ws://bctestnet1.xpxsirius.io:3000`, WebSocket)
+    listener.open().then(() => {
+      listener
+        .newBlock()
+        .subscribe(block => {
+          block.height = block.height.compact()
+          block.numTransactions = (block.numTransactions === undefined) ? 0 : block.numTransactions
+          block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
+          block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+          //console.log('Este es el block actual', block)
+          this.$store.dispatch('changeCurrentBlock', block)
+          
+        }, err => console.error(err))
+    })
     const account = Account.generateNewAccount(NetworkType.MIJIN_TEST)
     console.log('Your new account address is:', account.address.pretty(), 'and its private key', account.privateKey)
     console.log(this.$utils)
