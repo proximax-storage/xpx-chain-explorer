@@ -1,14 +1,17 @@
 <template>
   <div class="recent">
     <h1 class="supertitle">Recent Transaction</h1>
-    <div class="element" v-for="(item, index) in array" :key="item.name + index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index > 0 && index < limit + 1">
+    <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1">
       <div class="el-left">
         <h1 class="title alternate">Recipient / Sender</h1>
         <div>
           <figure>
             <img :src="require('@/assets/arrow-transaction-recipient-green.svg')" width="15">
           </figure>
-          <div class="value">hy46s5y2jdjsuusbajje7</div>
+          <div class="value" v-if="item.recipient">{{ item.recipient.pretty() }}</div>
+          <div class="value" v-else-if="item.type === typeTransactions.mosaicDefinition.id">New Mosaic</div>
+          <div class="value" v-else-if="item.type === typeTransactions.mosaicSupplyChange.id">New Mosaic Supply</div>
+          <div class="value" v-else-if="item.type === typeTransactions.registerNamespace.id">Root NS</div>
         </div>
         <div>
           <figure>
@@ -30,26 +33,21 @@
 </template>
 
 <script>
+import proximaxProvider from '@/services/proximaxProviders.js'
 export default {
   name: 'RecentTrans',
   props: {
     limit: {
       required: false,
       type: Number,
-      default: 5
-    }
+      default: 50
+    },
+    arrayTransactions: Array
   },
   data () {
+    console.log(proximaxProvider.typeTransactions())
     return {
-      array: [
-        { name: 'hola1' },
-        { name: 'hola2' },
-        { name: 'hola1' },
-        { name: 'hola2' },
-        { name: 'hola2' },
-        { name: 'hola1' },
-        { name: 'hola2' }
-      ]
+      typeTransactions: proximaxProvider.typeTransactions()
     }
   }
 }
