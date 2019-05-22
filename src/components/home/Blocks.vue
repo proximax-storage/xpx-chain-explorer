@@ -9,8 +9,8 @@
         <th>Timestamp</th>
       </tr>
       <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
-        <td class="link-data" @click="analyzeItem">{{ item.height }}</td>
-        <td class="link-data" @click="analyzeItem">{{ item.signer.publicKey }}</td>
+        <td @click="analyzeItem"><router-link class="link-data" :to="{ path: '/searchResult/' + item.height }" target="_blank">{{ item.height }}</router-link></td>
+        <td class="link-data" @click="analyzeItem"><router-link class="link-data" :to="{ path: '/searchResult/' + item.signer.publicKey }" target="_blank">{{ item.signer.publicKey }}</router-link></td>
         <td v-html="item.totalFee"></td>
         <td>{{ item.numTransactions }}</td>
         <td>{{ item.date }}</td>
@@ -101,6 +101,7 @@ td
 
 .link-data
   font-weight: bold
+  color: black
   &:hover
     color: dodgerblue
     text-decoration-line: underline

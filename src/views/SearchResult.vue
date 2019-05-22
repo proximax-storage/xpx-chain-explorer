@@ -28,6 +28,9 @@ export default {
     BlockInfo,
     Transaction,
     RecentTrans
+  },
+  mounted () {
+    console.log("este es el parametro",this.$route.params.id)
   }
 }
 </script>
