@@ -12,7 +12,8 @@ import {
   TransactionType,
   TransactionHttp,
   MosaicInfo,
-  MosaicService
+  MosaicService,
+  NetworkType
 } from 'tsjs-xpx-catapult-sdk'
 
 export default class proximaxProvider {
@@ -37,7 +38,7 @@ export default class proximaxProvider {
    * @memberof proximaxProvider
    */
   static mosaicXpx(){
-    return 'd423931bd268d1f4'
+    return '0DC67FBE1CAD29E3'
   }
 
   /**
@@ -47,7 +48,7 @@ export default class proximaxProvider {
    */
   static mosaicFullXpx(){
     return {
-      id: 'd423931bd268d1f4',
+      id: '0DC67FBE1CAD29E3',
       name: 'prx:xpx'
     }
   }

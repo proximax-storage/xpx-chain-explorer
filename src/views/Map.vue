@@ -2,7 +2,7 @@
   <div class="map">
     <div class="cont">
       <iframe v-if="model" class="imap" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d452.1581727691727!2d-66.91056292338106!3d10.512061010895078!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1ses-419!2sve!4v1558369609967!5m2!1ses-419!2sve" frameborder="0" style="border:0" allowfullscreen></iframe>
-      <iframe v-if="!model" class="imap" src="https://www.google.com/maps/embed? pb=!1m18!1m12!1m3!1d4558.570647457332!2d-66.91133110028488!3d10.499465122160784!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13. 1!3m3!1m2!1s0x8c2a5ed5d72b43db%3A0x86abc9e64feccea9!2sNuevo+Circo!5e0!3m2!1ses-419!2sve!4v1558370267259!5m2!1ses-419!2sve" frameborder="0"   style="border:0" allowfullscreen></iframe>
+      <iframe v-if="!model" class="imap" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3393.5424418258367!2d-66.86576883259643!3d10.490284297456643!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c2a58fcd2327d39%3A0x62054f6dadd2b037!2zQ2hhY2HDrXRv!5e0!3m2!1ses-419!2sve!4v1558561726671!5m2!1ses-419!2sve" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
     </div>
     <div class="control">
       <input type="button" value="Presiona" @click.stop="model = !model">

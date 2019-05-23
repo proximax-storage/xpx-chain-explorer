@@ -5,34 +5,83 @@
         <h1 class="supertitle">Account Info</h1>
         <div class="up">
           <div class="title">Address</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value">{{ detail.address.address }}</div>
         </div>
         <div class="down">
           <div class="title">Public Key</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value">{{ detail.publicKey }}</div>
         </div>
       </div>
       <div>
         <h1 class="supertitle">Owner Mosaic</h1>
         <div class="up">
           <div class="title">Id</div>
-          <div class="value">hd6638hfgwuw872yhj4</div>
+          <div class="value">{{ getId }}</div>
         </div>
         <div class="down">
           <div class="title">Quantity</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value" v-html="getBalance"></div>
         </div>
       </div>
     </div>
     <div class="pk-layout-down">
-      <h1 class="balance">XPX BALANCE: XXXXXXXXXXX</h1>
+      <h1 class="balance" v-html="formatBalance"></h1>
     </div>
   </div>
 </template>
 
 <script>
+import proximaxProvider from '@/services/proximaxProviders.js'
+
 export default {
-  name: 'PublicKey'
+  name: 'PublicKey',
+  data () {
+    return {
+      amount: 0
+    }
+  },
+  computed: {
+    getId () {
+      return proximaxProvider.mosaicXpx()
+    },
+    getBalance () {
+      // console.log(this.detail.mosaics)
+      let xpxMosaics = this.detail.mosaics.filter(el => el.id.id.toHex().toUpperCase() === proximaxProvider.mosaicXpx())
+      console.log(xpxMosaics)
+      let amount
+      if (xpxMosaics.length > 0) {
+        amount = this.$utils.fmtAmountValue(xpxMosaics[0].amount.compact())
+      } else {
+        amount = this.$utils.fmtAmountValue(0)
+      }
+      console.log(amount)
+      // console.log(this.detail.mosaics)
+      // this.detail.mosaics.forEach((el, index) => {
+        //   console.log("AQUIII", el.amount.compact(), el.id.id.toHex())
+      //   console.log(typeof el.id.id.toHex().toUpperCase(), typeof proximaxProvider.mosaicXpx())
+      //   console.log(el.id.id.toHex().toUpperCase() === proximaxProvider.mosaicXpx())
+      //   if (el.id.id.toHex().toUpperCase() == proximaxProvider.mosaicXpx()) {
+        //     console.log("entro aqui")
+      //     this.amount = el.amount.compact()
+      //     console.log(this.$utils.fmtAmountValue(amount))
+      //     this.amount = this.$utils.fmtAmountValue(amount)
+      //   } else {
+        //     this.amount = this.$utils.fmtAmountValue(0)
+      //   }
+      // })
+
+      // return this.amount
+      // let item = this.detail.mosaics.filter(el => el.id.id)
+      // console.log(item)
+      return amount
+    },
+    formatBalance () {
+      return `<div>XPX BALANCE: ${ this.getBalance }</div>`
+    }
+  },
+  props: {
+    detail: Object
+  }
 }
 </script>
 

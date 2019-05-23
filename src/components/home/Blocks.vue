@@ -10,7 +10,7 @@
       </tr>
       <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
         <td @click="analyzeItem"><router-link class="link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link></td>
-        <td class="link-data" @click="analyzeItem"><router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.publicKey }" target="_blank">{{ item.signer.publicKey }}</router-link></td>
+        <td class="link-data" @click="analyzeItem"><router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.address.address }" target="_blank">{{ item.signer.publicKey }}</router-link></td>
         <td v-html="item.totalFee"></td>
         <td>{{ item.numTransactions }}</td>
         <td>{{ item.date }}</td>
