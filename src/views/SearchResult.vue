@@ -9,7 +9,8 @@
     <public-key v-if="type === 'Public Key'" :detail="param"/>
     <block-info v-if="type === 'Block Height'" :detail="param"/>
     <transaction v-if="type === 'Transaction Hash'"/>
-    <recent-trans v-if="showRecentTransaction && this.blockTransactions !== null && this.blockTransactions > 0" :arrayTransactions="this.blockTransactions"/>
+    <recent-trans v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'"/>
+    <recent-trans v-if="showRecentTransaction && blockTransactions !== null && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
   </div>
 </template>
 
@@ -38,7 +39,9 @@ export default {
       recent: [],
       param: {},
       showRecentTransaction: false,
-      blockTransactions: null
+      blockTransactions: null,
+      showRecentMosaic: false,
+      blockMosaics: null,
     }
   },
   mounted () {
@@ -73,30 +76,33 @@ export default {
           this.showComponent()
 
           // If your account information has tiles, look up your information and name to display them in the tile table
-          if (this.accountInfo.mosaics.length > 0) {
-
-            this.mosaicXpx = this.accountInfo.mosaics.filter(element => {
-              return element.id.toHex() === xpx
-            })
-
-            this.mosaicXpx = this.$utils.fmtAmountValue(this.mosaicXpx[0].amount.compact())
-            this.showAccountInfo = true
-
-            this.accountInfo.mosaics = this.accountInfo.mosaics.filter(element => {
-              return element.id.toHex() !== xpx
-            })
-            if (this.accountInfo.mosaics.length === 0) {
-              this.showInfoMosaic = true
-            } else {
-              this.searchMosaics(this.accountInfo.mosaics)     
-            }
-          } else {
-            this.mosaicXpx = Utils.fmtAmountValue(0)
-            this.showInfoMosaic = true
-            this.showAccountInfo = true
+          if (resp.mosaics.length > 0) {
+            this.blockMosaics = resp.mosaics.filter(el => el.id.toHex() !== xpx)
+            this.showRecentMosaic = !this.showRecentMosaic
+            console.log("Transaciones", this.blockMosaics)
           }
-          // Search all transactions in the public account and show the table of recent transactions
-          this.viewTransactionsFromPublicAccount(this.accountInfo.publicAccount)
+            // this.mosaicXpx = this.accountInfo.mosaics.filter(element => {
+            //   return element.id.toHex() === xpx
+            // })
+
+          //   this.mosaicXpx = this.$utils.fmtAmountValue(this.mosaicXpx[0].amount.compact())
+          //   this.showAccountInfo = true
+
+          //   this.accountInfo.mosaics = this.accountInfo.mosaics.filter(element => {
+          //     return element.id.toHex() !== xpx
+          //   })
+          //   if (this.accountInfo.mosaics.length === 0) {
+          //     this.showInfoMosaic = true
+          //   } else {
+          //     this.searchMosaics(this.accountInfo.mosaics)     
+          //   }
+          // } else {
+          //   this.mosaicXpx = Utils.fmtAmountValue(0)
+          //   this.showInfoMosaic = true
+          //   this.showAccountInfo = true
+          // }
+          // // Search all transactions in the public account and show the table of recent transactions
+          // this.viewTransactionsFromPublicAccount(this.accountInfo.publicAccount)
         },
         error => {
           this.msg = 'Communication error with the node!'
