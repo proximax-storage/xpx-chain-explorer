@@ -122,7 +122,6 @@ td
   flex-flow: row wrap
   justify-content: center
   align-items: center
-  padding: 10px
   &::-webkit-scrollbar
     background: transparent
   &::-webkit-scrollbar-thumb

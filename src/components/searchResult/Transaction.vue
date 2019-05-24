@@ -2,25 +2,26 @@
   <div class="transaction">
     <div class="tran-layout-up">
       <div>
-        <h1 class="supertitle">Transfer Transaction</h1>
+        <h1 class="supertitle">{{ transactionType || 'Hash Transaction'}}</h1>
         <div class="up">
           <div class="title">Sender</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value">{{ prettyConvert(detail.signer.address) }}</div>
         </div>
         <div class="down">
           <div class="title">Recipient</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value" v-if="detail.recipient">{{ detail.recipient.pretty() }}</div>
+          <div class="value" v-else>{{ 'No available' }}</div>
         </div>
       </div>
       <div>
         <h1 class="supertitle" style="color: transparent">Timestamp</h1>
         <div class="up">
           <div class="title">Timestamp</div>
-          <div class="value">hd6638hfgwuw872yhj4</div>
+          <div class="value">{{ $utils.fmtTime(detail.deadline.value) }}</div>
         </div>
         <div class="down">
           <div class="title">Block Height</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value">{{ detail.transactionInfo.height.compact() }}</div>
         </div>
       </div>
     </div>
@@ -32,13 +33,48 @@
       <div class="layout-down-children">
         <div class="down-radius">
           <div class="title">Signature</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="value">{{ detail.signature }}</div>
         </div>
       </div>
       <div class="layout-down-children">
         <div class="down-radius">
-          <div class="title">Message</div>
-          <div class="value">SFE551IK2M2IU8S82TGEI88DIQUE76CXGQIJ</div>
+          <div class="title">Hash</div>
+          <div class="value">{{ detail.transactionInfo.hash }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="tran-layout-plus">
+      <h1 class="supertitle">Details</h1>
+      <div class="plus-cont">
+        <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
+          <div class="title">{{ item.key }}</div>
+          <div class="value">{{ item.value }}</div>
+        </div>
+        <div class="layout-plus-children"  v-if="detail.mosaicProperties">
+          <div class="title">Mosaic Properties</div>
+          <div class="value mosaic-properties">
+            <span>
+              Divisibility: <b>{{ detail.mosaicProperties.divisibility }}</b>
+            </span>
+            <span v-if="detail.mosaicProperties.supplyMutable">
+              Supply Mutable: <b style="color: green">{{ detail.mosaicProperties.supplyMutable }} <mdb-icon icon="check"/></b>
+            </span>
+            <span v-if="!detail.mosaicProperties.supplyMutable">
+              Supply Mutable: <b style="color: red">{{ detail.mosaicProperties.supplyMutable }} <mdb-icon icon="times"/></b>
+            </span>
+            <span v-if="detail.mosaicProperties.levyMutable">
+              Levy Mutable: <b style="color: green">{{ detail.mosaicProperties.levyMutable }} <mdb-icon icon="check"/></b>
+            </span>
+            <span v-if="!detail.mosaicProperties.levyMutable">
+              Levy Mutable: <b style="color: red">{{ detail.mosaicProperties.levyMutable }} <mdb-icon icon="times"/></b>
+            </span>
+            <span v-if="detail.mosaicProperties.transferable">
+              Transferable: <b style="color: green">{{ detail.mosaicProperties.transferable }} <mdb-icon icon="check"/></b>
+            </span>
+            <span v-if="!detail.mosaicProperties.transferable">
+              Transferable: <b style="color: red">{{ detail.mosaicProperties.transferable }} <mdb-icon icon="times"/></b>
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -46,8 +82,123 @@
 </template>
 
 <script>
+import proximaxProvider from '@/services/proximaxProviders'
+import { mdbIcon } from 'mdbvue'
+
 export default {
-  name: 'Transaction'
+  name: 'Transaction',
+  props: {
+    detail: Object
+  },
+  components: {
+    mdbIcon
+  },
+  data () {
+    return {
+      plusInfo: [],
+      transactionType: 'Hash Transaction'
+    }
+  },
+  mounted () {
+    this.verifyType()
+    this.verifyTransactionDetails()
+    console.log(this.detail)
+  },
+  methods: {
+    iterator (obj) {
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          const element = obj[key];
+          this.plusInfo.push({ key: key, value: element })
+        }
+      }
+    },
+    verifyType () {
+      let objectOfTypes = Object.values(proximaxProvider.typeTransactions())
+      objectOfTypes.forEach(element => {
+        // console.log(element.name)
+        if (this.detail.type === element.id) {
+          this.transactionType = element.name
+        }
+      })
+    },
+    verifyTransactionDetails () {
+      switch (this.transactionType) {
+        case 'Transfer Transaction':
+          this.plusInfo = [
+            { key: 'Message', value: this.detail.message.payload }
+          ]
+          // this.iterator(this.detail)
+          break;
+        case 'Register Namespace Transaction':
+          this.plusInfo = [
+            { key: 'Namespace Name', value: this.detail.namespaceName },
+            { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex() },
+            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Version', value: this.detail.version },
+            { key: 'Parent Id', value: (this.detail.parentId !== undefined) ? this.detail.parentId : 'No Available' }
+          ]
+          // this.iterator(this.detail)
+          break;
+        case 'Mosaic definition':
+          this.plusInfo = [
+            { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
+            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Nonce', value: (this.detail.nonce !== undefined) ? this.detail.nonce : 'No Available' },
+            { key: 'Type', value: this.detail.type },
+            { key: 'Version', value: this.detail.version }
+          ]
+          //this.iterator(this.detail)          
+          break;
+        case 'Mosaic supply change':
+          this.plusInfo = [
+            { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
+            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Type', value: this.detail.type },
+            { key: 'Version', value: this.detail.version },
+            { key: 'Delta', value: this.detail.delta.toHex() },
+            { key: 'Direction', value: this.detail.direction }
+          ]
+          // this.iterator(this.detail)          
+          break;
+        case 'Modify multisig account':
+          this.iterator(this.detail)          
+          break;
+        case 'Aggregate complete':
+          this.iterator(this.detail)          
+          break;
+        case 'Aggregate bonded':
+          this.iterator(this.detail)          
+          break;
+        case 'Lock':
+          this.iterator(this.detail)          
+          break;
+        case 'Secret pock':
+          this.iterator(this.detail)          
+          break;
+        case 'Secret proof':
+          this.iterator(this.detail)          
+          break;
+        case 'Mosaic Alias':
+          this.plusInfo = [
+            { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex() },
+            { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
+            { key: 'Action Type', value: (this.detail.actionType !== undefined) ? this.detail.actionType : 'No Available' },
+            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Type', value: this.detail.type },
+            { key: 'Version', value: this.detail.version }
+          ]
+          // this.iterator(this.detail)          
+          break;
+        default:
+          
+          break;
+      }
+    },
+    prettyConvert (item) {
+      return item.pretty()
+    }
+  }
 }
 </script>
 
@@ -63,6 +214,11 @@ $radius: 5px
   font-size: 10px
   font-weight: normal
   text-transform: uppercase
+  word-wrap: break-word
+  &.mosaic-properties
+    display: flex
+    flex-flow: row wrap
+    justify-content: space-around
 
 .amount
   color: black
@@ -85,6 +241,7 @@ $radius: 5px
   font-size: 17px
   color: #7AB5E2
   padding: 0px 0px 5px 0px
+  width: 100%
 
 .up
   background: #DDDDDD
@@ -133,18 +290,51 @@ $radius: 5px
     margin-bottom: 10px
   & > .tran-layout-down
     display: flex
-    flex-flow: row wrap
+    flex-flow: column wrap
     justify-content: space-between
     align-items: center
-    margin: 0px
+    margin: 0px 0px 15px 0px
     & > div:first-child
-      margin-right: 5px
+      margin-bottom: 10px 
+      width: 100%
       flex-grow: 1
     & > div:last-child
-      margin-left: 5px
+      margin-bottom: 5px
+      width: 100%
       flex-grow: 1
+  & > .tran-layout-plus
+    display: flex
+    flex-flow: column wrap
+    box-sizing: border-box
+    & > .plus-cont
+      width: 100%
+      background: #f4f4f4
+      border-radius: $radius
+      padding: 0px
+      display: flex
+      flex-flow: column wrap
+      & > .layout-plus-children
+        width: 100%
+        padding: 10px
+        box-sizing: border-box
+        &:only-child
+          border-radius: $radius
+        &:first-child
+          border-radius: $radius $radius 0px 0px
+        &:last-child
+          border-radius: 0px 0px $radius $radius
 
 @media screen and (max-width: 550px)
+  .value
+    font-size: 10px
+    font-weight: normal
+    text-transform: uppercase
+    word-wrap: break-word
+    &.mosaic-properties
+      display: flex
+      flex-flow: column
+      justify-content: space-around
+
   .transaction
     & > .tran-layout-up
       background: transparent

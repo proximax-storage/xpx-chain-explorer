@@ -5,17 +5,17 @@
         <mdb-dropdown style="text-align: center">
           <mdb-dropdown-toggle slot="toggle" class="white-text blue"
           style="padding: 10px; box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%"
-          >{{ typeSearch }}</mdb-dropdown-toggle>
+          >{{ label }}</mdb-dropdown-toggle>
           <mdb-dropdown-menu style="height: auto">
             <mdb-dropdown-item v-for="(item, index) in searchList" :key="index">
-              <a class="searchLink" @click="changeSearch(item)">{{ item.name }}</a>
+              <a class="searchLink" @click.prevent="changeSearch(item)">{{ item.name }}</a>
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
         </mdb-dropdown>
       </div>
       <div class="search-input">
-        <mdb-input :label="typeSearch" class="place-white" style="width: 100%"></mdb-input>
-        <figure>
+        <mdb-input :label="label" class="place-white" style="width: 100%" v-model="valueSearch" @keyup.enter="performSearch"></mdb-input>
+        <figure @click="performSearch">
           <img :src="require('@/assets/search-details-white.svg')" alt="">
         </figure>
       </div>
@@ -37,17 +37,33 @@ export default {
   },
   data () {
     return {
-      typeSearch: 'Search',
+      typeSearch: '',
+      label: 'Search',
       searchList: [
         { name: 'Public Key' },
         { name: 'Block Height' },
         { name: 'Transaction Hash' }
-      ]
+      ],
+      valueSearch: ''
     }
   },
   methods: {
     changeSearch (item) {
-      this.typeSearch = item.name
+      console.log(this.typeSearch)
+      console.log(this.valueSearch)
+      this.label = item.name
+      if (item.name === 'Public Key') {
+        this.typeSearch = 'publicKey'
+      } else if (item.name === 'Block Height') {
+        this.typeSearch = 'blockHeight'
+      } else if (item.name === 'Transaction Hash') {
+        this.typeSearch = 'transactionHash'
+      }
+    },
+    performSearch () {
+      console.log(this.$router)
+      console.log(`/searchResult/${this.typeSearch}/${this.valueSearch}`)
+      this.$router.go({ path: `searchResult/${this.typeSearch}/${this.valueSearch}` })
     }
   }
 }
@@ -66,6 +82,7 @@ export default {
     color: white !important
 
 .searchBar
+  padding: 10px
   display: flex
   flex-flow: row nowrap
   justify-content: center
@@ -76,17 +93,17 @@ export default {
     display: flex
     flex-flow: row nowrap
     align-items: center
+    justify-content: space-between
     & > .search-button
-      padding: 10px
       width: 30%
       display: flex
-      flex-flow: row nowrap
+      flex-flow: row wrap
       justify-content: center
     & > .search-input
       display: flex
       flex-flow: row nowrap
       align-items: center
-      width: 60%
+      width: 65%
       & > div
         margin: 0px
       & > figure

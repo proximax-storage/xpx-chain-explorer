@@ -8,7 +8,7 @@
     </div>
     <public-key v-if="type === 'Public Key'" :detail="param"/>
     <block-info v-if="type === 'Block Height'" :detail="param"/>
-    <transaction v-if="type === 'Transaction Hash'"/>
+    <transaction v-if="type === 'Transaction Hash'" :detail="param"/>
     <recent-trans v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'"/>
     <recent-trans v-if="showRecentTransaction && blockTransactions !== null && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
   </div>
@@ -57,6 +57,7 @@ export default {
     } else if (this.$route.params.type === 'blockHeight') {
       this.getBlockByHeight(this.$route.params.id)
     } else if (this.$route.params.type === 'transactionHash') {
+      this.getInfoTransaction(this.$route.params.id)
     }
     console.log(this.type)
     this.value = this.$route.params.id
@@ -105,9 +106,7 @@ export default {
           // this.viewTransactionsFromPublicAccount(this.accountInfo.publicAccount)
         },
         error => {
-          this.msg = 'Communication error with the node!'
-          this.showError = true
-          this.showAccountInfo = true
+          console.warn('Error')
         }
       )
     },
@@ -147,10 +146,58 @@ export default {
       },
       error => {
         console.log("Errorrrrr")
-        this.showInfo = true
-        this.msg = 'Communication error with the node!'
-        this.showError = true
+        // this.showInfo = true
+        // this.msg = 'Communication error with the node!'
+        // this.showError = true
       })
+    },
+    getInfoTransaction: function (hast) {
+      this.$proxProvider.getTransactionInformation(hast).subscribe(
+        resp => {
+          console.log(resp)
+          this.param = resp 
+          this.showComponent()
+          // const typeTransactions = proximaxProvider.typeTransactions()
+          // switch (resp.type) {
+          //   case typeTransactions.transfer.id:
+          //     this.typeTransactionId = typeTransactions.transfer.id
+          //     this.typeTransaction = typeTransactions.transfer.name
+          //     this.transferTransaction(resp)
+          //     break;
+
+          //   case typeTransactions.registerNamespace.id:
+          //     this.typeTransactionId = typeTransactions.registerNamespace.id
+          //     this.typeTransaction = typeTransactions.registerNamespace.name
+          //     this.registerNamespaceTransaction(resp)
+          //     break;
+
+          //   case typeTransactions.mosaicDefinition.id:
+          //     this.typeTransactionId = typeTransactions.mosaicDefinition.id
+          //     this.typeTransaction = typeTransactions.mosaicDefinition.name
+          //     this.mosaicDefinitionTransaction(resp)
+          //     break;
+
+          //   case typeTransactions.mosaicSupplyChange.id:
+          //     this.typeTransactionId = typeTransactions.mosaicSupplyChange.id
+          //     this.typeTransaction = typeTransactions.mosaicSupplyChange.name
+          //     this.mosaicSupplyChangeTransaction(resp)
+          //     break;
+          
+          //   default:
+          //     this.msg = 'Unexpected error try later!'
+          //     this.showInfo = true
+          //     this.showError = true
+          //     break;
+          // }
+          // this.showInfo = true
+        },
+        error => {          
+          // this.msg = 'Communication error with the node!'
+          // this.showInfo = true
+          // this.showError = true
+          console.warn('Communication error with the node!')
+        }
+      )
     },
     showComponent () {
       if (this.$route.params.type === 'publicKey') {
@@ -174,6 +221,10 @@ export default {
   font-size: 10px
 
 .search-value
+  padding: 10px
   color: orange
   font-size: 20px
+
+  font-weight: bold
+  word-wrap: break-word
 </style>

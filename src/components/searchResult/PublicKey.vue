@@ -97,6 +97,7 @@ $radius: 5px
   font-size: 10px
   font-weight: normal
   text-transform: uppercase
+  word-wrap: break-word
 
 .balance
   color: black

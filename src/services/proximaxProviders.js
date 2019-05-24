@@ -111,6 +111,46 @@ export default class proximaxProvider {
       secretProof: {
         id: TransactionType.SECRET_PROOF,
         name: 'Secret proof'
+      },
+      mosaicAlias: {
+        id: TransactionType.MOSAIC_ALIAS,
+        name: 'Mosaic Alias'
+      },
+      addressAlias: {
+        id: TransactionType.ADDRESS_ALIAS,
+        name: 'Address Alias'
+      },
+      modifyAccountPropertyAddress: {
+        id: TransactionType.MODIFY_ACCOUNT_PROPERTY_ADDRESS,
+        name: 'Modify Account Property Address'
+      },
+      modifyAccountPropertyMosaic: {
+        id: TransactionType.MODIFY_ACCOUNT_PROPERTY_MOSAIC,
+        name: 'Modify Account Property Mosaic'
+      },
+      modifyAccountPropertyEntityType: {
+        id: TransactionType.MODIFY_ACCOUNT_PROPERTY_ENTITY_TYPE,
+        name: 'Modify Account Entity Type'
+      },
+      linkAccount: {
+        id: TransactionType.LINK_ACCOUNT,
+        name: 'Link Account'
+      },
+      modifyAccountMetadata: {
+        id: TransactionType.MODIFY_ACCOUNT_METADATA,
+        name: 'Modify Account Metadata'
+      },
+      modifyMosaicMetadata: {
+        id: TransactionType.MODIFY_MOSAIC_METADATA,
+        name: 'Modify Mosaic Metadata'
+      },
+      modifyNamespaceMetadata: {
+        id: TransactionType.MODIFY_NAMESPACE_METADATA,
+        name: 'Modify Namespace Metadata'
+      },
+      linkAccount: {
+        id: TransactionType.MODIFY_NAMESPACE_METADATA,
+        name: 'Mosaic Alias'
       }
     }
   }

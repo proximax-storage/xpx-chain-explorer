@@ -89,6 +89,7 @@ $radius: 5px
   font-size: 10px
   font-weight: normal
   text-transform: uppercase
+  word-wrap: break-word
 
 .layout-down-children
   flex-grow: 1
@@ -134,8 +135,10 @@ $radius: 5px
       justify-content: space-evenly
       margin: 0px
       & > div:first-child
+        width: 100%
         margin: 0px 0px 10px 0px
       & > div:last-child
+        width: 100%
         margin: 0px 0px 10px 0px
         & > .supertitle
           display: none
