@@ -63,7 +63,10 @@ export default {
     performSearch () {
       console.log(this.$router)
       console.log(`/searchResult/${this.typeSearch}/${this.valueSearch}`)
-      this.$router.go({ path: `searchResult/${this.typeSearch}/${this.valueSearch}` })
+
+      let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
+      console.log(routeData)
+      window.open(routeData.href, '_blank')
     }
   }
 }
