@@ -1,5 +1,6 @@
 <template>
   <div class="block">
+    <mdb-progress v-if="dataTable.length === 0" bgColor="primary-color-dark" style="width: 100%" indeterminate/>
     <table>
       <tr class="header-row">
         <th>Block Height</th>
@@ -9,15 +10,15 @@
         <th>Timestamp</th>
       </tr>
       <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" v-show="(pag - 1) * limit <= index  && pag * limit > index">
-        <td @click="analyzeItem"><router-link class="link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link></td>
-        <td class="link-data" @click="analyzeItem"><router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.address.address }" target="_blank">{{ item.signer.publicKey }}</router-link></td>
+        <td><router-link class="link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link></td>
+        <td class="link-data"><router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.address.address }" target="_blank">{{ item.signer.publicKey }}</router-link></td>
         <td v-html="item.totalFee"></td>
         <td>{{ item.numTransactions }}</td>
         <td>{{ item.date }}</td>
       </tr>
     </table>
     <div class="pagination">
-      <paginator :arrayLength="dataTable.length" :limit="limit" @changePage="changePage" />
+      <paginator :arrayLength="dataTable.length" :limit="limit" @changePage="changePage"/>
     </div>
     <div style="display: none">
       {{ updateTable }}
@@ -26,13 +27,15 @@
 </template>
 
 <script>
+import { mdbProgress } from 'mdbvue'
 import Paginator from '@/components/global/Paginator.vue'
 import { Deadline } from 'tsjs-xpx-catapult-sdk'
 
 export default {
   name: 'Blocks',
   components: {
-    Paginator
+    Paginator,
+    mdbProgress
   },
   data () {
     return {
@@ -44,7 +47,7 @@ export default {
   },
   mounted () {
     this.viewAllBlocks()
-    console.log('Este es el current block', this.currentBlock)
+    //console.log('Este es el current block', this.currentBlock)
   },
   methods: {
     /**
@@ -78,19 +81,19 @@ export default {
      */
     changePage (page) {
       this.pag = page
-    },
-    analyzeItem (e) {
-      console.log(e.target.textContent)
     }
   },
   computed: {
     updateTable () {
       let height = this.$store.getters.getCurrentBlock
       let block = this.$store.state.currentBlock
-      console.log(height, block)
+      // console.log(height, block)
       if (height !== 'Loading') {
-        if (this.dataTable[0].height !== height) {
-          this.dataTable.unshift(block)
+        // console.log(this.dataTable[0])
+        if (this.dataTable[0] !== undefined) {
+          if (this.dataTable[0].height !== height) {
+            this.dataTable.unshift(block)
+          }
         }
       }
       return this.$store.getters.getCurrentBlock
@@ -119,7 +122,7 @@ td
 .block
   width: 100%
   display: flex
-  flex-flow: row wrap
+  flex-flow: column wrap
   justify-content: center
   align-items: center
   &::-webkit-scrollbar
@@ -133,23 +136,29 @@ td
     padding: 10px
     margin: 20px 0px 0px 0px
     & > tr.header-row
+      width: 100%
       background: transparent !important
       & > th
         text-align: center
         text-transform: uppercase
         font-weight: bold
         padding: 5px
+      & > td
+        width: 100%
     & > .pagination
       background: red
       width: 100%
       text-align: center
 
-@media screen and (max-width: 750px)
+@media screen and (max-width: 950px)
+  td
+    padding: 3px 5px
+
   .block
-    display: block
+    display: flex
+    flex-flow: column wrap
+    align-items: center
     overflow-x: auto
-    padding: 10px
-    text-align: center
     & > table
-      width: 700px
+      min-width: 700px
 </style>

@@ -108,8 +108,9 @@ export default {
         this.showInfo = true
         this.$proxProvider.blockchainHttp.getBlockTransactions(parseInt(block)).subscribe(
           blockTransactions => {
-            // console.log("Estoy aqui", blockTransactions)
+            console.log("Estoy aqui", blockTransactions)
             this.blockTransactions = blockTransactions
+            console.log(this.blockTransactions)
             for (const index in this.blockTransactions) {              
               this.blockTransactions[index].fee = this.$utils.fmtAmountValue(this.blockTransactions[index].maxFee.compact())
               this.blockTransactions[index].deadline = this.$utils.fmtTime(new Date(this.blockTransactions[index].deadline.value.toString()))              

@@ -14,7 +14,7 @@
         </mdb-dropdown>
       </div>
       <div class="search-input">
-        <mdb-input :label="label" class="place-white" style="width: 100%" v-model="valueSearch" @keyup.enter="performSearch"></mdb-input>
+        <mdb-input :label="label" class="place-white" style="width: 100%" v-model="valueSearch" @key.enter="performSearch"/>
         <figure @click="performSearch">
           <img :src="require('@/assets/search-details-white.svg')" alt="">
         </figure>
@@ -38,7 +38,7 @@ export default {
   data () {
     return {
       typeSearch: '',
-      label: 'Select type of search',
+      label: 'Select search',
       searchList: [
         { name: 'Public Key' },
         { name: 'Block Height' },

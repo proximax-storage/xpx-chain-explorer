@@ -26,8 +26,8 @@
       </div>
     </div>
     <div class="tran-layout-middle">
-      <h1 class="amount">Amount: <span>10000</span></h1>
-      <p class="fee">Fee: <span>0.00</span></p>
+      <h1 class="amount">Amount: <span>{{ detail.amount || '0' }}</span></h1>
+      <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
     </div>
     <div class="tran-layout-down">
       <div class="layout-down-children">
@@ -46,7 +46,7 @@
     <div class="tran-layout-plus">
       <h1 class="supertitle">Details</h1>
       <div class="plus-cont">
-        <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
+        <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index" :style="[(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4', (plusInfo.length === 1) ? 'border-radius: 5px' : 'border-radius: 0px']" >
           <div class="title">{{ item.key }}</div>
           <div class="value">{{ item.value }}</div>
         </div>
@@ -128,7 +128,7 @@ export default {
           this.plusInfo = [
             { key: 'Message', value: this.detail.message.payload }
           ]
-          // this.iterator(this.detail)
+          this.iterator(this.detail)
           break;
         case 'Register Namespace Transaction':
           this.plusInfo = [

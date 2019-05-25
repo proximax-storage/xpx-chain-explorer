@@ -1,7 +1,7 @@
 <template>
   <div class="recent">
     <h1 class="supertitle">{{ nameLabel }}</h1>
-    <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1">
+    <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(item)">
       <div class="el-left">
         <h1 class="title alternate">Recipient / Sender</h1>
         <div>
@@ -12,21 +12,22 @@
           <div class="value" v-else-if="item.type === typeTransactions.mosaicDefinition.id">New Mosaic</div>
           <div class="value" v-else-if="item.type === typeTransactions.mosaicSupplyChange.id">New Mosaic Supply</div>
           <div class="value" v-else-if="item.type === typeTransactions.registerNamespace.id">Root NS</div>
+          <div class="value" v-else-if="item.type === typeTransactions.mosaicAlias.id">Mosaic Alias</div>
         </div>
         <div>
           <figure>
             <img :src="require('@/assets/arrow-transaction-sender-orange.svg')" width="15">
           </figure>
-          <div class="value">hy46s5y2jdjsuusbajje7</div>
+          <div class="value">{{ item.signer.address.pretty() }}</div>
         </div>
       </div>
       <div class="el-middle">
         <div class="title">Timestamp</div>
-        <div class="value">2019-05-17</div>
+        <div class="value">{{ item.deadline }}</div>
       </div>
       <div class="el-right">
         <div class="title">Fee</div>
-        <div class="value">0.00</div>
+        <div class="value" v-html="item.fee"></div>
       </div>
     </div>
   </div>
@@ -52,6 +53,18 @@ export default {
     console.log(proximaxProvider.typeTransactions())
     return {
       typeTransactions: proximaxProvider.typeTransactions()
+    }
+  },
+  mounted () {
+    console.log(this.arrayTransactions)
+  },
+  methods: {
+    redirectToDetail (item) {
+      let hash = item.transactionInfo.hash
+      console.log(hash)
+
+      let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
+      window.open(routeData.href, '_blank')
     }
   }
 }

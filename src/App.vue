@@ -24,42 +24,14 @@ export default {
     AppHeader,
     AppFooter
   },
-  data () {
-    return {
-      //currentNode: this.$store.getters.getCurrentNode
-    }
-  },
-  computed: {
-    // currentNode () {
-    //   return this.$store.getters.currentNode
-    // }
-  },
   mounted () {
     this.loadNodes()
-    // const listener = new Listener(`ws://${this.currentNode}`, WebSocket)
-    // listener.open().then(() => {
-    //   listener
-    //     .newBlock()
-    //     .subscribe(block => {
-    //       block.height = block.height.compact()
-    //       block.numTransactions = (block.numTransactions === undefined) ? 0 : block.numTransactions
-    //       block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
-    //       block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
-    //       //console.log('Este es el block actual', block)
-    //       this.$store.dispatch('changeCurrentBlock', block)
-          
-    //     }, err => console.error(err))
-    // })
-    // const account = Account.generateNewAccount(NetworkType.MIJIN_TEST)
-    // console.log('Your new account address is:', account.address.pretty(), 'and its private key', account.privateKey)
   },
   methods: {
     loadNodes () {
-      console.log('CORRIENDO')
       axios.get('./config/nodes.json')
         .then(response => {
           let data = response
-          console.log(data.data.nodes)
           this.$store.dispatch('updateNodes', data.data.nodes)
           this.runWS()
         })

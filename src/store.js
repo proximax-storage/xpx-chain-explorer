@@ -11,10 +11,8 @@ export default new Vuex.Store({
   },
   mutations: {
     UPDATE_NODES: (state, data) => {
-      console.log('Llego a store', data)
       state.nodes = data
       state.currentNode = state.nodes[0]
-      console.log(state.currentNode)
     },
     UPDATE_CURRENT_NODE: (state, index) => {
       state.currentNode = state.nodes[index]
@@ -29,7 +27,6 @@ export default new Vuex.Store({
       commit('UPDATE_NODES', data)
     },
     updateCurrentNode ({ commit }, index) {
-      console.log('LLEGA AQUI')
       commit('UPDATE_CURRENT_NODE', index)
     },
     changeCurrentBlock ({ commit }, data) {
