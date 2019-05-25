@@ -72,7 +72,7 @@ export default {
       let suscripcion = this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
-          console.log(resp)
+          // console.log(resp)
           this.param = resp
           this.showComponent()
 
@@ -80,30 +80,8 @@ export default {
           if (resp.mosaics.length > 0) {
             this.blockMosaics = resp.mosaics.filter(el => el.id.toHex() !== xpx)
             this.showRecentMosaic = !this.showRecentMosaic
-            console.log("Transaciones", this.blockMosaics)
+            // console.log("Transaciones", this.blockMosaics)
           }
-            // this.mosaicXpx = this.accountInfo.mosaics.filter(element => {
-            //   return element.id.toHex() === xpx
-            // })
-
-          //   this.mosaicXpx = this.$utils.fmtAmountValue(this.mosaicXpx[0].amount.compact())
-          //   this.showAccountInfo = true
-
-          //   this.accountInfo.mosaics = this.accountInfo.mosaics.filter(element => {
-          //     return element.id.toHex() !== xpx
-          //   })
-          //   if (this.accountInfo.mosaics.length === 0) {
-          //     this.showInfoMosaic = true
-          //   } else {
-          //     this.searchMosaics(this.accountInfo.mosaics)     
-          //   }
-          // } else {
-          //   this.mosaicXpx = Utils.fmtAmountValue(0)
-          //   this.showInfoMosaic = true
-          //   this.showAccountInfo = true
-          // }
-          // // Search all transactions in the public account and show the table of recent transactions
-          // this.viewTransactionsFromPublicAccount(this.accountInfo.publicAccount)
         },
         error => {
           console.warn('Error')
@@ -130,7 +108,7 @@ export default {
         this.showInfo = true
         this.$proxProvider.blockchainHttp.getBlockTransactions(parseInt(block)).subscribe(
           blockTransactions => {
-            console.log("Estoy aqui", blockTransactions)
+            // console.log("Estoy aqui", blockTransactions)
             this.blockTransactions = blockTransactions
             for (const index in this.blockTransactions) {              
               this.blockTransactions[index].fee = this.$utils.fmtAmountValue(this.blockTransactions[index].maxFee.compact())
@@ -157,44 +135,8 @@ export default {
           console.log(resp)
           this.param = resp 
           this.showComponent()
-          // const typeTransactions = proximaxProvider.typeTransactions()
-          // switch (resp.type) {
-          //   case typeTransactions.transfer.id:
-          //     this.typeTransactionId = typeTransactions.transfer.id
-          //     this.typeTransaction = typeTransactions.transfer.name
-          //     this.transferTransaction(resp)
-          //     break;
-
-          //   case typeTransactions.registerNamespace.id:
-          //     this.typeTransactionId = typeTransactions.registerNamespace.id
-          //     this.typeTransaction = typeTransactions.registerNamespace.name
-          //     this.registerNamespaceTransaction(resp)
-          //     break;
-
-          //   case typeTransactions.mosaicDefinition.id:
-          //     this.typeTransactionId = typeTransactions.mosaicDefinition.id
-          //     this.typeTransaction = typeTransactions.mosaicDefinition.name
-          //     this.mosaicDefinitionTransaction(resp)
-          //     break;
-
-          //   case typeTransactions.mosaicSupplyChange.id:
-          //     this.typeTransactionId = typeTransactions.mosaicSupplyChange.id
-          //     this.typeTransaction = typeTransactions.mosaicSupplyChange.name
-          //     this.mosaicSupplyChangeTransaction(resp)
-          //     break;
-          
-          //   default:
-          //     this.msg = 'Unexpected error try later!'
-          //     this.showInfo = true
-          //     this.showError = true
-          //     break;
-          // }
-          // this.showInfo = true
         },
-        error => {          
-          // this.msg = 'Communication error with the node!'
-          // this.showInfo = true
-          // this.showError = true
+        error => {
           console.warn('Communication error with the node!')
         }
       )

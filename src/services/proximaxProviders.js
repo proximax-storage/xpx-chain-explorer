@@ -147,10 +147,6 @@ export default class proximaxProvider {
       modifyNamespaceMetadata: {
         id: TransactionType.MODIFY_NAMESPACE_METADATA,
         name: 'Modify Namespace Metadata'
-      },
-      linkAccount: {
-        id: TransactionType.MODIFY_NAMESPACE_METADATA,
-        name: 'Mosaic Alias'
       }
     }
   }

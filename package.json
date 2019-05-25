@@ -9,6 +9,7 @@
   "dependencies": {
     "ajv": "^5.5.2",
     "ajv-keywords": "^3.4.0",
+    "axios": "^0.18.0",
     "chart.js": "^2.8.0",
     "js-joda": "^1.10.1",
     "js-xpx-catapult-library": "file:../js-xpx-catapult-library",

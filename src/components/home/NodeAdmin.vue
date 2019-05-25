@@ -8,9 +8,9 @@
       <h1>Node</h1>
       <p>
         <mdb-dropdown style="text-align: center">
-          <mdb-dropdown-toggle slot="toggle" class="white-text" style="font-size: 20px; padding: 5px 10px; box-shadow: 0px 0px 0px transparent">{{ nameNode }}</mdb-dropdown-toggle>
+          <mdb-dropdown-toggle slot="toggle" class="white-text" style="font-size: 20px; padding: 5px 10px; box-shadow: 0px 0px 0px transparent">{{ getCurrentNode }}</mdb-dropdown-toggle>
           <mdb-dropdown-menu>
-            <a class="nodeLink" v-for="(item, index) in nodeList" :key="index" @click="changeRoute(item)">{{ item.name }}</a>
+            <a class="nodeLink" v-for="item in getAllNodes" :key="item.index" @click="changeNode(item.index)">{{ item.name }}</a>
           </mdb-dropdown-menu>
         </mdb-dropdown>
       </p>
@@ -34,7 +34,7 @@ export default {
   },
   data () {
     return {
-      nameNode: 'Select Node',
+      //nameNode: 
       nodeList: [
         { name: 'nodo-super--nodo1', route: 'route1' },
         { name: 'nodo-super--nodo2', route: 'route2' }
@@ -44,12 +44,23 @@ export default {
   computed: {
     updateBlock () {
       return this.$store.getters.getCurrentBlock
+    },
+    getCurrentNode () {
+      return this.$store.getters.getCurrentNode
+    },
+    getAllNodes () {
+      let tmpArray = []
+      let tmp = Array.from(this.$store.getters.getAllNodes)
+      tmp.forEach((item, index) => {
+        tmpArray.push({ name: item, index: index })
+      });
+      return tmpArray
     }
   },
   methods: {
-    changeRoute (item) {
-      console.log(item)
-      this.nameNode = item.name
+    changeNode (index) {
+      this.$store.dispatch('updateCurrentNode', index)
+      window.location.reload()
     }
   }
 }

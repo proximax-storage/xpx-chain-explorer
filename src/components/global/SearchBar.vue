@@ -38,7 +38,7 @@ export default {
   data () {
     return {
       typeSearch: '',
-      label: 'Search',
+      label: 'Select type of search',
       searchList: [
         { name: 'Public Key' },
         { name: 'Block Height' },
@@ -49,8 +49,6 @@ export default {
   },
   methods: {
     changeSearch (item) {
-      console.log(this.typeSearch)
-      console.log(this.valueSearch)
       this.label = item.name
       if (item.name === 'Public Key') {
         this.typeSearch = 'publicKey'
@@ -61,11 +59,7 @@ export default {
       }
     },
     performSearch () {
-      console.log(this.$router)
-      console.log(`/searchResult/${this.typeSearch}/${this.valueSearch}`)
-
       let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
-      console.log(routeData)
       window.open(routeData.href, '_blank')
     }
   }
@@ -81,7 +75,6 @@ export default {
 .searchLink
   display: block
   &:hover
-    background: dodgerblue
     color: white !important
 
 .searchBar
