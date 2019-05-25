@@ -9,7 +9,7 @@
     <public-key v-if="type === 'Public Key'" :detail="param"/>
     <block-info v-if="type === 'Block Height'" :detail="param"/>
     <transaction v-if="type === 'Transaction Hash'" :detail="param"/>
-    <recent-trans v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'"/>
+    <mosaics v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'"/>
     <recent-trans v-if="showRecentTransaction && blockTransactions.length > 0 && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
   </div>
 </template>
@@ -20,6 +20,7 @@ import PublicKey from '@/components/searchResult/PublicKey.vue'
 import BlockInfo from '@/components/searchResult/BlockInfo.vue'
 import Transaction from '@/components/searchResult/Transaction.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
+import Mosaics from '@/components/searchResult/Mosaics.vue'
 import { Address, Deadline, NetworkType } from 'tsjs-xpx-catapult-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
 
@@ -30,7 +31,8 @@ export default {
     PublicKey,
     BlockInfo,
     Transaction,
-    RecentTrans
+    RecentTrans,
+    Mosaics
   },
   data () {
     return {

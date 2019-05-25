@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <mdb-progress v-if="dataTable.length === 0" bgColor="primary-color-dark" style="width: 100%" indeterminate/>
-    <table class="desktop">
+    <table v-if="false" class="desktop">
       <tr class="header-row">
         <th>Block Height</th>
         <th>Harvester/Forger</th>
@@ -17,11 +17,30 @@
         <td style="word-wrap: break-word">{{ item.date }}</td>
       </tr>
     </table>
-    <!-- <div class="mobile">
-      <div v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
-
+    <div class="mobile">
+      <div class="element" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" v-show="(pag - 1) * limit <= index  && pag * limit > index">
+        <div>
+          <span>Height</span>
+          <router-link class="link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link>
+        </div>
+        <div>
+          <span>Harvester/Forger</span>
+          <router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.address.address }" target="_blank" style="word-wrap: break-word">{{ item.signer.publicKey }}</router-link>
+        </div>
+        <div>
+          <span>Fee</span>
+          <span v-html="item.totalFee"></span>
+        </div>
+        <div>
+          <span>TXES</span>
+          <span>{{ item.numTransactions }}</span>
+        </div>
+        <div>
+          <span>Timestamp</span>
+          <span>{{ item.date }}</span>
+        </div>
       </div>
-    </div> -->
+    </div>
     <div class="pagination">
       <paginator :arrayLength="dataTable.length" :limit="limit" @changePage="changePage"/>
     </div>
@@ -108,6 +127,39 @@ export default {
 </script>
 
 <style lang="sass">
+.mobile
+  display: flex
+  flex-flow: column
+  width: 100%
+  padding: 10px
+  margin: 0px
+  & > .element
+    display: flex
+    flex-flow: row nowrap
+    justify-content: space-around
+    margin: 5px 0px
+    padding: 3px
+    color: black
+    border-radius: 5px
+    & > div
+      display: flex
+      flex-flow: column
+      align-items: center
+      padding: 3px
+      & > span:first-child
+        font-size: 10px
+        text-transform: uppercase
+        font-weight: bold
+        color: grey
+      & > span:last-child
+        text-align: center
+        font-size: 15px
+        text-transform: uppercase
+        font-weight: bold
+        color: grey
+      & > a
+        word-wrap: break-word
+
 td
   text-align: center
   padding: 10px
@@ -118,8 +170,10 @@ td
   background: silver
 
 .link-data
+  font-size: 15px
   font-weight: bold
   color: black
+  word-break: break-all
   &:hover
     color: dodgerblue
     text-decoration-line: underline
@@ -128,7 +182,6 @@ td
   width: 100%
   display: flex
   flex-flow: column wrap
-  justify-content: center
   align-items: center
   &::-webkit-scrollbar
     background: transparent
@@ -151,11 +204,40 @@ td
       & > td
         width: 100%
     & > .pagination
-      background: red
       width: 100%
       text-align: center
 
-@media screen and (max-width: 950px)
+@media screen and (max-width: 900px)
+  .link-data
+    font-size: 10px
+    font-weight: bold
+    color: black
+    word-wrap: break-word
+    &:hover
+      color: dodgerblue
+      text-decoration-line: underline
+
+  .mobile > .element
+    flex-flow: column nowrap
+    & > div
+      display: flex
+      flex-flow: column wrap
+      align-items: center
+      padding: 3px
+      border-bottom: 1px solid silver
+      &:last-child
+        border-bottom: 1px solid transparent
+      & > span:first-child
+        font-size: 10px
+        text-transform: uppercase
+        font-weight: bold
+        color: grey
+      & > span:last-child
+        text-align: center
+        font-size: 10px
+        text-transform: uppercase
+        font-weight: bold
+        color: black
   td
     padding: 3px 5px
 

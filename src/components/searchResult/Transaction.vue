@@ -128,7 +128,7 @@ export default {
           this.plusInfo = [
             { key: 'Message', value: this.detail.message.payload }
           ]
-          this.iterator(this.detail)
+          //this.iterator(this.detail)
           break;
         case 'Register Namespace Transaction':
           this.plusInfo = [
