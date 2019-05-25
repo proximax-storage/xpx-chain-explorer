@@ -10,7 +10,7 @@
     <block-info v-if="type === 'Block Height'" :detail="param"/>
     <transaction v-if="type === 'Transaction Hash'" :detail="param"/>
     <recent-trans v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'"/>
-    <recent-trans v-if="showRecentTransaction && blockTransactions !== null && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
+    <recent-trans v-if="showRecentTransaction && blockTransactions.length > 0 && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
   </div>
 </template>
 
@@ -39,7 +39,7 @@ export default {
       recent: [],
       param: {},
       showRecentTransaction: false,
-      blockTransactions: null,
+      blockTransactions: [],
       showRecentMosaic: false,
       blockMosaics: null,
     }
@@ -72,7 +72,7 @@ export default {
       let suscripcion = this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
-          // console.log(resp)
+          console.log('Esta es la repuesta', resp)
           this.param = resp
           this.showComponent()
 
@@ -82,6 +82,7 @@ export default {
             this.showRecentMosaic = !this.showRecentMosaic
             // console.log("Transaciones", this.blockMosaics)
           }
+          this.viewTransactionsFromPublicAccount(resp.publicAccount)
         },
         error => {
           console.warn('Error')
@@ -134,7 +135,7 @@ export default {
       this.$proxProvider.getTransactionInformation(hast).subscribe(
         resp => {
           console.log(resp)
-          this.param = resp 
+          this.param = resp
           this.showComponent()
         },
         error => {
@@ -152,6 +153,29 @@ export default {
       }
       console.log(this.type)
       this.value = this.$route.params.id
+    },
+
+    /**
+     * Search all transactions from the public account
+     *
+     * @param {any} publicAccount
+     */
+    viewTransactionsFromPublicAccount(publicAccount) {
+      this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
+        transactions => {
+          if (transactions.length > 0) {
+            transactions.forEach(element => {
+              element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
+              element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString())) 
+              this.blockTransactions.push(element)
+            })
+            this.showRecentTransaction = true
+          }
+        },
+        error => {
+          console.error('dio error2....', error)
+        }
+      );
     }
   }
 }
