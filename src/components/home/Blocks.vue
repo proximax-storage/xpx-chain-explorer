@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <mdb-progress v-if="dataTable.length === 0" bgColor="primary-color-dark" style="width: 100%" indeterminate/>
-    <table>
+    <table class="desktop">
       <tr class="header-row">
         <th>Block Height</th>
         <th>Harvester/Forger</th>
@@ -14,9 +14,14 @@
         <td class="link-data"><router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.address.address }" target="_blank">{{ item.signer.publicKey }}</router-link></td>
         <td v-html="item.totalFee"></td>
         <td>{{ item.numTransactions }}</td>
-        <td>{{ item.date }}</td>
+        <td style="word-wrap: break-word">{{ item.date }}</td>
       </tr>
     </table>
+    <!-- <div class="mobile">
+      <div v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
+
+      </div>
+    </div> -->
     <div class="pagination">
       <paginator :arrayLength="dataTable.length" :limit="limit" @changePage="changePage"/>
     </div>

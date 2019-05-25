@@ -46,7 +46,7 @@
     <div class="tran-layout-plus">
       <h1 class="supertitle">Details</h1>
       <div class="plus-cont">
-        <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index" :style="[(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4', (plusInfo.length === 1) ? 'border-radius: 5px' : 'border-radius: 0px']" >
+        <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
           <div class="title">{{ item.key }}</div>
           <div class="value">{{ item.value }}</div>
         </div>
