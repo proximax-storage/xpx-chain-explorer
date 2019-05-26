@@ -8,7 +8,7 @@
       <h1>Node</h1>
       <p>
         <mdb-dropdown style="text-align: center">
-          <mdb-dropdown-toggle slot="toggle" class="white-text" style="font-size: 20px; padding: 5px 10px; box-shadow: 0px 0px 0px transparent">{{ getCurrentNode }}</mdb-dropdown-toggle>
+          <mdb-dropdown-toggle slot="toggle" class="white-text" style="font-size: 20px; padding: 5px 10px; box-shadow: 0px 0px 0px transparent">{{ getCurrentNode || 'bctestnet1.xpxsirius.io:3000' }}</mdb-dropdown-toggle>
           <mdb-dropdown-menu>
             <a class="nodeLink" v-for="item in getAllNodes" :key="item.index" @click="changeNode(item.index)">{{ item.name }}</a>
           </mdb-dropdown-menu>
@@ -35,10 +35,6 @@ export default {
   data () {
     return {
       //nameNode: 
-      nodeList: [
-        { name: 'nodo-super--nodo1', route: 'route1' },
-        { name: 'nodo-super--nodo2', route: 'route2' }
-      ]
     }
   },
   computed: {

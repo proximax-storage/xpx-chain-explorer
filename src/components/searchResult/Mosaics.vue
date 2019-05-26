@@ -3,31 +3,16 @@
     <h1 class="supertitle">{{ nameLabel }}</h1>
     <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(item)">
       <div class="el-left">
-        <h1 class="title alternate">Recipient / Sender</h1>
-        <div>
-          <figure>
-            <img :src="require('@/assets/arrow-transaction-recipient-green.svg')" width="15">
-          </figure>
-          <div class="value" v-if="item.recipient">{{ item.recipient.pretty() }}</div>
-          <div class="value" v-else-if="item.type === typeTransactions.mosaicDefinition.id">New Mosaic</div>
-          <div class="value" v-else-if="item.type === typeTransactions.mosaicSupplyChange.id">New Mosaic Supply</div>
-          <div class="value" v-else-if="item.type === typeTransactions.registerNamespace.id">Root NS</div>
-          <div class="value" v-else-if="item.type === typeTransactions.mosaicAlias.id">Mosaic Alias</div>
-        </div>
-        <div>
-          <figure>
-            <img :src="require('@/assets/arrow-transaction-sender-orange.svg')" width="15">
-          </figure>
-          <div class="value">{{ item.signer.address.pretty() }}</div>
-        </div>
+        <div class="title">Id</div>
+        <div class="value">{{ mosaicName(item) }}</div>
       </div>
       <div class="el-middle">
-        <div class="title">Timestamp</div>
-        <div class="value">{{ item.deadline }}</div>
+        <div class="title">Id</div>
+        <div class="value">{{ item.id.toHex() }}</div>
       </div>
       <div class="el-right">
-        <div class="title">Fee</div>
-        <div class="value" v-html="item.fee"></div>
+        <div class="title">Amount</div>
+        <div class="value" v-html="$utils.fmtAmountValue(item.amount.compact())"></div>
       </div>
     </div>
   </div>
@@ -35,6 +20,7 @@
 
 <script>
 import proximaxProvider from '@/services/proximaxProviders.js'
+
 export default {
   name: 'RecentTrans',
   props: {
@@ -50,22 +36,41 @@ export default {
     }
   },
   data () {
-    console.log(proximaxProvider.typeTransactions())
+    // console.log(proximaxProvider.typeTransactions())
     return {
-      typeTransactions: proximaxProvider.typeTransactions()
+      // typeTransactions: proximaxProvider.typeTransactions()
     }
   },
   mounted () {
-    console.log(this.arrayTransactions)
+    console.log("ESTE ES MI OBJETO PRUEBA",this.arrayTransactions)
   },
   methods: {
-    redirectToDetail (item) {
-      let hash = item.transactionInfo.hash
-      console.log(hash)
+    mosaicName (item) {
+      let mosaicNames = this.$storage.get('mosaicNames')
+      console.log("mosaic names:", mosaicNames)
+      if (mosaicNames === null) {
+        let id = item.id.toHex()
+        // ERROR: Caso 1
+        // this.$proxProvider.getMosaicsName(id).subcribe(
+        //   resp => {
+        //     console.log(resp)
+        //   })
 
-      let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
-      window.open(routeData.href, '_blank')
+        // ERROR: Caso 2
+        // proximaxProvider.getMosaicsName(id).subcribe(
+        //   resp => {
+        //     console.log(resp)
+        //   })
+      }
+      return 'default'
     }
+    // redirectToDetail (item) {
+    //   let hash = item.transactionInfo.hash
+    //   console.log(hash)
+
+    //   let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
+    //   window.open(routeData.href, '_blank')
+    // }
   }
 }
 </script>
@@ -122,9 +127,11 @@ $radius: 5px
     display: flex
     flex-flow: row nowrap
     justify-content: space-between
+    aling-items: center
     border-radius: $radius
     background: #f4f4f4
     margin: 5px 0px
+    padding: 5px
     & > .el-left
       flex-grow: 1
       display: flex

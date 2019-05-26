@@ -173,7 +173,6 @@ td
   font-size: 15px
   font-weight: bold
   color: black
-  word-break: break-all
   &:hover
     color: dodgerblue
     text-decoration-line: underline
@@ -224,9 +223,8 @@ td
       flex-flow: column wrap
       align-items: center
       padding: 3px
-      border-bottom: 1px solid silver
-      &:last-child
-        border-bottom: 1px solid transparent
+      &:nth-child(2n)
+        background: #c5c5c5
       & > span:first-child
         font-size: 10px
         text-transform: uppercase

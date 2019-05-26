@@ -37,12 +37,18 @@ export default {
         })
     },
     runWS () {
-      const listener = new Listener(`ws://${this.getCurrentNode()}`, WebSocket)
+      
+      if (this.getCurrentNode() == null) {
+        this.$store.state.currentNode = "bctestnet1.xpxsirius.io:3000"
+      }
+      console.log(this.$store.state.currentNode)
+      const listener = new Listener(`ws://${this.$store.state.currentNode}`, WebSocket)
       listener.open().then(() => {
         listener
           .newBlock()
           .subscribe(block => {
             block.height = block.height.compact()
+            console.log('block', block.height)
             block.numTransactions = (block.numTransactions === undefined) ? 0 : block.numTransactions
             block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
             block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))

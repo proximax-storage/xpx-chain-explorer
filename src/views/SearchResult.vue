@@ -82,6 +82,7 @@ export default {
           if (resp.mosaics.length > 0) {
             this.blockMosaics = resp.mosaics.filter(el => el.id.toHex() !== xpx)
             this.showRecentMosaic = !this.showRecentMosaic
+            console.log(this.showRecentMosaic, this.blockMosaics)
             // console.log("Transaciones", this.blockMosaics)
           }
           this.viewTransactionsFromPublicAccount(resp.publicAccount)
