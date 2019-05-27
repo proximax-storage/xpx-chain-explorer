@@ -4,11 +4,11 @@
     <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(item)">
       <div class="el-left">
         <div class="title">Id</div>
-        <div class="value">{{ mosaicName(item) }}</div>
+        <div class="value">{{ item.id.toHex() }}</div>
       </div>
       <div class="el-middle">
-        <div class="title">Id</div>
-        <div class="value">{{ item.id.toHex() }}</div>
+        <div class="title">Name</div>
+        <div class="value">{{ item.name }}</div>
       </div>
       <div class="el-right">
         <div class="title">Amount</div>
@@ -35,42 +35,31 @@ export default {
       default: 'Recent Transaction'
     }
   },
-  data () {
-    // console.log(proximaxProvider.typeTransactions())
-    return {
-      // typeTransactions: proximaxProvider.typeTransactions()
-    }
-  },
   mounted () {
-    console.log("ESTE ES MI OBJETO PRUEBA",this.arrayTransactions)
+    this.mosaicName()
   },
   methods: {
-    mosaicName (item) {
+    mosaicName () {
       let mosaicNames = this.$storage.get('mosaicNames')
-      console.log("mosaic names:", mosaicNames)
       if (mosaicNames === null) {
-        let id = item.id.toHex()
-        // ERROR: Caso 1
-        // this.$proxProvider.getMosaicsName(id).subcribe(
-        //   resp => {
-        //     console.log(resp)
-        //   })
-
-        // ERROR: Caso 2
-        // proximaxProvider.getMosaicsName(id).subcribe(
-        //   resp => {
-        //     console.log(resp)
-        //   })
+        const mosaics = this.arrayTransactions.map(mosaic => { return mosaic.id })
+        this.$proxProvider.getMosaicsName(mosaics).subscribe(
+          resp => {
+            for (const element of resp) {
+              this.arrayTransactions.forEach(item => {
+                if (element.mosaicId.toHex() === item.id.toHex()) {
+                  item.name = element.names[0]
+                }
+              })
+            }
+          },
+          err => {
+            console.log('Errroooooooooooooooooor', err);
+          }
+        )
       }
       return 'default'
     }
-    // redirectToDetail (item) {
-    //   let hash = item.transactionInfo.hash
-    //   console.log(hash)
-
-    //   let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
-    //   window.open(routeData.href, '_blank')
-    // }
   }
 }
 </script>
