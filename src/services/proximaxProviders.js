@@ -248,7 +248,7 @@ export default class proximaxProvider {
    * @memberof proximaxProvider
    */
   getMosaicsName(mosaicIds) {
-    return this.mosaicHttp.getMosaicsName(mosaicIds)
+    return this.mosaicHttp.getMosaicNames(mosaicIds)
   }
 
   /**
