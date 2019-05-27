@@ -37,12 +37,13 @@ export default {
         })
     },
     runWS () {
-      
-      if (this.getCurrentNode() == null) {
-        this.$store.state.currentNode = "bctestnet1.xpxsirius.io:3000"
+      let currentNode = this.$storage.get('currentNode')
+      console.log(currentNode)
+      if (currentNode == null) {
+        currentNode = this.$store.state.currentNode
       }
-      console.log(this.$store.state.currentNode)
-      const listener = new Listener(`ws://${this.$store.state.currentNode}`, WebSocket)
+      console.log("NODO", currentNode)
+      const listener = new Listener(`ws://${currentNode}`, WebSocket)
       listener.open().then(() => {
         listener
           .newBlock()

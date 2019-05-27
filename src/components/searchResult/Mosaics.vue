@@ -1,10 +1,10 @@
 <template>
   <div class="recent">
     <h1 class="supertitle">{{ nameLabel }}</h1>
-    <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(item)">
+    <div class="element" v-for="(item, index) in finalArray" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(item)">
       <div class="el-left">
         <div class="title">Id</div>
-        <div class="value">{{ item.id.toHex() }}</div>
+        <div class="value">{{ item.id }}</div>
       </div>
       <div class="el-middle">
         <div class="title">Name</div>
@@ -12,7 +12,7 @@
       </div>
       <div class="el-right">
         <div class="title">Amount</div>
-        <div class="value" v-html="$utils.fmtAmountValue(item.amount.compact())"></div>
+        <div class="value" v-html="$utils.fmtAmountValue(item.amount)"></div>
       </div>
     </div>
   </div>
@@ -35,30 +35,58 @@ export default {
       default: 'Recent Transaction'
     }
   },
+  data () {
+    return {
+      arrayData: []
+    }
+  },
   mounted () {
-    this.mosaicName()
+    // this.mosaicName(id)
+    this.constructorObj()
   },
   methods: {
-    mosaicName () {
+    constructorObj () {
+      // TODO: Falta almacenar en LocalStorage
       let mosaicNames = this.$storage.get('mosaicNames')
       if (mosaicNames === null) {
-        const mosaics = this.arrayTransactions.map(mosaic => { return mosaic.id })
-        this.$proxProvider.getMosaicsName(mosaics).subscribe(
-          resp => {
-            for (const element of resp) {
-              this.arrayTransactions.forEach(item => {
-                if (element.mosaicId.toHex() === item.id.toHex()) {
-                  item.name = element.names[0]
-                }
+        this.arrayTransactions.forEach(item => {
+          let id = item.id
+          let idExact = item.id.toHex()
+          // console.log(item, id)
+          let mosaics = [id]
+          this.$proxProvider.getMosaicsName(mosaics).subscribe(
+            resp => {
+              // console.log("NOMBRE", resp[0])
+              // console.log({
+              //   id: idExact,
+              //   name: resp[0].names[0],
+              //   amount: item.amount.compact()
+              // })
+              this.arrayData.push({
+                id: idExact,
+                name: resp[0].names[0],
+                amount: item.amount.compact()
+              })
+            },
+            err => {
+              this.arrayData.push({
+                id: 'Communication error with the node!',
+                name: 'Communication error with the node!',
+                amount: 'Communication error with the node!'
               })
             }
-          },
-          err => {
-            console.log('Errroooooooooooooooooor', err);
-          }
-        )
+          )
+        })
       }
-      return 'default'
+    },
+    getItemId (item) {
+      return item.id.toHex()
+    }
+  },
+  computed: {
+    finalArray () {
+      console.log(this.arrayData)
+      return this.arrayData
     }
   }
 }

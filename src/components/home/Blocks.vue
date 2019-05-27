@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <mdb-progress v-if="dataTable.length === 0" bgColor="primary-color-dark" style="width: 100%" indeterminate/>
-    <table v-if="false" class="desktop">
+    <!-- <table v-if="false" class="desktop">
       <tr class="header-row">
         <th>Block Height</th>
         <th>Harvester/Forger</th>
@@ -16,7 +16,7 @@
         <td>{{ item.numTransactions }}</td>
         <td style="word-wrap: break-word">{{ item.date }}</td>
       </tr>
-    </table>
+    </table> -->
     <div class="mobile">
       <div class="element" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" v-show="(pag - 1) * limit <= index  && pag * limit > index">
         <div>
