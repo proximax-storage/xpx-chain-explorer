@@ -19,8 +19,8 @@
           <div class="value">{{ getId }}</div>
         </div>
         <div class="down">
-          <div class="title">Quantity</div>
-          <div class="value" v-html="getBalance"></div>
+          <div class="title" style="opacity: 0">Amount</div>
+          <div class="value" style="opacity: 0">0</div>
         </div>
       </div>
     </div>

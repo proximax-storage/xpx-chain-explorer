@@ -1,12 +1,12 @@
 <template>
-  <div class="recent">
+  <div class="recent" v-if="finalArray.length > 0">
     <h1 class="supertitle">{{ nameLabel }}</h1>
     <div class="element" v-for="(item, index) in finalArray" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(item)">
       <div class="el-left">
         <div class="title">Id</div>
         <div class="value">{{ item.id }}</div>
       </div>
-      <div class="el-middle">
+      <div class="el-middle" v-if="item.name">
         <div class="title">Name</div>
         <div class="value">{{ item.name }}</div>
       </div>
@@ -47,37 +47,67 @@ export default {
   methods: {
     constructorObj () {
       // TODO: Falta almacenar en LocalStorage
+      let itemComplete
       let mosaicNames = this.$storage.get('mosaicNames')
       if (mosaicNames === null) {
         this.arrayTransactions.forEach(item => {
-          let id = item.id
-          let idExact = item.id.toHex()
-          // console.log(item, id)
-          let mosaics = [id]
-          this.$proxProvider.getMosaicsName(mosaics).subscribe(
-            resp => {
-              // console.log("NOMBRE", resp[0])
-              // console.log({
-              //   id: idExact,
-              //   name: resp[0].names[0],
-              //   amount: item.amount.compact()
-              // })
-              this.arrayData.push({
-                id: idExact,
-                name: resp[0].names[0],
-                amount: item.amount.compact()
-              })
-            },
-            err => {
-              this.arrayData.push({
-                id: 'Communication error with the node!',
-                name: 'Communication error with the node!',
-                amount: 'Communication error with the node!'
-              })
+          this.mosaicName(item)
+        })
+      } else {
+        mosaicNames = JSON.parse(mosaicNames)
+        console.log(mosaicNames)
+        this.arrayTransactions.forEach(item => {
+          // this.mosaicName(item)
+          let tmpitem = mosaicNames.filter(el => item.id.toHex() === el.id)
+          console.log("TEMPORAL ITEM", tmpitem)
+          if (tmpitem.length > 0) {
+            itemComplete = {
+              id: tmpitem[0].id,
+              name: tmpitem[0].name,
+              amount: item.amount.compact()
             }
-          )
+            this.arrayData.push(itemComplete)
+          }
         })
       }
+    },
+    mosaicName (item) {
+      let id = item.id
+      let idExact = item.id.toHex()
+      // console.log(item, id)
+      let mosaics = [id]
+      this.$proxProvider.getMosaicsName(mosaics).subscribe(
+        resp => {
+          // console.log("NOMBRE", resp[0])
+          let itemComplete = {
+            id: idExact,
+            name: resp[0].names[0],
+            amount: item.amount.compact()
+          }
+
+          this.arrayData.push(itemComplete)
+
+          let mosaicNames = this.$storage.get('mosaicNames')
+          if (mosaicNames === null) {
+            mosaicNames = [{
+              id: idExact,
+              name: resp[0].names[0]
+            }]
+            this.$storage.set('mosaicNames', mosaicNames)
+          } else {
+            let mosaicNames = JSON.parse(mosaicNames)
+            mosaicNames.push({ id: idExact, name: resp[0].names[0] })
+            this.$storage.set('mosaicNames', JSON.stringify(mosaicNames))
+          }
+        },
+        err => {
+          this.arrayData.push({
+            id: 'Communication error with the node!',
+            name: 'Communication error with the node!',
+            amount: 'Communication error with the node!'
+          })
+        }
+      )
     },
     getItemId (item) {
       return item.id.toHex()

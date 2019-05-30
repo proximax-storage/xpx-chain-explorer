@@ -177,7 +177,7 @@ export default {
           this.iterator(this.detail)          
           break;
         case 'Secret proof':
-          this.iterator(this.detail)          
+          this.iterator(this.detail)
           break;
         case 'Mosaic Alias':
           this.plusInfo = [

@@ -137,7 +137,7 @@ export default {
     display: flex
     flex-flow: row nowrap
     justify-content: space-around
-    margin: 5px 0px
+    margin: 1px 0px
     padding: 3px
     color: black
     border-radius: 5px
