@@ -42,7 +42,8 @@ export default {
       searchList: [
         { name: 'Public Key' },
         { name: 'Block Height' },
-        { name: 'Transaction Hash' }
+        { name: 'Transaction Hash' },
+        { name: 'Address' }
       ],
       valueSearch: ''
     }
@@ -56,6 +57,8 @@ export default {
         this.typeSearch = 'blockHeight'
       } else if (item.name === 'Transaction Hash') {
         this.typeSearch = 'transactionHash'
+      } else if (item.name === 'Address') {
+        this.typeSearch = 'address'
       }
     },
     performSearch () {

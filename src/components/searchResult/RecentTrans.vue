@@ -35,6 +35,7 @@
 
 <script>
 import proximaxProvider from '@/services/proximaxProviders.js'
+
 export default {
   name: 'RecentTrans',
   props: {
@@ -50,7 +51,7 @@ export default {
     }
   },
   data () {
-    console.log(proximaxProvider.typeTransactions())
+    // console.log(proximaxProvider.typeTransactions())
     return {
       typeTransactions: proximaxProvider.typeTransactions()
     }

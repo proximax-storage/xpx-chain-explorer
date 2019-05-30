@@ -6,7 +6,7 @@
       <div class="search-type">{{ type }}</div>
       <div class="search-value">{{ value }}</div>
     </div>
-    <public-key v-if="type === 'Public Key'" :detail="param"/>
+    <public-key v-if="type === 'Public Key' || type === 'Address'" :detail="param"/>
     <block-info v-if="type === 'Block Height'" :detail="param"/>
     <transaction v-if="type === 'Transaction Hash'" :detail="param"/>
     <mosaics v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'"/>
@@ -47,7 +47,8 @@ export default {
     }
   },
   mounted () {
-    if (this.$route.params.type === 'publicKey') {
+    console.log(this.$route.params)
+    if (this.$route.params.type === 'publicKey' || this.$route.params.type === 'address') {
       let tmp
       if (this.$route.params.id.length === 64) {
         tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, NetworkType.TEST_NET)
@@ -61,7 +62,7 @@ export default {
     } else if (this.$route.params.type === 'transactionHash') {
       this.getInfoTransaction(this.$route.params.id)
     }
-    console.log(this.type)
+    // console.log("Tipo de busqueda", this.type)
     this.value = this.$route.params.id
   },
   methods: {
@@ -69,10 +70,11 @@ export default {
       const addr = Address.createFromRawAddress(account)
       const xpx = proximaxProvider.mosaicXpx()
 
-      console.log(addr, xpx)
+      console.log("ADDRESS & XPX", addr, xpx)
       
       let suscripcion = this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
+          console.warn('Si Entro')
           // Assign the response to accountInfo and show the account information
           console.log('Esta es la repuesta', resp)
           this.param = resp
@@ -80,10 +82,11 @@ export default {
 
           // If your account information has tiles, look up your information and name to display them in the tile table
           if (resp.mosaics.length > 0) {
-            this.blockMosaics = resp.mosaics.filter(el => el.id.toHex() !== xpx)
+            let filteredTrans = resp.mosaics.filter(el => el.id.toHex().toUpperCase() !== xpx)
+            console.log(filteredTrans)
+            this.blockMosaics = filteredTrans
             this.showRecentMosaic = !this.showRecentMosaic
             console.log(this.showRecentMosaic, this.blockMosaics)
-            // console.log("Transaciones", this.blockMosaics)
           }
           this.viewTransactionsFromPublicAccount(resp.publicAccount)
         },
@@ -153,6 +156,8 @@ export default {
         this.type = 'Block Height'
       } else if (this.$route.params.type === 'transactionHash') {
         this.type = 'Transaction Hash'
+      } else if (this.$route.params.type === 'address') {
+        this.type = 'Address'
       }
       console.log(this.type)
       this.value = this.$route.params.id

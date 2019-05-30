@@ -11,7 +11,7 @@
         <div class="value">{{ item.name }}</div>
       </div>
       <div class="el-right">
-        <div class="title">Amount</div>
+        <div class="title">Quantity</div>
         <div class="value" v-html="$utils.fmtAmountValue(item.amount)"></div>
       </div>
     </div>
@@ -55,11 +55,11 @@ export default {
         })
       } else {
         mosaicNames = JSON.parse(mosaicNames)
-        console.log(mosaicNames)
+        //console.log(mosaicNames)
         this.arrayTransactions.forEach(item => {
           // this.mosaicName(item)
           let tmpitem = mosaicNames.filter(el => item.id.toHex() === el.id)
-          console.log("TEMPORAL ITEM", tmpitem)
+          // console.log("TEMPORAL ITEM", tmpitem)
           if (tmpitem.length > 0) {
             itemComplete = {
               id: tmpitem[0].id,
@@ -95,7 +95,7 @@ export default {
             }]
             this.$storage.set('mosaicNames', mosaicNames)
           } else {
-            let mosaicNames = JSON.parse(mosaicNames)
+            mosaicNames = JSON.parse(mosaicNames)
             mosaicNames.push({ id: idExact, name: resp[0].names[0] })
             this.$storage.set('mosaicNames', JSON.stringify(mosaicNames))
           }
@@ -115,7 +115,7 @@ export default {
   },
   computed: {
     finalArray () {
-      console.log(this.arrayData)
+      // console.log(this.arrayData)
       return this.arrayData
     }
   }

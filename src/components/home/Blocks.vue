@@ -25,7 +25,7 @@
         </div>
         <div>
           <span>Harvester/Forger</span>
-          <router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.address.address }" target="_blank" style="word-break: break-all">{{ item.signer.publicKey }}</router-link>
+          <router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.publicKey }" target="_blank" style="word-break: break-all">{{ item.signer.publicKey }}</router-link>
         </div>
         <div>
           <span>Fee</span>
@@ -70,6 +70,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.dataTable)
     this.viewAllBlocks()
     //console.log('Este es el current block', this.currentBlock)
   },

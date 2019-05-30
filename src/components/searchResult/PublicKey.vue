@@ -5,7 +5,7 @@
         <h1 class="supertitle">Account Info</h1>
         <div class="up">
           <div class="title">Address</div>
-          <div class="value">{{ detail.address.address }}</div>
+          <div class="value">{{ detail.address.pretty() }}</div>
         </div>
         <div class="down">
           <div class="title">Public Key</div>
