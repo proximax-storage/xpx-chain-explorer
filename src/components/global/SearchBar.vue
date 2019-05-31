@@ -7,7 +7,7 @@
           style="padding: 10px; box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%"
           >{{ label }}</mdb-dropdown-toggle>
           <mdb-dropdown-menu style="height: auto">
-            <mdb-dropdown-item v-for="(item, index) in searchList" :key="index">
+            <mdb-dropdown-item v-for="(item, index) in searchList" :key="index" style="padding: 0px">
               <a class="searchLink" @click.prevent="changeSearch(item)">{{ item.name }}</a>
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
@@ -77,6 +77,7 @@ export default {
 
 .searchLink
   display: block
+  padding: 10px
   &:hover
     color: white !important
 

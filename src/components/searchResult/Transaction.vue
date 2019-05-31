@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div class="tran-layout-plus">
+    <div class="tran-layout-plus" v-if="plusInfo.length > 0">
       <h1 class="supertitle">Details</h1>
       <div class="plus-cont">
         <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
@@ -74,6 +74,18 @@
             <span v-if="!detail.mosaicProperties.transferable">
               Transferable: <b style="color: red">{{ detail.mosaicProperties.transferable }} <mdb-icon icon="times"/></b>
             </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tran-layout-plus" v-if="detail.cosignatures">
+      <h1 class="supertitle">Cosignatures</h1>
+      <div class="plus-cont">
+        <div class="layout-plus-children" v-for="(item, index) in detail.cosignatures" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
+          <div class="title">{{ index + 1 }}.- Cosignature</div>
+          <div style="padding: 5px">
+            <div class="title">Signature</div>
+            <div class="value">{{ item.signature }}</div>
           </div>
         </div>
       </div>
@@ -165,10 +177,14 @@ export default {
           this.iterator(this.detail)          
           break;
         case 'Aggregate complete':
-          this.iterator(this.detail)          
+          this.plusInfo = [
+            // { key: 'Inner Transactions', value: this.detail.innerTransactions },
+            { key: 'Cosignatures', value: this.detail.cosignatures }
+          ]
+          // this.iterator(this.detail)          
           break;
         case 'Aggregate bonded':
-          this.iterator(this.detail)          
+          // this.iterator(this.detail)          
           break;
         case 'Lock':
           this.iterator(this.detail)          
@@ -190,8 +206,16 @@ export default {
           ]
           // this.iterator(this.detail)          
           break;
-        default:
-          
+        case 'Modify Mosaic Metadata':
+          this.plusInfo = [
+            { key: 'Modifications', value: this.detail.modifications },
+            { key: 'Metadata Id', value: (this.detail.metadataId !== undefined) ? this.detail.metadataId : 'No Available' },
+            { key: 'Metadata Type', value: (this.detail.metadataType !== undefined) ? this.detail.metadataType : 'No Available' },
+            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Type', value: this.detail.type },
+            { key: 'Version', value: this.detail.version }
+          ]
+          // this.iterator(this.detail)
           break;
       }
     },
@@ -258,6 +282,9 @@ $radius: 5px
   border-radius: $radius
   padding: 10px
 
+.radius
+  border-radius: $radius
+
 .transaction
   margin: 15px 10px
   border: 1px solid #7ab5e280
@@ -317,8 +344,7 @@ $radius: 5px
         width: 100%
         padding: 10px
         box-sizing: border-box
-        &:only-child
-          border-radius: $radius
+        background: red
         &:first-child
           border-radius: $radius $radius 0px 0px
         &:last-child

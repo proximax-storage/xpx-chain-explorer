@@ -12,7 +12,7 @@
     "axios": "^0.18.0",
     "chart.js": "^2.8.0",
     "js-joda": "^1.10.1",
-    "js-xpx-catapult-library": "^0.1.0",
+    "js-xpx-catapult-library": "^0.1.1",
     "mdbvue": "git+https://oauth2:SyJaA8eSM2gkFZh4onhD@git.mdbootstrap.com/mdb/vue/vu-pro.git",
     "postcss-import": "^12.0.1",
     "register-service-worker": "^1.6.2",

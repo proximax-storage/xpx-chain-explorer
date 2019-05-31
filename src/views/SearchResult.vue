@@ -70,20 +70,18 @@ export default {
       const addr = Address.createFromRawAddress(account)
       const xpx = proximaxProvider.mosaicXpx()
 
-      console.log("ADDRESS & XPX", addr, xpx)
+      // console.log("ADDRESS & XPX", addr, xpx)
       
       let suscripcion = this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
-          console.warn('Si Entro')
           // Assign the response to accountInfo and show the account information
-          console.log('Esta es la repuesta', resp)
+          // console.log('RESPONSE ACCOUNT', resp)
           this.param = resp
           this.showComponent()
 
           // If your account information has tiles, look up your information and name to display them in the tile table
           if (resp.mosaics.length > 0) {
             let filteredTrans = resp.mosaics.filter(el => el.id.toHex().toUpperCase() !== xpx)
-            console.log(filteredTrans)
             this.blockMosaics = filteredTrans
             this.showRecentMosaic = !this.showRecentMosaic
             console.log(this.showRecentMosaic, this.blockMosaics)
@@ -115,9 +113,7 @@ export default {
         this.showInfo = true
         this.$proxProvider.blockchainHttp.getBlockTransactions(parseInt(block)).subscribe(
           blockTransactions => {
-            console.log("Estoy aqui", blockTransactions)
             this.blockTransactions = blockTransactions
-            console.log(this.blockTransactions)
             for (const index in this.blockTransactions) {              
               this.blockTransactions[index].fee = this.$utils.fmtAmountValue(this.blockTransactions[index].maxFee.compact())
               this.blockTransactions[index].deadline = this.$utils.fmtTime(new Date(this.blockTransactions[index].deadline.value.toString()))              
@@ -140,7 +136,6 @@ export default {
     getInfoTransaction: function (hast) {
       this.$proxProvider.getTransactionInformation(hast).subscribe(
         resp => {
-          console.log(resp)
           this.param = resp
           this.showComponent()
         },
@@ -159,7 +154,6 @@ export default {
       } else if (this.$route.params.type === 'address') {
         this.type = 'Address'
       }
-      console.log(this.type)
       this.value = this.$route.params.id
     },
 
@@ -181,7 +175,7 @@ export default {
           }
         },
         error => {
-          console.error('dio error2....', error)
+          console.error('ACCOUNT ERROR....', error)
         }
       );
     }
