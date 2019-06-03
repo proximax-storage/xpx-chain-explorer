@@ -1,15 +1,15 @@
 <template>
   <div class="network">
     <div>
-      <graphics/>
+      <graphics :title="'Node Monitor'"/>
     </div>
     <div class="mini-two">
-      <graphics/>
-      <graphics/>
+      <graphics :title="'Nem unique harvesters daily chart'"/>
+      <graphics :title="'Nem transaction per day chart'"/>
     </div>
     <div class="mini-two">
-      <graphics/>
-      <graphics/>
+      <graphics :title="'Nem account over time'"/>
+      <graphics :title="'Nem average block dificulty per day'"/>
     </div>
   </div>
 </template>

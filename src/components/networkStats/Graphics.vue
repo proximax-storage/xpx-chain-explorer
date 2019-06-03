@@ -1,6 +1,9 @@
 <template>
   <div class="graphics">
-    <canvas id="graphic-1" class="standard-canvas" height="250"></canvas>
+    <h1>{{ title }}</h1>
+    <div>
+      <canvas id="graphic-1" class="standard-canvas" height="250"></canvas>
+    </div>
   </div>
 </template>
 
@@ -9,8 +12,16 @@ import Chart from 'chart.js'
 
 export default {
   name: 'Graphics',
+  props: {
+    title: {
+      type: String,
+      required: false,
+      default: 'Graphic'
+    }
+  },
   mounted () {
-    const ctx = this.$el.children[0].getContext('2d')
+    const ctx = this.$el.querySelector('#graphic-1')
+    console.log(ctx)
 
     // eslint-disable-next-line
     const graphic1 = new Chart(ctx, {
@@ -67,6 +78,13 @@ export default {
   flex-grow: 1
 
 .graphics
+  display: block
   padding: 10px
+  border-radius: 5px
   width: 100%
+  & > h1
+    color: #7ab5e2
+    font-size: 15px
+    font-weight: bold
+    text-transform: uppercase
 </style>

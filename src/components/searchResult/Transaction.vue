@@ -78,22 +78,14 @@
         </div>
       </div>
     </div>
-    <div class="tran-layout-plus" v-if="detail.cosignatures">
-      <h1 class="supertitle">Cosignatures</h1>
-      <div class="plus-cont">
-        <div class="layout-plus-children" v-for="(item, index) in detail.cosignatures" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
-          <div class="title">{{ index + 1 }}.- Cosignature</div>
-          <div style="padding: 5px">
-            <div class="title">Signature</div>
-            <div class="value">{{ item.signature }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <cosignatures :params="detail.cosignatures"/>
+    <inner-transactions :params="detail.innerTransactions"/>
   </div>
 </template>
 
 <script>
+import Cosignatures from '@/components/searchResult/Transaction.Cosignatures'
+import InnerTransactions from '@/components/searchResult/Transaction.InnerTransactions'
 import proximaxProvider from '@/services/proximaxProviders'
 import { mdbIcon } from 'mdbvue'
 
@@ -103,7 +95,9 @@ export default {
     detail: Object
   },
   components: {
-    mdbIcon
+    mdbIcon,
+    InnerTransactions,
+    Cosignatures
   },
   data () {
     return {
@@ -114,7 +108,7 @@ export default {
   mounted () {
     this.verifyType()
     this.verifyTransactionDetails()
-    console.log(this.detail)
+    console.log("TRANSACTION", this.detail)
   },
   methods: {
     iterator (obj) {
@@ -138,7 +132,10 @@ export default {
       switch (this.transactionType) {
         case 'Transfer Transaction':
           this.plusInfo = [
-            { key: 'Message', value: this.detail.message.payload }
+            { key: 'Message', value: (this.detail.message.payload !== '') ? this.detail.message.payload : 'No Available' },
+            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Version', value: this.detail.version },
+            { key: 'Parent Id', value: (this.detail.parentId !== undefined) ? this.detail.parentId : 'No Available' }
           ]
           //this.iterator(this.detail)
           break;
@@ -155,8 +152,8 @@ export default {
         case 'Mosaic definition':
           this.plusInfo = [
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
-            { key: 'Network Type', value: this.detail.networkType },
             { key: 'Nonce', value: (this.detail.nonce !== undefined) ? this.detail.nonce : 'No Available' },
+            { key: 'Network Type', value: this.detail.networkType },
             { key: 'Type', value: this.detail.type },
             { key: 'Version', value: this.detail.version }
           ]
@@ -165,11 +162,11 @@ export default {
         case 'Mosaic supply change':
           this.plusInfo = [
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
+            { key: 'Delta', value: this.detail.delta.toHex() },
+            { key: 'Direction', value: this.detail.direction },
             { key: 'Network Type', value: this.detail.networkType },
             { key: 'Type', value: this.detail.type },
             { key: 'Version', value: this.detail.version },
-            { key: 'Delta', value: this.detail.delta.toHex() },
-            { key: 'Direction', value: this.detail.direction }
           ]
           // this.iterator(this.detail)          
           break;
@@ -177,19 +174,15 @@ export default {
           this.iterator(this.detail)          
           break;
         case 'Aggregate complete':
-          this.plusInfo = [
-            // { key: 'Inner Transactions', value: this.detail.innerTransactions },
-            { key: 'Cosignatures', value: this.detail.cosignatures }
-          ]
-          // this.iterator(this.detail)          
+          // this.iterator(this.detail)    
           break;
         case 'Aggregate bonded':
-          // this.iterator(this.detail)          
+          // this.iterator(this.detail)        
           break;
         case 'Lock':
           this.iterator(this.detail)          
           break;
-        case 'Secret pock':
+        case 'Secret lock':
           this.iterator(this.detail)          
           break;
         case 'Secret proof':
@@ -206,6 +199,24 @@ export default {
           ]
           // this.iterator(this.detail)          
           break;
+        case 'Address Alias':
+          this.iterator(this.detail)          
+          break;
+        case 'Modify Account Property Address':
+          this.iterator(this.detail)          
+          break;
+        case 'Modify Account Property Mosaic':
+          this.iterator(this.detail)          
+          break;
+        case 'Modify Account Entity Type':
+          this.iterator(this.detail)          
+          break;
+        case 'Link Account':
+          this.iterator(this.detail)          
+          break;
+        case 'Modify Account Metadata':
+          this.iterator(this.detail)          
+          break;
         case 'Modify Mosaic Metadata':
           this.plusInfo = [
             { key: 'Modifications', value: this.detail.modifications },
@@ -216,6 +227,9 @@ export default {
             { key: 'Version', value: this.detail.version }
           ]
           // this.iterator(this.detail)
+          break;
+        case 'Modify Namespace Metadata':
+          this.iterator(this.detail)
           break;
       }
     },
@@ -320,16 +334,16 @@ $radius: 5px
     flex-flow: column wrap
     justify-content: space-between
     align-items: center
-    margin: 0px 0px 15px 0px
     & > div:first-child
-      margin-bottom: 10px 
+      margin-bottom: 10px
       width: 100%
       flex-grow: 1
     & > div:last-child
-      margin-bottom: 5px
+      margin-bottom: 0px
       width: 100%
       flex-grow: 1
   & > .tran-layout-plus
+    margin-top: 10px
     display: flex
     flex-flow: column wrap
     box-sizing: border-box
@@ -344,7 +358,6 @@ $radius: 5px
         width: 100%
         padding: 10px
         box-sizing: border-box
-        background: red
         &:first-child
           border-radius: $radius $radius 0px 0px
         &:last-child

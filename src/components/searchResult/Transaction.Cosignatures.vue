@@ -1,0 +1,56 @@
+<template>
+  <div class="tran-layout-plus" v-if="params">
+    <h1 class="supertitle">Cosignatures</h1>
+    <div>
+      <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
+        <div>
+          <div class="title">Signature</div>
+          <div class="value">{{ item.signature }}</div>
+        </div>
+        <div>
+          <div class="title">Signer</div>
+          <div class="value">Public Key: <b>{{ item.signer.publicKey }}</b></div>
+          <div class="value">Address: <b>{{ item.signer.address.pretty() }}</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Cosignatures',
+  props: {
+    params: Array
+  }
+}
+</script>
+
+<style lang="sass" scoped>
+.supertitle
+  margin: 0px
+  font-size: 17px
+  color: #7AB5E2
+  padding: 0px 0px 5px 0px
+  width: 100%
+
+.element
+  padding: 10px
+  margin-bottom: 10px
+  font-size: 10px
+  &:last-child
+    margin: 0px
+
+.title
+  font-weight: bold
+  text-transform: uppercase
+  color: black
+  font-family: 'Roboto', sans-serif
+
+.value
+  word-break: break-all
+  text-transform: uppercase
+  color: black
+  font-family: 'Roboto', sans-serif
+  font-weight: 400
+</style>
