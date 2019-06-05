@@ -71,9 +71,9 @@ export default {
   methods: {
     /**
      * Change Search
-     * 
+     *
      * This method changes the type of search you want to perform
-     * 
+     *
      * @param { Object } item
      */
     changeSearch (item) {
@@ -91,13 +91,15 @@ export default {
 
     /**
      * Perform Search
-     * 
+     *
      * This method executes the search action,
      * taking the type of search and the value entered by the user
      */
     performSearch () {
-      let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
-      window.open(routeData.href, '_blank')
+      if (this.typeSearch !== '') {
+        let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
+        window.open(routeData.href, '_blank')
+      }
     }
   }
 }
