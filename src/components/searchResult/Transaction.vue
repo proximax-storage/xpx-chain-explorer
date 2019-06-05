@@ -1,6 +1,11 @@
 <template>
+  <!-- Transaction Component -->
   <div class="transaction">
+
+    <!-- Up -->
     <div class="tran-layout-up">
+
+      <!-- left -->
       <div>
         <h1 class="supertitle">{{ transactionType || 'Hash Transaction'}}</h1>
         <div class="up">
@@ -13,6 +18,9 @@
           <div class="value" v-else>{{ 'No available' }}</div>
         </div>
       </div>
+      <!-- End Left -->
+
+      <!-- Right -->
       <div>
         <h1 class="supertitle" style="color: transparent">Timestamp</h1>
         <div class="up">
@@ -24,63 +32,113 @@
           <div class="value">{{ detail.transactionInfo.height.compact() }}</div>
         </div>
       </div>
+      <!-- End Right -->
+
     </div>
+    <!-- End Up -->
+
+    <!-- Center -->
     <div class="tran-layout-middle">
       <h1 class="amount">Amount: <span>{{ detail.amount || '0' }}</span></h1>
       <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
     </div>
+    <!-- End Center -->
+
+    <!-- Down -->
     <div class="tran-layout-down">
+
+      <!-- Up Element -->
       <div class="layout-down-children">
         <div class="down-radius">
           <div class="title">Signature</div>
           <div class="value">{{ detail.signature }}</div>
         </div>
       </div>
+      <!-- End Up Element -->
+
+      <!-- Down Element-->
       <div class="layout-down-children">
         <div class="down-radius">
           <div class="title">Hash</div>
           <div class="value">{{ detail.transactionInfo.hash }}</div>
         </div>
       </div>
+      <!-- End Down Element-->
+
     </div>
+    <!-- End Down -->
+
+    <!-- Plus Area -->
     <div class="tran-layout-plus" v-if="plusInfo.length > 0">
+      <!-- Name -->
       <h1 class="supertitle">Details</h1>
+
+      <!-- Plus Container -->
       <div class="plus-cont">
+
+        <!-- Iterated Element -->
         <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
           <div class="title">{{ item.key }}</div>
           <div class="value">{{ item.value }}</div>
         </div>
+        <!-- End Iterated Element -->
+
+        <!-- Mosaic Properties Area -->
         <div class="layout-plus-children"  v-if="detail.mosaicProperties">
+          <!-- Name -->
           <div class="title">Mosaic Properties</div>
+
+          <!-- Properties Container -->
           <div class="value mosaic-properties">
+
             <span>
               Divisibility: <b>{{ detail.mosaicProperties.divisibility }}</b>
             </span>
+
             <span v-if="detail.mosaicProperties.supplyMutable">
               Supply Mutable: <b style="color: green">{{ detail.mosaicProperties.supplyMutable }} <mdb-icon icon="check"/></b>
             </span>
+
             <span v-if="!detail.mosaicProperties.supplyMutable">
               Supply Mutable: <b style="color: red">{{ detail.mosaicProperties.supplyMutable }} <mdb-icon icon="times"/></b>
             </span>
+
             <span v-if="detail.mosaicProperties.levyMutable">
               Levy Mutable: <b style="color: green">{{ detail.mosaicProperties.levyMutable }} <mdb-icon icon="check"/></b>
             </span>
+
             <span v-if="!detail.mosaicProperties.levyMutable">
               Levy Mutable: <b style="color: red">{{ detail.mosaicProperties.levyMutable }} <mdb-icon icon="times"/></b>
             </span>
+
             <span v-if="detail.mosaicProperties.transferable">
               Transferable: <b style="color: green">{{ detail.mosaicProperties.transferable }} <mdb-icon icon="check"/></b>
             </span>
+
             <span v-if="!detail.mosaicProperties.transferable">
               Transferable: <b style="color: red">{{ detail.mosaicProperties.transferable }} <mdb-icon icon="times"/></b>
             </span>
+
           </div>
+          <!-- Properties Container -->
+
         </div>
+        <!-- Mosaic Properties Area -->
+
       </div>
     </div>
+    <!-- End Plus Area -->
+
+    <!-- Cosignatures Component -->
     <cosignatures :params="detail.cosignatures"/>
+    <!-- End Consignature Component -->
+
+    <!-- Inner Transactions Component -->
     <inner-transactions :params="detail.innerTransactions"/>
+    <!-- End Inner Transactions Component -->
+
   </div>
+  <!-- End Transaction Component -->
 </template>
 
 <script>
@@ -105,12 +163,24 @@ export default {
       transactionType: 'Hash Transaction'
     }
   },
+
+  /**
+   * Mounted
+   * 
+   * Call Verify Type and Verify Transaction Details
+   */
   mounted () {
     this.verifyType()
     this.verifyTransactionDetails()
-    console.log("TRANSACTION", this.detail)
+    // console.log("TRANSACTION", this.detail)
   },
   methods: {
+    /**
+     * Iterator 
+     * 
+     * This method iterates over the object received by parameter that
+     * shows all the data it brings and pushes them in a local array
+     */
     iterator (obj) {
       for (const key in obj) {
         if (obj.hasOwnProperty(key)) {
@@ -119,6 +189,12 @@ export default {
         }
       }
     },
+
+    /**
+     * Verify Type
+     * 
+     * Verify the type of a transaction and change the name accordingly
+     */
     verifyType () {
       let objectOfTypes = Object.values(proximaxProvider.typeTransactions())
       objectOfTypes.forEach(element => {
@@ -128,6 +204,13 @@ export default {
         }
       })
     },
+
+    /**
+     * Verify Transaction Details
+     * 
+     * This method verifies the type of transaction and builds
+     * an appropriate object for the component
+     */
     verifyTransactionDetails () {
       switch (this.transactionType) {
         case 'Transfer Transaction':
@@ -233,6 +316,12 @@ export default {
           break;
       }
     },
+
+    /**
+     * Pretty Convert
+     * 
+     * Convert the element received by parameter to pretty format
+     */
     prettyConvert (item) {
       return item.pretty()
     }

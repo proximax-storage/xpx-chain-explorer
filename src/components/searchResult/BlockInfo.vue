@@ -1,6 +1,12 @@
 <template>
+
+  <!-- Block Info Component -->
   <div class="blockInfo">
+
+    <!-- Up Container -->
     <div class="bi-layout-up">
+
+      <!-- Left -->
       <div>
         <h1 class="supertitle">Block Info</h1>
         <div class="up">
@@ -12,6 +18,9 @@
           <div class="value">{{ detail.timestamp }}</div>
         </div>
       </div>
+      <!-- End Left -->
+
+      <!-- Right -->
       <div>
         <h1 class="supertitle" style="color: transparent">Harvester / Forger</h1>
         <div class="up">
@@ -23,27 +32,42 @@
           <div class="value">{{ detail.hash }}</div>
         </div>
       </div>
+      <!-- End Right -->
+
     </div>
+    <!-- End Up container -->
+
+    <!-- Down Container -->
     <div class="bi-layout-down">
+      <!-- Left -->
       <div class="layout-down-children">
         <div class="down-radius">
           <div class="title">Difficulty</div>
           <div class="value">{{ detail.difficulty }}</div>
         </div>
       </div>
+      <!-- End Left -->
+
+      <!-- Center -->
       <div class="layout-down-children">
         <div class="down-radius">
           <div class="title">Txes</div>
           <div class="value">{{ detail.txes }}</div>
         </div>
       </div>
+      <!-- End Center -->
+
+      <!-- Right -->
       <div class="layout-down-children">
         <div class="down-radius">
           <div class="title">Fees</div>
           <div class="value" v-html="detail.fee"></div>
         </div>
       </div>
+      <!-- End Right -->
+      
     </div>
+    <!-- End Down Container -->
   </div>
 </template>
 

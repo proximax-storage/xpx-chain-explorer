@@ -1,7 +1,9 @@
 <template>
+  <!-- Footer Commponent -->
   <div class="footer">
     <p>Copyright 2019. ProximaX Explorer. All rights reserved.</p>
   </div>
+  <!-- End Footer Component -->
 </template>
 
 <script>

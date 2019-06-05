@@ -1,7 +1,15 @@
 <template>
+
+  <!-- Recent Transactions Component -->
   <div class="recent">
+
+    <!-- Title -->
     <h1 class="supertitle">{{ nameLabel }}</h1>
+
+    <!-- Iterated Elements -->
     <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(item)">
+
+      <!-- Left -->
       <div class="el-left">
         <h1 class="title alternate">Recipient / Sender</h1>
         <div>
@@ -21,16 +29,27 @@
           <div class="value">{{ item.signer.address.pretty() }}</div>
         </div>
       </div>
+      <!-- End Left -->
+
+      <!-- Center -->
       <div class="el-middle">
         <div class="title">Timestamp</div>
         <div class="value">{{ item.deadline }}</div>
       </div>
+      <!-- End Center -->
+
+      <!-- Right -->
       <div class="el-right">
         <div class="title">Fee</div>
         <div class="value" v-html="item.fee"></div>
       </div>
+      <!-- End Right -->
+      
     </div>
+    <!-- End Iterated Elements -->
+
   </div>
+  <!-- Recent Transaction Component -->
 </template>
 
 <script>
@@ -57,9 +76,15 @@ export default {
     }
   },
   mounted () {
-    console.log(this.arrayTransactions)
+    // console.log(this.arrayTransactions)
   },
   methods: {
+    /**
+     * Redirect To Detail
+     * 
+     * Execute the redirection action in detail in a new tab,
+     * when the user clicks on one of the transactions listed
+     */
     redirectToDetail (item) {
       let hash = item.transactionInfo.hash
       console.log(hash)

@@ -1,46 +1,68 @@
 <template>
+
+  <!-- Blocks Component -->
   <div class="block">
+
+    <!-- MDB Loader -->
     <mdb-progress v-if="dataTable.length === 0" bgColor="primary-color-dark" style="width: 100%" indeterminate/>
-    <!-- <table v-if="false" class="desktop">
-      <tr class="header-row">
-        <th>Block Height</th>
-        <th>Harvester/Forger</th>
-        <th>Fee</th>
-        <th>Txes</th>
-        <th>Timestamp</th>
-      </tr>
-      <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" v-show="(pag - 1) * limit <= index  && pag * limit > index">
-        <td><router-link class="link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link></td>
-        <td class="link-data"><router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.address.address }" target="_blank">{{ item.signer.publicKey }}</router-link></td>
-        <td v-html="item.totalFee"></td>
-        <td>{{ item.numTransactions }}</td>
-        <td style="word-wrap: break-word">{{ item.date }}</td>
-      </tr>
-    </table> -->
+    <!-- End MDB Loader -->
+
+    <!-- ALTERNATIVE BLOCK CONFIGURED IN INVISIBLE -->
+      <!-- <table class="desktop">
+        <tr class="header-row">
+          <th>Block Height</th>
+          <th>Harvester/Forger</th>
+          <th>Fee</th>
+          <th>Txes</th>
+          <th>Timestamp</th>
+        </tr>
+        <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" v-show="(pag - 1) * limit <= index  && pag * limit > index">
+          <td><router-link class="link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link></td>
+          <td class="link-data"><router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.address.address }" target="_blank">{{ item.signer.publicKey }}</router-link></td>
+          <td v-html="item.totalFee"></td>
+          <td>{{ item.numTransactions }}</td>
+          <td style="word-wrap: break-word">{{ item.date }}</td>
+        </tr>
+      </table> -->
+    <!-- END ALTERNATIVE BLOCK CONFIGURED IN INVISIBLE -->
+
+    <!-- NEW DESIGN OF BLOCKS COMPONENT (Mobile Compatible)-->
     <div class="mobile">
+
+      <!-- Iterated Element of Block -->
       <div class="element" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" v-show="(pag - 1) * limit <= index  && pag * limit > index">
+
         <div>
           <span>Height</span>
           <router-link class="link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link>
         </div>
+
         <div>
           <span>Harvester/Forger</span>
           <router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.publicKey }" target="_blank" style="word-break: break-all">{{ item.signer.publicKey }}</router-link>
         </div>
+
         <div>
           <span>Fee</span>
           <span v-html="item.totalFee"></span>
         </div>
+
         <div>
           <span>TXES</span>
           <span>{{ item.numTransactions }}</span>
         </div>
+
         <div>
           <span>Timestamp</span>
           <span>{{ item.date }}</span>
         </div>
+
       </div>
+      <!-- End Of Iterated Element of Block -->
+
     </div>
+    <!-- END NEW DESIGN OF BLOCKS COMPONENT -->
+
     <div class="pagination">
       <paginator :arrayLength="dataTable.length" :limit="limit" @changePage="changePage"/>
     </div>
@@ -48,6 +70,8 @@
       {{ updateTable }}
     </div>
   </div>
+  <!-- End Blocks Component -->
+
 </template>
 
 <script>
@@ -70,12 +94,14 @@ export default {
     }
   },
   mounted () {
-    console.log(this.dataTable)
+    // console.log(this.dataTable)
     this.viewAllBlocks()
     //console.log('Este es el current block', this.currentBlock)
   },
   methods: {
     /**
+     * View All Blocks
+     * 
      * Method to see recently closed blocks
      */
     viewAllBlocks () {
@@ -109,6 +135,12 @@ export default {
     }
   },
   computed: {
+    /**
+     * Update Table
+     * 
+     * This is not a method but a computed property that updates the last block and represents it in the table
+     * This method should be called as a property and not as a method
+     */
     updateTable () {
       let height = this.$store.getters.getCurrentBlock
       let block = this.$store.state.currentBlock

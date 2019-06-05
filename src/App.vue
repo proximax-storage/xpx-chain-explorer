@@ -1,11 +1,23 @@
 <template>
+  <!-- Main Component -->
   <div id="app">
+
+    <!-- Header Component -->
     <app-header/>
+    <!-- End Header Component -->
+
+    <!-- All Views Container -->
     <div class="view-container">
       <router-view class="view"/>
     </div>
+    <!-- End All View Container -->
+
+    <!-- Footer Component -->
     <app-footer/>
+    <!-- End Footer Component -->
+
   </div>
+  <!-- End Main Component -->
 </template>
 
 <script>
@@ -25,9 +37,17 @@ export default {
     AppFooter
   },
   mounted () {
+    // Call Load Nodes Method
     this.loadNodes()
   },
   methods: {
+    /**
+     * Load Nodes Method
+     * 
+     * This method initializes the communication with the node,
+     * from which the necessary information is obtained to render the data
+     * of the proximax blockchain
+     */
     loadNodes () {
       axios.get('./config/nodes.json')
         .then(response => {
@@ -36,33 +56,55 @@ export default {
           this.runWS()
         })
     },
+
+    /**
+     * Run WS / Run WebSocket
+     * 
+     * This method runs a websocket, configured to maintain a constant
+     * communication with the node
+     */
     runWS () {
+      // $storage is localstorage service (Persistence Service) included in the main instance of vue (No need import)
+      // $utils is Utils service (Utils Service) included in the main instance of vue (No need import)
+
+      // Get the current Node from the persistence service
       let currentNode = this.$storage.get('currentNode')
-      console.log(currentNode)
+      
+      // In the case that there is no information in the persistence service,
+      // it is obtained from es vuex or $ store
       if (currentNode == null) {
         currentNode = this.$store.state.currentNode
       }
-      console.log("NODO", currentNode)
+
+      // Print current node in console
+      // console.log("NODO", currentNode)
+
+      // Run the ws using the current node
       const listener = new Listener(`ws://${currentNode}`, WebSocket)
       listener.open().then(() => {
         listener
           .newBlock()
           .subscribe(block => {
             block.height = block.height.compact()
-            console.log('block', block.height)
+
+            // Print the current closed block
+            // console.log('block', block.height)
+
             block.numTransactions = (block.numTransactions === undefined) ? 0 : block.numTransactions
             block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
             block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
-            //console.log('Este es el block actual', block)
             this.$store.dispatch('changeCurrentBlock', block)
             
-          }, err => console.error(err))
-      })
+          },
+          err => {
+            // Show error message in the console
+            console.error(err)
+          })
+        }
+      )
       const account = Account.generateNewAccount(NetworkType.MIJIN_TEST)
+      // Print Account and Private Key of the current user
       console.log('Your new account address is:', account.address.pretty(), 'and its private key', account.privateKey)
-    },
-    getCurrentNode () {
-      return this.$store.getters.getCurrentNode
     }
   }
 }

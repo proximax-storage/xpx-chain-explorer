@@ -1,25 +1,34 @@
 <template>
+  <!-- Map View -->
   <div class="map">
+
+    <!-- Map Container -->
     <div class="cont">
       <div class="imap" v-for="(item, index) in mapList" v-show="item.active === true" :key="index" v-html="item.template"></div>
     </div>
+    <!-- End Map Container -->
+
+    <!-- Input Filter Container -->
     <div>
-    <div class="filter-input">
-      <div>
-        <mdb-dropdown style="width: 100%; margin-top:10px">
-          <mdb-dropdown-toggle slot="toggle" color="primary" style="width: 100%; font-weight:bold">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
-          <mdb-dropdown-menu>
-            <mdb-dropdown-item v-for="(item, index) in listOfOptions" :key="index">
-              <a class="searchLink" @click="changeSearch(item)">{{ item }}</a>
-            </mdb-dropdown-item>
-          </mdb-dropdown-menu>
-        </mdb-dropdown>
-      </div>
-      <div>
-        <mdb-input icon="search white-text" label="Filter Server" v-model="filter"/>
+      <div class="filter-input">
+        <div>
+          <mdb-dropdown style="width: 100%; margin-top:10px">
+            <mdb-dropdown-toggle slot="toggle" color="primary" style="width: 100%; font-weight:bold">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
+            <mdb-dropdown-menu>
+              <mdb-dropdown-item v-for="(item, index) in listOfOptions" :key="index">
+                <a class="searchLink" @click="changeSearch(item)">{{ item }}</a>
+              </mdb-dropdown-item>
+            </mdb-dropdown-menu>
+          </mdb-dropdown>
+        </div>
+        <div>
+          <mdb-input icon="search white-text" label="Filter Server" v-model="filter"/>
+        </div>
       </div>
     </div>
-    </div>
+    <!-- End Input Filter Container -->
+
+    <!-- Map Options Container -->
     <div class="control">
       <div class="cardServe" v-for="(item, index) in mapList" :key="index" @click="activate(item)" :style="(item.visible) ? 'display: flex' : 'display: none'">
         <div>{{ item.name }}</div>
@@ -29,7 +38,10 @@
         <mdb-icon v-if="!item.active" icon="times red-text"/>
       </div>
     </div>
+    <!-- End Map Options Container -->
+
   </div>
+  <!-- End Map View -->
 </template>
 
 <script>
@@ -92,12 +104,10 @@ export default {
       console.log(this.filterExe)
       if (item === 'By name') {
         this.filterExe = 'name'
-        console.log('Entro npmbre')
       } 
       
       if (item === 'By countrie') {
         this.filterExe = 'countrie'
-        console.log('Entro pais')
       }
 
       this.buttonName = item
@@ -107,7 +117,6 @@ export default {
     filter (n, o) {
       this.mapList.forEach(el => {
         if (this.filterExe !== '') {
-          console.log(this.filterExe)
           el.visible = false
           let tmp = el[this.filterExe].toLowerCase()
           if (tmp.indexOf(this.filter.toLowerCase()) !== -1) {

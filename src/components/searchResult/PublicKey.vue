@@ -1,6 +1,11 @@
 <template>
+  <!-- Public Key Component -->
   <div class="publicKey">
+
+    <!-- Up Container -->
     <div class="pk-layout-up">
+
+      <!-- Left -->
       <div>
         <h1 class="supertitle">Account Info</h1>
         <div class="up">
@@ -12,6 +17,9 @@
           <div class="value">{{ detail.publicKey }}</div>
         </div>
       </div>
+      <!-- End Left -->
+
+      <!-- Right -->
       <div>
         <h1 class="supertitle">Owner Mosaic</h1>
         <div class="up">
@@ -23,11 +31,19 @@
           <div class="value" style="opacity: 0">0</div>
         </div>
       </div>
+      <!-- End Right -->
+
     </div>
+    <!-- End Up Container -->
+
+    <!-- Down Container -->
     <div class="pk-layout-down">
       <h1 class="balance" v-html="formatBalance"></h1>
     </div>
+    <!-- End Down Container -->
+
   </div>
+  <!-- End Public Key Component -->
 </template>
 
 <script>
@@ -40,21 +56,36 @@ export default {
       amount: 0
     }
   },
+  props: {
+    detail: Object
+  },
   computed: {
+    /**
+     * Get ID
+     * 
+     * Return XPX Mosaic ID
+     */
     getId () {
       return proximaxProvider.mosaicXpx()
     },
+
+    /**
+     * Get Balance
+     * 
+     * This computed property obtains the balance depending on the mosaics that the component
+     * receives by parameters, analyzing the xpx mosaic and printing its value
+     */
     getBalance () {
       // console.log(this.detail.mosaics)
       let xpxMosaics = this.detail.mosaics.filter(el => el.id.id.toHex().toUpperCase() === proximaxProvider.mosaicXpx())
-      console.log(xpxMosaics)
+      // console.log(xpxMosaics)
       let amount
       if (xpxMosaics.length > 0) {
         amount = this.$utils.fmtAmountValue(xpxMosaics[0].amount.compact())
       } else {
         amount = this.$utils.fmtAmountValue(0)
       }
-      console.log(amount)
+      // console.log(amount)
       // console.log(this.detail.mosaics)
       // this.detail.mosaics.forEach((el, index) => {
         //   console.log("AQUIII", el.amount.compact(), el.id.id.toHex())
@@ -75,12 +106,15 @@ export default {
       // console.log(item)
       return amount
     },
+
+    /**
+     * Format Balance
+     * 
+     * return the balance in html format
+     */
     formatBalance () {
       return `<div>XPX BALANCE: ${ this.getBalance }</div>`
     }
-  },
-  props: {
-    detail: Object
   }
 }
 </script>

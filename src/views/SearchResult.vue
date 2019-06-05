@@ -1,17 +1,40 @@
 <template>
+  <!-- Search Result View -->
   <div class="searchResult">
+    <!-- Search Bar Component -->
     <search-bar/>
+    <!-- End Search Bar Component -->
+
+    <!-- Search Result Main Message Container -->
     <div style="text-align: center; padding: 10px 0px">
       <h1 style="font-size: 20px">RESULT FOR SEARCH...</h1>
       <div class="search-type">{{ type }}</div>
       <div class="search-value">{{ value }}</div>
     </div>
+    <!-- End Search Result Main Message Container -->
+
+    <!-- Public Key Component -->
     <public-key v-if="type === 'Public Key' || type === 'Address'" :detail="param"/>
+    <!-- End Public Key Component -->
+
+    <!-- Block Info Component -->
     <block-info v-if="type === 'Block Height'" :detail="param"/>
+    <!-- Block Info Component -->
+
+    <!-- Transaction Component -->
     <transaction v-if="type === 'Transaction Hash'" :detail="param"/>
+    <!-- End Transaction Component -->
+
+    <!-- Mosaics Component -->
     <mosaics v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'"/>
+    <!-- End Mosaics Component -->
+
+    <!-- Recent Transactions Component -->
     <recent-trans v-if="showRecentTransaction && blockTransactions.length > 0 && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
+    <!-- End Recent Transactions Component -->
+
   </div>
+  <!-- End Search Result View -->
 </template>
 
 <script>
@@ -36,10 +59,10 @@ export default {
   },
   data () {
     return {
+      param: {},
       type: '',
       value: '',
       recent: [],
-      param: {},
       showRecentTransaction: false,
       blockTransactions: [],
       showRecentMosaic: false,
@@ -47,12 +70,23 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params)
+    // $proxProvider and proximaxProvider is Proximax Service (Proximax Provider Service) included in the main instance of vue (No need import)
+    /**
+     * Mounted - Lifecycle Hook of Vue
+     * Search Result View
+     * 
+     * In the search results, the mounted method, performs an analysis
+     * of what type of data is being received and depending on this shows
+     * the appropriate component to represent the data, in this case it
+     * alternates on the components: Public Key, Block Info, and Transactions
+     * 
+     * This component is widely connected to the Search Bar component
+     */
     if (this.$route.params.type === 'publicKey' || this.$route.params.type === 'address') {
       let tmp
       if (this.$route.params.id.length === 64) {
         tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, NetworkType.TEST_NET)
-        console.log("TEMPORAL", tmp)
+        // console.log("TEMPORAL", tmp)
         this.getInfoAccountAndViewTransactions(tmp.address.address)
       } else {
         this.getInfoAccountAndViewTransactions(this.$route.params.id)
@@ -62,10 +96,18 @@ export default {
     } else if (this.$route.params.type === 'transactionHash') {
       this.getInfoTransaction(this.$route.params.id)
     }
-    // console.log("Tipo de busqueda", this.type)
     this.value = this.$route.params.id
   },
   methods: {
+    // For Public Key and Hash Transactions Data
+    /**
+     * Get Info Account And View Transactions
+     * 
+     * This method performs the request and receipt of the information of an account,
+     * and also returns your recent transactions shown in a component dedicated to it.
+     * 
+     * @param { String } Account
+     */
     getInfoAccountAndViewTransactions: function(account) {
       const addr = Address.createFromRawAddress(account)
       const xpx = proximaxProvider.mosaicXpx()
@@ -84,7 +126,6 @@ export default {
             let filteredTrans = resp.mosaics.filter(el => el.id.toHex().toUpperCase() !== xpx)
             this.blockMosaics = filteredTrans
             this.showRecentMosaic = !this.showRecentMosaic
-            console.log(this.showRecentMosaic, this.blockMosaics)
           }
           this.viewTransactionsFromPublicAccount(resp.publicAccount)
         },
@@ -93,6 +134,15 @@ export default {
         }
       )
     },
+
+    /**
+     * Get Block By Height
+     * 
+     * This method performs the request and receipt of the information of an block,
+     * and also returns your recent transactions shown in a component dedicated to it.
+     * 
+     * @param { String } block
+     */
     getBlockByHeight (block) {
       this.$proxProvider.blockchainHttp.getBlockByHeight(parseInt(block)).subscribe(
         next => {
@@ -116,7 +166,7 @@ export default {
             this.blockTransactions = blockTransactions
             for (const index in this.blockTransactions) {              
               this.blockTransactions[index].fee = this.$utils.fmtAmountValue(this.blockTransactions[index].maxFee.compact())
-              this.blockTransactions[index].deadline = this.$utils.fmtTime(new Date(this.blockTransactions[index].deadline.value.toString()))              
+              this.blockTransactions[index].deadline = this.$utils.fmtTime(new Date(this.blockTransactions[index].deadline.value.toString()))
             }
             this.showRecentTransaction = true
             this.noShowTransactions = (this.blockTransactions.length > 0) ? false : true
@@ -128,11 +178,16 @@ export default {
       },
       error => {
         console.log("Errorrrrr")
-        // this.showInfo = true
-        // this.msg = 'Communication error with the node!'
-        // this.showError = true
       })
     },
+
+    /**
+     * Get Info Transaction
+     * 
+     * This method performs the request and receipt of information about a transaction
+     * 
+     * @param { String } hast
+     */
     getInfoTransaction: function (hast) {
       this.$proxProvider.getTransactionInformation(hast).subscribe(
         resp => {
@@ -158,9 +213,10 @@ export default {
     },
 
     /**
+     * View Transactions From Public Account
      * Search all transactions from the public account
      *
-     * @param {any} publicAccount
+     * @param { any } publicAccount
      */
     viewTransactionsFromPublicAccount(publicAccount) {
       this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
@@ -177,7 +233,7 @@ export default {
         error => {
           console.error('ACCOUNT ERROR....', error)
         }
-      );
+      )
     }
   }
 }

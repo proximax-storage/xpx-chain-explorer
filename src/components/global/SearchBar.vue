@@ -1,7 +1,12 @@
 <template>
+  <!-- Search Bar Component -->
   <div class="searchBar">
     <div class="search-cont">
+
+      <!-- Type Search Button -->
       <div class="search-button">
+
+        <!-- MDB Dropdown -->
         <mdb-dropdown style="text-align: center">
           <mdb-dropdown-toggle slot="toggle" class="white-text blue"
           style="padding: 10px; box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%"
@@ -12,15 +17,30 @@
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
         </mdb-dropdown>
+        <!-- End MDB Dropdown -->
+
       </div>
+      <!-- End Type Search Buttton -->
+
+      <!-- Search Input -->
       <div class="search-input">
+
+        <!-- MDB Input -->
         <mdb-input :label="label" class="place-white" style="width: 100%" v-model="valueSearch" @key.enter="performSearch"/>
+        <!-- End MDB Input -->
+
+        <!-- Input Icon -->
         <figure @click="performSearch">
           <img :src="require('@/assets/search-details-white.svg')" alt="">
         </figure>
+        <!-- Input Icon -->
+
       </div>
+      <!-- End Search Input -->
+
     </div>
   </div>
+  <!-- End Search Bar Component -->
 </template>
 
 <script>
@@ -49,6 +69,13 @@ export default {
     }
   },
   methods: {
+    /**
+     * Change Search
+     * 
+     * This method changes the type of search you want to perform
+     * 
+     * @param { Object } item
+     */
     changeSearch (item) {
       this.label = item.name
       if (item.name === 'Public Key') {
@@ -61,6 +88,13 @@ export default {
         this.typeSearch = 'address'
       }
     },
+
+    /**
+     * Perform Search
+     * 
+     * This method executes the search action,
+     * taking the type of search and the value entered by the user
+     */
     performSearch () {
       let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
       window.open(routeData.href, '_blank')

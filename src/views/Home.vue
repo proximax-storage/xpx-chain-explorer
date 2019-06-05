@@ -1,9 +1,21 @@
 <template>
+  <!-- Home View -->
   <div class="home">
+
+    <!-- Node Admin Component -->
     <node-admin/>
+    <!-- End Node Admin Componment -->
+
+    <!-- Search Bar Component -->
     <search-bar/>
+    <!-- End Search Bar Component -->
+
+    <!-- Blocks Component -->
     <blocks/>
+    <!-- End Blocks Component -->
+
   </div>
+  <!-- End Home View -->
 </template>
 
 <script>

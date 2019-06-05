@@ -1,21 +1,32 @@
 <template>
+  <!-- Mosaic Component -->
   <div class="recent" v-if="finalArray.length > 0">
+    <!-- Name -->
     <h1 class="supertitle">{{ nameLabel }}</h1>
+
+    <!-- Iterated Elements (Mosaics) -->
     <div class="element" v-for="(item, index) in finalArray" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(item)">
+      
       <div class="el-left">
         <div class="title">Id</div>
         <div class="value">{{ item.id }}</div>
       </div>
+      
       <div class="el-middle" v-if="item.name">
         <div class="title">Name</div>
         <div class="value">{{ item.name }}</div>
       </div>
+      
       <div class="el-right">
         <div class="title">Quantity</div>
         <div class="value" v-html="$utils.fmtAmountValue(item.amount)"></div>
       </div>
+
     </div>
+    <!-- End Iterated Elements -->
+
   </div>
+  <!-- End Mosaic Component -->
 </template>
 
 <script>
@@ -40,13 +51,25 @@ export default {
       arrayData: []
     }
   },
+  /**
+   * Mounted
+   * 
+   * Call constructorObj method
+   */
   mounted () {
     // this.mosaicName(id)
     this.constructorObj()
   },
   methods: {
+    /**
+     * Constructor Object
+     * 
+     * This method reconstructs an appropriate object to show
+     * the data with the data that you enter as a parameter
+     * 
+     * Call mosaicName method
+     */
     constructorObj () {
-      // TODO: Falta almacenar en LocalStorage
       let itemComplete
       let mosaicNames = this.$storage.get('mosaicNames')
       if (mosaicNames === null) {
@@ -55,11 +78,10 @@ export default {
         })
       } else {
         mosaicNames = JSON.parse(mosaicNames)
-        //console.log(mosaicNames)
+        // console.log(mosaicNames)
         this.arrayTransactions.forEach(item => {
           // this.mosaicName(item)
           let tmpitem = mosaicNames.filter(el => item.id.toHex() === el.id)
-          // console.log("TEMPORAL ITEM", tmpitem)
           if (tmpitem.length > 0) {
             itemComplete = {
               id: tmpitem[0].id,
@@ -71,6 +93,13 @@ export default {
         })
       }
     },
+
+    /**
+     * Mosaic Name
+     * 
+     * Make a request and get information about a mosaic,
+     * which is reconstructed and stored in local storage
+     */
     mosaicName (item) {
       let id = item.id
       let idExact = item.id.toHex()
@@ -78,7 +107,6 @@ export default {
       let mosaics = [id]
       this.$proxProvider.getMosaicsName(mosaics).subscribe(
         resp => {
-          // console.log("NOMBRE", resp[0])
           let itemComplete = {
             id: idExact,
             name: resp[0].names[0],
@@ -109,11 +137,17 @@ export default {
         }
       )
     },
-    getItemId (item) {
-      return item.id.toHex()
-    }
+
+    // getItemId (item) {
+    //   return item.id.toHex()
+    // }
   },
   computed: {
+    /**
+     * Final Array
+     * 
+     * Observe the changes in the variable array data
+     */
     finalArray () {
       // console.log(this.arrayData)
       return this.arrayData

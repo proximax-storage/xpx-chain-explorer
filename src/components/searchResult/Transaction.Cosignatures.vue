@@ -1,20 +1,30 @@
 <template>
+  <!-- Cosignatures Components -->
   <div class="tran-layout-plus" v-if="params">
+    <!-- Name -->
     <h1 class="supertitle">Cosignatures</h1>
+
+    <!-- Iterated Elements -->
     <div>
       <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
+
         <div>
           <div class="title">Signature</div>
           <div class="value">{{ item.signature }}</div>
         </div>
+
         <div>
           <div class="title">Signer</div>
           <div class="value">Public Key: <b>{{ item.signer.publicKey }}</b></div>
           <div class="value">Address: <b>{{ item.signer.address.pretty() }}</b></div>
         </div>
+        
       </div>
     </div>
+    <!-- End Iterated Elements -->
+
   </div>
+  <!-- Cosignatures Component -->
 </template>
 
 <script>

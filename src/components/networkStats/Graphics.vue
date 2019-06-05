@@ -1,13 +1,23 @@
 <template>
+
+  <!-- Graphic Component -->
   <div class="graphics">
+
+    <!-- Name Of Graphic -->
     <h1>{{ title }}</h1>
+
+    <!-- Graphic -->
     <div>
       <canvas id="graphic-1" class="standard-canvas" height="250"></canvas>
     </div>
+    <!-- End Graphic -->
+
   </div>
+  <!-- End Graphic Component -->
 </template>
 
 <script>
+// Library chart to show the graphics
 import Chart from 'chart.js'
 
 export default {
@@ -19,9 +29,16 @@ export default {
       default: 'Graphic'
     }
   },
+
+  /**
+   * Mounted
+   *
+   * Analyze and manage the data received from the parent component to
+   * display the appropriate graphics
+   */
   mounted () {
     const ctx = this.$el.querySelector('#graphic-1')
-    console.log(ctx)
+    //console.log(ctx)
 
     // eslint-disable-next-line
     const graphic1 = new Chart(ctx, {

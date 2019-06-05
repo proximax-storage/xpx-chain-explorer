@@ -1,3 +1,8 @@
+/**
+ * Persistance Service
+ * 
+ * Class that allows us to manage the data stored in LocalStorage
+ */
 class Persistence {
   constructor () {
     this.storage = localStorage

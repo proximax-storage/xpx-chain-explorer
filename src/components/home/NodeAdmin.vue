@@ -1,9 +1,15 @@
 <template>
+  <!-- Node Administrator Component -->
   <div class="node-admin">
+
+    <!-- Current Block Area -->
     <div class="admin-item">
       <h1>Current Block</h1>
       <p>{{ updateBlock }}</p>
     </div>
+    <!-- End Current Block Area -->
+
+    <!-- Node Selector Area -->
     <div class="admin-item" style="flex-grow: 3">
       <h1>Node</h1>
       <p>
@@ -15,11 +21,17 @@
         </mdb-dropdown>
       </p>
     </div>
+    <!-- End Node Selector Area -->
+
+    <!-- Average Response Time -->
     <div class="admin-item">
       <h1>Avg Response Time</h1>
       <p>5000</p>
     </div>
+    <!-- End Average Response Area -->
+
   </div>
+  <!-- End Node Administratos -->
 </template>
 
 <script>
@@ -38,12 +50,29 @@ export default {
     }
   },
   computed: {
+    /**
+     * Update Block 
+     * 
+     * Get the last stored block from the store
+     */
     updateBlock () {
       return this.$store.getters.getCurrentBlock
     },
+
+    /**
+     * Update Node 
+     * 
+     * Get the last stored Node from the store
+     */
     getCurrentNode () {
       return this.$store.getters.getCurrentNode
     },
+
+    /**
+     * Get All Nodes 
+     * 
+     * Get the list of available nodes from the store
+     */
     getAllNodes () {
       let tmpArray = []
       let tmp = Array.from(this.$store.getters.getAllNodes)
@@ -54,6 +83,11 @@ export default {
     }
   },
   methods: {
+    /**
+     * Change Node
+     * 
+     * Execute the Change the node action and reload the page
+     */
     changeNode (index) {
       this.$store.dispatch('updateCurrentNode', index)
       window.location.reload()
