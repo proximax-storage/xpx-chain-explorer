@@ -26,7 +26,7 @@
     <!-- Average Response Time -->
     <div class="admin-item">
       <h1>Avg Response Time</h1>
-      <p>5000</p>
+      <p>{{ getAverage }} ms</p>
     </div>
     <!-- End Average Response Area -->
 
@@ -46,13 +46,13 @@ export default {
   },
   data () {
     return {
-      //nameNode: 
+      //nameNode:
     }
   },
   computed: {
     /**
-     * Update Block 
-     * 
+     * Update Block
+     *
      * Get the last stored block from the store
      */
     updateBlock () {
@@ -60,8 +60,8 @@ export default {
     },
 
     /**
-     * Update Node 
-     * 
+     * Update Node
+     *
      * Get the last stored Node from the store
      */
     getCurrentNode () {
@@ -69,8 +69,8 @@ export default {
     },
 
     /**
-     * Get All Nodes 
-     * 
+     * Get All Nodes
+     *
      * Get the list of available nodes from the store
      */
     getAllNodes () {
@@ -80,12 +80,19 @@ export default {
         tmpArray.push({ name: item, index: index })
       });
       return tmpArray
+    },
+
+    /**
+     * Get Average
+     */
+    getAverage () {
+      return this.$store.getters.getAverage
     }
   },
   methods: {
     /**
      * Change Node
-     * 
+     *
      * Execute the Change the node action and reload the page
      */
     changeNode (index) {

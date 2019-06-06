@@ -39,6 +39,12 @@ export default {
   mounted () {
     // Call Load Nodes Method
     this.loadNodes()
+    this.average()
+  },
+  data () {
+    return {
+      averageTime: 0
+    }
   },
   methods: {
     /**
@@ -94,7 +100,7 @@ export default {
             block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
             block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
             this.$store.dispatch('changeCurrentBlock', block)
-
+            this.reset()
           })
         }
       )
@@ -112,6 +118,26 @@ export default {
       const account = Account.generateNewAccount(NetworkType.MIJIN_TEST)
       // Print Account and Private Key of the current user
       console.log('Your new account address is:', account.address.pretty(), 'and its private key', account.privateKey)
+    },
+
+    /**
+     * Calculate Average
+     */
+    average () {
+      this.averageTime = 0
+      setInterval(() => {
+        this.averageTime += 1
+        // console.log(this.averageTime)
+      }, 1)
+    },
+
+    /**
+     * Reset Average Time
+     *
+     */
+    reset () {
+      this.$store.dispatch('updateAverage', this.averageTime)
+      this.averageTime = 0
     }
   }
 }

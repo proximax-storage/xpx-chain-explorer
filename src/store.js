@@ -9,7 +9,8 @@ export default new Vuex.Store({
     currentNode: 'bctestnet1.xpxsirius.io:3000',
     currentBlock: { height: 'Loading' },
     errorInfo: { active: false, message: '', submessage: '' },
-    loaderActive: true
+    loaderActive: true,
+    average: 'Loading'
   },
   mutations: {
     UPDATE_NODES: (state, data) => {
@@ -27,8 +28,10 @@ export default new Vuex.Store({
       state.errorInfo = data
     },
     CHANGE_LOADER: (state, data) => {
-      console.log('CHANGE_LOADER')
       state.loaderActive = data
+    },
+    UPDATE_AVERAGE: (state, data) => {
+      state.average = data
     }
   },
   actions: {
@@ -45,8 +48,10 @@ export default new Vuex.Store({
       commit('UPDATE_ERROR_INFO', data)
     },
     changeLoader ({ commit }, data) {
-      console.log('changeLoader')
       commit('CHANGE_LOADER', data)
+    },
+    updateAverage ({ commit }, data) {
+      commit('UPDATE_AVERAGE', data)
     }
   },
   getters: {
@@ -57,6 +62,7 @@ export default new Vuex.Store({
       return (memoryNode === '' || memoryNode === undefined) ? state.currentNode : memoryNode
     },
     getErrorInfo: state => state.errorInfo,
-    getLoaderState: state => state.loaderActive
+    getLoaderState: state => state.loaderActive,
+    getAverage: state => state.average
   }
 })
