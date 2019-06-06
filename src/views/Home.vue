@@ -10,6 +10,10 @@
     <search-bar/>
     <!-- End Search Bar Component -->
 
+    <!-- Error Component -->
+    <error :active="true" :message="'Esto es una prueba'"/>
+    <!-- End Error Component -->
+
     <!-- Blocks Component -->
     <blocks/>
     <!-- End Blocks Component -->
@@ -22,13 +26,15 @@
 import NodeAdmin from '@/components/home/NodeAdmin.vue'
 import SearchBar from '@/components/global/SearchBar.vue'
 import Blocks from '@/components/home/Blocks.vue'
+import Error from '@/components/global/Error.vue'
 
 export default {
   name: 'home',
   components: {
     NodeAdmin,
     SearchBar,
-    Blocks
+    Blocks,
+    Error
   }
 }
 </script>

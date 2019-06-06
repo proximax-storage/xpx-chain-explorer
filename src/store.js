@@ -7,7 +7,9 @@ export default new Vuex.Store({
   state: {
     nodes: undefined,
     currentNode: 'bctestnet1.xpxsirius.io:3000',
-    currentBlock: { height: 'Loading' }
+    currentBlock: { height: 'Loading' },
+    errorInfo: { active: false, message: '', submessage: '' },
+    loaderActive: true
   },
   mutations: {
     UPDATE_NODES: (state, data) => {
@@ -20,6 +22,13 @@ export default new Vuex.Store({
     },
     UPDATE_CURRENT_BLOCK: (state, data) => {
       state.currentBlock = data
+    },
+    UPDATE_ERROR_INFO: (state, data) => {
+      state.errorInfo = data
+    },
+    CHANGE_LOADER: (state, data) => {
+      console.log('CHANGE_LOADER')
+      state.loaderActive = data
     }
   },
   actions: {
@@ -32,6 +41,13 @@ export default new Vuex.Store({
     changeCurrentBlock ({ commit }, data) {
       commit('UPDATE_CURRENT_BLOCK', data)
     },
+    updateErrorInfo ({ commit }, data) {
+      commit('UPDATE_ERROR_INFO', data)
+    },
+    changeLoader ({ commit }, data) {
+      console.log('changeLoader')
+      commit('CHANGE_LOADER', data)
+    }
   },
   getters: {
     getCurrentBlock: state => state.currentBlock.height,
@@ -39,6 +55,8 @@ export default new Vuex.Store({
     getCurrentNode: state => {
       let memoryNode = localStorage.getItem('currentNode')
       return (memoryNode === '' || memoryNode === undefined) ? state.currentNode : memoryNode
-    }
+    },
+    getErrorInfo: state => state.errorInfo,
+    getLoaderState: state => state.loaderActive
   }
 })

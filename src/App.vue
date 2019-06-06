@@ -43,7 +43,7 @@ export default {
   methods: {
     /**
      * Load Nodes Method
-     * 
+     *
      * This method initializes the communication with the node,
      * from which the necessary information is obtained to render the data
      * of the proximax blockchain
@@ -59,7 +59,7 @@ export default {
 
     /**
      * Run WS / Run WebSocket
-     * 
+     *
      * This method runs a websocket, configured to maintain a constant
      * communication with the node
      */
@@ -69,7 +69,7 @@ export default {
 
       // Get the current Node from the persistence service
       let currentNode = this.$storage.get('currentNode')
-      
+
       // In the case that there is no information in the persistence service,
       // it is obtained from es vuex or $ store
       if (currentNode == null) {
@@ -94,14 +94,21 @@ export default {
             block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
             block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
             this.$store.dispatch('changeCurrentBlock', block)
-            
-          },
-          err => {
-            // Show error message in the console
-            console.error(err)
+
           })
         }
       )
+      .catch(err => {
+        // Show error message in the console
+        console.log('AQUI')
+        this.$store.dispatch('updateErrorInfo', {
+          active: true,
+          message: 'Comunication error whit node!',
+          submessage: 'Check the internet connection and reload the page'
+        })
+
+        // console.error(err)
+      })
       const account = Account.generateNewAccount(NetworkType.MIJIN_TEST)
       // Print Account and Private Key of the current user
       console.log('Your new account address is:', account.address.pretty(), 'and its private key', account.privateKey)

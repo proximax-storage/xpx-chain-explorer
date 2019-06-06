@@ -4,7 +4,7 @@
   <div class="block">
 
     <!-- MDB Loader -->
-    <mdb-progress v-if="dataTable.length === 0" bgColor="primary-color-dark" style="width: 100%" indeterminate/>
+    <mdb-progress v-if="dataTable.length === 0 && loaderStatus" bgColor="primary-color-dark" style="width: 100%" indeterminate/>
     <!-- End MDB Loader -->
 
     <!-- ALTERNATIVE BLOCK CONFIGURED IN INVISIBLE -->
@@ -101,7 +101,7 @@ export default {
   methods: {
     /**
      * View All Blocks
-     * 
+     *
      * Method to see recently closed blocks
      */
     viewAllBlocks () {
@@ -110,7 +110,7 @@ export default {
           this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(next.compact(), 100).subscribe(
             blockInfo => {
               blockInfo.forEach(element => {
-                element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())                
+                element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())
                 element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
                 element.height = element.height.compact()
                 this.dataTable.push(element)
@@ -118,11 +118,23 @@ export default {
             },
             error => {
               console.error('Communication error with the node!')
+              this.$store.dispatch('updateErrorInfo', {
+                active: true,
+                message: 'Comunication error whit node!',
+                submessage: 'Check the internet connection and reload the page'
+              })
+              this.$store.dispatch('changeLoader', false)
             }
           )
         },
         error => {
           console.error('Communication error with the node!')
+          this.$store.dispatch('updateErrorInfo', {
+            active: true,
+            message: 'Comunication error whit node!',
+            submessage: 'Check the internet connection and reload the page'
+          })
+          this.$store.dispatch('changeLoader', false)
         }
       )
     },
@@ -137,7 +149,7 @@ export default {
   computed: {
     /**
      * Update Table
-     * 
+     *
      * This is not a method but a computed property that updates the last block and represents it in the table
      * This method should be called as a property and not as a method
      */
@@ -154,6 +166,10 @@ export default {
         }
       }
       return this.$store.getters.getCurrentBlock
+    },
+    loaderStatus () {
+      console.log(this.$store.getters.getLoaderState)
+      return this.$store.getters.getLoaderState
     }
   }
 }
