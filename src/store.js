@@ -10,7 +10,8 @@ export default new Vuex.Store({
     currentBlock: { height: 'Loading' },
     errorInfo: { active: false, message: '', submessage: '' },
     loaderActive: true,
-    average: 'Loading'
+    average: 'Loading',
+    averageList: [0]
   },
   mutations: {
     UPDATE_NODES: (state, data) => {
@@ -32,6 +33,12 @@ export default new Vuex.Store({
     },
     UPDATE_AVERAGE: (state, data) => {
       state.average = data
+      if (state.averageList.length < 10) {
+        state.averageList.push(data)
+      } else {
+        state.averageList.push(data)
+        state.averageList.shift()
+      }
     }
   },
   actions: {

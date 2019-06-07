@@ -28,7 +28,7 @@
 <script>
 /**
  * Graphic Component
- * 
+ *
  * The graphic component is the only one that is currently displayed in this view
  */
 import Graphics from '@/components/networkStats/Graphics.vue'
