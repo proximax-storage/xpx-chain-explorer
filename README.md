@@ -1,4 +1,4 @@
-# pruebaexplorer
+# proximax-catapult-explorer
 
 ## Project setup
 ```
