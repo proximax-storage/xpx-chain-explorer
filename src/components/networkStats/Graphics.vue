@@ -26,6 +26,21 @@ export default {
       type: String,
       required: false,
       default: 'Graphic'
+    },
+    numGraphic: {
+      type: Number,
+      requires: false,
+      default: 0
+    }
+  },
+
+  data () {
+    return {
+      labels: [],
+      arrData: [],
+      color: 'rgba(0, 0, 255, 1)',
+      backgroundColor: 'rgba(0, 0, 255, .1)',
+      labelName: ''
     }
   },
 
@@ -36,11 +51,15 @@ export default {
    * display the appropriate graphics
    */
   mounted () {
+    setInterval(() => {
+      this.setLocalData()
+      this.showGraphic()
+    }, 7000);
+    this.setLocalData()
     this.showGraphic()
   },
   methods: {
     showGraphic () {
-      console.log("Graphic Data", this.graphicData)
       const ctx = this.$el.querySelector('#graphic-1')
       // console.log(ctx)
       // console.log(this.graphicData)
@@ -48,31 +67,101 @@ export default {
       const graphic = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          labels: this.labels,
           datasets: [
             {
-              label: '# of Votes',
-              data: [12, 30, 3, 5, 2, 20],
+              label: this.labelName,
+              data: this.arrData,
               backgroundColor: [
-                'rgba(255, 0, 0, 0.2)'
+                this.backgroundColor
               ],
               borderColor: [
-                'rgba(255, 0, 0, 1)'
+                this.color
               ],
               borderWidth: 3
             }
           ]
         },
-        // options: {
-        //   scales: {
-        //     yAxes: [{
-        //       ticks: {
-        //         beginAtZero: true
-        //       }
-        //     }]
-        //   }
-        // }
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
       })
+    },
+
+    /**
+     *
+     */
+    setLocalData () {
+      switch (this.numGraphic) {
+        case 0:
+          this.arrData = Array.from(this.$store.getters.getAverageList)
+          let tmp1 = Array.from(this.$store.getters.getBlockList)
+          tmp1.forEach(el => {
+            el.toString()
+          })
+          this.labels = tmp1
+          this.labelName = 'Closing time of the current block'
+          break;
+
+        case 1:
+          this.arrData = Array.from(this.$store.getters.getAverageList)
+          let tmp2 = Array.from(this.$store.getters.getBlockList)
+          tmp2.forEach(el => {
+            el.toString()
+          })
+          this.labels = tmp2
+          this.labelName = 'Closing time of the current block',
+          this.color = 'rgba(255, 0, 0, 1)'
+          this.backgroundColor = 'rgba(255, 0, 0, .1)'
+          break;
+
+        case 2:
+          this.arrData = Array.from(this.$store.getters.getAverageList)
+          let tmp3 = Array.from(this.$store.getters.getBlockList)
+          tmp3.forEach(el => {
+            el.toString()
+          })
+          this.labels = tmp3
+          this.labelName = 'Closing time of the current block',
+          this.color = 'rgba(255, 165, 0, 1)'
+          this.backgroundColor = 'rgba(255, 165, 0, .1)'
+          break;
+
+        case 3:
+          this.arrData = Array.from(this.$store.getters.getAverageList)
+          let tmp4 = Array.from(this.$store.getters.getBlockList)
+          tmp4.forEach(el => {
+            el.toString()
+          })
+          this.labels = tmp4
+          this.labelName = 'Closing time of the current block',
+          this.color = 'rgba(0, 255, 0, 1)'
+          this.backgroundColor = 'rgba(0, 255, 0, .1)'
+          break;
+
+        case 4:
+          this.arrData = Array.from(this.$store.getters.getAverageList)
+          let tmp5 = Array.from(this.$store.getters.getBlockList)
+          tmp5.forEach(el => {
+            el.toString()
+          })
+          this.labels = tmp5
+          this.labelName = 'Closing time of the current block',
+          this.color = 'rgba(128, 0, 128, 1)'
+          this.backgroundColor = 'rgba(128, 0, 128, .1)'
+          break;
+
+        default:
+          this.arrData = [0,0]
+          this.labels = ["Loading", "Loading"]
+          break;
+      }
     }
   }
 }

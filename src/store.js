@@ -11,7 +11,8 @@ export default new Vuex.Store({
     errorInfo: { active: false, message: '', submessage: '' },
     loaderActive: true,
     average: 'Loading',
-    averageList: [0]
+    averageList: [0],
+    blockList: []
   },
   mutations: {
     UPDATE_NODES: (state, data) => {
@@ -24,6 +25,17 @@ export default new Vuex.Store({
     },
     UPDATE_CURRENT_BLOCK: (state, data) => {
       state.currentBlock = data
+      if (state.blockList.length === 0) {
+        state.blockList.push(data.height)
+        state.blockList.unshift(data.height - 1)
+      } else {
+        if (state.blockList.length < 10) {
+          state.blockList.push(data.height)
+        } else {
+          state.blockList.push(data.height)
+          state.blockList.shift()
+        }
+      }
     },
     UPDATE_ERROR_INFO: (state, data) => {
       state.errorInfo = data
@@ -33,6 +45,7 @@ export default new Vuex.Store({
     },
     UPDATE_AVERAGE: (state, data) => {
       state.average = data
+
       if (state.averageList.length < 10) {
         state.averageList.push(data)
       } else {
@@ -70,6 +83,8 @@ export default new Vuex.Store({
     },
     getErrorInfo: state => state.errorInfo,
     getLoaderState: state => state.loaderActive,
-    getAverage: state => state.average
+    getAverage: state => state.average,
+    getAverageList: state => state.averageList,
+    getBlockList: state => state.blockList
   }
 })
