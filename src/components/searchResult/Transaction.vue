@@ -10,11 +10,11 @@
         <h1 class="supertitle">{{ transactionType || 'Hash Transaction'}}</h1>
         <div class="up">
           <div class="title">Sender</div>
-          <div class="value">{{ prettyConvert(detail.signer.address) }}</div>
+          <div class="value" style="cursor: pointer" @click="goToAddress(detail.signer.address.pretty())">{{ detail.signer.address.pretty() }}</div>
         </div>
         <div class="down">
           <div class="title">Recipient</div>
-          <div class="value" v-if="detail.recipient">{{ detail.recipient.pretty() }}</div>
+          <div class="value" v-if="detail.recipient" style="cursor: pointer" @click="goToAddress(detail.recipient.pretty())">{{ detail.recipient.pretty() }}</div>
           <div class="value" v-else>{{ 'No available' }}</div>
         </div>
       </div>
@@ -75,6 +75,16 @@
 
       <!-- Plus Container -->
       <div class="plus-cont">
+
+        <!-- Amount / Delta -->
+        <div class="layout-plus-children" v-if="detail.delta">
+          <div class="title">Amount</div>
+          <div class="value" :style="(detail.direction === 1) ? 'color: green' : 'color: red'">
+            {{ (detail.direction === 1) ? '+' : '-' }}
+            <span v-html="$utils.fmtAmountValue(this.detail.delta.toHex())"></span>
+          </div>
+        </div>
+        <!-- End Amount / Delta -->
 
         <!-- Iterated Element -->
         <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
@@ -166,7 +176,7 @@ export default {
 
   /**
    * Mounted
-   * 
+   *
    * Call Verify Type and Verify Transaction Details
    */
   mounted () {
@@ -176,8 +186,8 @@ export default {
   },
   methods: {
     /**
-     * Iterator 
-     * 
+     * Iterator
+     *
      * This method iterates over the object received by parameter that
      * shows all the data it brings and pushes them in a local array
      */
@@ -192,7 +202,7 @@ export default {
 
     /**
      * Verify Type
-     * 
+     *
      * Verify the type of a transaction and change the name accordingly
      */
     verifyType () {
@@ -207,7 +217,7 @@ export default {
 
     /**
      * Verify Transaction Details
-     * 
+     *
      * This method verifies the type of transaction and builds
      * an appropriate object for the component
      */
@@ -215,10 +225,10 @@ export default {
       switch (this.transactionType) {
         case 'Transfer Transaction':
           this.plusInfo = [
-            { key: 'Message', value: (this.detail.message.payload !== '') ? this.detail.message.payload : 'No Available' },
             { key: 'Network Type', value: this.detail.networkType },
             { key: 'Version', value: this.detail.version },
-            { key: 'Parent Id', value: (this.detail.parentId !== undefined) ? this.detail.parentId : 'No Available' }
+            { key: 'Parent Id', value: (this.detail.parentId !== undefined) ? this.detail.parentId : 'No Available' },
+            { key: 'Message', value: (this.detail.message.payload !== '') ? this.detail.message.payload : 'No Available' }
           ]
           //this.iterator(this.detail)
           break;
@@ -240,33 +250,33 @@ export default {
             { key: 'Type', value: this.detail.type },
             { key: 'Version', value: this.detail.version }
           ]
-          //this.iterator(this.detail)          
+          //this.iterator(this.detail)
           break;
         case 'Mosaic supply change':
           this.plusInfo = [
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
-            { key: 'Delta', value: this.detail.delta.toHex() },
-            { key: 'Direction', value: this.detail.direction },
             { key: 'Network Type', value: this.detail.networkType },
             { key: 'Type', value: this.detail.type },
-            { key: 'Version', value: this.detail.version },
+            { key: 'Version', value: this.detail.version }
+            // { key: 'Amount', value: this.$utils.fmtAmountValue(this.detail.delta.toHex()) },
+            // { key: 'Direction', value: this.detail.direction },
           ]
-          // this.iterator(this.detail)          
+          // this.iterator(this.detail)
           break;
         case 'Modify multisig account':
-          this.iterator(this.detail)          
+          this.iterator(this.detail)
           break;
         case 'Aggregate complete':
-          // this.iterator(this.detail)    
+          // this.iterator(this.detail)
           break;
         case 'Aggregate bonded':
-          // this.iterator(this.detail)        
+          // this.iterator(this.detail)
           break;
         case 'Lock':
-          this.iterator(this.detail)          
+          this.iterator(this.detail)
           break;
         case 'Secret lock':
-          this.iterator(this.detail)          
+          this.iterator(this.detail)
           break;
         case 'Secret proof':
           this.iterator(this.detail)
@@ -280,25 +290,25 @@ export default {
             { key: 'Type', value: this.detail.type },
             { key: 'Version', value: this.detail.version }
           ]
-          // this.iterator(this.detail)          
+          // this.iterator(this.detail)
           break;
         case 'Address Alias':
-          this.iterator(this.detail)          
+          this.iterator(this.detail)
           break;
         case 'Modify Account Property Address':
-          this.iterator(this.detail)          
+          this.iterator(this.detail)
           break;
         case 'Modify Account Property Mosaic':
-          this.iterator(this.detail)          
+          this.iterator(this.detail)
           break;
         case 'Modify Account Entity Type':
-          this.iterator(this.detail)          
+          this.iterator(this.detail)
           break;
         case 'Link Account':
-          this.iterator(this.detail)          
+          this.iterator(this.detail)
           break;
         case 'Modify Account Metadata':
-          this.iterator(this.detail)          
+          this.iterator(this.detail)
           break;
         case 'Modify Mosaic Metadata':
           this.plusInfo = [
@@ -319,11 +329,12 @@ export default {
 
     /**
      * Pretty Convert
-     * 
+     *
      * Convert the element received by parameter to pretty format
      */
-    prettyConvert (item) {
-      return item.pretty()
+    goToAddress (address) {
+      let routeData = this.$router.resolve({ path: `/searchResult/address/${address}` })
+      window.open(routeData.href, '_blank')
     }
   }
 }

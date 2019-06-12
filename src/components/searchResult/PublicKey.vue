@@ -21,9 +21,9 @@
 
       <!-- Right -->
       <div>
-        <h1 class="supertitle">Owner Mosaic</h1>
+        <h1 class="supertitle" style="opacity: 0">XPX ID</h1>
         <div class="up">
-          <div class="title">Id</div>
+          <div class="title">XPX Mosaic Id</div>
           <div class="value">{{ getId }}</div>
         </div>
         <div class="down">
@@ -62,7 +62,7 @@ export default {
   computed: {
     /**
      * Get ID
-     * 
+     *
      * Return XPX Mosaic ID
      */
     getId () {
@@ -71,7 +71,7 @@ export default {
 
     /**
      * Get Balance
-     * 
+     *
      * This computed property obtains the balance depending on the mosaics that the component
      * receives by parameters, analyzing the xpx mosaic and printing its value
      */
@@ -109,7 +109,7 @@ export default {
 
     /**
      * Format Balance
-     * 
+     *
      * return the balance in html format
      */
     formatBalance () {
