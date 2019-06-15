@@ -3,13 +3,13 @@
   <div class="map">
 
     <!-- Map Container -->
-    <div class="cont">
+    <div class="cont animated fast fadeIn">
       <div class="imap" v-for="(item, index) in mapList" v-show="item.active === true" :key="index" v-html="item.template"></div>
     </div>
     <!-- End Map Container -->
 
     <!-- Input Filter Container -->
-    <div>
+    <div class="animated fast fadeIn">
       <div class="filter-input">
         <div>
           <mdb-dropdown style="width: 100%; margin-top:10px">
@@ -91,7 +91,7 @@ export default {
       ]
     }
   },
-  
+
   methods: {
     activate (item) {
       this.mapList.forEach(el => {
@@ -104,8 +104,8 @@ export default {
       console.log(this.filterExe)
       if (item === 'By name') {
         this.filterExe = 'name'
-      } 
-      
+      }
+
       if (item === 'By countrie') {
         this.filterExe = 'countrie'
       }
@@ -123,9 +123,9 @@ export default {
             el.visible = true
           }
         }
-        
+
       })
-      
+
       if (this.filterExe === '') {
         this.mapList.forEach(el => {
           el.visible = true

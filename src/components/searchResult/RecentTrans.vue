@@ -1,7 +1,7 @@
 <template>
 
   <!-- Recent Transactions Component -->
-  <div class="recent">
+  <div class="recent animated fast fadeIn">
 
     <!-- Title -->
     <h1 class="supertitle">{{ nameLabel }}</h1>
@@ -44,7 +44,7 @@
         <div class="value" v-html="item.fee"></div>
       </div>
       <!-- End Right -->
-      
+
     </div>
     <!-- End Iterated Elements -->
 
@@ -81,7 +81,7 @@ export default {
   methods: {
     /**
      * Redirect To Detail
-     * 
+     *
      * Execute the redirection action in detail in a new tab,
      * when the user clicks on one of the transactions listed
      */

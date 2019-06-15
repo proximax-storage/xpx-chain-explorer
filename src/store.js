@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     nodes: undefined,
-    currentNode: 'bctestnet1.xpxsirius.io:3000',
+    currentNode: '',
     currentBlock: { height: 'Loading' },
     errorInfo: { active: false, message: '', submessage: '' },
     loaderActive: true,

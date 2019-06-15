@@ -1,6 +1,6 @@
 <template>
   <!-- Transaction Component -->
-  <div class="transaction">
+  <div class="transaction animated fast fadeIn">
 
     <!-- Up -->
     <div class="tran-layout-up">
@@ -10,11 +10,15 @@
         <h1 class="supertitle">{{ transactionType || 'Hash Transaction'}}</h1>
         <div class="up">
           <div class="title">Sender</div>
-          <div class="value" style="cursor: pointer" @click="goToAddress(detail.signer.address.pretty())">{{ detail.signer.address.pretty() }}</div>
+          <div class="value" style="cursor: pointer" @click="goToAddress(detail.signer.address.pretty())">
+            {{ detail.signer.address.pretty() }}
+          </div>
         </div>
         <div class="down">
           <div class="title">Recipient</div>
-          <div class="value" v-if="detail.recipient" style="cursor: pointer" @click="goToAddress(detail.recipient.pretty())">{{ detail.recipient.pretty() }}</div>
+          <div class="value" v-if="detail.recipient" style="cursor: pointer" @click="goToAddress(detail.recipient.pretty())">
+            {{ detail.recipient.pretty() }}
+          </div>
           <div class="value" v-else>{{ 'No available' }}</div>
         </div>
       </div>
@@ -39,7 +43,7 @@
 
     <!-- Center -->
     <div class="tran-layout-middle">
-      <h1 class="amount">Amount: <span>{{ detail.amount || '0' }}</span></h1>
+      <h1 class="amount" v-if="detail.amount">Amount: <span>{{ detail.amount || '0' }}</span></h1>
       <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
     </div>
     <!-- End Center -->
@@ -78,10 +82,10 @@
 
         <!-- Amount / Delta -->
         <div class="layout-plus-children" v-if="detail.delta">
-          <div class="title">Amount</div>
+          <div class="title">Amount (Delta)</div>
           <div class="value" :style="(detail.direction === 1) ? 'color: green' : 'color: red'">
             {{ (detail.direction === 1) ? '+' : '-' }}
-            <span v-html="$utils.fmtAmountValue(this.detail.delta.toHex())"></span>
+            <span v-html="$utils.fmtAmountValue(this.detail.delta.compact())"></span>
           </div>
         </div>
         <!-- End Amount / Delta -->
@@ -180,6 +184,9 @@ export default {
    * Call Verify Type and Verify Transaction Details
    */
   mounted () {
+    console.log("TRANSACCION DETAIL", this.detail)
+    console.log(this.detail.direction)
+    console.log(this.detail.delta.compact())
     this.verifyType()
     this.verifyTransactionDetails()
     // console.log("TRANSACTION", this.detail)
@@ -368,9 +375,10 @@ $radius: 5px
     font-weight: normal
 
 .fee
-  font-size: 10px
+  font-size: 15px
   margin: 0px
   font-weight: bold
+  text-transform: uppercase
   & > span
     font-weight: normal
 

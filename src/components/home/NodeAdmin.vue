@@ -1,6 +1,6 @@
 <template>
   <!-- Node Administrator Component -->
-  <div class="node-admin">
+  <div class="node-admin animated fast fadeIn">
 
     <!-- Current Block Area -->
     <div class="admin-item">

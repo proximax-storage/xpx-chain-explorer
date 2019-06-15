@@ -25,6 +25,10 @@
     <transaction v-if="type === 'Transaction Hash'" :detail="param"/>
     <!-- End Transaction Component -->
 
+    <!-- Mosaic Info component -->
+    <mosaic-info v-if="type === 'Mosaic Info'"/>
+    <!-- End Mosaic Info Component -->
+
     <!-- Mosaics Component -->
     <mosaics v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'"/>
     <!-- End Mosaics Component -->
@@ -42,6 +46,7 @@ import SearchBar from '@/components/global/SearchBar.vue'
 import PublicKey from '@/components/searchResult/PublicKey.vue'
 import BlockInfo from '@/components/searchResult/BlockInfo.vue'
 import Transaction from '@/components/searchResult/Transaction.vue'
+import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
 import { Address, Deadline, NetworkType } from 'tsjs-xpx-catapult-sdk'
@@ -54,6 +59,7 @@ export default {
     PublicKey,
     BlockInfo,
     Transaction,
+    MosaicInfo,
     RecentTrans,
     Mosaics
   },
@@ -74,12 +80,12 @@ export default {
     /**
      * Mounted - Lifecycle Hook of Vue
      * Search Result View
-     * 
+     *
      * In the search results, the mounted method, performs an analysis
      * of what type of data is being received and depending on this shows
      * the appropriate component to represent the data, in this case it
      * alternates on the components: Public Key, Block Info, and Transactions
-     * 
+     *
      * This component is widely connected to the Search Bar component
      */
     if (this.$route.params.type === 'publicKey' || this.$route.params.type === 'address') {
@@ -95,6 +101,10 @@ export default {
       this.getBlockByHeight(this.$route.params.id)
     } else if (this.$route.params.type === 'transactionHash') {
       this.getInfoTransaction(this.$route.params.id)
+    } else if (this.$route.params.type === 'mosaicInfo') {
+      console.log('AQUI')
+      this.getMosaicInfo()
+      this.showComponent()
     }
     this.value = this.$route.params.id
   },
@@ -102,10 +112,10 @@ export default {
     // For Public Key and Hash Transactions Data
     /**
      * Get Info Account And View Transactions
-     * 
+     *
      * This method performs the request and receipt of the information of an account,
      * and also returns your recent transactions shown in a component dedicated to it.
-     * 
+     *
      * @param { String } Account
      */
     getInfoAccountAndViewTransactions: function(account) {
@@ -113,7 +123,7 @@ export default {
       const xpx = proximaxProvider.mosaicXpx()
 
       // console.log("ADDRESS & XPX", addr, xpx)
-      
+
       let suscripcion = this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
@@ -137,10 +147,10 @@ export default {
 
     /**
      * Get Block By Height
-     * 
+     *
      * This method performs the request and receipt of the information of an block,
      * and also returns your recent transactions shown in a component dedicated to it.
-     * 
+     *
      * @param { String } block
      */
     getBlockByHeight (block) {
@@ -164,7 +174,7 @@ export default {
         this.$proxProvider.blockchainHttp.getBlockTransactions(parseInt(block)).subscribe(
           blockTransactions => {
             this.blockTransactions = blockTransactions
-            for (const index in this.blockTransactions) {              
+            for (const index in this.blockTransactions) {
               this.blockTransactions[index].fee = this.$utils.fmtAmountValue(this.blockTransactions[index].maxFee.compact())
               this.blockTransactions[index].deadline = this.$utils.fmtTime(new Date(this.blockTransactions[index].deadline.value.toString()))
             }
@@ -183,9 +193,9 @@ export default {
 
     /**
      * Get Info Transaction
-     * 
+     *
      * This method performs the request and receipt of information about a transaction
-     * 
+     *
      * @param { String } hast
      */
     getInfoTransaction: function (hast) {
@@ -208,6 +218,8 @@ export default {
         this.type = 'Transaction Hash'
       } else if (this.$route.params.type === 'address') {
         this.type = 'Address'
+      } else if (this.$route.params.type === 'mosaicInfo') {
+        this.type = 'Mosaic Info'
       }
       this.value = this.$route.params.id
     },
@@ -224,7 +236,7 @@ export default {
           if (transactions.length > 0) {
             transactions.forEach(element => {
               element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
-              element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString())) 
+              element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString()))
               this.blockTransactions.push(element)
             })
             this.showRecentTransaction = true
@@ -232,6 +244,16 @@ export default {
         },
         error => {
           console.error('ACCOUNT ERROR....', error)
+        }
+      )
+    },
+
+    getMosaicInfo () {
+      console.log('getMosaicInfo')
+      console.log(this.$route.params)
+      this.$proxProvider.getMosaics(this.$route.params.value).subscribe(
+        res => {
+          console.log(res)
         }
       )
     }

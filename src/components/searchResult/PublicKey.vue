@@ -1,6 +1,6 @@
 <template>
   <!-- Public Key Component -->
-  <div class="publicKey">
+  <div class="publicKey animated fast fadeIn">
 
     <!-- Up Container -->
     <div class="pk-layout-up">

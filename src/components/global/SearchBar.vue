@@ -1,6 +1,6 @@
 <template>
   <!-- Search Bar Component -->
-  <div class="searchBar">
+  <div class="searchBar animated fast fadeIn">
     <div class="search-cont">
 
       <!-- Type Search Button -->
@@ -26,7 +26,7 @@
       <div class="search-input">
 
         <!-- MDB Input -->
-        <mdb-input :label="label" class="place-white" style="width: 100%" v-model="valueSearch" @key.enter="performSearch"/>
+        <mdb-input :label="label" class="place-white" style="width: 100%" v-model="valueSearch" @keydown.enter="performSearch"/>
         <!-- End MDB Input -->
 
         <!-- Input Icon -->
@@ -124,6 +124,8 @@ export default {
   justify-content: center
   align-items: center
   margin: 10px 0px
+  position: relative
+  z-index: 2000
   & > .search-cont
     width: 100%
     display: flex

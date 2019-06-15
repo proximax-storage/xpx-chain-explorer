@@ -1,7 +1,7 @@
 <template>
 
   <!-- Block Info Component -->
-  <div class="blockInfo">
+  <div class="blockInfo animated fast fadeIn">
 
     <!-- Up Container -->
     <div class="bi-layout-up">
@@ -65,7 +65,7 @@
         </div>
       </div>
       <!-- End Right -->
-      
+
     </div>
     <!-- End Down Container -->
   </div>

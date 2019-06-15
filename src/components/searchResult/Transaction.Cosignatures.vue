@@ -1,6 +1,6 @@
 <template>
   <!-- Cosignatures Components -->
-  <div class="tran-layout-plus" v-if="params">
+  <div class="tran-layout-plus animated fast fadeIn" v-if="params">
     <!-- Name -->
     <h1 class="supertitle">Cosignatures</h1>
 
@@ -18,7 +18,7 @@
           <div class="value">Public Key: <b>{{ item.signer.publicKey }}</b></div>
           <div class="value">Address: <b>{{ item.signer.address.pretty() }}</b></div>
         </div>
-        
+
       </div>
     </div>
     <!-- End Iterated Elements -->

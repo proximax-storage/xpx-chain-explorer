@@ -1,6 +1,6 @@
 <template>
   <!-- Inner Transaction Component -->
-  <div>
+  <div class="animated fast fadeIn">
     <!-- name -->
     <h1 class="supertitle" v-if="params">Inner Transactions</h1>
 

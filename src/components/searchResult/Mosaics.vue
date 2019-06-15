@@ -1,22 +1,22 @@
 <template>
   <!-- Mosaic Component -->
-  <div class="recent" v-if="finalArray.length > 0">
+  <div class="recent animated fast fadeIn" v-if="finalArray.length > 0">
     <!-- Name -->
     <h1 class="supertitle">{{ nameLabel }}</h1>
 
     <!-- Iterated Elements (Mosaics) -->
     <div class="element" v-for="(item, index) in finalArray" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(item)">
-      
+
       <div class="el-left">
         <div class="title">Id</div>
         <div class="value">{{ item.id }}</div>
       </div>
-      
+
       <div class="el-middle" v-if="item.name">
         <div class="title">Name</div>
         <div class="value">{{ item.name }}</div>
       </div>
-      
+
       <div class="el-right">
         <div class="title">Quantity</div>
         <div class="value" v-html="$utils.fmtAmountValue(item.amount)"></div>
@@ -48,25 +48,27 @@ export default {
   },
   data () {
     return {
-      arrayData: []
+      arrayData: [],
+
     }
   },
   /**
    * Mounted
-   * 
+   *
    * Call constructorObj method
    */
   mounted () {
     // this.mosaicName(id)
+    console.log(this.arrayTransactions)
     this.constructorObj()
   },
   methods: {
     /**
      * Constructor Object
-     * 
+     *
      * This method reconstructs an appropriate object to show
      * the data with the data that you enter as a parameter
-     * 
+     *
      * Call mosaicName method
      */
     constructorObj () {
@@ -96,7 +98,7 @@ export default {
 
     /**
      * Mosaic Name
-     * 
+     *
      * Make a request and get information about a mosaic,
      * which is reconstructed and stored in local storage
      */
@@ -138,6 +140,10 @@ export default {
       )
     },
 
+    redirectToDetail (item) {
+      console.log(item.id)
+    }
+
     // getItemId (item) {
     //   return item.id.toHex()
     // }
@@ -145,7 +151,7 @@ export default {
   computed: {
     /**
      * Final Array
-     * 
+     *
      * Observe the changes in the variable array data
      */
     finalArray () {

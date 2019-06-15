@@ -124,7 +124,6 @@ export default {
      * Calculate Average
      */
     average () {
-      this.averageTime = 0
       setInterval(() => {
         this.averageTime += 1
         // console.log(this.averageTime)

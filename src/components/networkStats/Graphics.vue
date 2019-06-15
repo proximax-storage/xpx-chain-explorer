@@ -1,7 +1,7 @@
 <template>
 
   <!-- Graphic Component -->
-  <div class="graphics">
+  <div class="graphics animated fast fadeIn">
 
     <!-- Name Of Graphic -->
     <h1>{{ title }}</h1>

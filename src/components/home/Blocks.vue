@@ -1,7 +1,7 @@
 <template>
 
   <!-- Blocks Component -->
-  <div class="block">
+  <div class="block animated fast fadeIn">
 
     <!-- MDB Loader -->
     <mdb-progress v-if="dataTable.length === 0 && loaderStatus" bgColor="primary-color-dark" style="width: 100%" indeterminate/>

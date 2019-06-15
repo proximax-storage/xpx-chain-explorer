@@ -1,6 +1,6 @@
 <template>
   <!-- Footer Commponent -->
-  <div class="footer">
+  <div class="footer animated fadeIn">
     <p>Copyright 2019. ProximaX Explorer. All rights reserved.</p>
   </div>
   <!-- End Footer Component -->
