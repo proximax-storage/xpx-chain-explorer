@@ -148,7 +148,7 @@
     <!-- End Consignature Component -->
 
     <!-- Inner Transactions Component -->
-    <inner-transactions :params="detail.innerTransactions"/>
+    <inner-transactions :params="detail.innerTransactions" @runModal="infoReceiver"/>
     <!-- End Inner Transactions Component -->
 
   </div>
@@ -184,9 +184,6 @@ export default {
    * Call Verify Type and Verify Transaction Details
    */
   mounted () {
-    console.log("TRANSACCION DETAIL", this.detail)
-    console.log(this.detail.direction)
-    console.log(this.detail.delta.compact())
     this.verifyType()
     this.verifyTransactionDetails()
     // console.log("TRANSACTION", this.detail)
@@ -342,6 +339,13 @@ export default {
     goToAddress (address) {
       let routeData = this.$router.resolve({ path: `/searchResult/address/${address}` })
       window.open(routeData.href, '_blank')
+    },
+
+    infoReceiver (data, title) {
+      console.log(data, title)
+
+      this.$emit('runOpen', title)
+      this.$emit('runPush', data)
     }
   }
 }

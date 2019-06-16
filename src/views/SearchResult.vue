@@ -6,7 +6,7 @@
     <!-- End Search Bar Component -->
 
     <!-- Search Result Main Message Container -->
-    <div style="text-align: center; padding: 10px 0px">
+    <div style="text-align: center; padding: 10px 0px" class="animated fast fadeIn">
       <h1 style="font-size: 20px">RESULT FOR SEARCH...</h1>
       <div class="search-type">{{ type }}</div>
       <div class="search-value">{{ value }}</div>
@@ -22,20 +22,20 @@
     <!-- Block Info Component -->
 
     <!-- Transaction Component -->
-    <transaction v-if="type === 'Transaction Hash'" :detail="param"/>
+    <transaction v-if="type === 'Transaction Hash'" :detail="param" @runOpen="openModal" @runPush="pushInfo"/>
     <!-- End Transaction Component -->
 
-    <!-- Mosaic Info component -->
-    <mosaic-info v-if="type === 'Mosaic Info'"/>
-    <!-- End Mosaic Info Component -->
-
     <!-- Mosaics Component -->
-    <mosaics v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'"/>
+    <mosaics v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
     <!-- End Mosaics Component -->
 
     <!-- Recent Transactions Component -->
     <recent-trans v-if="showRecentTransaction && blockTransactions.length > 0 && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
     <!-- End Recent Transactions Component -->
+
+    <!-- Modal Component -->
+    <modal :param="modalInfo" :active="modalActive" :run="closeModal" :title="modalTitle"/>
+    <!-- End Modal Component -->
 
   </div>
   <!-- End Search Result View -->
@@ -46,7 +46,7 @@ import SearchBar from '@/components/global/SearchBar.vue'
 import PublicKey from '@/components/searchResult/PublicKey.vue'
 import BlockInfo from '@/components/searchResult/BlockInfo.vue'
 import Transaction from '@/components/searchResult/Transaction.vue'
-import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
+import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
 import { Address, Deadline, NetworkType } from 'tsjs-xpx-catapult-sdk'
@@ -59,7 +59,7 @@ export default {
     PublicKey,
     BlockInfo,
     Transaction,
-    MosaicInfo,
+    Modal,
     RecentTrans,
     Mosaics
   },
@@ -73,6 +73,10 @@ export default {
       blockTransactions: [],
       showRecentMosaic: false,
       blockMosaics: null,
+      // modalConfig
+      modalInfo: [],
+      modalActive: false,
+      modalTitle: 'Info'
     }
   },
   mounted () {
@@ -101,10 +105,6 @@ export default {
       this.getBlockByHeight(this.$route.params.id)
     } else if (this.$route.params.type === 'transactionHash') {
       this.getInfoTransaction(this.$route.params.id)
-    } else if (this.$route.params.type === 'mosaicInfo') {
-      console.log('AQUI')
-      this.getMosaicInfo()
-      this.showComponent()
     }
     this.value = this.$route.params.id
   },
@@ -118,7 +118,7 @@ export default {
      *
      * @param { String } Account
      */
-    getInfoAccountAndViewTransactions: function(account) {
+    getInfoAccountAndViewTransactions (account) {
       const addr = Address.createFromRawAddress(account)
       const xpx = proximaxProvider.mosaicXpx()
 
@@ -218,8 +218,6 @@ export default {
         this.type = 'Transaction Hash'
       } else if (this.$route.params.type === 'address') {
         this.type = 'Address'
-      } else if (this.$route.params.type === 'mosaicInfo') {
-        this.type = 'Mosaic Info'
       }
       this.value = this.$route.params.id
     },
@@ -248,14 +246,38 @@ export default {
       )
     },
 
-    getMosaicInfo () {
-      console.log('getMosaicInfo')
-      console.log(this.$route.params)
-      this.$proxProvider.getMosaics(this.$route.params.value).subscribe(
-        res => {
-          console.log(res)
-        }
-      )
+    /**
+     * Open Modal
+     *
+     * Se inicia el componente modal, de modo que aparece en la pantalla
+     * y al mismo tiempo se configura el título.
+     */
+    openModal (title) {
+      console.log('run', title)
+      this.modalTitle = title
+      this.modalActive = true
+    },
+
+    /**
+     * Push Info
+     *
+     * This function performs the configuration of the information
+     * that you want to show in the modal
+     */
+    pushInfo (info) {
+      console.log('push', info)
+      this.modalInfo = info
+    },
+
+    /**
+     * Close Modal
+     *
+     * This method works in reverse of 'openModal' method,
+     * but emptying the information, preparing the modal for a next use
+     */
+    closeModal () {
+      this.modalActive = false
+      this.modalInfo = []
     }
   }
 }

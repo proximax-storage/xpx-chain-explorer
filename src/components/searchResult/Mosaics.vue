@@ -5,7 +5,7 @@
     <h1 class="supertitle">{{ nameLabel }}</h1>
 
     <!-- Iterated Elements (Mosaics) -->
-    <div class="element" v-for="(item, index) in finalArray" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(item)">
+    <div class="element" v-for="(item, index) in finalArray" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(index)">
 
       <div class="el-left">
         <div class="title">Id</div>
@@ -48,8 +48,7 @@ export default {
   },
   data () {
     return {
-      arrayData: [],
-
+      arrayData: []
     }
   },
   /**
@@ -140,13 +139,37 @@ export default {
       )
     },
 
-    redirectToDetail (item) {
-      console.log(item.id)
-    }
+    redirectToDetail (index) {
+      this.$emit('viewMosaic', 'Mosaic Info')
+      let mosaicNames = this.$storage.get('mosaicNames')
+      mosaicNames = JSON.parse(mosaicNames)
+      let compatible
+      mosaicNames.forEach(el => {
+        if (el.id === this.arrayTransactions[index].id.toHex()) {
+          compatible = el
+        }
+      })
 
-    // getItemId (item) {
-    //   return item.id.toHex()
-    // }
+      this.$proxProvider.getMosaic(this.arrayTransactions[index].id)
+        .subscribe(
+          resp => {
+            let info = [
+              { key: 'Name', value: compatible.name },
+              { key: 'Mosaic ID', value: resp.mosaicId.id.toHex() },
+              { key: 'Meta ID', value: resp.metaId },
+              { key: 'Address', value: resp.owner.address.pretty() },
+              { key: 'Public Key', value: resp.owner.publicKey },
+              { key: 'Height', value: resp.height.compact() },
+              { key: 'Divisibility', value: resp.properties.divisibility },
+              { key: 'Duration', value: resp.properties.duration.compact() },
+              { key: 'Levy Mutable', value: resp.properties.levyMutable, style: (resp.properties.levyMutable === true) ? 'color: green' : 'color: red' },
+              { key: 'Supply Mutable', value: resp.properties.supplyMutable, style: (resp.properties.supplyMutable === true) ? 'color: green' : 'color: red' },
+              { key: 'Transferable', value: resp.properties.transferable, style: (resp.properties.transferable === true) ? 'color: green' : 'color: red' },
+            ]
+            this.$emit('pushInfo', info)
+          }
+        )
+    }
   },
   computed: {
     /**

@@ -6,7 +6,7 @@
 
     <!-- Iterated Element -->
     <div>
-      <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
+      <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" @click="redirecToDetail(index)">
 
         <div style="padding: 2px">
           <div class="title">Address</div>
@@ -41,13 +41,43 @@
 </template>
 
 <script>
+import proximaxProvider from '@/services/proximaxProviders'
+
 export default {
   name: 'InnerTransaction',
   props: {
     params: Array
   },
   mounted () {
-    // console.log('INNER TRANSACTIONS', this.params)
+  },
+  methods: {
+    redirecToDetail (index) {
+      let typeName
+      let objectOfTypes = Object.values(proximaxProvider.typeTransactions())
+      objectOfTypes.forEach(element => {
+        // console.log(element.name)
+        if (this.params[index].type === element.id) {
+          typeName = element.name
+        }
+      })
+
+      console.log(this.params[index])
+      let info = [
+        { key: 'Address - Sender', value: this.params[index].signer.address.address },
+        { key: 'Public Key - Sender', value: this.params[index].signer.publicKey },
+        { key: 'Signature', value: this.params[index].signature },
+        { key: 'Address - Recipient', value: this.params[index].recipient.address },
+        { key: 'Timestamp', value: this.$utils.fmtTime(this.params[index].deadline.value) },
+        { key: 'Aggregate Hash', value: this.params[index].transactionInfo.aggregateHash },
+        { key: 'Aggregate Id', value: this.params[index].transactionInfo.aggregateId },
+        { key: 'Height', value: this.params[index].transactionInfo.height.compact() },
+        { key: 'Type', value: this.params[index].type },
+        { key: 'Version', value: this.params[index].version },
+        { key: 'Max Fee', value: '', valueHtml: this.$utils.fmtAmountValue(this.params[index].maxFee.compact()) },
+        { key: 'Message', value: (this.params[index].message.payload !== '') ? this.params[index].message : 'No Available' },
+      ]
+      this.$emit('runModal', info, `Inner Transaction Detail - ${ typeName }`)
+    }
   }
 }
 </script>
@@ -66,6 +96,7 @@ $radius: 5px
   padding: 10px
   margin-bottom: 10px
   font-size: 10px
+  cursor: pointer
   &:last-child
     margin: 0px
 
