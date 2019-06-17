@@ -59,9 +59,9 @@ export default {
     PublicKey,
     BlockInfo,
     Transaction,
-    Modal,
     RecentTrans,
-    Mosaics
+    Mosaics,
+    Modal
   },
   data () {
     return {
@@ -80,6 +80,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.$proxProvider.getNetworkById(184))
     // $proxProvider and proximaxProvider is Proximax Service (Proximax Provider Service) included in the main instance of vue (No need import)
     /**
      * Mounted - Lifecycle Hook of Vue

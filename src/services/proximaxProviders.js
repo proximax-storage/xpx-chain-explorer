@@ -30,6 +30,7 @@ export default class proximaxProvider {
     this.MosaicInfo = new MosaicInfo()
     this.mosaicService = new MosaicService(this.accountHttp, this.mosaicHttp, this.namespaceHttp)
     this.accountInfo = {}
+    this.NetworkType = NetworkType
   }
 
   /**
@@ -153,7 +154,7 @@ export default class proximaxProvider {
 
   /**
    * Create public account
-   * 
+   *
    * @param publicKey
    * @param network
    * @returns {Observable} PublicAccount
@@ -294,9 +295,52 @@ export default class proximaxProvider {
    * @memberof proximaxProvider
    */
   getMosaicNameFromHex(id) {
-    const idFromHex = Id.fromHex(id)   
+    const idFromHex = Id.fromHex(id)
     const mosaicId = this.getMosaicId([idFromHex.lower, idFromHex.higher]);
     return this.getMosaicsName([mosaicId]);
   }
 
+  /**
+   * Get All Networks
+   *
+   * It is a function that collects all the constants that contain the data
+   * of the available networks from the sdk of proximax, filters and cleans,
+   * to return an array of objects that contain in each element the name and
+   * the numeric value of all the networks
+   */
+  getAllNetworks() {
+    let object = this.NetworkType
+    let arrTmp = []
+    let arrFinal = []
+
+    for (let key in object) {
+      if (object.hasOwnProperty(key)) {
+        let element = object[key];
+        arrTmp.push({ name: key, value: element })
+      }
+    }
+
+    arrTmp.forEach(el => {
+      if (isNaN(parseInt(el.network))) {
+        arrFinal.push(el)
+      }
+    })
+
+    return arrFinal
+  }
+
+  /**
+   * Get Network By Id
+   *
+   * This is a method that uses the 'getAllNetworks' function and the 'id'
+   * parameter to filter and return information from a network in an object
+   * that contains the name and numerical value of that network
+   *
+   * @param { Number } id
+   */
+  getNetworkById(id) {
+    let networks = this.getAllNetworks()
+    let found = networks.filter(el => el.value === id)
+    return (found.length !== 0) ? found[0] : null
+  }
 }

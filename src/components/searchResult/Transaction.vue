@@ -84,7 +84,7 @@
         <div class="layout-plus-children" v-if="detail.delta">
           <div class="title">Amount (Delta)</div>
           <div class="value" :style="(detail.direction === 1) ? 'color: green' : 'color: red'">
-            {{ (detail.direction === 1) ? '+' : '-' }}
+            {{ (detail.direction === 1) ? 'Increase: +' : 'Decrease: -' }}
             <span v-html="$utils.fmtAmountValue(this.detail.delta.compact())"></span>
           </div>
         </div>
@@ -229,7 +229,7 @@ export default {
       switch (this.transactionType) {
         case 'Transfer Transaction':
           this.plusInfo = [
-            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Version', value: this.detail.version },
             { key: 'Parent Id', value: (this.detail.parentId !== undefined) ? this.detail.parentId : 'No Available' },
             { key: 'Message', value: (this.detail.message.payload !== '') ? this.detail.message.payload : 'No Available' }
@@ -240,7 +240,7 @@ export default {
           this.plusInfo = [
             { key: 'Namespace Name', value: this.detail.namespaceName },
             { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex() },
-            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Version', value: this.detail.version },
             { key: 'Parent Id', value: (this.detail.parentId !== undefined) ? this.detail.parentId : 'No Available' }
           ]
@@ -250,7 +250,7 @@ export default {
           this.plusInfo = [
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
             { key: 'Nonce', value: (this.detail.nonce !== undefined) ? this.detail.nonce : 'No Available' },
-            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Type', value: this.detail.type },
             { key: 'Version', value: this.detail.version }
           ]
@@ -259,7 +259,7 @@ export default {
         case 'Mosaic supply change':
           this.plusInfo = [
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
-            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Type', value: this.detail.type },
             { key: 'Version', value: this.detail.version }
             // { key: 'Amount', value: this.$utils.fmtAmountValue(this.detail.delta.toHex()) },
@@ -290,7 +290,7 @@ export default {
             { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex() },
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
             { key: 'Action Type', value: (this.detail.actionType !== undefined) ? this.detail.actionType : 'No Available' },
-            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Type', value: this.detail.type },
             { key: 'Version', value: this.detail.version }
           ]
@@ -319,7 +319,7 @@ export default {
             { key: 'Modifications', value: this.detail.modifications },
             { key: 'Metadata Id', value: (this.detail.metadataId !== undefined) ? this.detail.metadataId : 'No Available' },
             { key: 'Metadata Type', value: (this.detail.metadataType !== undefined) ? this.detail.metadataType : 'No Available' },
-            { key: 'Network Type', value: this.detail.networkType },
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Type', value: this.detail.type },
             { key: 'Version', value: this.detail.version }
           ]
