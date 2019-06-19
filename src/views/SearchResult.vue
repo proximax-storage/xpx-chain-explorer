@@ -134,8 +134,10 @@ export default {
 
           // If your account information has tiles, look up your information and name to display them in the tile table
           if (resp.mosaics.length > 0) {
+            console.log(resp.mosaics)
             let filteredTrans = resp.mosaics.filter(el => el.id.toHex().toUpperCase() !== xpx)
             this.blockMosaics = filteredTrans
+            console.log("Filtered Trans", filteredTrans)
             this.showRecentMosaic = !this.showRecentMosaic
           }
           this.viewTransactionsFromPublicAccount(resp.publicAccount)

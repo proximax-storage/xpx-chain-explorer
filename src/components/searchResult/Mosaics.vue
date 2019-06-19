@@ -90,6 +90,8 @@ export default {
               amount: item.amount.compact()
             }
             this.arrayData.push(itemComplete)
+          } else {
+            this.mosaicName(item)
           }
         })
       }

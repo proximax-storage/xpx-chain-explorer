@@ -121,6 +121,8 @@ export default {
   display: flex
   flex-flow: row wrap
   justify-content: space-evenly
+  position: relative
+  z-index: 3000
   & > .admin-item
     flex-grow: 1
     border: 1px solid #7ab5e280
