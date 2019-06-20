@@ -5,7 +5,7 @@
     <h1 class="supertitle">{{ nameLabel }}</h1>
 
     <!-- Iterated Elements (Mosaics) -->
-    <div class="element" v-for="(item, index) in finalArray" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(index)">
+    <div class="element animated fast fadeIn" v-for="(item, index) in finalArray" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(index)">
 
       <div class="el-left">
         <div class="title">Id</div>

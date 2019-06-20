@@ -6,14 +6,14 @@
       <div v-if="param.length !== 0">
         <div class="element" v-for="(item, index) in param" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'">
           <div class="title">{{ item.key }}</div>
-          <div class="value" :style="item.style" v-if="item.value !== ''">
+          <div class="value" :style="item.style" v-if="item.value !== ''" :class="item.class" @click="(item.class === 'link') ? goToAddress(item.value) : null">
             {{ item.value }}
           </div>
           <div class="value" :style="item.style" v-html="item.valueHtml"></div>
         </div>
       </div>
       <div class="loader" v-else>
-        <mdb-spinner crazy multicolor />
+        <mdb-spinner crazy multicolor/>
       </div>
       <div class="loader">
         <button class="red button" @click="run"><mdb-icon icon="times"/> Close</button>
@@ -42,6 +42,12 @@ export default {
     param: Array,
     title: String
   },
+  methods: {
+    goToAddress (address) {
+      let routeData = this.$router.resolve({ path: `/searchResult/address/${address}` })
+      window.open(routeData.href, '_blank')
+    }
+  }
 }
 </script>
 
@@ -71,6 +77,11 @@ export default {
   font-weight: bold
   text-transform: uppercase
   margin: 0px
+
+.link:hover
+  color: dodgerblue
+  text-decoration: underline
+  cursor: pointer
 
 .value
   font-size: 10px

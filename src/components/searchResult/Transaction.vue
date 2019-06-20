@@ -186,7 +186,7 @@ export default {
   mounted () {
     this.verifyType()
     this.verifyTransactionDetails()
-    // console.log("TRANSACTION", this.detail)
+    console.log("TRANSACTION", this.detail)
   },
   methods: {
     /**
@@ -268,7 +268,14 @@ export default {
           // this.iterator(this.detail)
           break;
         case 'Modify multisig account':
-          this.iterator(this.detail)
+          this.plusInfo = [
+            { key: 'Minimal Removal Delta', value: this.detail.minRemovalDelta },
+            { key: 'Minimal Approval Delta', value: this.detail.minApprovalDelta },
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
+            { key: 'Type', value: this.detail.type },
+            { key: 'Version', value: this.detail.version }
+          ]
+          // this.iterator(this.detail)
           break;
         case 'Aggregate complete':
           // this.iterator(this.detail)

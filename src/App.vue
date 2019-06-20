@@ -135,7 +135,8 @@ export default {
      *
      */
     reset () {
-      this.$store.dispatch('updateAverage', this.averageTime)
+      let time = this.averageTime
+      this.$store.dispatch('updateAverage', time)
       this.averageTime = 0
     }
   }

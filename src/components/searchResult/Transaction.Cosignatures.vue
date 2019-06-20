@@ -1,6 +1,6 @@
 <template>
   <!-- Cosignatures Components -->
-  <div class="tran-layout-plus animated fast fadeIn" v-if="params">
+  <div class="tran-layout-plus animated fast fadeIn" v-if="visible">
     <!-- Name -->
     <h1 class="supertitle">Cosignatures</h1>
 
@@ -32,6 +32,17 @@ export default {
   name: 'Cosignatures',
   props: {
     params: Array
+  },
+  data () {
+    return {
+      visible: false
+    }
+  },
+  mounted () {
+    if (this.params && this.params.length !== 0) {
+      console.log('Si llega')
+      this.visible = true
+    }
   }
 }
 </script>
@@ -50,6 +61,8 @@ export default {
   font-size: 10px
   &:last-child
     margin: 0px
+  & > div
+    padding: 5px 0px
 
 .title
   font-weight: bold

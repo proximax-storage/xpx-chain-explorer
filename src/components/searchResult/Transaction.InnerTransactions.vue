@@ -63,10 +63,10 @@ export default {
 
       console.log(this.params[index])
       let info = [
-        { key: 'Address - Sender', value: this.params[index].signer.address.address },
-        { key: 'Public Key - Sender', value: this.params[index].signer.publicKey },
+        { key: 'Address - Sender', value: this.params[index].signer.address.address, class: 'link' },
+        { key: 'Public Key - Sender', value: this.params[index].signer.publicKey, class: 'link' },
         { key: 'Signature', value: this.params[index].signature },
-        { key: 'Address - Recipient', value: this.params[index].recipient.address },
+        { key: 'Address - Recipient', value: this.params[index].recipient.address, class: 'link' },
         { key: 'Timestamp', value: this.$utils.fmtTime(this.params[index].deadline.value) },
         { key: 'Aggregate Hash', value: this.params[index].transactionInfo.aggregateHash },
         { key: 'Aggregate Id', value: this.params[index].transactionInfo.aggregateId },
