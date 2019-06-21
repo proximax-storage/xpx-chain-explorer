@@ -21,14 +21,14 @@
 
       <!-- Right -->
       <div>
-        <h1 class="supertitle" style="opacity: 0">XPX ID</h1>
+        <h1 class="supertitle">XPX Info</h1>
         <div class="up">
           <div class="title">XPX Mosaic Id</div>
           <div class="value">{{ getId }}</div>
         </div>
         <div class="down">
-          <div class="title" style="opacity: 0">Amount</div>
-          <div class="value" style="opacity: 0">0</div>
+          <div class="title">XPX Name</div>
+          <div class="value">XPX</div>
         </div>
       </div>
       <!-- End Right -->
@@ -186,7 +186,7 @@ $radius: 5px
     padding: 10px
     margin: 0px
 
-@media screen and (max-width: 550px)
+@media screen and (max-width: 595px)
   .publicKey
     & > .pk-layout-up
       flex-flow: column

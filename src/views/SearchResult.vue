@@ -13,8 +13,11 @@
     </div>
     <!-- End Search Result Main Message Container -->
 
+    <error/>
+
     <!-- Public Key Component -->
     <public-key v-if="type === 'Public Key' || type === 'Address'" :detail="param"/>
+    <multisig v-if="multisigActive" :info="multisigData" :cosignatories="cosignList" :relatedAccount="multisigRelatedAccount"/>
     <!-- End Public Key Component -->
 
     <!-- Block Info Component -->
@@ -43,7 +46,9 @@
 
 <script>
 import SearchBar from '@/components/global/SearchBar.vue'
+import Error from '@/components/global/Error.vue'
 import PublicKey from '@/components/searchResult/PublicKey.vue'
+import Multisig from '@/components/searchResult/MultisigInfo.vue'
 import BlockInfo from '@/components/searchResult/BlockInfo.vue'
 import Transaction from '@/components/searchResult/Transaction.vue'
 import Modal from '@/components/global/Modal.vue'
@@ -51,12 +56,15 @@ import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
 import { Address, Deadline, NetworkType } from 'tsjs-xpx-catapult-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
+import axios from 'axios'
 
 export default {
   name: 'SearchResult',
   components: {
     SearchBar,
+    Error,
     PublicKey,
+    Multisig,
     BlockInfo,
     Transaction,
     RecentTrans,
@@ -73,6 +81,11 @@ export default {
       blockTransactions: [],
       showRecentMosaic: false,
       blockMosaics: null,
+      // Multisig
+      multisigActive: false,
+      multisigData: undefined,
+      multisigRelatedAccount: [],
+
       // modalConfig
       modalInfo: [],
       modalActive: false,
@@ -80,8 +93,8 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$proxProvider.getNetworkById(184))
-    // $proxProvider and proximaxProvider is Proximax Service (Proximax Provider Service) included in the main instance of vue (No need import)
+    // $proxProvider and proximaxProvider is Proximax Service (Proximax Provider Service)
+    // included in the main instance of vue (No need import)
     /**
      * Mounted - Lifecycle Hook of Vue
      * Search Result View
@@ -123,10 +136,28 @@ export default {
       const addr = Address.createFromRawAddress(account)
       const xpx = proximaxProvider.mosaicXpx()
 
-      // console.log("ADDRESS & XPX", addr, xpx)
+      console.log("ADDRESS & XPX", addr, xpx)
 
       let suscripcion = this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
+
+          axios.get(`http://${this.$store.state.currentNode}/account/${addr.address}/multisig`)
+            .then(response => {
+              let objTmp = {
+                account: response.data.multisig.account,
+                accountAddress: response.data.multisig.accountAddress,
+                minApproval: response.data.multisig.minApproval,
+                minRemoval: response.data.multisig.minRemoval
+              }
+
+              this.cosignList = Array.from(response.data.multisig.cosignatories)
+              this.multisigRelatedAccount = Array.from(response.data.multisig.multisigAccounts)
+              this.multisigData = objTmp
+              this.multisigActive = true
+            })
+            .catch(error => {
+              console.log('No data of multisig account')
+            })
           // Assign the response to accountInfo and show the account information
           // console.log('RESPONSE ACCOUNT', resp)
           this.param = resp
@@ -143,7 +174,11 @@ export default {
           this.viewTransactionsFromPublicAccount(resp.publicAccount)
         },
         error => {
-          console.warn('Error')
+          this.$store.dispatch('updateErrorInfo', {
+            active: true,
+            message: 'Address or public key not found',
+            submessage: 'Check the information provided and try again'
+          })
         }
       )
     },
@@ -190,7 +225,11 @@ export default {
         )
       },
       error => {
-        console.log("Errorrrrr")
+        this.$store.dispatch('updateErrorInfo', {
+          active: true,
+          message: 'Block Height not found',
+          submessage: 'Check the information provided and try again'
+        })
       })
     },
 
@@ -208,7 +247,11 @@ export default {
           this.showComponent()
         },
         error => {
-          console.warn('Communication error with the node!')
+          this.$store.dispatch('updateErrorInfo', {
+            active: true,
+            message: 'Transaction not found',
+            submessage: 'Check the information provided and try again'
+          })
         }
       )
     },

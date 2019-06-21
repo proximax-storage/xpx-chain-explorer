@@ -67,6 +67,7 @@ export default {
       })
 
       this.redirectAction(`/${objectRoute}`)
+      this.cleanError()
     },
 
     /**
@@ -98,6 +99,14 @@ export default {
           this.navItems[i].class = 'active'
         }
       }
+    },
+
+    cleanError () {
+      this.$store.dispatch('updateErrorInfo', {
+        active: false,
+        message: '',
+        submessage: ''
+      })
     }
   },
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="error" v-if="obj.active">
+  <div class="error animated faste fadeIn" v-if="obj.active">
     <div class="red-elem">
       <p>{{ obj.message }}</p>
       <p>{{ obj.submessage }}</p>
@@ -15,15 +15,6 @@ export default {
       return this.$store.getters.getErrorInfo
     }
   }
-  // data () {
-  //   return {
-  //     obj: {
-  //       active: true,
-  //       message: 'Hoolaaa',
-  //       submessage: 'Holaaa'
-  //     }
-  //   }
-  // }
 }
 </script>
 

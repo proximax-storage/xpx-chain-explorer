@@ -11,7 +11,7 @@
     <!-- End Search Bar Component -->
 
     <!-- Error Component -->
-    <error :active="true" :message="'Esto es una prueba'"/>
+    <error/>
     <!-- End Error Component -->
 
     <!-- Blocks Component -->

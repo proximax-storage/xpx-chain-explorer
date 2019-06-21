@@ -168,7 +168,6 @@ export default {
       return this.$store.getters.getCurrentBlock
     },
     loaderStatus () {
-      console.log(this.$store.getters.getLoaderState)
       return this.$store.getters.getLoaderState
     }
   }
@@ -205,7 +204,7 @@ export default {
         font-size: 15px
         text-transform: uppercase
         font-weight: bold
-        color: grey
+        color: #404040
       & > a
         word-wrap: break-word
 

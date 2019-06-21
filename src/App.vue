@@ -115,9 +115,6 @@ export default {
 
         // console.error(err)
       })
-      const account = Account.generateNewAccount(NetworkType.MIJIN_TEST)
-      // Print Account and Private Key of the current user
-      console.log('Your new account address is:', account.address.pretty(), 'and its private key', account.privateKey)
     },
 
     /**
@@ -144,7 +141,7 @@ export default {
 </script>
 
 <style lang="sass">
-@import url('https://fonts.googleapis.com/css?family=Roboto')
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap')
 
 *
   margin: 0px
@@ -163,20 +160,23 @@ body
   background: transparent
 
 #app
-  font-family: 'Roboto', sans-serif
+  font-family: 'Lato', sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   color: white
   background: transparent
 
-@media screen and (max-width: 1920px)
+@media screen and (min-width: 1367px)
   .view-container
     display: flex
+    flex-flow: row nowrap
     width: 100%
     justify-content: center
     align-items: center
+    margin: 0px
     & > .view
       width: 70%
+      max-width: 1366px
 
 @media screen and (max-width: 1366px)
   .view-container
