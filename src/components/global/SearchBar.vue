@@ -8,16 +8,17 @@
 
         <!-- MDB Dropdown -->
         <mdb-dropdown style="text-align: center">
-          <mdb-dropdown-toggle slot="toggle" class="white-text blue"
+          <mdb-dropdown-toggle slot="toggle" class="white-text cyan darken-3"
           style="padding: 10px; box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%"
           >{{ label }}</mdb-dropdown-toggle>
           <mdb-dropdown-menu style="height: auto">
-            <mdb-dropdown-item v-for="(item, index) in searchList" :key="index" style="padding: 0px">
-              <a class="searchLink" @click.prevent="changeSearch(item)">{{ item.name }}</a>
+            <mdb-dropdown-item class="searchLink" v-for="(item, index) in searchList" :key="index" style="padding: 0px">
+              <a @click.prevent="changeSearch(item)">{{ item.name }}</a>
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
         </mdb-dropdown>
         <!-- End MDB Dropdown -->
+
 
       </div>
       <!-- End Type Search Buttton -->
@@ -26,7 +27,7 @@
       <div class="search-input">
 
         <!-- MDB Input -->
-        <mdb-input :label="label" class="place-white" style="width: 100%" v-model="valueSearch" @keydown.enter="performSearch"/>
+        <mdb-input :label="label" bg type="search" class="place-white black-text" style="width: 100%" v-model="valueSearch" @keydown.enter="performSearch"/>
         <!-- End MDB Input -->
 
         <!-- Input Icon -->
@@ -107,22 +108,27 @@ export default {
 
 <style lang="sass">
 .place-white
-  color: white !important
+  color: black !important
   & > input
-    color: white !important
+    color: black !important
+    border-bottom: #2d8e9b
+    margin: 0px
+  & > label
+    color: #2d8e9b !important
+    &::after
+      background: red !important
+
 
 .searchLink
   display: block
-  padding: 10px
+  transition: all linear 0s
+  padding: 5px
   &:hover
     color: white !important
+    background: #2d8e9b !important
 
 .searchBar
   padding: 10px
-  display: flex
-  flex-flow: row nowrap
-  justify-content: center
-  align-items: center
   margin: 10px 0px
   position: relative
   z-index: 2000
@@ -133,15 +139,16 @@ export default {
     align-items: center
     justify-content: space-between
     & > .search-button
-      width: 30%
+      margin: 0px 10px
       display: flex
       flex-flow: row wrap
       justify-content: center
     & > .search-input
+      margin: 0px 10px
       display: flex
       flex-flow: row nowrap
       align-items: center
-      width: 65%
+      flex-grow: 3
       & > div
         margin: 0px
       & > figure
@@ -151,12 +158,26 @@ export default {
         align-items: center
         width: 30px
         height: 30px
-        margin: 0px
+        margin: 0px 0px 0px 10px
         padding: 5px
         border-radius: 50%
+        background: rgba(45, 142, 155, .5)
         &:hover
-          background: #ffffff80
+          background: rgba(45, 142, 155, 1)
         & > img
           margin: 0px
           width: 15px
+
+@media screen and (max-width: 550px)
+  .searchBar
+    & > .search-cont
+      flex-flow: column
+      & > .search-button
+        margin: 5px
+        flex-grow: 0
+        width: 100%
+      & > .search-input
+        margin: 5px
+        flex-grow: 0
+        width: 100%
 </style>

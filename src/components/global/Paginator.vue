@@ -3,14 +3,14 @@
   <div class="paginator">
 
     <!-- Double Angle Button - Full Back -->
-    <figure class="hover-effect" v-if="pag > 2">
-      <div class="" @click="changePage(1)">First</div>
+    <figure class="hover-effect" v-if="pag > 2" @click="changePage(1)">
+      <div class="extremes">First</div>
     </figure>
     <!-- End Double Angle Button - Full Back -->
 
     <!-- Angle Button - One Step Back -->
-    <figure class="hover-effect" v-if="pag > 1">
-      <div class="fa fa-angle-left" @click="changePage(pag - 1)"></div>
+    <figure class="hover-effect" v-if="pag > 1" @click="changePage(pag - 1)">
+      <div class="fa fa-angle-left"></div>
     </figure>
     <!-- End Angle Button - One Step Back -->
 
@@ -21,14 +21,14 @@
     <!-- End Iterated Elements -->
 
     <!-- Angle Button - One Step Forward -->
-    <figure class="hover-effect" v-if="pag < numberPag">
-      <div class="fa fa-angle-right" @click="changePage(pag + 1)"></div>
+    <figure class="hover-effect" v-if="pag < numberPag" @click="changePage(pag + 1)">
+      <div class="fa fa-angle-right"></div>
     </figure>
     <!-- End Angle Button - One Step Forward -->
 
     <!-- Double Angle Button - Full Forward -->
-    <figure class="hover-effect" v-if="pag < numberPag - 1">
-      <div class="" @click="changePage(numberPag)">Last</div>
+    <figure class="hover-effect" v-if="pag < numberPag - 1" @click="changePage(numberPag)">
+      <div class="extremes">Last</div>
     </figure>
     <!-- End Double Angle Button - Full Forward -->
 
@@ -90,15 +90,18 @@ export default {
 .hover-effect
   background: transparent
   &:hover
-    background: #00000070
+    background: rgba(255, 255, 255, .5)
 
 .select-effect
-  background: #00000070
+  background: rgba(255, 255, 255, 1)
+
+.extremes
+  color: #2d8e9b
+  font-weigth: bold
 
 .paginator
-  background: transparent
-  border: 1px solid #7ab5e2
-  padding: 20px 50px
+  color: black
+  padding: 10px 50px
   margin: 10px 0px
   display: flex
   align-items: center

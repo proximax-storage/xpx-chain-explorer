@@ -14,7 +14,7 @@
       <h1>Node</h1>
       <p>
         <mdb-dropdown style="text-align: center">
-          <mdb-dropdown-toggle slot="toggle" class="white-text" style="font-size: 20px; padding: 5px 10px; box-shadow: 0px 0px 0px transparent">{{ getCurrentNode || 'bctestnet1.xpxsirius.io:3000' }}</mdb-dropdown-toggle>
+          <mdb-dropdown-toggle slot="toggle" class="black-text" style="font-size: 20px; padding: 5px 10px; box-shadow: 0px 0px 0px transparent">{{ getCurrentNode || 'bctestnet1.xpxsirius.io:3000' }}</mdb-dropdown-toggle>
           <mdb-dropdown-menu>
             <a class="nodeLink" v-for="item in getAllNodes" :key="item.index" @click="changeNode(item.index)">{{ item.name }}</a>
           </mdb-dropdown-menu>
@@ -125,7 +125,7 @@ export default {
   z-index: 3000
   & > .admin-item
     flex-grow: 1
-    border: 1px solid #7ab5e280
+    background: #dddddd6b
     padding: 10px
     border-radius: 7px
     min-width: 200px
@@ -135,8 +135,8 @@ export default {
       margin: 0px
       font-weight: bold
       text-transform: uppercase
-      color: #7ab5e2
+      color: #2d8e9b
     & > p
       font-size: 30px
-      color: #f4f4f4
+      color: black
 </style>

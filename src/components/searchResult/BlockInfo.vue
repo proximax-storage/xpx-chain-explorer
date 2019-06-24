@@ -86,7 +86,7 @@ $radius: 5px
 .supertitle
   margin: 0px
   font-size: 17px
-  color: #7AB5E2
+  color: white
   padding: 0px 0px 5px 0px
 
 .up
@@ -119,9 +119,8 @@ $radius: 5px
   flex-grow: 1
 
 .blockInfo
-  margin: 15px 10px
-  border: 1px solid #7ab5e280
-  border-radius: $radius
+  // margin: 15px 10px
+  background: #2d8e9b
   padding: 10px
   color: black
   & > .bi-layout-up

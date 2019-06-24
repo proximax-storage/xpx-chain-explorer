@@ -7,7 +7,6 @@
 
     <!-- Search Result Main Message Container -->
     <div style="text-align: center; padding: 10px 0px" class="animated fast fadeIn">
-      <h1 style="font-size: 20px">RESULT FOR SEARCH...</h1>
       <div class="search-type">{{ type }}</div>
       <div class="search-value">{{ value }}</div>
     </div>
@@ -81,10 +80,14 @@ export default {
       blockTransactions: [],
       showRecentMosaic: false,
       blockMosaics: null,
+      // Public Key
+      errorPublicKey: false,
+
       // Multisig
       multisigActive: false,
       multisigData: undefined,
       multisigRelatedAccount: [],
+      errorMultisig: false,
 
       // modalConfig
       modalInfo: [],
@@ -135,52 +138,59 @@ export default {
     getInfoAccountAndViewTransactions (account) {
       const addr = Address.createFromRawAddress(account)
       const xpx = proximaxProvider.mosaicXpx()
-
-      console.log("ADDRESS & XPX", addr, xpx)
-
+      let errorActive1 = false
+      let errorActive2 = false
+      // console.log("ADDRESS & XPX", addr, xpx)
       let suscripcion = this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
-
-          axios.get(`http://${this.$store.state.currentNode}/account/${addr.address}/multisig`)
-            .then(response => {
-              let objTmp = {
-                account: response.data.multisig.account,
-                accountAddress: response.data.multisig.accountAddress,
-                minApproval: response.data.multisig.minApproval,
-                minRemoval: response.data.multisig.minRemoval
-              }
-
-              this.cosignList = Array.from(response.data.multisig.cosignatories)
-              this.multisigRelatedAccount = Array.from(response.data.multisig.multisigAccounts)
-              this.multisigData = objTmp
-              this.multisigActive = true
-            })
-            .catch(error => {
-              console.log('No data of multisig account')
-            })
           // Assign the response to accountInfo and show the account information
-          // console.log('RESPONSE ACCOUNT', resp)
+          console.log('RESPONSE ACCOUNT', resp.address.pretty())
           this.param = resp
           this.showComponent()
 
           // If your account information has tiles, look up your information and name to display them in the tile table
           if (resp.mosaics.length > 0) {
-            console.log(resp.mosaics)
             let filteredTrans = resp.mosaics.filter(el => el.id.toHex().toUpperCase() !== xpx)
             this.blockMosaics = filteredTrans
-            console.log("Filtered Trans", filteredTrans)
+            // console.log("Filtered Trans", filteredTrans)
             this.showRecentMosaic = !this.showRecentMosaic
           }
           this.viewTransactionsFromPublicAccount(resp.publicAccount)
         },
         error => {
-          this.$store.dispatch('updateErrorInfo', {
-            active: true,
-            message: 'Address or public key not found',
-            submessage: 'Check the information provided and try again'
-          })
+          this.errorPublicKey = true
+          // this.$store.dispatch('updateErrorInfo', {
+          //   active: true,
+          //   message: 'Address or public key not found',
+          //   submessage: 'Check the information provided and try again'
+          // })
         }
       )
+
+      axios.get(`http://${this.$store.state.currentNode}/account/${addr.address}/multisig`)
+        .then(response => {
+          let objTmp = {
+            account: response.data.multisig.account,
+            accountAddress: response.data.multisig.accountAddress,
+            minApproval: response.data.multisig.minApproval,
+            minRemoval: response.data.multisig.minRemoval
+          }
+
+          console.log(response.data.multisig.cosignatories[0])
+
+          this.cosignList = Array.from(response.data.multisig.cosignatories)
+          this.multisigRelatedAccount = Array.from(response.data.multisig.multisigAccounts)
+          this.multisigData = objTmp
+          this.multisigActive = true
+
+          if (this.type === '') {
+            this.type = 'Multisig Account'
+          }
+        })
+        .catch(error => {
+          console.log('No data of multisig account')
+          this.errorMultisig = true
+        })
     },
 
     /**
@@ -299,7 +309,6 @@ export default {
      * y al mismo tiempo se configura el título.
      */
     openModal (title) {
-      console.log('run', title)
       this.modalTitle = title
       this.modalActive = true
     },
@@ -311,7 +320,6 @@ export default {
      * that you want to show in the modal
      */
     pushInfo (info) {
-      console.log('push', info)
       this.modalInfo = info
     },
 
@@ -324,6 +332,27 @@ export default {
     closeModal () {
       this.modalActive = false
       this.modalInfo = []
+    },
+
+    showError () {
+      this.$store.dispatch('updateErrorInfo', {
+        active: true,
+        message: 'Address or public key not found',
+        submessage: 'Check the information provided and try again'
+      })
+    }
+  },
+  watch: {
+    errorMultisig (n, o) {
+      if (this.errorMultisig && this.errorPublicKey) {
+        this.showError()
+      }
+    },
+
+    errorPublicKey (n, o) {
+      if (this.errorMultisig && this.errorPublicKey) {
+        this.showError()
+      }
     }
   }
 }
@@ -331,13 +360,13 @@ export default {
 
 <style lang="sass" scoped>
 .search-type
-  color: white
+  color: black
   font-weight: bold
   font-size: 10px
 
 .search-value
   padding: 10px
-  color: orange
+  color: #2d8e9b
   font-size: 20px
 
   font-weight: bold

@@ -13,16 +13,16 @@
       <div class="filter-input">
         <div>
           <mdb-dropdown style="width: 100%; margin-top:10px">
-            <mdb-dropdown-toggle slot="toggle" color="primary" style="width: 100%; font-weight:bold">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
+            <mdb-dropdown-toggle slot="toggle" color="teal darken-1" style="width: 100%; font-weight:bold">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
             <mdb-dropdown-menu>
-              <mdb-dropdown-item v-for="(item, index) in listOfOptions" :key="index">
-                <a class="searchLink" @click="changeSearch(item)">{{ item }}</a>
+              <mdb-dropdown-item v-for="(item, index) in listOfOptions" :key="index" class="searchLink">
+                <a  @click="changeSearch(item)">{{ item }}</a>
               </mdb-dropdown-item>
             </mdb-dropdown-menu>
           </mdb-dropdown>
         </div>
         <div>
-          <mdb-input icon="search white-text" label="Filter Server" v-model="filter"/>
+          <mdb-input label="Filter Server" v-model="filter"/>
         </div>
       </div>
     </div>
@@ -141,9 +141,11 @@ $radius: 5px
 
 .searchLink
   font-weight: bold
+  &:hover
+    background: #2d8e9b !important
 
 .md-form > input
-  color: white !important
+  color: black !important
 
 .map
   display: block

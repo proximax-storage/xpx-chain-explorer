@@ -2,7 +2,7 @@
   <div class="multisig animated fast fadeIn">
     <h1 class="supertitle">Multisig Account Info</h1>
     <div class="info">
-      <div class="left">
+      <div class="left" v-if="!info.minRemoval > 0 && !info.minApproval > 0">
         <div class="up">
           <div class="title">Address</div>
           <div class="value">{{ info.account }}</div>
@@ -12,7 +12,7 @@
           <div class="value">{{ info.accountAddress }}</div>
         </div>
       </div>
-      <div class="right">
+      <div class="right" v-if="info.minRemoval > 0 && info.minApproval > 0">
         <div class="up">
           <div class="title">Minimal Removal</div>
           <div class="value">{{ info.minRemoval }}</div>
@@ -66,7 +66,7 @@ $radius: 5px
   justify-content: space-between
   margin: 0px
   font-size: 17px
-  color: #7AB5E2
+  color: white
   padding: 0px 0px 5px 0px
 
 .title
@@ -91,10 +91,9 @@ $radius: 5px
   border-radius: 0px 0px $radius $radius
 
 .multisig
-  margin: 15px 10px
+  // margin: 15px 10px
   padding: 10px
-  border-radius: $radius
-  border: 1px solid #7ab5e280
+  background: #2d8e9b
   color: black
   & > .info
     display: flex
@@ -114,7 +113,6 @@ $radius: 5px
       background: #f4f4f4
       border-radius: $radius
       flex-grow: 1
-      margin-left: 10px
   & > .element
     display: flex
     flex-flow: column nowrap

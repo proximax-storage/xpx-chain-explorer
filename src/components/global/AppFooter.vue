@@ -15,6 +15,7 @@ export default {
 <style lang="sass" scoped>
 .footer
   margin: 20px 0px 0px 0px
+  color: black
   & > p
     font-size: 10px
     text-align: center

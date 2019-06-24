@@ -183,7 +183,7 @@ export default {
   border-radius: 5px
   width: 100%
   & > h1
-    color: #7ab5e2
+    color: #2d8e9b
     font-size: 15px
     font-weight: bold
     text-transform: uppercase

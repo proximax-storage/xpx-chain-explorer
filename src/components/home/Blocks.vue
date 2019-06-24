@@ -4,7 +4,7 @@
   <div class="block animated fast fadeIn">
 
     <!-- MDB Loader -->
-    <mdb-progress v-if="dataTable.length === 0 && loaderStatus" bgColor="primary-color-dark" style="width: 100%" indeterminate/>
+    <mdb-progress v-if="dataTable.length === 0 && loaderStatus" bgColor="teal darken-1" style="width: 100%" indeterminate/>
     <!-- End MDB Loader -->
 
     <!-- ALTERNATIVE BLOCK CONFIGURED IN INVISIBLE -->
@@ -222,7 +222,7 @@ td
   font-weight: bold
   color: black
   &:hover
-    color: dodgerblue
+    color: #2d8e9b
     text-decoration-line: underline
 
 .block
@@ -266,13 +266,21 @@ td
 
   .mobile > .element
     flex-flow: column nowrap
+    // box-shadow: 0px 3px 3px grey
+    margin: 10px
+    &:nth-child(2n)
+      border: 1px solid silver
     & > div
       display: flex
       flex-flow: column wrap
       align-items: center
       padding: 3px
+      border-bottom: 1px solid silver
+      &:last-child
+        border-bottom: 0px solid silver
       &:nth-child(2n)
-        background: #c5c5c5
+        // background: #c5c5c5
+        // border-bottom: 1px solid silver
       & > span:first-child
         font-size: 10px
         text-transform: uppercase

@@ -3,7 +3,7 @@
   <div class="header animated faster fadeIn">
     <!-- Image Container -->
     <figure>
-      <img :src="require('@/assets/logo-proximax-sirius-bc-explorer-white.svg')" alt="logo">
+      <img :src="require('@/assets/logo-proximax-sirius-bc-explorer-white.svg')" alt="logo" class="logo">
     </figure>
     <!-- End Image Container -->
 
@@ -122,11 +122,15 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.logo
+  background: rgba(45, 142, 155, 0.3)
+  border-radius: 5px
+
 .inactive
-  border-bottom: 2px solid #7ab5e1
+  border-bottom: 2px solid #ddd
 
 .active
-  border-bottom: 2px solid #7ab5e160
+  border-bottom: 2px solid #2d8e9b
 
 .header
   width: 100%
@@ -135,7 +139,7 @@ export default {
   align-items: center
   padding: 10px
   & > figure
-    width: 400px
+    width: 300px
     padding: 20px
   & > nav
     width: 100%
@@ -146,12 +150,12 @@ export default {
       flex-grow: 1
       text-align: center
       text-transform: uppercase
-      color: orange
+      color: black
       font-weight: bold
       font-size: 15px
       cursor: pointer
       &:hover
-        border-bottom: 2px solid #7ab5e160
+        border-bottom: 2px solid #2d8e9b
 
 @media screen and (max-width: 550px)
   .header > figure
