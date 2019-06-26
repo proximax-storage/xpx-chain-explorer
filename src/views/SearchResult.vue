@@ -362,7 +362,7 @@ export default {
 .search-type
   color: black
   font-weight: bold
-  font-size: 10px
+  font-size: 13px
 
 .search-value
   padding: 10px

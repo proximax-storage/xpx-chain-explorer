@@ -108,7 +108,7 @@ export default {
   & > .modal-back
     width: 100%
     height: 100%
-    background: rgba(0, 12, 36, .9)
+    background: rgba(0, 0, 0, .9)
   & > .cont
     position: absolute
     z-index: 6000
@@ -123,7 +123,7 @@ export default {
       background: transparent
       width: 5px
     &::-webkit-scrollbar-thumb
-      background: dodgerblue
+      background: #2d8e9b
       border-radius: 10px
 
 @media screen and (max-width: 960px)

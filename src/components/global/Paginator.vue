@@ -90,14 +90,18 @@ export default {
 .hover-effect
   background: transparent
   &:hover
-    background: rgba(255, 255, 255, .5)
+    background: rgba(45, 142, 155, 0.7)
+    color: white
 
 .select-effect
-  background: rgba(255, 255, 255, 1)
+  background: rgba(45, 142, 155, 1)
+  color: white
 
 .extremes
   color: #2d8e9b
   font-weigth: bold
+  &:hover
+    color: white
 
 .paginator
   color: black

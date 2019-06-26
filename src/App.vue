@@ -150,11 +150,11 @@ export default {
   box-sizing: border-box
 
 html
-  //background-image: url('./assets/background-proximax-explorer.jpg')
+  background-image: url('./assets/background-proximax-explorer.jpg')
   background-position: top center
   background-size: 100%
   background-repeat: no-repeat
-  background-color: #f4f4f4
+  background-color: #f3f3f3
 
 body
   background: transparent

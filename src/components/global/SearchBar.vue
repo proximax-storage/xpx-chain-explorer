@@ -9,11 +9,11 @@
         <!-- MDB Dropdown -->
         <mdb-dropdown style="text-align: center">
           <mdb-dropdown-toggle slot="toggle" class="white-text cyan darken-3"
-          style="padding: 10px; box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%"
+          style="box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%"
           >{{ label }}</mdb-dropdown-toggle>
           <mdb-dropdown-menu style="height: auto">
             <mdb-dropdown-item class="searchLink" v-for="(item, index) in searchList" :key="index" style="padding: 0px">
-              <a @click.prevent="changeSearch(item)">{{ item.name }}</a>
+              <a style="display: block; padding: 10px" @click.prevent="changeSearch(item)">{{ item.name }}</a>
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
         </mdb-dropdown>
@@ -24,19 +24,19 @@
       <!-- End Type Search Buttton -->
 
       <!-- Search Input -->
-      <div class="search-input">
+      <form class="search-input">
 
         <!-- MDB Input -->
-        <mdb-input :label="label" bg type="search" class="place-white black-text" style="width: 100%" v-model="valueSearch" @keydown.enter="performSearch"/>
+        <mdb-input :label="label" type="search" class="place-white black-text" style="width: 100%" v-model="valueSearch"/>
         <!-- End MDB Input -->
 
         <!-- Input Icon -->
-        <figure @click="performSearch">
+        <button @click.prevent="performSearch">
           <img :src="require('@/assets/search-details-white.svg')" alt="">
-        </figure>
+        </button>
         <!-- Input Icon -->
 
-      </div>
+      </form>
       <!-- End Search Input -->
 
     </div>
@@ -107,8 +107,13 @@ export default {
 </script>
 
 <style lang="sass">
+.md-form input[type=search]:focus:not([readonly])
+    box-shadow: 0 1px 0 0 #2d8e9b
+    border-bottom: 1px solid #2d8e9b
+
 .place-white
   color: black !important
+  margin: 0px !important
   & > input
     color: black !important
     border-bottom: #2d8e9b
@@ -151,19 +156,18 @@ export default {
       flex-grow: 3
       & > div
         margin: 0px
-      & > figure
+      & > button
         display: flex
         flex-flow: row nowrap
         justify-content: center
         align-items: center
-        width: 30px
-        height: 30px
+        width: 40px
+        height: 40px
         margin: 0px 0px 0px 10px
-        padding: 5px
+        padding: 0px
         border-radius: 50%
-        background: rgba(45, 142, 155, .5)
-        &:hover
-          background: rgba(45, 142, 155, 1)
+        background: rgb(45, 142, 155)
+        border: none
         & > img
           margin: 0px
           width: 15px

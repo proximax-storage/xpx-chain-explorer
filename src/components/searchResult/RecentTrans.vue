@@ -150,6 +150,8 @@ $radius: 5px
     border-radius: $radius
     background: #f4f4f4
     margin: 5px 0px
+    cursor: pointer
+    border: 1px solid #dddddde4
     & > .el-left
       flex-grow: 1
       display: flex

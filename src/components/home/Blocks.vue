@@ -4,7 +4,7 @@
   <div class="block animated fast fadeIn">
 
     <!-- MDB Loader -->
-    <mdb-progress v-if="dataTable.length === 0 && loaderStatus" bgColor="teal darken-1" style="width: 100%" indeterminate/>
+    <mdb-progress v-if="dataTable.length === 0 && loaderStatus" bgColor="cyan darken-3" style="width: 100%" indeterminate/>
     <!-- End MDB Loader -->
 
     <!-- ALTERNATIVE BLOCK CONFIGURED IN INVISIBLE -->
@@ -180,12 +180,12 @@ export default {
   flex-flow: column
   width: 100%
   padding: 10px
-  margin: 0px
+  margin: 2px 0px
   & > .element
     display: flex
     flex-flow: row nowrap
     justify-content: space-around
-    margin: 2px 0px
+    // margin: 2px 0px
     padding: 3px
     color: black
     border-radius: 5px
@@ -258,16 +258,14 @@ td
   .link-data
     font-size: 10px
     font-weight: bold
-    color: black
+    color: #2d8e9b
+    text-decoration: underline
     word-wrap: break-word
-    &:hover
-      color: dodgerblue
-      text-decoration-line: underline
 
   .mobile > .element
     flex-flow: column nowrap
     // box-shadow: 0px 3px 3px grey
-    margin: 10px
+    margin: 5px 0px 5px 0px
     &:nth-child(2n)
       border: 1px solid silver
     & > div
@@ -275,7 +273,7 @@ td
       flex-flow: column wrap
       align-items: center
       padding: 3px
-      border-bottom: 1px solid silver
+      border-bottom: 1px solid #c0c0c040
       &:last-child
         border-bottom: 0px solid silver
       &:nth-child(2n)

@@ -14,9 +14,13 @@
       <h1>Node</h1>
       <p>
         <mdb-dropdown style="text-align: center">
-          <mdb-dropdown-toggle slot="toggle" class="black-text" style="font-size: 20px; padding: 5px 10px; box-shadow: 0px 0px 0px transparent">{{ getCurrentNode || 'bctestnet1.xpxsirius.io:3000' }}</mdb-dropdown-toggle>
+          <mdb-dropdown-toggle slot="toggle" class="black-text" style="width:100%;padding: 5px 10px; box-shadow: 0px 0px 0px transparent">
+            <span class="button-toggle">{{ getCurrentNode || this.$store.state.currentNode }}</span>
+          </mdb-dropdown-toggle>
           <mdb-dropdown-menu>
-            <a class="nodeLink" v-for="item in getAllNodes" :key="item.index" @click="changeNode(item.index)">{{ item.name }}</a>
+            <a class="nodeLink" v-for="item in getAllNodes" :key="item.index" @click="changeNode(item.index)">
+              {{ item.name }}
+            </a>
           </mdb-dropdown-menu>
         </mdb-dropdown>
       </p>
@@ -125,7 +129,7 @@ export default {
   z-index: 3000
   & > .admin-item
     flex-grow: 1
-    background: #dddddd6b
+    background: white
     padding: 10px
     border-radius: 7px
     min-width: 200px
@@ -139,4 +143,22 @@ export default {
     & > p
       font-size: 30px
       color: black
+      text-align: center
+
+.button-toggle
+  font-size: 20px
+  word-break: break-all
+
+@media screen and (max-width: 600px)
+  .node-admin
+    flex-flow: column nowrap
+    & > .admin-item
+      border-radius: 5px
+      & > h1
+        font-size: 10px
+      & > p
+        font-size: 15px
+
+  .button-toggle
+    font-size: 15px
 </style>

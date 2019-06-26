@@ -25,7 +25,7 @@
         <h1 class="supertitle" style="color: transparent">Harvester / Forger</h1>
         <div class="up">
           <div class="title">Harvester / Forger</div>
-          <div class="value">{{ detail.publicKey }}</div>
+          <div class="value link" @click="goToAddress(detail.publicKey)">{{ detail.publicKey }}</div>
         </div>
         <div class="down">
           <div class="title">Hash</div>
@@ -50,7 +50,7 @@
 
       <!-- Center -->
       <div class="layout-down-children">
-        <div class="down-radius">
+        <div class="down-radius" style="background: #ddd">
           <div class="title">Txes</div>
           <div class="value">{{ detail.txes }}</div>
         </div>
@@ -76,6 +76,13 @@ export default {
   name: 'BlockInfo',
   props: {
     detail: Object
+  },
+
+  methods: {
+    goToAddress (address) {
+      let routeData = this.$router.resolve({ path: `/searchResult/address/${ address }` })
+      window.open(routeData.href, '_blank')
+    }
   }
 }
 </script>
@@ -88,6 +95,11 @@ $radius: 5px
   font-size: 17px
   color: white
   padding: 0px 0px 5px 0px
+
+.link:hover
+  color: #2d8e9b
+  text-decoration: underline
+  cursor: pointer
 
 .up
   background: #DDDDDD

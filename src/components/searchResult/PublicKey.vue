@@ -10,11 +10,11 @@
         <h1 class="supertitle">Account Info</h1>
         <div class="up">
           <div class="title">Address</div>
-          <div class="value">{{ detail.address.pretty() }}</div>
+          <div class="value link" @click="goToAddress(detail.address.pretty())">{{ detail.address.pretty() }}</div>
         </div>
         <div class="down">
           <div class="title">Public Key</div>
-          <div class="value">{{ detail.publicKey }}</div>
+          <div class="value link" @click="goToAddress(detail.publicKey)">{{ detail.publicKey }}</div>
         </div>
       </div>
       <!-- End Left -->
@@ -115,12 +115,25 @@ export default {
     formatBalance () {
       return `<div>XPX BALANCE: ${ this.getBalance }</div>`
     }
+  },
+  methods: {
+    goToAddress (address) {
+      let routeData = (address.length === 64) ?
+      this.$router.resolve({ path: `/searchResult/publicKey/${ address }` }) :
+      this.$router.resolve({ path: `/searchResult/address/${ address }` })
+      window.open(routeData.href, '_blank')
+    }
   }
 }
 </script>
 
 <style lang="sass" scoped>
 $radius: 5px
+
+.link:hover
+  color: #2d8e9b
+  text-decoration: underline
+  cursor: pointer
 
 .title
   font-size: 10px

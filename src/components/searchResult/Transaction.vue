@@ -10,13 +10,13 @@
         <h1 class="supertitle">{{ transactionType || 'Hash Transaction'}}</h1>
         <div class="up">
           <div class="title">Sender</div>
-          <div class="value" style="cursor: pointer" @click="goToAddress(detail.signer.address.pretty())">
+          <div class="value link" style="cursor: pointer" @click="goToAddress(detail.signer.address.pretty())">
             {{ detail.signer.address.pretty() }}
           </div>
         </div>
         <div class="down">
           <div class="title">Recipient</div>
-          <div class="value" v-if="detail.recipient" style="cursor: pointer" @click="goToAddress(detail.recipient.pretty())">
+          <div class="value link" v-if="detail.recipient" style="cursor: pointer" @click="goToAddress(detail.recipient.pretty())">
             {{ detail.recipient.pretty() }}
           </div>
           <div class="value" v-else>{{ 'No available' }}</div>
@@ -33,7 +33,9 @@
         </div>
         <div class="down">
           <div class="title">Block Height</div>
-          <div class="value">{{ detail.transactionInfo.height.compact() }}</div>
+          <div class="value link" @click="goToBlock(detail.transactionInfo.height.compact())">
+            {{ detail.transactionInfo.height.compact() }}
+          </div>
         </div>
       </div>
       <!-- End Right -->
@@ -64,7 +66,7 @@
       <div class="layout-down-children">
         <div class="down-radius">
           <div class="title">Hash</div>
-          <div class="value">{{ detail.transactionInfo.hash }}</div>
+          <div class="value link" @click="goToHash(detail.transactionInfo.hash)">{{ detail.transactionInfo.hash }}</div>
         </div>
       </div>
       <!-- End Down Element-->
@@ -143,6 +145,10 @@
     </div>
     <!-- End Plus Area -->
 
+    <!-- Modifications Component -->
+    <modifications :params="detail.modifications" :type="transactionType"/>
+    <!-- End Modifications Component -->
+
     <!-- Cosignatures Component -->
     <cosignatures :params="detail.cosignatures"/>
     <!-- End Consignature Component -->
@@ -156,10 +162,11 @@
 </template>
 
 <script>
-import Cosignatures from '@/components/searchResult/Transaction.Cosignatures'
-import InnerTransactions from '@/components/searchResult/Transaction.InnerTransactions'
 import proximaxProvider from '@/services/proximaxProviders'
 import { mdbIcon } from 'mdbvue'
+import InnerTransactions from '@/components/searchResult/Transaction.InnerTransactions'
+import Cosignatures from '@/components/searchResult/Transaction.Cosignatures'
+import Modifications from '@/components/searchResult/Transaction.Modifications.vue'
 
 export default {
   name: 'Transaction',
@@ -169,7 +176,8 @@ export default {
   components: {
     mdbIcon,
     InnerTransactions,
-    Cosignatures
+    Cosignatures,
+    Modifications
   },
   data () {
     return {
@@ -275,6 +283,7 @@ export default {
             { key: 'Type', value: this.detail.type },
             { key: 'Version', value: this.detail.version }
           ]
+          console.log(this.detail.modifications)
           // this.iterator(this.detail)
           break;
         case 'Aggregate complete':
@@ -323,7 +332,6 @@ export default {
           break;
         case 'Modify Mosaic Metadata':
           this.plusInfo = [
-            { key: 'Modifications', value: this.detail.modifications },
             { key: 'Metadata Id', value: (this.detail.metadataId !== undefined) ? this.detail.metadataId : 'No Available' },
             { key: 'Metadata Type', value: (this.detail.metadataType !== undefined) ? this.detail.metadataType : 'No Available' },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
@@ -348,6 +356,16 @@ export default {
       window.open(routeData.href, '_blank')
     },
 
+    goToBlock (height) {
+      let routeData = this.$router.resolve({ path: `/searchResult/blockHeight/${height}` })
+      window.open(routeData.href, '_blank')
+    },
+
+    goToHash (hash) {
+      let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
+      window.open(routeData.href, '_blank')
+    },
+
     infoReceiver (data, title) {
       console.log(data, title)
 
@@ -360,6 +378,11 @@ export default {
 
 <style lang="sass" scoped>
 $radius: 5px
+
+.link:hover
+  color: #2d8e9b
+  text-decoration: underline
+  cursor: pointer
 
 .title
   font-size: 10px
