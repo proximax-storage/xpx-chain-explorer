@@ -23,12 +23,12 @@
       <div>
         <h1 class="supertitle">XPX Info</h1>
         <div class="up">
-          <div class="title">XPX Mosaic Id</div>
-          <div class="value">{{ getId }}</div>
+          <div class="title">Namespace Name</div>
+          <div class="value">PRX</div>
         </div>
         <div class="down">
-          <div class="title">XPX Name</div>
-          <div class="value">XPX</div>
+          <div class="title">XPX Mosaic Id</div>
+          <div class="value">{{ getId }}</div>
         </div>
       </div>
       <!-- End Right -->
@@ -113,7 +113,7 @@ export default {
      * return the balance in html format
      */
     formatBalance () {
-      return `<div>XPX BALANCE: ${ this.getBalance }</div>`
+      return `<div>BALANCE: ${ this.getBalance } XPX</div>`
     }
   },
   methods: {

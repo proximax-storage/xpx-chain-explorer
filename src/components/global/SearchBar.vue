@@ -39,6 +39,11 @@
       </form>
       <!-- End Search Input -->
 
+      <!-- Banner Section -->
+      <div class="banner animated fast" v-if="bannerActive" :class="{ fadeIn: bannerActive, fadeOut: !bannerActive }">
+        {{ bannerMessage }}
+      </div>
+      <!-- End Banner Section -->
     </div>
   </div>
   <!-- End Search Bar Component -->
@@ -66,7 +71,10 @@ export default {
         { name: 'Transaction Hash' },
         { name: 'Address' }
       ],
-      valueSearch: ''
+      valueSearch: '',
+      // Banner
+      bannerActive: false,
+      bannerMessage: ''
     }
   },
   methods: {
@@ -98,8 +106,21 @@ export default {
      */
     performSearch () {
       if (this.typeSearch !== '') {
-        let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
-        window.open(routeData.href, '_blank')
+        if (this.valueSearch !== '') {
+          if (this.bannerActive) {
+            this.bannerActive = false
+            this.bannerMessage = ''
+          }
+
+          let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
+          window.open(routeData.href, '_blank')
+        } else {
+          this.bannerActive = true
+          this.bannerMessage = 'The value of the search can not be empty'
+        }
+      } else {
+        this.bannerActive = true
+        this.bannerMessage = 'Please select a search type'
       }
     }
   }
@@ -123,7 +144,6 @@ export default {
     &::after
       background: red !important
 
-
 .searchLink
   display: block
   transition: all linear 0s
@@ -131,6 +151,16 @@ export default {
   &:hover
     color: white !important
     background: #2d8e9b !important
+
+.banner
+  width: 100%
+  background: rgba(255, 0, 0, 0.7)
+  border-radius: 25px
+  padding: 3px
+  font-weight: bold
+  font-size: 12px
+  display: flex
+  justify-content: center
 
 .searchBar
   padding: 10px
@@ -140,7 +170,7 @@ export default {
   & > .search-cont
     width: 100%
     display: flex
-    flex-flow: row nowrap
+    flex-flow: row wrap
     align-items: center
     justify-content: space-between
     & > .search-button

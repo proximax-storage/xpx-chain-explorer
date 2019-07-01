@@ -52,6 +52,22 @@ export default {
   mounted () {
     console.log("Multisig", Array.from(this.info), this.cosignatories)
     this.cosignActive = (this.cosignatories.length > 0) ? true : false
+  },
+  methods: {
+     goToAddress (address) {
+      let routeData = this.$router.resolve({ path: `/searchResult/address/${address}` })
+      window.open(routeData.href, '_blank')
+    },
+
+    goToBlock (height) {
+      let routeData = this.$router.resolve({ path: `/searchResult/blockHeight/${height}` })
+      window.open(routeData.href, '_blank')
+    },
+
+    goToHash (hash) {
+      let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
+      window.open(routeData.href, '_blank')
+    }
   }
 }
 </script>
@@ -79,6 +95,11 @@ $radius: 5px
   font-weight: normal
   text-transform: uppercase
   word-break: break-all
+
+.link:hover
+  color: #2d8e9b
+  text-decoration: underline
+  cursor: pointer
 
 .up
   padding: 10px

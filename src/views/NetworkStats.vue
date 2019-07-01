@@ -10,14 +10,14 @@
 
     <!-- Divided Graphic Container -->
     <div class="mini-two">
-      <graphics :title="'Nem unique harvesters daily chart'" :numGraphic="1"/>
-      <graphics :title="'Nem transaction per day chart'" :numGraphic="2"/>
+      <graphics :title="'Sirius unique harvesters daily chart'" :numGraphic="1"/>
+      <graphics :title="'Sirius transaction per day chart'" :numGraphic="2"/>
     </div>
 
     <!-- Divided Graphic Container -->
     <div class="mini-two">
-      <graphics :title="'Nem account over time'" :numGraphic="3"/>
-      <graphics :title="'Nem average block dificulty per day'" :numGraphic="4"/>
+      <graphics :title="'Sirius account over time'" :numGraphic="3"/>
+      <graphics :title="'Sirius average block dificulty per day'" :numGraphic="4"/>
     </div>
     <!-- Divided Graphic Container -->
 

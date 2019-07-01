@@ -117,7 +117,6 @@ export default {
               })
             },
             error => {
-              console.error('Communication error with the node!')
               this.$store.dispatch('updateErrorInfo', {
                 active: true,
                 message: 'Comunication error whit node!',
@@ -128,7 +127,6 @@ export default {
           )
         },
         error => {
-          console.error('Communication error with the node!')
           this.$store.dispatch('updateErrorInfo', {
             active: true,
             message: 'Comunication error whit node!',

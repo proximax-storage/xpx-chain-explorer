@@ -12,7 +12,8 @@ export default new Vuex.Store({
     loaderActive: true,
     average: 'Loading',
     averageList: [0],
-    blockList: []
+    blockList: [],
+    rentalFeeInfo: undefined
   },
   mutations: {
     UPDATE_NODES: (state, data) => {
@@ -52,6 +53,9 @@ export default new Vuex.Store({
         state.averageList.push(data)
         state.averageList.shift()
       }
+    },
+    SET_RENTAL_FEE_INFO: (state, data) => {
+      state.rentalFeeInfo = data
     }
   },
   actions: {
@@ -72,6 +76,9 @@ export default new Vuex.Store({
     },
     updateAverage ({ commit }, data) {
       commit('UPDATE_AVERAGE', data)
+    },
+    setRentalFeeInfo ({ commit }, data) {
+      commit('SET_RENTAL_FEE_INFO', data)
     }
   },
   getters: {

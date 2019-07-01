@@ -4,7 +4,10 @@
     <div class="cont">
       <h1 class="supertitle">{{ title || 'Info' }}</h1>
       <div v-if="param.length !== 0">
-        <div class="element" v-for="(item, index) in param" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'">
+        <div class="element" v-for="(item, index) in param"
+        :key="index"
+        :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'"
+        v-if="item.value !== 'No Available'">
           <div class="title">{{ item.key }}</div>
           <div class="value" :style="item.style" v-if="item.value !== ''" :class="item.class" @click="(item.class === 'link') ? goToAddress(item.value) : null">
             {{ item.value }}
@@ -79,9 +82,15 @@ export default {
   margin: 0px
 
 .link:hover
-  color: dodgerblue
+  color: #2d8e9b
   text-decoration: underline
   cursor: pointer
+
+.true
+  color: #008c00
+
+.false
+  color: red
 
 .value
   font-size: 10px

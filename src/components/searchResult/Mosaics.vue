@@ -168,6 +168,7 @@ export default {
               { key: 'Supply Mutable', value: resp.properties.supplyMutable, style: (resp.properties.supplyMutable === true) ? 'color: green' : 'color: red' },
               { key: 'Transferable', value: resp.properties.transferable, style: (resp.properties.transferable === true) ? 'color: green' : 'color: red' },
             ]
+
             this.$emit('pushInfo', info)
           }
         )
@@ -243,6 +244,7 @@ $radius: 5px
     background: #f4f4f4
     margin: 5px 0px
     padding: 5px
+    cursor: pointer
     & > .el-left
       flex-grow: 1
       display: flex

@@ -7,7 +7,7 @@
     <h1 class="supertitle">{{ nameLabel }}</h1>
 
     <!-- Iterated Elements -->
-    <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(item)">
+    <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1">
 
       <!-- Left -->
       <div class="el-left">
@@ -16,7 +16,7 @@
           <figure>
             <img :src="require('@/assets/arrow-transaction-recipient-green.svg')" width="15">
           </figure>
-          <div class="value" v-if="item.recipient">{{ item.recipient.pretty() }}</div>
+          <div class="value link" @click="goToAddress(item.recipient.pretty())" v-if="item.recipient">{{ item.recipient.pretty() }}</div>
           <div class="value" v-else-if="item.type === typeTransactions.mosaicDefinition.id">New Mosaic</div>
           <div class="value" v-else-if="item.type === typeTransactions.mosaicSupplyChange.id">New Mosaic Supply</div>
           <div class="value" v-else-if="item.type === typeTransactions.registerNamespace.id">Root NS</div>
@@ -26,7 +26,7 @@
           <figure>
             <img :src="require('@/assets/arrow-transaction-sender-orange.svg')" width="15">
           </figure>
-          <div class="value">{{ item.signer.address.pretty() }}</div>
+          <div class="value link" @click="goToAddress(item.signer.address.pretty())">{{ item.signer.address.pretty() }}</div>
         </div>
       </div>
       <!-- End Left -->
@@ -39,12 +39,17 @@
       <!-- End Center -->
 
       <!-- Right -->
-      <div class="el-right">
+      <div class="el-middle">
         <div class="title">Fee</div>
         <div class="value" v-html="item.fee"></div>
       </div>
       <!-- End Right -->
 
+      <div class="el-right">
+        <div class="viewIcon" @click="redirectToDetail(item)">
+          <mdb-icon far icon="eye"/>
+        </div>
+      </div>
     </div>
     <!-- End Iterated Elements -->
 
@@ -54,9 +59,13 @@
 
 <script>
 import proximaxProvider from '@/services/proximaxProviders.js'
+import { mdbIcon } from 'mdbvue'
 
 export default {
   name: 'RecentTrans',
+  components: {
+    mdbIcon
+  },
   props: {
     limit: {
       required: false,
@@ -91,6 +100,11 @@ export default {
 
       let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
       window.open(routeData.href, '_blank')
+    },
+
+    goToAddress (address) {
+      let routeData = this.$router.resolve({ path: `/searchResult/address/${address}` })
+      window.open(routeData.href, '_blank')
     }
   }
 }
@@ -98,6 +112,11 @@ export default {
 
 <style lang="sass" scoped>
 $radius: 5px
+
+.link:hover
+  color: #2d8e9b
+  text-decoration: underline
+  cursor: pointer
 
 .title
   font-size: 10px
@@ -109,6 +128,15 @@ $radius: 5px
   font-size: 10px
   font-weight: normal
   text-transform: uppercase
+
+.viewIcon
+  font-size: 15px
+  padding: 10px 30px
+  border-radius: 5px
+  background: #cecece
+  &:hover
+    background: #2d8e9b
+    color: white
 
 .balance
   color: black

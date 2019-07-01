@@ -141,7 +141,7 @@ export default {
       let errorActive1 = false
       let errorActive2 = false
       // console.log("ADDRESS & XPX", addr, xpx)
-      let suscripcion = this.$proxProvider.getAccountInfo(addr).subscribe(
+      this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
           console.log('RESPONSE ACCOUNT', resp.address.pretty())
@@ -159,11 +159,6 @@ export default {
         },
         error => {
           this.errorPublicKey = true
-          // this.$store.dispatch('updateErrorInfo', {
-          //   active: true,
-          //   message: 'Address or public key not found',
-          //   submessage: 'Check the information provided and try again'
-          // })
         }
       )
 

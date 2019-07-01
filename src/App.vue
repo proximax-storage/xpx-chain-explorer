@@ -38,6 +38,7 @@ export default {
   },
   mounted () {
     // Call Load Nodes Method
+    this.readConfig()
     this.loadNodes()
     this.average()
   },
@@ -135,6 +136,14 @@ export default {
       let time = this.averageTime
       this.$store.dispatch('updateAverage', time)
       this.averageTime = 0
+    },
+
+    readConfig () {
+      axios.get('./config/rentalFee.json')
+        .then(response => {
+          let tmp = response.data
+          this.$store.dispatch('setRentalFeeInfo', tmp)
+        })
     }
   }
 }

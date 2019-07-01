@@ -55,27 +55,56 @@ export default {
       let typeName
       let objectOfTypes = Object.values(proximaxProvider.typeTransactions())
       objectOfTypes.forEach(element => {
-        // console.log(element.name)
         if (this.params[index].type === element.id) {
           typeName = element.name
         }
       })
 
-      console.log(this.params[index])
       let info = [
-        { key: 'Address - Sender', value: this.params[index].signer.address.address, class: 'link' },
-        { key: 'Public Key - Sender', value: this.params[index].signer.publicKey, class: 'link' },
+        { key: 'Sender Address', value: this.params[index].signer.address.pretty(), class: 'link' },
+        { key: 'Sender Public Key', value: this.params[index].signer.publicKey, class: 'link' },
         { key: 'Signature', value: this.params[index].signature },
-        { key: 'Address - Recipient', value: this.params[index].recipient.address, class: 'link' },
         { key: 'Timestamp', value: this.$utils.fmtTime(this.params[index].deadline.value) },
         { key: 'Aggregate Hash', value: this.params[index].transactionInfo.aggregateHash },
         { key: 'Aggregate Id', value: this.params[index].transactionInfo.aggregateId },
         { key: 'Height', value: this.params[index].transactionInfo.height.compact() },
-        { key: 'Type', value: this.params[index].type },
+        { key: 'Type', value: (this.params[index].type === undefined) ? 'No Available' : this.params[index].type },
         { key: 'Version', value: this.params[index].version },
-        { key: 'Max Fee', value: '', valueHtml: this.$utils.fmtAmountValue(this.params[index].maxFee.compact()) },
-        { key: 'Message', value: (this.params[index].message.payload !== '') ? this.params[index].message : 'No Available' },
+        {
+          key: 'Fee', value: '',
+          valueHtml: (this.params[index].mosaicProperties !== undefined) ? this.$utils.fmtDivisibility(this.params[index].maxFee.compact(), this.params[index].mosaicProperties.divisibility) : this.$utils.fmtAmountValue(this.params[index].maxFee.compact())
+        }
       ]
+
+      if (this.params[index].recipient) {
+        info.push({
+          key: 'Recipient Address',
+          value: this.params[index].recipient.pretty(),
+          class: 'link'
+        })
+      }
+
+      if (this.params[index].message) {
+        info.push({
+          key: 'Message',
+          value: this.params[index].message.payload
+        })
+      }
+
+      switch (typeName) {
+        case 'Mosaic definition':
+          info.unshift({ key: 'Mosaic Id', value: this.params[index].mosaicId.id.toHex() })
+          info.push({ key: 'Divisibility', value: this.params[index].mosaicProperties.divisibility })
+          info.push({ key: 'Levy Mutable', value: this.params[index].mosaicProperties.levyMutable, class: (this.params[index].mosaicProperties.levyMutable) ? 'true' : 'false' })
+          info.push({ key: 'Supply Mutable', value: this.params[index].mosaicProperties.supplyMutable, class: (this.params[index].mosaicProperties.supplyMutable) ? 'true' : 'false' })
+          info.push({ key: 'Transferable', value: this.params[index].mosaicProperties.transferable, class: (this.params[index].mosaicProperties.transferable) ? 'true' : 'false' })
+          info.push({ key: 'Duration', value: this.$utils.calculateDuration(this.params[index].mosaicProperties.duration.compact()) })
+          break;
+
+        default:
+          break;
+      }
+
       this.$emit('runModal', info, `Inner Transaction Detail - ${ typeName }`)
     }
   }
@@ -88,7 +117,7 @@ $radius: 5px
 .supertitle
   margin: 10px 0px 0px 0px
   font-size: 17px
-  color: #7AB5E2
+  color: white
   padding: 0px 0px 5px 0px
   width: 100%
 

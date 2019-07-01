@@ -19,6 +19,7 @@
 <script>
 // Library chart to show the graphics
 import Chart from 'chart.js'
+import axios from 'axios'
 
 export default {
   props: {
@@ -51,6 +52,21 @@ export default {
    * display the appropriate graphics
    */
   mounted () {
+    axios.get(`http://${this.$store.state.currentNode}/diagnostic/storage`)
+      .then(response => {
+        console.log(response.data)
+      })
+
+    axios.get(`http://${this.$store.state.currentNode}/network`)
+      .then(response => {
+        console.log(response.data)
+      })
+
+    axios.get(`http://${this.$store.state.currentNode}/node/info`)
+      .then(response => {
+        console.log(response.data)
+      })
+
     setInterval(() => {
       this.setLocalData()
       this.showGraphic()

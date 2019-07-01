@@ -23,7 +23,7 @@ export default class Utils {
   /**
    * Method to format integer with thousands separator
    * @param data
-   * @memberof Utils   
+   * @memberof Utils
    */
   static fmtIntValue(data) {
     if (!data) {
@@ -34,11 +34,11 @@ export default class Utils {
       return r + "</strong>"
     }
   }
-  
+
   /**
    * Method for currency format depending on the divisibility
-   * @param quantity 
-   * @param divisibility 
+   * @param quantity
+   * @param divisibility
    * @memberof Utils
    */
   static fmtDivisibility(quantity, divisibility) {
@@ -58,7 +58,7 @@ export default class Utils {
       return r + ".</strong><span class='dim'>" + b[1] + "</span>"
     }
   }
-  
+
   /**
    * Method for data format
    * @param format date with class date of js
@@ -76,7 +76,7 @@ export default class Utils {
     // console.log(date)
     return final
   }
-   
+
   /**
    * Method to calculate the duration of a namespace
    * @param duration of namespace
@@ -91,6 +91,11 @@ export default class Utils {
     seconds -= mnts * 60
     const response = days + " days, " + hrs + " Hrs, " + mnts + " Minutes, " + seconds + " Seconds"
     return response;
+  }
+
+  static pretty(address) {
+    let tmp = address.split()
+    console.log(tmp)
   }
 }
 

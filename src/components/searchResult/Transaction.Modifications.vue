@@ -1,16 +1,20 @@
 <template>
-  <div class="modif">
+  <div class="modif" v-if="visible">
     <h1 class="supertitle">Modifications</h1>
     <div v-if="type === 'Modify multisig account'">
       <div class="element" v-for="(item, index) in params" :key="index">
         <div style="padding: 2px">
           <div class="title">Address</div>
-          <div class="value">{{ item.cosignatoryPublicAccount.address.pretty() }}</div>
+          <div class="value link" @click="goToAddress(item.cosignatoryPublicAccount.address.pretty())">
+            {{ item.cosignatoryPublicAccount.address.pretty() }}
+          </div>
         </div>
 
         <div style="padding: 2px">
           <div class="title">Public Key</div>
-          <div class="value">{{ item.cosignatoryPublicAccount.publicKey }}</div>
+          <div class="value link" @click="goToAddress(item.cosignatoryPublicAccount.publicKey)">
+            {{ item.cosignatoryPublicAccount.publicKey }}
+          </div>
         </div>
 
         <div style="padding: 2px">
@@ -48,27 +52,31 @@ export default {
   },
   data () {
     return {
-      arrFiltered: []
+      arrFiltered: [],
+      visible: false
     }
   },
   mounted () {
     console.log("Params", this.params)
+    if (this.params && this.params.length !== 0) {
+      this.visible = true
+    }
+  },
+  methods: {
+     goToAddress (address) {
+      let routeData = this.$router.resolve({ path: `/searchResult/address/${address}` })
+      window.open(routeData.href, '_blank')
+    },
 
-    // this.params.forEach(el => {
-    //   if (el.cosignatoryPublicAccount) {
-    //     let address = {
-    //       key: 'Address',
-    //       value: el.cosignatoryPublicAccount.address.pretty()
-    //     }
+    goToBlock (height) {
+      let routeData = this.$router.resolve({ path: `/searchResult/blockHeight/${height}` })
+      window.open(routeData.href, '_blank')
+    },
 
-    //     let publicKey = {
-    //       key: 'Public Key',
-    //       value: el.cosignatoryPublicAccount.publicKey
-    //     }
-
-
-    //   }
-    // })
+    goToHash (hash) {
+      let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
+      window.open(routeData.href, '_blank')
+    }
   }
 }
 </script>
@@ -107,4 +115,9 @@ $radius: 5px
   color: black
   font-family: 'Roboto', sans-serif
   font-weight: 400
+
+.link:hover
+  color: #2d8e9b
+  text-decoration: underline
+  cursor: pointer
 </style>

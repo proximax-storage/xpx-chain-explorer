@@ -51,7 +51,7 @@ export default {
 .supertitle
   margin: 0px
   font-size: 17px
-  color: #7AB5E2
+  color: white
   padding: 0px 0px 5px 0px
   width: 100%
 

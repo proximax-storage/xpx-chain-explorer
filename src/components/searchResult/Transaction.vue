@@ -15,11 +15,28 @@
           </div>
         </div>
         <div class="down">
-          <div class="title">Recipient</div>
-          <div class="value link" v-if="detail.recipient" style="cursor: pointer" @click="goToAddress(detail.recipient.pretty())">
-            {{ detail.recipient.pretty() }}
+          <div class="title" v-if="transactionType === 'Register Namespace Transaction'">
+            Recipient - Namespace Rental Fee Sink
           </div>
-          <div class="value" v-else>{{ 'No available' }}</div>
+          <div class="title" v-else-if="transactionType === 'Mosaic definition'">
+            Recipient - Mosaic Rental Fee Sink
+          </div>
+          <div class="title" v-else-if="transactionType !== 'Register Namespace Transaction' || transactionType !== 'Mosaic definition'">
+            Recipient
+          </div>
+          <!-- <div class="value link" v-if="detail.recipient" style="cursor: pointer" @click="goToAddress(detail.recipient.pretty())">
+            {{ detail.recipient.pretty() }}
+          </div> -->
+          <div class="value link" v-if="transactionType === 'Register Namespace Transaction'" @click="goToAddress($store.state.rentalFeeInfo.namespaceRentalFee.address)">
+            {{ $store.state.rentalFeeInfo.namespaceRentalFee.address }}
+          </div>
+          <div class="value link" v-else-if="transactionType === 'Mosaic definition'" @click="goToAddress($store.state.rentalFeeInfo.namespaceRentalFee.address)">
+            {{ $store.state.rentalFeeInfo.namespaceRentalFee.address }}
+          </div>
+          <div class="value" :class="(detail.recipient === undefined) ? '' : 'link'" v-else-if="transactionType !== 'Register Namespace Transaction' || transactionType !== 'Mosaic definition'" :style="(detail.recipient === undefined) ? '' : 'cursor: pointer'" @click="(detail.recipient === undefined) ? '' : goToAddress(detail.recipient.pretty())">
+            {{ (detail.recipient === undefined) ? 'No Available' : detail.recipient.pretty() }}
+          </div>
+          <!-- <div class="value" v-else>{{ 'No available' }}</div> -->
         </div>
       </div>
       <!-- End Left -->
@@ -45,7 +62,10 @@
 
     <!-- Center -->
     <div class="tran-layout-middle">
-      <h1 class="amount" v-if="detail.amount">Amount: <span>{{ detail.amount || '0' }}</span></h1>
+      <!-- <h1 class="amount" v-if="detail.amount">Amount: <span>{{ detail.amount }}</span></h1>
+      <h1 class="amount" v-else-if="detail.mosaic.amount">Amount: <span>{{ detail.mosaic.amount }}</span></h1>
+      <h1 class="amount" v-else>Amount: <span>0.000000</span></h1> -->
+
       <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
     </div>
     <!-- End Center -->
@@ -95,7 +115,8 @@
         <!-- Iterated Element -->
         <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
           <div class="title">{{ item.key }}</div>
-          <div class="value">{{ item.value }}</div>
+          <div class="value" v-if="item.value !== ''">{{ item.value }}</div>
+          <div class="value" v-else-if="item.valueHtml !== ''" v-html="item.valueHtml"></div>
         </div>
         <!-- End Iterated Element -->
 
@@ -145,6 +166,10 @@
     </div>
     <!-- End Plus Area -->
 
+    <!-- Mosaics In Transfer Component -->
+    <mosaics-in-transfer  :params="mosaicsOfTransfer" :xpx="xpx"/>
+    <!-- End Mosaics In Transfer Component -->
+
     <!-- Modifications Component -->
     <modifications :params="detail.modifications" :type="transactionType"/>
     <!-- End Modifications Component -->
@@ -167,6 +192,8 @@ import { mdbIcon } from 'mdbvue'
 import InnerTransactions from '@/components/searchResult/Transaction.InnerTransactions'
 import Cosignatures from '@/components/searchResult/Transaction.Cosignatures'
 import Modifications from '@/components/searchResult/Transaction.Modifications.vue'
+import MosaicsInTransfer from '@/components/searchResult/Transaction.Mosaics.vue'
+import { loadavg } from 'os';
 
 export default {
   name: 'Transaction',
@@ -177,12 +204,15 @@ export default {
     mdbIcon,
     InnerTransactions,
     Cosignatures,
-    Modifications
+    Modifications,
+    MosaicsInTransfer
   },
   data () {
     return {
       plusInfo: [],
-      transactionType: 'Hash Transaction'
+      transactionType: 'Hash Transaction',
+      mosaicsOfTransfer: null,
+      xpx: proximaxProvider.mosaicXpx()
     }
   },
 
@@ -227,6 +257,21 @@ export default {
       })
     },
 
+    analyzeMessage (message) {
+      console.log(message)
+      let result = null
+      if (message.type === 0) {
+        if (message.payload === '') {
+          result = { key: 'Message', value: 'Empty Message' }
+        } else {
+          result = { key: 'Message', value: message.payload }
+        }
+      } else {
+        result = { key: 'Message', value: 'Encrypted Message' }
+      }
+      return result
+    },
+
     /**
      * Verify Transaction Details
      *
@@ -238,20 +283,51 @@ export default {
         case 'Transfer Transaction':
           this.plusInfo = [
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
+            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version },
-            { key: 'Parent Id', value: (this.detail.parentId !== undefined) ? this.detail.parentId : 'No Available' },
-            { key: 'Message', value: (this.detail.message.payload !== '') ? this.detail.message.payload : 'No Available' }
+            // { key: 'Message', value: (this.detail.message.payload !== '') ? this.detail.message.payload : 'Empty' }
           ]
+
+          this.plusInfo.push(this.analyzeMessage(this.detail.message))
+
+          if (this.detail.mosaics.length > 0) {
+            this.mosaicsOfTransfer = this.detail.mosaics
+          }
           //this.iterator(this.detail)
           break;
         case 'Register Namespace Transaction':
+          let findParent = async () => {
+            let level = this.detail.namespaceType
+            if (level !== 0) {
+              let parentId = this.detail.parentId
+              let name
+              this.$proxProvider.getNamespacesName([this.detail.parentId])
+                .subscribe(response => {
+                  if (response.length = 2) {
+                    response.reverse()
+                    name = `${response[0].name} . ${response[1].name} . ${this.detail.namespaceName}`
+                    let parentNamespace = { key: 'Namespace Level', value: name }
+                    this.plusInfo.unshift(parentNamespace)
+                  } else if (response.length = 1) {
+                    name = `${response[0].name} . ${this.detail.namespaceName}`
+                    let parentNamespace = { key: 'Namespace Level', value: name }
+                    this.plusInfo.unshift(parentNamespace)
+                  }
+                })
+            }
+          }
+
           this.plusInfo = [
             { key: 'Namespace Name', value: this.detail.namespaceName },
+            { key: 'Namespace Type', value: (this.detail.namespaceType === 0) ? 'Root' : 'Sub' },
             { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex() },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Version', value: this.detail.version },
-            { key: 'Parent Id', value: (this.detail.parentId !== undefined) ? this.detail.parentId : 'No Available' }
+            { key: 'Parent Id', value: (this.detail.parentId !== undefined) ? this.detail.parentId.id.toHex() : 'No Available' },
+            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
+            { key: 'Version', value: this.detail.version }
           ]
+
+          findParent()
           // this.iterator(this.detail)
           break;
         case 'Mosaic definition':
@@ -259,7 +335,7 @@ export default {
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
             { key: 'Nonce', value: (this.detail.nonce !== undefined) ? this.detail.nonce : 'No Available' },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Type', value: this.detail.type },
+            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
           ]
           //this.iterator(this.detail)
@@ -268,7 +344,7 @@ export default {
           this.plusInfo = [
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Type', value: this.detail.type },
+            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
             // { key: 'Amount', value: this.$utils.fmtAmountValue(this.detail.delta.toHex()) },
             // { key: 'Direction', value: this.detail.direction },
@@ -280,10 +356,9 @@ export default {
             { key: 'Minimal Removal Delta', value: this.detail.minRemovalDelta },
             { key: 'Minimal Approval Delta', value: this.detail.minApprovalDelta },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Type', value: this.detail.type },
+            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
           ]
-          console.log(this.detail.modifications)
           // this.iterator(this.detail)
           break;
         case 'Aggregate complete':
@@ -293,7 +368,15 @@ export default {
           // this.iterator(this.detail)
           break;
         case 'Lock':
-          this.iterator(this.detail)
+          this.plusInfo = [
+            { key: 'Mosaic Id', value: this.detail.mosaic.id.toHex() },
+            { key: 'Mosaic Amount', value: '', valueHtml: this.$utils.fmtAmountValue(this.detail.mosaic.amount.compact()) },
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
+            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
+            { key: 'Version', value: this.detail.version },
+            { key: 'Duration', value: this.$utils.calculateDuration(this.detail.duration.compact()) }
+          ]
+          // this.iterator(this.detail)
           break;
         case 'Secret lock':
           this.iterator(this.detail)
@@ -307,7 +390,7 @@ export default {
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
             { key: 'Action Type', value: (this.detail.actionType !== undefined) ? this.detail.actionType : 'No Available' },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Type', value: this.detail.type },
+            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
           ]
           // this.iterator(this.detail)
@@ -335,7 +418,7 @@ export default {
             { key: 'Metadata Id', value: (this.detail.metadataId !== undefined) ? this.detail.metadataId : 'No Available' },
             { key: 'Metadata Type', value: (this.detail.metadataType !== undefined) ? this.detail.metadataType : 'No Available' },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Type', value: this.detail.type },
+            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
           ]
           // this.iterator(this.detail)
@@ -367,8 +450,6 @@ export default {
     },
 
     infoReceiver (data, title) {
-      console.log(data, title)
-
       this.$emit('runOpen', title)
       this.$emit('runPush', data)
     }
