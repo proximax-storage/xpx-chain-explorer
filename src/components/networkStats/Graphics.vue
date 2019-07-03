@@ -52,20 +52,20 @@ export default {
    * display the appropriate graphics
    */
   mounted () {
-    axios.get(`http://${this.$store.state.currentNode}/diagnostic/storage`)
-      .then(response => {
-        console.log(response.data)
-      })
+    // axios.get(`http://${this.$store.state.currentNode}/diagnostic/storage`)
+    //   .then(response => {
+    //     console.log(response.data)
+    //   })
 
-    axios.get(`http://${this.$store.state.currentNode}/network`)
-      .then(response => {
-        console.log(response.data)
-      })
+    // axios.get(`http://${this.$store.state.currentNode}/network`)
+    //   .then(response => {
+    //     console.log(response.data)
+    //   })
 
-    axios.get(`http://${this.$store.state.currentNode}/node/info`)
-      .then(response => {
-        console.log(response.data)
-      })
+    // axios.get(`http://${this.$store.state.currentNode}/node/info`)
+    //   .then(response => {
+    //     console.log(response.data)
+    //   })
 
     setInterval(() => {
       this.setLocalData()

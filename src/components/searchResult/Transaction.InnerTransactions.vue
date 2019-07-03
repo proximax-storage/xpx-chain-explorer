@@ -130,15 +130,14 @@ $radius: 5px
     margin: 0px
 
 .title
+  font-size: 10px
   font-weight: bold
   text-transform: uppercase
   color: black
-  font-family: 'Roboto', sans-serif
 
 .value
+  font-size: 14px
   text-transform: uppercase
   word-break: break-all
   color: black
-  font-family: 'Roboto', sans-serif
-  font-weight: 400
 </style>

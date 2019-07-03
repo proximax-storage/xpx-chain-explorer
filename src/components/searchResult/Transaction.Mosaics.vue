@@ -6,7 +6,7 @@
       <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
 
         <div style="padding: 2px">
-          <div class="title">Mosaic Id</div>
+          <div class="title">{{ titleMosaic }}</div>
           <div class="value">{{ verifyXPX(index) }}</div>
         </div>
 
@@ -34,7 +34,8 @@ export default {
   },
   data () {
     return {
-      optionalQuantity: null
+      optionalQuantity: null,
+      titleMosaic: 'Mosaic Id'
     }
   },
   methods: {
@@ -48,11 +49,28 @@ export default {
             if (response.properties.divisibility !== 0) {
               this.optionalQuantity = this.$utils.fmtDivisibility(Array.from(this.params)[index].amount.compact(), response.properties.divisibility)
             } else {
-              this.optionalQuantity = Array.from(this.params)[index].amount.compact()
+              this.optionalQuantity = `${Array.from(this.params)[index].amount.compact()}`
+              console.log(this.optionalQuantity)
             }
+          },
+          error => {
+            this.$proxProvider.getNamespacesInfo(Array.from(this.params)[index].id)
+              .subscribe(response => {
+                this.titleMosaic = 'Namespace Id Alias'
+                let tmpId = this.$proxProvider.createMosaicId(response.alias.mosaicId)
+                fullId = tmpId.toHex()
+                this.$proxProvider.getMosaic(tmpId).subscribe(
+                  response2 => {
+                    if (response2.properties.divisibility !== 0) {
+                      this.optionalQuantity = this.$utils.fmtDivisibility(Array.from(this.params)[index].amount.compact(), response2.properties.divisibility)
+                    } else {
+                      this.optionalQuantity = `${Array.from(this.params)[index].amount.compact()}`
+                    }
+                  }
+                )
+              })
           })
       }
-
       return fullId
     }
   }
@@ -75,15 +93,14 @@ export default {
     margin: 0px
 
 .title
+  font-size: 10px
   font-weight: bold
   text-transform: uppercase
   color: black
-  font-family: 'Roboto', sans-serif
 
 .value
+  font-size: 13px
   text-transform: uppercase
   word-break: break-all
   color: black
-  font-family: 'Roboto', sans-serif
-  font-weight: 400
 </style>

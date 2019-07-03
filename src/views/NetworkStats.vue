@@ -10,7 +10,7 @@
 
     <!-- Divided Graphic Container -->
     <div class="mini-two">
-      <graphics :title="'Sirius unique harvesters daily chart'" :numGraphic="1"/>
+      <graphics :title="'Sirius unique validators daily chart'" :numGraphic="1"/>
       <graphics :title="'Sirius transaction per day chart'" :numGraphic="2"/>
     </div>
 

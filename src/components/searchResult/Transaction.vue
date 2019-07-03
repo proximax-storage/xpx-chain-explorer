@@ -284,13 +284,14 @@ export default {
           this.plusInfo = [
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
-            { key: 'Version', value: this.detail.version },
-            // { key: 'Message', value: (this.detail.message.payload !== '') ? this.detail.message.payload : 'Empty' }
+            { key: 'Version', value: this.detail.version }
           ]
 
-          this.plusInfo.push(this.analyzeMessage(this.detail.message))
+          if (this.detail.message !== undefined) {
+            this.plusInfo.push(this.analyzeMessage(this.detail.message))
+          }
 
-          if (this.detail.mosaics.length > 0) {
+          if (this.detail.mosaics && this.detail.mosaics.length > 0) {
             this.mosaicsOfTransfer = this.detail.mosaics
           }
           //this.iterator(this.detail)
@@ -393,6 +394,13 @@ export default {
             { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
           ]
+
+          this.$proxProvider.getNamespacesName([this.detail.namespaceId.id]).subscribe(
+            response => {
+              console.log(response[0].name)
+              this.plusInfo.unshift({ key: 'Namespace Name', value: response[0].name })
+            }
+          )
           // this.iterator(this.detail)
           break;
         case 'Address Alias':
@@ -471,7 +479,7 @@ $radius: 5px
   text-transform: uppercase
 
 .value
-  font-size: 10px
+  font-size: 13px
   font-weight: normal
   text-transform: uppercase
   word-wrap: break-word

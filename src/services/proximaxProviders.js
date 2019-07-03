@@ -176,6 +176,17 @@ export default class proximaxProvider {
   }
 
   /**
+   * Create an Address from a given raw address.
+   *
+   * @param {Array} id
+   * @returns {Observable} Address
+   * @memberof proximaxProvider
+   */
+  createMosaicId(id) {
+    return new MosaicId(id)
+  }
+
+  /**
    * Get block height
    *
    * @returns {Observable} Address
@@ -274,6 +285,17 @@ export default class proximaxProvider {
    */
   getNamespacesName(namespaceIds) {
     return this.namespaceHttp.getNamespacesName(namespaceIds)
+  }
+
+  /**
+   * Get namespace name
+   *
+   * @param namespaceInfo
+   * @returns { Observable } namespaceHttp
+   * @memberof proximaxProvider
+   */
+  getNamespacesInfo(namespaceIds) {
+    return this.namespaceHttp.getNamespace(namespaceIds)
   }
 
   /**

@@ -9,6 +9,8 @@
     <!-- Iterated Elements -->
     <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1">
 
+      <div class="el-name">{{ verifyType(item.type) }}</div>
+
       <!-- Left -->
       <div class="el-left">
         <h1 class="title alternate">Recipient / Sender</h1>
@@ -17,10 +19,13 @@
             <img :src="require('@/assets/arrow-transaction-recipient-green.svg')" width="15">
           </figure>
           <div class="value link" @click="goToAddress(item.recipient.pretty())" v-if="item.recipient">{{ item.recipient.pretty() }}</div>
-          <div class="value" v-else-if="item.type === typeTransactions.mosaicDefinition.id">New Mosaic</div>
-          <div class="value" v-else-if="item.type === typeTransactions.mosaicSupplyChange.id">New Mosaic Supply</div>
-          <div class="value" v-else-if="item.type === typeTransactions.registerNamespace.id">Root NS</div>
-          <div class="value" v-else-if="item.type === typeTransactions.mosaicAlias.id">Mosaic Alias</div>
+          <div class="value" v-else-if="item.type === typeTransactions.mosaicDefinition.id">
+            {{ mosaicRental }}
+          </div>
+          <div class="value" v-else-if="item.type === typeTransactions.registerNamespace.id">
+            {{ namespaceRental }}
+          </div>
+          <div class="value" v-else>No Available</div>
         </div>
         <div>
           <figure>
@@ -75,17 +80,20 @@ export default {
     arrayTransactions: Array,
     nameLabel: {
       type: String,
-      default: 'Recent Transaction'
+      default: 'Recent Transactions'
     }
   },
   data () {
     // console.log(proximaxProvider.typeTransactions())
     return {
-      typeTransactions: proximaxProvider.typeTransactions()
+      typeTransactions: proximaxProvider.typeTransactions(),
+      mosaicRental: this.$store.state.rentalFeeInfo.mosaicRentalFee.address,
+      namespaceRental: this.$store.state.rentalFeeInfo.namespaceRentalFee.address
     }
   },
   mounted () {
     // console.log(this.arrayTransactions)
+    console.log(this.mosaicRental, this.namespaceRental)
   },
   methods: {
     /**
@@ -105,7 +113,20 @@ export default {
     goToAddress (address) {
       let routeData = this.$router.resolve({ path: `/searchResult/address/${address}` })
       window.open(routeData.href, '_blank')
-    }
+    },
+    verifyType (item) {
+      let name = null
+      console.log('verifyType')
+      let objectOfTypes = Object.values(proximaxProvider.typeTransactions())
+      objectOfTypes.forEach(element => {
+        // console.log(element.name)
+        if (item === element.id) {
+          name = element.name
+        }
+      })
+
+      return name
+    },
   }
 }
 </script>
@@ -125,7 +146,7 @@ $radius: 5px
   margin: 0px
 
 .value
-  font-size: 10px
+  font-size: 14px
   font-weight: normal
   text-transform: uppercase
 
@@ -180,6 +201,17 @@ $radius: 5px
     margin: 5px 0px
     cursor: pointer
     border: 1px solid #dddddde4
+    & > .el-name
+      flex-grow: 1
+      display: flex
+      flex-flow: row nowrap
+      justify-content: center
+      align-items: center
+      color: #2d8e9b
+      font-weight: bold
+      width: 200px
+      padding: 5px
+      text-align: center
     & > .el-left
       flex-grow: 1
       display: flex

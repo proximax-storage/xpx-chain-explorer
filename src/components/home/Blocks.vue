@@ -7,30 +7,11 @@
     <mdb-progress v-if="dataTable.length === 0 && loaderStatus" bgColor="cyan darken-3" style="width: 100%" indeterminate/>
     <!-- End MDB Loader -->
 
-    <!-- ALTERNATIVE BLOCK CONFIGURED IN INVISIBLE -->
-      <!-- <table class="desktop">
-        <tr class="header-row">
-          <th>Block Height</th>
-          <th>Harvester/Forger</th>
-          <th>Fee</th>
-          <th>Txes</th>
-          <th>Timestamp</th>
-        </tr>
-        <tr v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" v-show="(pag - 1) * limit <= index  && pag * limit > index">
-          <td><router-link class="link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link></td>
-          <td class="link-data"><router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.address.address }" target="_blank">{{ item.signer.publicKey }}</router-link></td>
-          <td v-html="item.totalFee"></td>
-          <td>{{ item.numTransactions }}</td>
-          <td style="word-wrap: break-word">{{ item.date }}</td>
-        </tr>
-      </table> -->
-    <!-- END ALTERNATIVE BLOCK CONFIGURED IN INVISIBLE -->
-
     <!-- NEW DESIGN OF BLOCKS COMPONENT (Mobile Compatible)-->
     <div class="mobile">
 
       <!-- Iterated Element of Block -->
-      <div class="element" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" v-show="(pag - 1) * limit <= index  && pag * limit > index">
+      <div class="element" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
 
         <div>
           <span>Height</span>
@@ -38,23 +19,23 @@
         </div>
 
         <div>
-          <span>Harvester/Forger</span>
+          <span>Validator</span>
           <router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.publicKey }" target="_blank" style="word-break: break-all">{{ item.signer.publicKey }}</router-link>
         </div>
 
         <div>
           <span>Fee</span>
-          <span v-html="item.totalFee"></span>
+          <span v-html="item.totalFee" class="value"></span>
         </div>
 
         <div>
           <span>TXES</span>
-          <span>{{ item.numTransactions }}</span>
+          <span class="value">{{ item.numTransactions }}</span>
         </div>
 
         <div>
           <span>Timestamp</span>
-          <span>{{ item.date }}</span>
+          <span class="value">{{ item.date }}</span>
         </div>
 
       </div>
@@ -63,9 +44,6 @@
     </div>
     <!-- END NEW DESIGN OF BLOCKS COMPONENT -->
 
-    <div class="pagination">
-      <paginator :arrayLength="dataTable.length" :limit="limit" @changePage="changePage"/>
-    </div>
     <div style="display: none">
       {{ updateTable }}
     </div>
@@ -76,13 +54,11 @@
 
 <script>
 import { mdbProgress } from 'mdbvue'
-import Paginator from '@/components/global/Paginator.vue'
 import { Deadline } from 'tsjs-xpx-catapult-sdk'
 
 export default {
   name: 'Blocks',
   components: {
-    Paginator,
     mdbProgress
   },
   data () {
@@ -177,12 +153,14 @@ export default {
   display: flex
   flex-flow: column
   width: 100%
-  padding: 10px
+  padding: 15px
   margin: 2px 0px
   & > .element
+    margin-top: 5px
     display: flex
     flex-flow: row nowrap
     justify-content: space-around
+    border: 1px solid #dddddde4
     // margin: 2px 0px
     padding: 3px
     color: black
@@ -199,7 +177,7 @@ export default {
         color: grey
       & > span:last-child
         text-align: center
-        font-size: 15px
+        font-size: 14px
         text-transform: uppercase
         font-weight: bold
         color: #404040
@@ -216,7 +194,7 @@ td
   background: silver
 
 .link-data
-  font-size: 15px
+  font-size: 14px
   font-weight: bold
   color: black
   &:hover

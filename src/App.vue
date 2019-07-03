@@ -150,7 +150,9 @@ export default {
 </script>
 
 <style lang="sass">
-@import url('https://fonts.googleapis.com/css?family=Lato&display=swap')
+@font-face
+  font-family: 'LocalLato'
+  src: url('./assets/fonts/Lato-Regular.ttf')
 
 *
   margin: 0px
@@ -169,7 +171,7 @@ body
   background: transparent
 
 #app
-  font-family: 'Lato', sans-serif
+  font-family: 'LocalLato' !important
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   color: white
@@ -184,7 +186,7 @@ body
     align-items: center
     margin: 0px
     & > .view
-      width: 70%
+      width: 100%
       max-width: 1366px
 
 @media screen and (max-width: 1366px)
@@ -194,14 +196,14 @@ body
     justify-content: center
     align-items: center
     & > .view
-      width: 80%
+      width: 100%
 
 @media screen and (max-width: 1024px)
   .view-container
     justify-content: center
     align-items: center
     & > .view
-      width: 90%
+      width: 100%
 
 @media screen and (max-width: 960px)
   .view-container > .view

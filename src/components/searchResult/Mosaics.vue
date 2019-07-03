@@ -12,9 +12,9 @@
         <div class="value">{{ item.id }}</div>
       </div>
 
-      <div class="el-middle" v-if="item.name">
+      <div class="el-middle" :class="(item.name) ? '' : 'mosaicNameTrans'">
         <div class="title">Name</div>
-        <div class="value">{{ item.name }}</div>
+        <div class="value">{{ item.name || 'No Available' }}</div>
       </div>
 
       <div class="el-right">
@@ -191,6 +191,9 @@ export default {
 <style lang="sass" scoped>
 $radius: 5px
 
+.mosaicNameTrans
+  opacity: 0
+
 .title
   font-size: 10px
   font-weight: bold
@@ -198,7 +201,7 @@ $radius: 5px
   margin: 0px
 
 .value
-  font-size: 10px
+  font-size: 14px
   font-weight: normal
   text-transform: uppercase
 
@@ -278,6 +281,9 @@ $radius: 5px
 @media screen and (max-width: 741px)
   .alternate
     display: block
+
+  .mosaicNameTrans
+    opacity: 1
 
   .recent > .element
     flex-flow: column

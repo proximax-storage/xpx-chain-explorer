@@ -15,8 +15,12 @@
 
         <div>
           <div class="title">Signer</div>
-          <div class="value">Public Key: <b>{{ item.signer.publicKey }}</b></div>
-          <div class="value">Address: <b>{{ item.signer.address.pretty() }}</b></div>
+          <div class="value">Address:
+            <span class="link" @click="goToAddress(item.signer.address.pretty())">{{ item.signer.address.pretty() }}</span>
+          </div>
+          <div class="value">Public Key:
+            <span class="link" @click="goToAddress(item.signer.publicKey)">{{ item.signer.publicKey }}</span>
+          </div>
         </div>
 
       </div>
@@ -42,6 +46,14 @@ export default {
     if (this.params && this.params.length !== 0) {
       console.log('Si llega')
       this.visible = true
+    }
+  },
+  methods: {
+    goToAddress (address) {
+      let routeData = (address.length === 64) ?
+      this.$router.resolve({ path: `/searchResult/publicKey/${ address }` }) :
+      this.$router.resolve({ path: `/searchResult/address/${ address }` })
+      window.open(routeData.href, '_blank')
     }
   }
 }
@@ -76,4 +88,9 @@ export default {
   color: black
   font-family: 'Roboto', sans-serif
   font-weight: 400
+
+.link:hover
+  color: #2d8e9b
+  text-decoration: underline
+  cursor: pointer
 </style>

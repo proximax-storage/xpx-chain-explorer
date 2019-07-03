@@ -91,7 +91,7 @@ $radius: 5px
   margin: 0px
 
 .value
-  font-size: 10px
+  font-size: 14px
   font-weight: normal
   text-transform: uppercase
   word-break: break-all

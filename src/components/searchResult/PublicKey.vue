@@ -59,6 +59,9 @@ export default {
   props: {
     detail: Object
   },
+  mounted () {
+    console.log(this.detail)
+  },
   computed: {
     /**
      * Get ID
@@ -141,7 +144,7 @@ $radius: 5px
   text-transform: uppercase
 
 .value
-  font-size: 10px
+  font-size: 14px
   font-weight: normal
   text-transform: uppercase
   word-wrap: break-word

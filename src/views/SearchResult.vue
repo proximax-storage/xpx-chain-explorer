@@ -246,6 +246,7 @@ export default {
      * @param { String } hast
      */
     getInfoTransaction: function (hast) {
+      console.log('Get Info Transaction')
       this.$proxProvider.getTransactionInformation(hast).subscribe(
         resp => {
           this.param = resp
@@ -280,8 +281,9 @@ export default {
      * @param { any } publicAccount
      */
     viewTransactionsFromPublicAccount(publicAccount) {
-      this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
+      this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 400).subscribe(
         transactions => {
+          console.log("Transacciones de esta cuenta",transactions)
           if (transactions.length > 0) {
             transactions.forEach(element => {
               element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
@@ -360,7 +362,7 @@ export default {
   font-size: 13px
 
 .search-value
-  padding: 10px
+  padding: 0px 10px 10px 10px
   color: #2d8e9b
   font-size: 20px
 
