@@ -95,36 +95,36 @@ export default {
           .subscribe(block => {
             block.height = block.height.compact()
 
-            console.log(typeof block.numTransactions)
             if (block.numTransactions !== undefined) {
+              // console.log('block.numTransactions BIEN')
               block.numTransactions = block.numTransactions
               block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
               block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
               this.$store.dispatch('changeCurrentBlock', block)
               this.reset()
-              console.log('Block TXS', block.numTransactions)
+              // console.log('Block TXS', block.numTransactions)
             } else if (block.numTransactions === undefined) {
-              console.log('block.numTransactions es indefinido')
+              // console.log('block.numTransactions es indefinido')
               this.$proxProvider.blockchainHttp.getBlockByHeight(block.height).subscribe(
                 response => {
-                  console.log(response)
+                  // console.log(response)
                   block.numTransactions = response.numTransactions
                   block.totalFee = this.$utils.fmtAmountValue(response.totalFee.compact())
                   block.date = this.$utils.fmtTime(new Date(response.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
                   this.$store.dispatch('changeCurrentBlock', block)
                   this.reset()
-                  console.log('Block TXS', block.numTransactions)
+                  // console.log('Block TXS', block.numTransactions)
                   // console.log("Blockchain Query", response.numTransactions)
                   // console.log("getBlockByHeight", response)
                 }
               )
             }
 
-            block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
-            block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
-            this.$store.dispatch('changeCurrentBlock', block)
-            this.reset()
-            console.log('Block TXS', block.numTransactions)
+            // block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
+            // block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+            // this.$store.dispatch('changeCurrentBlock', block)
+            // this.reset()
+            // console.log('Block TXS', block.numTransactions)
             // console.log('Block', block)
           })
         }

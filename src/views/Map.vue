@@ -4,8 +4,8 @@
 
     <!-- Map Container -->
     <div class="cont animated fast fadeIn">
-      <div id="first" class="imap"></div>
-      <div v-if="false" class="imap" v-for="(item, index) in mapList" v-show="item.active === true" :key="index" v-html="item.template"></div>
+      <!-- <div id="first" class="imap"></div> -->
+      <div v-if="true" class="imap" v-for="(item, index) in mapList" v-show="item.active === true" :key="index" v-html="item.template"></div>
     </div>
     <!-- End Map Container -->
 
@@ -103,15 +103,15 @@ export default {
   },
 
   mounted () {
-    this.loadMap()
-    this.mapList.forEach(el => {
-      axios.get(`http://${el.name}/chain/height`).then(
-        response => {
-          console.log(response.data)
-          el.height = response.data.height[0]
-        }
-      )
-    })
+    // this.loadMap()
+    // this.mapList.forEach(el => {
+    //   axios.get(`http://${el.name}/chain/height`).then(
+    //     response => {
+    //       console.log(response.data)
+    //       el.height = response.data.height[0]
+    //     }
+    //   )
+    // })
 
     // let resp
     // axios.get('./config/nodesInformation.json')
