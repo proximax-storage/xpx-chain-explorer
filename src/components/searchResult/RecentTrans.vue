@@ -9,7 +9,7 @@
     <!-- Iterated Elements -->
     <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1">
 
-      <div class="el-name">{{ verifyType(item.type) }}</div>
+      <div class="el-name value">{{ verifyType(item.type) }}</div>
 
       <!-- Left -->
       <div class="el-left">
@@ -149,10 +149,12 @@ $radius: 5px
   font-size: 14px
   font-weight: normal
   text-transform: uppercase
+  text-align: center
 
 .viewIcon
   font-size: 15px
   padding: 10px 30px
+  margin: 5px
   border-radius: 5px
   border: 1px solid grey
   background: #cecece
@@ -206,7 +208,9 @@ $radius: 5px
     border: 1px solid #dddddde4
     & > .el-name
       flex-grow: 1
-      display: flex
+      font-size: 11px
+      text-transform: uppercase
+      display: block
       flex-flow: row nowrap
       justify-content: center
       align-items: center
@@ -251,6 +255,8 @@ $radius: 5px
 
   .recent > .element
     flex-flow: column
+    & > .el-name
+      width: 100%
     & > .el-left
       border-radius: $radius $radius 0px 0px
       padding: 5px

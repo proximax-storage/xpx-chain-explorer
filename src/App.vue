@@ -116,7 +116,6 @@ export default {
                   console.log('Block TXS', block.numTransactions)
                   // console.log("Blockchain Query", response.numTransactions)
                   // console.log("getBlockByHeight", response)
-
                 }
               )
             }
@@ -176,8 +175,8 @@ export default {
 
 <style lang="sass">
 @font-face
-  font-family: 'LocalLato'
-  src: url('./assets/fonts/Lato-Regular.ttf')
+  font-family: 'font'
+  src: url('./assets/fonts/OpenSans-Regular.ttf')
 
 *
   margin: 0px
@@ -196,7 +195,7 @@ body
   background: transparent
 
 #app
-  font-family: 'LocalLato' !important
+  font-family: 'font' !important
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   color: white

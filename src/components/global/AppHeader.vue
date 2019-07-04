@@ -3,7 +3,7 @@
   <div class="header animated faster fadeIn">
     <!-- Image Container -->
     <figure>
-      <img :src="require('@/assets/logo-proximax-sirius-bc-explorer.svg')" alt="logo" class="logo">
+      <img :src="require('@/assets/logo-proximax-sirius-bc-explorer.svg')" alt="logo">
     </figure>
     <!-- End Image Container -->
 
@@ -29,9 +29,9 @@ export default {
   data () {
     return {
       navItems: [
-        { name: 'transaction', route: '', class: 'active' },
-        { name: 'network stats', route: 'networkStats', class: 'inactive' },
-        { name: 'map', route: 'map', class: 'inactive' }
+        { name: 'Transactions', route: '', class: 'active' },
+        { name: 'Network stats', route: 'networkStats', class: 'inactive' },
+        { name: 'Map', route: 'map', class: 'inactive' }
       ]
     }
   },
@@ -122,6 +122,10 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.logo
+  width: 270px
+  height: 70px
+
 .inactive
   border-bottom: 2px solid #ddd
 

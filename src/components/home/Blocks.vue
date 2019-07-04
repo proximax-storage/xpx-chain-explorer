@@ -231,7 +231,7 @@ export default {
       align-items: center
       padding: 3px
       & > span:first-child
-        font-size: 10px
+        font-size: 9px
         text-transform: uppercase
         font-weight: bold
         color: grey

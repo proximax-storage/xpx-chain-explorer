@@ -4,7 +4,8 @@
 
     <!-- Map Container -->
     <div class="cont animated fast fadeIn">
-      <div class="imap" v-for="(item, index) in mapList" v-show="item.active === true" :key="index" v-html="item.template"></div>
+      <div id="first" class="imap"></div>
+      <div v-if="false" class="imap" v-for="(item, index) in mapList" v-show="item.active === true" :key="index" v-html="item.template"></div>
     </div>
     <!-- End Map Container -->
 
@@ -84,7 +85,6 @@ export default {
       buttonName: undefined,
       listOfOptions: [
         'By name',
-        'By countrie'
       ],
       mapList: [
         {
@@ -98,25 +98,12 @@ export default {
           active: true,
           visible: true
         }
-        // {
-        //   name: 'Salto Angel',
-        //   countrie: 'Venezuela',
-        //   template: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3968.187368910313!2d-62.53761318583581!3d5.968913545676438!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8dc6be717030a879%3A0x73210e8bf60fdfe7!2sSalto+Angel!5e0!3m2!1ses-419!2sve!4v1558762489623!5m2!1ses-419!2sve" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>',
-        //   active: false,
-        //   visible: true
-        // },
-        // {
-        //   name: 'Statue of Liberty',
-        //   countrie: 'USA',
-        //   template: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3025.306387423316!2d-74.04668908505585!3d40.68924937933436!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25090129c363d%3A0x40c6a5770d25022b!2sEstatua+de+la+Libertad!5e0!3m2!1ses-419!2sve!4v1558772995244!5m2!1ses-419!2sve" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>',
-        //   active: false,
-        //   visible: true
-        // }
       ]
     }
   },
 
   mounted () {
+    this.loadMap()
     this.mapList.forEach(el => {
       axios.get(`http://${el.name}/chain/height`).then(
         response => {
@@ -176,6 +163,12 @@ export default {
       }
 
       this.buttonName = item
+    },
+    loadMap () {
+      map = new google.maps.Map(document.getElementById('first'), {
+        center: {lat: -34.397, lng: 150.644},
+        zoom: 8
+      })
     }
   },
   watch: {
@@ -237,6 +230,7 @@ $radius: 5px
     width: 100%
     & > .imap
       width: 100%
+      height: 450px
       padding: 10px
       background: #dddddd
       border-radius: 5px
