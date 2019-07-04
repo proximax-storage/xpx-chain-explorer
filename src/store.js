@@ -26,6 +26,8 @@ export default new Vuex.Store({
     },
     UPDATE_CURRENT_BLOCK: (state, data) => {
       state.currentBlock = data
+
+      // Array for Graphics
       if (state.blockList.length === 0) {
         state.blockList.push(data.height)
         state.blockList.unshift(data.height - 1)

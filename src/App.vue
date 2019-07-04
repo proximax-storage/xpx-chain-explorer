@@ -94,41 +94,45 @@ export default {
           .newBlock()
           .subscribe(block => {
             block.height = block.height.compact()
-            this.$proxProvider.blockchainHttp.getBlockByHeight(block.height).subscribe(
-              response => {
-                console.log("Accion", response.numTransactions)
-                block.numTransactions = response.numTransactions
-                block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
-                block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
-                this.$store.dispatch('changeCurrentBlock', block)
-                this.reset()
-              }
-            )
-            // Print the current closed block
 
+            console.log(typeof block.numTransactions)
+            if (block.numTransactions !== undefined) {
+              block.numTransactions = block.numTransactions
+              block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
+              block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+              this.$store.dispatch('changeCurrentBlock', block)
+              this.reset()
+              console.log('Block TXS', block.numTransactions)
+            } else if (block.numTransactions === undefined) {
+              console.log('block.numTransactions es indefinido')
+              this.$proxProvider.blockchainHttp.getBlockByHeight(block.height).subscribe(
+                response => {
+                  console.log(response)
+                  block.numTransactions = response.numTransactions
+                  block.totalFee = this.$utils.fmtAmountValue(response.totalFee.compact())
+                  block.date = this.$utils.fmtTime(new Date(response.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+                  this.$store.dispatch('changeCurrentBlock', block)
+                  this.reset()
+                  console.log('Block TXS', block.numTransactions)
+                  // console.log("Blockchain Query", response.numTransactions)
+                  // console.log("getBlockByHeight", response)
 
-            // let tmp = this.$proxProvider.createPublicAccount(block.signer.publicKey, NetworkType.TEST_NET)
-            // let addr = Address.createFromRawAddress(tmp.address.address)
-            // this.$proxProvider.getAccountInfo(addr).subscribe(
-            //   resp => {
-            //     this.$proxProvider.getAllTransactionsFromAccount(resp.publicAccount, 400).subscribe(
-            //       transactions => {
-            //         console.log("Transacciones de esta cuenta",transactions.length)
-            //         block.numTransactions = transactions.length
+                }
+              )
+            }
 
-            //         this.$store.dispatch('changeCurrentBlock', block)
-            //         this.reset()
-            //       }
-            //     )
-            //   }
-            // )
-            console.log('block', block.numTransactions)
+            block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
+            block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+            this.$store.dispatch('changeCurrentBlock', block)
+            this.reset()
+            console.log('Block TXS', block.numTransactions)
+            // console.log('Block', block)
           })
         }
       )
       .catch(err => {
         // Show error message in the console
-        console.log('AQUI')
+        // console.log('AQUI')
         this.$store.dispatch('updateErrorInfo', {
           active: true,
           message: 'Comunication error whit node!',

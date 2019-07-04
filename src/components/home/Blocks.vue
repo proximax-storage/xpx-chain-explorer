@@ -101,7 +101,7 @@ export default {
         next => {
           this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(next.compact(), 100).subscribe(
             blockInfo => {
-              console.log(blockInfo)
+              // console.log(blockInfo)
               blockInfo.forEach(element => {
                 element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())
                 element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
@@ -114,7 +114,7 @@ export default {
                 // console.log(this.dataTable[this.dataTable.length-1].height)
                 this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 50).subscribe(
                   response => {
-                    console.log(response)
+                    // console.log(response)
                     response.forEach(element => {
                       element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())
                       element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
@@ -157,7 +157,7 @@ export default {
         this.buttonLoaderActive = true
         this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 100).subscribe(
           response => {
-            console.log(response)
+            // console.log(response)
             response.forEach(element => {
               element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())
               element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))

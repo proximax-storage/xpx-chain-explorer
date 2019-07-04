@@ -19,7 +19,7 @@
 
         <div style="padding: 2px">
           <div class="title">Type</div>
-          <div class="value">{{ item.type }}</div>
+          <div class="value">{{ (item.type == 0) ? 'Add' : 'Remove' }}</div>
         </div>
       </div>
     </div>
