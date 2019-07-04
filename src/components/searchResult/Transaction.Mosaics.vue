@@ -1,23 +1,18 @@
 <template>
-  <div class="mosaics" v-if="params !== null && params.length > 0">
+  <div class="mosaics animated faster fadeInDown" v-if="showFinalData !== null && showFinalData.length > 0">
     <h1 class="supertitle">Mosaics In Transfer</h1>
 
     <div>
-      <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
+      <div class="element" v-for="(item, index) in showFinalData" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
 
-        <div style="padding: 2px">
+        <div style="padding: 2px" class="animated faster fadeInDown">
           <div class="title">{{ titleMosaic }}</div>
-          <div class="value">{{ verifyXPX(index) }}</div>
+          <div class="value">{{ item.name }}</div>
         </div>
 
-        <div style="padding: 2px" v-if="verifyXPX(index) === 'XPX'">
-          <div class="title" >Mosaic Amount</div>
-          <div class="value" v-html="$utils.fmtAmountValue(item.amount.compact())"></div>
-        </div>
-
-        <div style="padding: 2px" v-else>
-          <div class="title" >Mosaic Quantity</div>
-          <div class="value" v-html="optionalQuantity"></div>
+        <div style="padding: 2px" class="animated faster fadeInDown">
+          <div class="title" >Mosaic {{ amountQuantity }}</div>
+          <div class="value" v-html="item.amount"></div>
         </div>
 
       </div>
@@ -30,48 +25,72 @@ export default {
   name: 'MosaicsInTransfer',
   props: {
     params: Array,
-    xpx: String
   },
   data () {
     return {
-      optionalQuantity: null,
-      titleMosaic: 'Mosaic Id'
+      xpx: '0DC67FBE1CAD29E3',
+      finalData: [],
+      titleMosaic: 'Mosaic Id',
+      amountQuantity: 'Amount'
     }
   },
+  mounted () {
+    //this.organizeData()
+  },
   methods: {
-    verifyXPX (index) {
-      let fullId = Array.from(this.params)[index].id.toHex().toUpperCase()
-      if (fullId === this.xpx) {
-        fullId = 'XPX'
-      } else {
-        this.$proxProvider.getMosaic(Array.from(this.params)[index].id)
-          .subscribe(response => {
-            if (response.properties.divisibility !== 0) {
-              this.optionalQuantity = this.$utils.fmtDivisibility(Array.from(this.params)[index].amount.compact(), response.properties.divisibility)
-            } else {
-              this.optionalQuantity = `${Array.from(this.params)[index].amount.compact()}`
-              console.log(this.optionalQuantity)
-            }
-          },
-          error => {
-            this.$proxProvider.getNamespacesInfo(Array.from(this.params)[index].id)
-              .subscribe(response => {
-                this.titleMosaic = 'Namespace Id Alias'
-                let tmpId = this.$proxProvider.createMosaicId(response.alias.mosaicId)
-                fullId = tmpId.toHex()
-                this.$proxProvider.getMosaic(tmpId).subscribe(
-                  response2 => {
-                    if (response2.properties.divisibility !== 0) {
-                      this.optionalQuantity = this.$utils.fmtDivisibility(Array.from(this.params)[index].amount.compact(), response2.properties.divisibility)
-                    } else {
-                      this.optionalQuantity = `${Array.from(this.params)[index].amount.compact()}`
-                    }
+    organizeData () {
+      // console.log('Mounted')
+      if (this.params !== null) {
+        this.params.forEach(el => {
+          let tmpObj = {}
+          if (el.id.toHex().toUpperCase() === this.xpx) {
+            this.$emit('returnAmount', this.$utils.fmtAmountValue(el.amount.compact()))
+          } else {
+            this.amountQuantity = 'Quantity'
+            tmpObj.name = el.id.toHex()
+            this.$proxProvider.getMosaic(el.id).subscribe(
+              response => {
+                if (response.properties.divisibility !== 0) {
+                  tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response.properties.divisibility)
+                  this.finalData.push(tmpObj)
+                } else {
+                  tmpObj.amount = `${el.amount.compact()}`
+                  this.finalData.push(tmpObj)
+                }
+              },
+              error => {
+                this.$proxProvider.getNamespacesInfo(el.id).subscribe(
+                  response => {
+                    this.titleMosaic = 'Mosaic Alias'
+                    let tmpId = this.$proxProvider.createMosaicId(response.alias.mosaicId)
+                    this.$proxProvider.getMosaic(tmpId).subscribe(
+                      response2 => {
+                        if (response2.properties.divisibility !== 0) {
+                          tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility)
+                          this.finalData.push(tmpObj)
+                        } else {
+                          tmpObj.amount = `${el.amount.compact()}`
+                          this.finalData.push(tmpObj)
+                        }
+                      }
+                    )
                   }
                 )
-              })
-          })
+              }
+            )
+          }
+        })
       }
-      return fullId
+    }
+  },
+  computed: {
+    showFinalData () {
+      return this.finalData
+    }
+  },
+  watch: {
+    params (nv, ov) {
+      this.organizeData()
     }
   }
 }

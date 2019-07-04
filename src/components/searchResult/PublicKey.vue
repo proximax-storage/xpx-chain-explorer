@@ -88,25 +88,6 @@ export default {
       } else {
         amount = this.$utils.fmtAmountValue(0)
       }
-      // console.log(amount)
-      // console.log(this.detail.mosaics)
-      // this.detail.mosaics.forEach((el, index) => {
-        //   console.log("AQUIII", el.amount.compact(), el.id.id.toHex())
-      //   console.log(typeof el.id.id.toHex().toUpperCase(), typeof proximaxProvider.mosaicXpx())
-      //   console.log(el.id.id.toHex().toUpperCase() === proximaxProvider.mosaicXpx())
-      //   if (el.id.id.toHex().toUpperCase() == proximaxProvider.mosaicXpx()) {
-        //     console.log("entro aqui")
-      //     this.amount = el.amount.compact()
-      //     console.log(this.$utils.fmtAmountValue(amount))
-      //     this.amount = this.$utils.fmtAmountValue(amount)
-      //   } else {
-        //     this.amount = this.$utils.fmtAmountValue(0)
-      //   }
-      // })
-
-      // return this.amount
-      // let item = this.detail.mosaics.filter(el => el.id.id)
-      // console.log(item)
       return amount
     },
 

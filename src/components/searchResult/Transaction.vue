@@ -62,10 +62,7 @@
 
     <!-- Center -->
     <div class="tran-layout-middle">
-      <!-- <h1 class="amount" v-if="detail.amount">Amount: <span>{{ detail.amount }}</span></h1>
-      <h1 class="amount" v-else-if="detail.mosaic.amount">Amount: <span>{{ detail.mosaic.amount }}</span></h1>
-      <h1 class="amount" v-else>Amount: <span>0.000000</span></h1> -->
-
+      <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="calculatedAmount"></span></p>
       <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
     </div>
     <!-- End Center -->
@@ -167,7 +164,7 @@
     <!-- End Plus Area -->
 
     <!-- Mosaics In Transfer Component -->
-    <mosaics-in-transfer  :params="mosaicsOfTransfer" :xpx="xpx"/>
+    <mosaics-in-transfer  :params="mosaicsOfTransfer" @returnAmount="returnAmount"/>
     <!-- End Mosaics In Transfer Component -->
 
     <!-- Modifications Component -->
@@ -212,7 +209,8 @@ export default {
       plusInfo: [],
       transactionType: 'Hash Transaction',
       mosaicsOfTransfer: null,
-      xpx: proximaxProvider.mosaicXpx()
+      xpx: proximaxProvider.mosaicXpx(),
+      calculatedAmount: null
     }
   },
 
@@ -325,7 +323,8 @@ export default {
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Parent Id', value: (this.detail.parentId !== undefined) ? this.detail.parentId.id.toHex() : 'No Available' },
             { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
-            { key: 'Version', value: this.detail.version }
+            { key: 'Version', value: this.detail.version },
+            { key: 'Duration', value: this.$utils.calculateDuration(this.detail.duration.compact()) }
           ]
 
           findParent()
@@ -460,6 +459,10 @@ export default {
     infoReceiver (data, title) {
       this.$emit('runOpen', title)
       this.$emit('runPush', data)
+    },
+
+    returnAmount (data) {
+      this.calculatedAmount = data
     }
   }
 }

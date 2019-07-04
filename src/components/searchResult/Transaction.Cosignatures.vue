@@ -77,17 +77,16 @@ export default {
     padding: 5px 0px
 
 .title
+  font-size: 10px
   font-weight: bold
   text-transform: uppercase
   color: black
-  font-family: 'Roboto', sans-serif
 
 .value
-  word-break: break-all
+  font-size: 14px
   text-transform: uppercase
+  word-break: break-all
   color: black
-  font-family: 'Roboto', sans-serif
-  font-weight: 400
 
 .link:hover
   color: #2d8e9b

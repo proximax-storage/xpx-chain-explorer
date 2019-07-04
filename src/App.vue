@@ -27,7 +27,8 @@ import {
   Account,
   NetworkType,
   Listener,
-  Deadline
+  Deadline,
+  Address
 } from 'tsjs-xpx-catapult-sdk'
 import axios from 'axios'
 
@@ -93,15 +94,35 @@ export default {
           .newBlock()
           .subscribe(block => {
             block.height = block.height.compact()
-
+            this.$proxProvider.blockchainHttp.getBlockByHeight(block.height).subscribe(
+              response => {
+                console.log("Accion", response.numTransactions)
+                block.numTransactions = response.numTransactions
+                block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
+                block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+                this.$store.dispatch('changeCurrentBlock', block)
+                this.reset()
+              }
+            )
             // Print the current closed block
-            // console.log('block', block.height)
 
-            block.numTransactions = (block.numTransactions === undefined) ? 0 : block.numTransactions
-            block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
-            block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
-            this.$store.dispatch('changeCurrentBlock', block)
-            this.reset()
+
+            // let tmp = this.$proxProvider.createPublicAccount(block.signer.publicKey, NetworkType.TEST_NET)
+            // let addr = Address.createFromRawAddress(tmp.address.address)
+            // this.$proxProvider.getAccountInfo(addr).subscribe(
+            //   resp => {
+            //     this.$proxProvider.getAllTransactionsFromAccount(resp.publicAccount, 400).subscribe(
+            //       transactions => {
+            //         console.log("Transacciones de esta cuenta",transactions.length)
+            //         block.numTransactions = transactions.length
+
+            //         this.$store.dispatch('changeCurrentBlock', block)
+            //         this.reset()
+            //       }
+            //     )
+            //   }
+            // )
+            console.log('block', block.numTransactions)
           })
         }
       )
@@ -176,6 +197,8 @@ body
   -moz-osx-font-smoothing: grayscale
   color: white
   background: transparent
+  &::-webkit-scrollbar
+    background: red
 
 @media screen and (min-width: 1367px)
   .view-container

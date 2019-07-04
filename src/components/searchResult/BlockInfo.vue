@@ -22,9 +22,9 @@
 
       <!-- Right -->
       <div>
-        <h1 class="supertitle" style="color: transparent">Harvester / Forger</h1>
+        <h1 class="supertitle" style="color: transparent">Validator</h1>
         <div class="up">
-          <div class="title">Harvester / Forger</div>
+          <div class="title">Validator</div>
           <div class="value link" @click="goToAddress(detail.publicKey)">{{ detail.publicKey }}</div>
         </div>
         <div class="down">
@@ -51,7 +51,7 @@
       <!-- Center -->
       <div class="layout-down-children">
         <div class="down-radius" style="background: #ddd">
-          <div class="title">Txes</div>
+          <div class="title">Txs</div>
           <div class="value">{{ detail.txes }}</div>
         </div>
       </div>

@@ -31,11 +31,30 @@
     <!-- Map Options Container -->
     <div class="control">
       <div class="cardServe" v-for="(item, index) in mapList" :key="index" @click="activate(item)" :style="(item.visible) ? 'display: flex' : 'display: none'">
-        <div>{{ item.name }}</div>
-        <div>{{ item.countrie }}</div>
-        <div :style="(item.active) ? 'color: green' : 'color: red'">{{ item.active }}</div>
-        <mdb-icon v-if="item.active" icon="check green-text"/>
-        <mdb-icon v-if="!item.active" icon="times red-text"/>
+        <div>
+          <div class="title">Name</div>
+          <div class="value">{{ item.name }}</div>
+        </div>
+        <div>
+          <div class="title">Ip</div>
+          <div class="value">{{ item.ip }}</div>
+        </div>
+        <div>
+          <div class="title">Version</div>
+          <div class="value">{{ item.version }}</div>
+        </div>
+        <div>
+          <div class="title">Location</div>
+          <div class="value">{{ item.location }}</div>
+        </div>
+        <div>
+          <div class="title">Height</div>
+          <div class="value">{{ item.height }}</div>
+        </div>
+        <div>
+          <div class="title">Status</div>
+          <div class="value">{{ item.status }}</div>
+        </div>
       </div>
     </div>
     <!-- End Map Options Container -->
@@ -46,6 +65,7 @@
 
 <script>
 import { mdbIcon, mdbInput, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle } from 'mdbvue'
+import axios from 'axios'
 
 export default {
   name: 'Map',
@@ -68,28 +88,73 @@ export default {
       ],
       mapList: [
         {
-          name: 'Louvre Museum',
-          countrie: 'France',
-          template: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.8741023651414!2d2.335455315275216!3d48.86061107928766!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e267a32d441%3A0xb0088e1f7c07f451!2sPir%C3%A1mide+del+Museo+del+Louvre!5e0!3m2!1ses-419!2sve!4v1558762417387!5m2!1ses-419!2sve" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>',
+          name: 'bctestnet1.xpxsirius.io:3000',
+          ip: '54.255.178.204',
+          template: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2812.3311413209963!2d103.8531170829637!3d1.2929284703464528!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMTcnMzQuNCJOIDEwM8KwNTEnMTYuOSJF!5e0!3m2!1ses-419!2sve!4v1562199616164!5m2!1ses-419!2sve" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>',
+          version: 0,
+          location: 'Malasia',
+          height: null,
+          status: 'Online',
           active: true,
           visible: true
-        },
-        {
-          name: 'Salto Angel',
-          countrie: 'Venezuela',
-          template: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3968.187368910313!2d-62.53761318583581!3d5.968913545676438!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8dc6be717030a879%3A0x73210e8bf60fdfe7!2sSalto+Angel!5e0!3m2!1ses-419!2sve!4v1558762489623!5m2!1ses-419!2sve" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>',
-          active: false,
-          visible: true
-        },
-        {
-          name: 'Statue of Liberty',
-          countrie: 'USA',
-          template: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3025.306387423316!2d-74.04668908505585!3d40.68924937933436!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25090129c363d%3A0x40c6a5770d25022b!2sEstatua+de+la+Libertad!5e0!3m2!1ses-419!2sve!4v1558772995244!5m2!1ses-419!2sve" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>',
-          active: false,
-          visible: true
         }
+        // {
+        //   name: 'Salto Angel',
+        //   countrie: 'Venezuela',
+        //   template: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3968.187368910313!2d-62.53761318583581!3d5.968913545676438!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8dc6be717030a879%3A0x73210e8bf60fdfe7!2sSalto+Angel!5e0!3m2!1ses-419!2sve!4v1558762489623!5m2!1ses-419!2sve" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>',
+        //   active: false,
+        //   visible: true
+        // },
+        // {
+        //   name: 'Statue of Liberty',
+        //   countrie: 'USA',
+        //   template: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3025.306387423316!2d-74.04668908505585!3d40.68924937933436!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25090129c363d%3A0x40c6a5770d25022b!2sEstatua+de+la+Libertad!5e0!3m2!1ses-419!2sve!4v1558772995244!5m2!1ses-419!2sve" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>',
+        //   active: false,
+        //   visible: true
+        // }
       ]
     }
+  },
+
+  mounted () {
+    this.mapList.forEach(el => {
+      axios.get(`http://${el.name}/chain/height`).then(
+        response => {
+          console.log(response.data)
+          el.height = response.data.height[0]
+        }
+      )
+    })
+
+    // let resp
+    // axios.get('./config/nodesInformation.json')
+    //   .then(response => {
+    //     resp = Array.from(response.data.nodesInfo)
+
+    //     resp.forEach(el => {
+    //       axios.get(`http://${el.name}/node/info`).then(
+    //         response2 => {
+    //           console.log(response)
+    //           axios.get(`http://${el.name}/chain/height`).then(
+    //             response3 => {
+    //               console.log(response2)
+
+    //               let tmpObj = {
+    //                 name: response.data.name,
+    //                 ip: response.data.host,
+    //                 version: response.data.version,
+    //                 location: response.data.location,
+    //                 height: response3.data.height[0]
+    //               }
+
+    //               this.mapList.push(tmpObj)
+    //               console.log(this.mapList)
+    //             }
+    //           )
+    //         }
+    //       )
+    //     })
+    //   })
   },
 
   methods: {
@@ -139,6 +204,19 @@ export default {
 <style lang="sass">
 $radius: 5px
 
+.title
+  font-size: 9px
+  font-weight: bold
+  text-transform: uppercase
+  margin: 0px
+  text-align: center
+  color: grey
+
+.value
+  font-size: 14px
+  font-weight: normal
+  text-transform: uppercase
+  text-align: center
 .searchLink
   font-weight: bold
   &:hover

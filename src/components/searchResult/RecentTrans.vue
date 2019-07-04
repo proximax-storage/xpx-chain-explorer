@@ -154,9 +154,12 @@ $radius: 5px
   font-size: 15px
   padding: 10px 30px
   border-radius: 5px
+  border: 1px solid grey
   background: #cecece
+  transition: all linear 0s
   &:hover
     background: #2d8e9b
+    border: 1px solid #2d8e9b
     color: white
 
 .balance
