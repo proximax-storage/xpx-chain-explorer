@@ -4,8 +4,8 @@
 
     <!-- Map Container -->
     <div class="cont animated fast fadeIn">
-      <!-- <div id="first" class="imap"></div> -->
-      <div v-if="true" class="imap" v-for="(item, index) in mapList" v-show="item.active === true" :key="index" v-html="item.template"></div>
+      <div id="first" class="imap"></div>
+      <!-- <div v-if="true" class="imap" v-for="(item, index) in mapList" v-show="item.active === true" :key="index" v-html="item.template"></div> -->
     </div>
     <!-- End Map Container -->
 
@@ -83,8 +83,10 @@ export default {
       filter: '',
       filterExe: 'name',
       buttonName: undefined,
+      map: undefined,
       listOfOptions: [
         'By name',
+        'By ip'
       ],
       mapList: [
         {
@@ -103,7 +105,7 @@ export default {
   },
 
   mounted () {
-    // this.loadMap()
+    this.loadMap()
     // this.mapList.forEach(el => {
     //   axios.get(`http://${el.name}/chain/height`).then(
     //     response => {
@@ -158,17 +160,21 @@ export default {
         this.filterExe = 'name'
       }
 
-      if (item === 'By countrie') {
-        this.filterExe = 'countrie'
+      if (item === 'By ip') {
+        this.filterExe = 'ip'
       }
 
       this.buttonName = item
     },
     loadMap () {
-      map = new google.maps.Map(document.getElementById('first'), {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 8
+      let location = { lat: 1.2928999662399, lng: 103.85469818115 }
+
+      let map = new google.maps.Map(document.getElementById('first'), {
+        center: location,
+        zoom: 16
       })
+
+      let marker = new google.maps.Marker({ position: location, map: map })
     }
   },
   watch: {
@@ -230,7 +236,7 @@ $radius: 5px
     width: 100%
     & > .imap
       width: 100%
-      height: 450px
+      height: 500px
       padding: 10px
       background: #dddddd
       border-radius: 5px

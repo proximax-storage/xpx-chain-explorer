@@ -3,7 +3,7 @@
   <div class="header animated faster fadeIn">
     <!-- Image Container -->
     <figure>
-      <img :src="require('@/assets/logo-proximax-sirius-bc-explorer.svg')" alt="logo">
+      <img :src="require('@/assets/logo-proximax-sirius-explorer.svg')" alt="logo">
     </figure>
     <!-- End Image Container -->
 

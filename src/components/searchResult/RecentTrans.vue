@@ -210,7 +210,7 @@ $radius: 5px
       flex-grow: 1
       font-size: 11px
       text-transform: uppercase
-      display: block
+      display: flex
       flex-flow: row nowrap
       justify-content: center
       align-items: center
@@ -218,7 +218,6 @@ $radius: 5px
       font-weight: bold
       width: 200px
       padding: 5px
-      text-align: center
     & > .el-left
       flex-grow: 1
       display: flex

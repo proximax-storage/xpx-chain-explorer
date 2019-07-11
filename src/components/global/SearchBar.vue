@@ -129,8 +129,8 @@ export default {
 
 <style lang="sass">
 .md-form input[type=search]:focus:not([readonly])
-    box-shadow: 0 1px 0 0 #2d8e9b
-    border-bottom: 1px solid #2d8e9b
+    box-shadow: 0 1px 0 0 #2d8e9b !important
+    border-bottom: 1px solid #2d8e9b !important
 
 .place-white
   color: black !important

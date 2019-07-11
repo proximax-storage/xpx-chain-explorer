@@ -58,6 +58,9 @@ export default new Vuex.Store({
     },
     SET_RENTAL_FEE_INFO: (state, data) => {
       state.rentalFeeInfo = data
+    },
+    PUSH_NEW_NODE: (state, data) => {
+      state.nodes.push(data)
     }
   },
   actions: {
@@ -81,6 +84,9 @@ export default new Vuex.Store({
     },
     setRentalFeeInfo ({ commit }, data) {
       commit('SET_RENTAL_FEE_INFO', data)
+    },
+    pushNewNode({ commit }, data) {
+      commit('PUSH_NEW_NODE', data)
     }
   },
   getters: {

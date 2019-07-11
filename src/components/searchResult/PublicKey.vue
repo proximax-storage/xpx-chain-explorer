@@ -182,7 +182,7 @@ $radius: 5px
     padding: 10px
     margin: 0px
 
-@media screen and (max-width: 595px)
+@media screen and (max-width: 740px)
   .publicKey
     & > .pk-layout-up
       flex-flow: column

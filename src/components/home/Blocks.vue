@@ -99,7 +99,7 @@ export default {
     viewAllBlocks () {
       this.$proxProvider.blockchainHttp.getBlockchainHeight().subscribe(
         next => {
-          this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(next.compact(), 100).subscribe(
+          this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(next.compact(), 50).subscribe(
             blockInfo => {
               // console.log(blockInfo)
               blockInfo.forEach(element => {
