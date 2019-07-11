@@ -10,6 +10,6 @@
     "status": "Online",
     "active": false,
     "visible": true,
-    "relatedNode": "bctestnet1.xpxsirius.io:3000"
+    "urlNode": "bctestnet1.xpxsirius.io:3000"
   }
 ]
