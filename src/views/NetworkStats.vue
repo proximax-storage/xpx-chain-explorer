@@ -8,10 +8,8 @@
     <!-- End Big Graphic Container -->
     <mdb-progress v-if="blocks.length === 0" bgColor="cyan darken-3" style="width: 100%" indeterminate/>
     <div v-if="blocks.length > 0">
-      <div>
-        <graphics :title="'Sirius unique validators daily chart'" :numGraphic="1" :params="blocks"/>
-      </div>
       <div class="mini-two">
+        <graphics :title="'Sirius unique validators daily chart'" :numGraphic="1" :params="blocks"/>
         <graphics :title="'Sirius transaction per day chart'" :numGraphic="2" :params="blocks"/>
       </div>
 
@@ -69,11 +67,12 @@ export default {
                 this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(blockInfo[blockInfo.length - 1].height.compact() - 1).subscribe(
                   response => {
                     console.log(response)
-                    this.blocks = blockInfo.concat(response)
+                    blockInfo.concat(response)
+                    this.blocks = blockInfo.slice(0, 9)
                   }
                 )
               } else {
-                this.blocks = blockInfo
+                this.blocks = blockInfo.slice(0, 10)
               }
             },
             error => {
