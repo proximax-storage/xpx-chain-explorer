@@ -59,27 +59,7 @@ export default {
    * display the appropriate graphics
    */
   mounted () {
-    // axios.get(`http://${this.$store.state.currentNode}/diagnostic/storage`)
-    //   .then(response => {
-    //     console.log(response.data)
-    //   })
-
-    // axios.get(`http://${this.$store.state.currentNode}/network`)
-    //   .then(response => {
-    //     console.log(response.data)
-    //   })
-
-    // axios.get(`http://${this.$store.state.currentNode}/node/info`)
-    //   .then(response => {
-    //     console.log(response.data)
-    //   })
-
-    setInterval(() => {
-      this.setLocalData()
-      this.showGraphic()
-    }, 7000);
     this.setLocalData()
-    this.showGraphic()
   },
   methods: {
     showGraphic () {
@@ -123,6 +103,16 @@ export default {
     setLocalData () {
       switch (this.numGraphic) {
         case 0:
+          setInterval(() => {
+            this.arrData = Array.from(this.$store.getters.getAverageList)
+            let tmp1 = Array.from(this.$store.getters.getBlockList)
+            tmp1.forEach(el => {
+              el.toString()
+            })
+            this.labels = tmp1
+            this.labelName = 'Closing time of the current block'
+            this.showGraphic()  
+          }, 10000);
           this.arrData = Array.from(this.$store.getters.getAverageList)
           let tmp1 = Array.from(this.$store.getters.getBlockList)
           tmp1.forEach(el => {
@@ -130,6 +120,7 @@ export default {
           })
           this.labels = tmp1
           this.labelName = 'Closing time of the current block'
+          this.showGraphic()
           break;
 
         case 1:
@@ -155,6 +146,7 @@ export default {
           this.labelName = 'Last closed blocks',
           this.color = 'rgba(255, 0, 0, 1)'
           this.backgroundColor = 'rgba(255, 0, 0, .1)'
+          this.showGraphic()
           break;
 
         case 2:
@@ -167,18 +159,20 @@ export default {
           this.labelName = 'Last closed blocks',
           this.color = 'rgba(255, 165, 0, 1)'
           this.backgroundColor = 'rgba(255, 165, 0, .1)'
+          this.showGraphic()
           break;
 
         case 3:
-          this.arrData = Array.from(this.$store.getters.getAverageList)
-          let tmp4 = Array.from(this.$store.getters.getBlockList)
-          tmp4.forEach(el => {
-            el.toString()
-          })
-          this.labels = tmp4
+          var date = new Date()
+          var lastDay = new Date(date.getTime() - 24*60*60*1000)
+          var lastWeek = new Date(date.getTime() - (24*60*60*1000)*7)
+          var lastWeek2 = new Date(date.getTime() - (24*60*60*1000)*7)
+          this.arrData = Array.from([10, 12, 4, 5])
+          this.labels = Array.from([`${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`, `${lastDay.getFullYear()}/${lastDay.getMonth()}/${lastDay.getDate()}`, `${lastWeek.getFullYear()}/${lastWeek.getMonth()}/${lastWeek.getDate()}`, `${lastWeek2.getFullYear()}/${lastWeek2.getMonth()}/${lastWeek2.getDate()}`])
           this.labelName = 'Closing time of the current block',
           this.color = 'rgba(0, 255, 0, 1)'
           this.backgroundColor = 'rgba(0, 255, 0, .1)'
+          this.showGraphic()
           break;
 
         case 4:
@@ -191,6 +185,7 @@ export default {
           this.labelName = 'Last closed blocks',
           this.color = 'rgba(128, 0, 128, 1)'
           this.backgroundColor = 'rgba(128, 0, 128, .1)'
+          this.showGraphic()
           break;
 
         default:
