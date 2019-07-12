@@ -149,6 +149,9 @@ export default {
             })
             this.arrData.push(exist.length)
           })
+          for (let index = 0; index < this.labels.length; index++) {
+            this.labels[index] = this.labels[index].substring(50)
+          }
           this.labelName = 'Last closed blocks',
           this.color = 'rgba(255, 0, 0, 1)'
           this.backgroundColor = 'rgba(255, 0, 0, .1)'
