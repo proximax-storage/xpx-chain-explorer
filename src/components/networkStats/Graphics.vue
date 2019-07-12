@@ -32,7 +32,14 @@ export default {
       type: Number,
       requires: false,
       default: 0
-    }
+    },
+    params: {
+      type: Array,
+      requires: false,
+      default () {
+        return []
+      }
+    },
   },
 
   data () {
@@ -126,25 +133,35 @@ export default {
           break;
 
         case 1:
-          this.arrData = Array.from(this.$store.getters.getAverageList)
-          let tmp2 = Array.from(this.$store.getters.getBlockList)
-          tmp2.forEach(el => {
-            el.toString()
+          this.labels = Array.from([])
+          this.arrData = Array.from([])
+          this.params.forEach(el => {
+            let exist = this.labels.filter(item => {
+              return el.signer.publicKey === item
+            })
+            if (exist.length === 0) {
+              this.labels.push(el.signer.publicKey)
+            }
           })
-          this.labels = tmp2
-          this.labelName = 'Closing time of the current block',
+          this.labels.forEach(el => {
+            let exist = this.params.filter(item => {
+              return el === item.signer.publicKey
+            })
+            this.arrData.push(exist.length)
+          })
+          this.labelName = 'Last closed blocks',
           this.color = 'rgba(255, 0, 0, 1)'
           this.backgroundColor = 'rgba(255, 0, 0, .1)'
           break;
 
         case 2:
-          this.arrData = Array.from(this.$store.getters.getAverageList)
-          let tmp3 = Array.from(this.$store.getters.getBlockList)
-          tmp3.forEach(el => {
-            el.toString()
+          this.labels = Array.from([])
+          this.arrData = Array.from([])
+          this.params.forEach(el => {
+            this.labels.push(el.height.compact())
+            this.arrData.push(el.numTransactions)
           })
-          this.labels = tmp3
-          this.labelName = 'Closing time of the current block',
+          this.labelName = 'Last closed blocks',
           this.color = 'rgba(255, 165, 0, 1)'
           this.backgroundColor = 'rgba(255, 165, 0, .1)'
           break;
@@ -162,13 +179,13 @@ export default {
           break;
 
         case 4:
-          this.arrData = Array.from(this.$store.getters.getAverageList)
-          let tmp5 = Array.from(this.$store.getters.getBlockList)
-          tmp5.forEach(el => {
-            el.toString()
+          this.labels = Array.from([])
+          this.arrData = Array.from([])
+          this.params.forEach(el => {
+            this.labels.push(el.height.compact())
+            this.arrData.push(el.difficulty.compact())
           })
-          this.labels = tmp5
-          this.labelName = 'Closing time of the current block',
+          this.labelName = 'Last closed blocks',
           this.color = 'rgba(128, 0, 128, 1)'
           this.backgroundColor = 'rgba(128, 0, 128, .1)'
           break;
