@@ -160,20 +160,37 @@ export default {
 
     // Load An Map
     loadMap (lat, lon, item) {
-      // console.log('Loading Map', lat, lon)
-      let location = { lat: lat, lng: lon }
-      let map = new google.maps.Map(document.getElementById('first'), {
-        center: location,
-        zoom: 16
+      // console.log(lat, lon)
+      mapboxgl.accessToken = 'pk.eyJ1Ijoiai1tb3JhMTUiLCJhIjoiY2p5MGY4a2RhMDJqZjNucXh0anl0ZDd2eCJ9.Lsq-ETN03fbVIctkd9lV3Q';
+      let map = new mapboxgl.Map({
+        container: 'first',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [lon, lat],
+        zoom: 10
       })
 
+
+      map.addControl(new mapboxgl.NavigationControl())
+
+      let popup = new mapboxgl.Popup({ offset: 25 })
+        .setHTML(
+          `<div>
+            <div><b>Name: </b> ${item.name}</div>
+            <div><b>IP: </b> ${item.ip}</div>
+            <div><b>Location: </b> ${item.location}</div>
+          </div>`
+        )
+
       let image = require('../assets/map-pointer-green-15x20.png')
-      let marker = new google.maps.Marker({
-        position: location,
-        map: map,
-        title: `Name: ${item.name}\nIP: ${item.ip}\nLocation: ${item.location}`,
-        icon: image
-      })
+      let el = document.createElement('div')
+      el.style.width = '33px'
+      el.style.height = '43px'
+      el.style.backgroundImage = `url(${image})`
+
+      var marker = new mapboxgl.Marker(el)
+        .setLngLat([lon, lat])
+        .setPopup(popup)
+        .addTo(map)
     },
 
     verifyMapList () {
@@ -212,6 +229,9 @@ export default {
 <style lang="sass">
 $radius: 5px
 
+.mapboxgl-popup
+  color: black
+
 .title
   font-size: 9px
   font-weight: bold
@@ -246,7 +266,7 @@ $radius: 5px
     & > .imap
       width: 100%
       height: 450px
-      padding: 10px
+      border-radius: 5px
       background: #dddddd
   & > .filter-input
     display: flex
