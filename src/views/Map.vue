@@ -118,11 +118,13 @@ export default {
             el.lat = resp.data.latitude
             el.lon = resp.data.longitude
 
-            axios.get(`http://${el.urlNode}/chain/height`).then(
-              response => {
-                el.height = response.data.height[0]
-              }
-            )
+            if (el.urlNode !== undefined) {
+              axios.get(`http://${el.urlNode}/chain/height`).then(
+                response => {
+                  el.height = response.data.height[0]
+                }
+              )
+            }
 
             this.verifyMapList()
           }
@@ -243,7 +245,7 @@ $radius: 5px
     width: 100%
     & > .imap
       width: 100%
-      height: 500px
+      height: 450px
       padding: 10px
       background: #dddddd
   & > .filter-input

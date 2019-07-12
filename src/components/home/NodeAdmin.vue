@@ -139,17 +139,17 @@ export default {
       } else if (action == 'add') {
         // this.newNode = false
         if (this.newNodeValue !== '') {
-          console.log(this.newNodeValue)
+          // console.log(this.newNodeValue)
           this.nodeMessage = ''
           axios.get(`http://${this.newNodeValue}/node/info`).then(
             response => {
               this.$store.dispatch('pushNewNode', this.newNodeValue)
-              console.log(this.$storage.get('customNodes'))
+              // console.log(this.$storage.get('customNodes'))
               if (this.$storage.get('customNodes') === null || this.$storage.get('customNodes') === undefined) {
                 this.$storage.set('customNodes', [this.newNodeValue])
               } else {
                 let tmpCustomNodes = JSON.parse(this.$storage.get('customNodes'))
-                console.log(typeof tmpCustomNodes, tmpCustomNodes)
+                // console.log(typeof tmpCustomNodes, tmpCustomNodes)
               }
               this.nodeMessage = 'Node Accepted - Available from the list of nodes'
             }
