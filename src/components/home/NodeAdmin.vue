@@ -144,6 +144,13 @@ export default {
           axios.get(`http://${this.newNodeValue}/node/info`).then(
             response => {
               this.$store.dispatch('pushNewNode', this.newNodeValue)
+              console.log(this.$storage.get('customNodes'))
+              if (this.$storage.get('customNodes') === null || this.$storage.get('customNodes') === undefined) {
+                this.$storage.set('customNodes', [this.newNodeValue])
+              } else {
+                let tmpCustomNodes = JSON.parse(this.$storage.get('customNodes'))
+                console.log(typeof tmpCustomNodes, tmpCustomNodes)
+              }
               this.nodeMessage = 'Node Accepted - Available from the list of nodes'
             }
           )

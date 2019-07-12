@@ -59,8 +59,19 @@ export default {
     loadNodes () {
       axios.get('./config/nodes.json')
         .then(response => {
-          let data = response
-          this.$store.dispatch('updateNodes', data.data.nodes)
+          let finaldata = response
+          let tmpNodes = JSON.parse(this.$storage.get('customNodes'))
+          // console.log("Custom Nodes", tmpNodes)
+          // console.log("Custom Nodes type", typeof tmpNodes)
+          if (typeof tmpNodes === 'object') {
+            // console.log('Add Custom Nodes')
+            // console.log(response.data.nodes, tmpNodes)
+            finaldata = response.data.nodes.concat(tmpNodes)
+            // console.log(finaldata)
+          } else {
+            finaldata = response.data.nodes
+          }
+          this.$store.dispatch('updateNodes', finaldata)
           this.runWS()
         })
     },

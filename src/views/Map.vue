@@ -109,7 +109,7 @@ export default {
     },
 
     analyzeMaps () {
-      console.log(this.mapList)
+      // console.log(this.mapList)
       this.mapList.forEach((el, index) => {
         // console.log(el)
         // Get LatLon
@@ -117,23 +117,26 @@ export default {
           resp => {
             el.lat = resp.data.latitude
             el.lon = resp.data.longitude
+
+            axios.get(`http://${el.urlNode}/chain/height`).then(
+              response => {
+                el.height = response.data.height[0]
+              }
+            )
+
             this.verifyMapList()
           }
         )
-        .catch(error => {
-          console.log('This is an error')
-        })
-
       })
     },
 
     loadFirstMap () {
-      console.log('Loading First Map')
-      this.loadMap(this.mapList[0].lat, this.mapList[0].lon)
+      // console.log('Loading First Map')
+      this.loadMap(this.mapList[0].lat, this.mapList[0].lon, this.mapList[0])
     },
 
     activate (item) {
-      this.loadMap(item.lat, item.lon)
+      this.loadMap(item.lat, item.lon, item)
     },
 
     changeSearch (item) {
@@ -149,40 +152,32 @@ export default {
         this.filterExe = 'status'
       }
 
-      console.log(this.filterExe)
+      // console.log(this.filterExe)
       this.buttonName = item
     },
 
     // Load An Map
-    loadMap (lat, lon) {
+    loadMap (lat, lon, item) {
       // console.log('Loading Map', lat, lon)
       let location = { lat: lat, lng: lon }
-
       let map = new google.maps.Map(document.getElementById('first'), {
         center: location,
         zoom: 16
       })
 
-      let marker = new google.maps.Marker({ position: location, map: map })
+      let image = require('../assets/map-pointer-green-15x20.png')
+      let marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        title: `Name: ${item.name}\nIP: ${item.ip}\nLocation: ${item.location}`,
+        icon: image
+      })
     },
 
     verifyMapList () {
       if (this.mapList.some(el => el.lat > 0) === true) {
         this.loadFirstMap()
       }
-    },
-
-    getHeight () {
-      this.maplist.forEach(el => {
-        console.log('Loading Height')
-        console.log("El", el.urlNode)
-        axios.get(`http://${el.urlNode}/chain/height`).then(
-          response => {
-            el.height = response.data
-            console.log(el.height)
-          }
-        )
-      })
     }
   },
 
