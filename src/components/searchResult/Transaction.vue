@@ -112,8 +112,8 @@
         <!-- Iterated Element -->
         <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
           <div class="title">{{ item.key }}</div>
-          <div class="value" v-if="item.value !== ''">{{ item.value }}</div>
-          <div class="value" v-else-if="item.valueHtml !== ''" v-html="item.valueHtml"></div>
+          <div :class="(item.class === undefined) ? 'value' : item.class" v-if="item.value !== ''">{{ item.value }}</div>
+          <div :class="(item.class === undefined) ? 'value' : item.class" v-else v-html="item.valueHtml"></div>
         </div>
         <!-- End Iterated Element -->
 
@@ -260,12 +260,12 @@ export default {
       let result = null
       if (message.type === 0) {
         if (message.payload === '') {
-          result = { key: 'Message', value: 'Empty Message' }
+          result = { key: 'Message', value: 'Empty Message', class: 'valueLower' }
         } else {
-          result = { key: 'Message', value: message.payload }
+          result = { key: 'Message', value: message.payload, class: 'valueLower' }
         }
       } else {
-        result = { key: 'Message', value: 'Encrypted Message' }
+        result = { key: 'Message', value: 'Encrypted Message', class: 'valueLower' }
       }
       return result
     },
@@ -490,6 +490,11 @@ $radius: 5px
     display: flex
     flex-flow: row wrap
     justify-content: space-around
+
+.valueLower
+  font-size: 13px
+  font-weight: normal
+  word-wrap: break-word
 
 .amount
   color: black

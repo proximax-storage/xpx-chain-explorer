@@ -86,103 +86,112 @@ export default {
       map: undefined,
       listOfOptions: [
         'By name',
-        'By ip'
+        'By location',
+        'By status'
       ],
-      mapList: [
-        {
-          name: 'bctestnet1.xpxsirius.io:3000',
-          ip: '54.255.178.204',
-          template: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2812.3311413209963!2d103.8531170829637!3d1.2929284703464528!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMTcnMzQuNCJOIDEwM8KwNTEnMTYuOSJF!5e0!3m2!1ses-419!2sve!4v1562199616164!5m2!1ses-419!2sve" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>',
-          version: 0,
-          location: 'Malasia',
-          height: null,
-          status: 'Online',
-          active: true,
-          visible: true
-        }
-      ]
+      mapList: [],
+      showFirstMap: false
     }
   },
 
   mounted () {
-    this.loadMap()
-    // this.mapList.forEach(el => {
-    //   axios.get(`http://${el.name}/chain/height`).then(
-    //     response => {
-    //       console.log(response.data)
-    //       el.height = response.data.height[0]
-    //     }
-    //   )
-    // })
-
-    // let resp
-    // axios.get('./config/nodesInformation.json')
-    //   .then(response => {
-    //     resp = Array.from(response.data.nodesInfo)
-
-    //     resp.forEach(el => {
-    //       axios.get(`http://${el.name}/node/info`).then(
-    //         response2 => {
-    //           console.log(response)
-    //           axios.get(`http://${el.name}/chain/height`).then(
-    //             response3 => {
-    //               console.log(response2)
-
-    //               let tmpObj = {
-    //                 name: response.data.name,
-    //                 ip: response.data.host,
-    //                 version: response.data.version,
-    //                 location: response.data.location,
-    //                 height: response3.data.height[0]
-    //               }
-
-    //               this.mapList.push(tmpObj)
-    //               console.log(this.mapList)
-    //             }
-    //           )
-    //         }
-    //       )
-    //     })
-    //   })
+    this.getInfoNodes()
   },
 
   methods: {
-    activate (item) {
-      this.mapList.forEach(el => {
-        el.active = false
-      })
-
-      item.active = true
+    getInfoNodes () {
+      axios.get('./config/nodesInfoMaps.json').then(
+        response => {
+          this.mapList = response.data
+          this.analyzeMaps()
+        }
+      )
     },
+
+    analyzeMaps () {
+      // console.log(this.mapList)
+      this.mapList.forEach((el, index) => {
+        // console.log(el)
+        // Get LatLon
+        axios.get(`https://geoip-db.com/json/${el.ip}`).then(
+          resp => {
+            el.lat = resp.data.latitude
+            el.lon = resp.data.longitude
+
+            if (el.urlNode !== undefined) {
+              axios.get(`http://${el.urlNode}/chain/height`).then(
+                response => {
+                  el.height = response.data.height[0]
+                }
+              )
+            }
+
+            this.verifyMapList()
+          }
+        )
+      })
+    },
+
+    loadFirstMap () {
+      // console.log('Loading First Map')
+      this.loadMap(this.mapList[0].lat, this.mapList[0].lon, this.mapList[0])
+    },
+
+    activate (item) {
+      this.loadMap(item.lat, item.lon, item)
+    },
+
     changeSearch (item) {
-      console.log(this.filterExe)
       if (item === 'By name') {
         this.filterExe = 'name'
       }
 
-      if (item === 'By ip') {
-        this.filterExe = 'ip'
+      if (item === 'By location') {
+        this.filterExe = 'location'
       }
 
+      if (item === 'By status') {
+        this.filterExe = 'status'
+      }
+
+      // console.log(this.filterExe)
       this.buttonName = item
     },
-    loadMap () {
-      let location = { lat: 1.2928999662399, lng: 103.85469818115 }
 
+    // Load An Map
+    loadMap (lat, lon, item) {
+      // console.log('Loading Map', lat, lon)
+      let location = { lat: lat, lng: lon }
       let map = new google.maps.Map(document.getElementById('first'), {
         center: location,
         zoom: 16
       })
 
-      let marker = new google.maps.Marker({ position: location, map: map })
+      let image = require('../assets/map-pointer-green-15x20.png')
+      let marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        title: `Name: ${item.name}\nIP: ${item.ip}\nLocation: ${item.location}`,
+        icon: image
+      })
+    },
+
+    verifyMapList () {
+      if (this.mapList.some(el => el.lat > 0) === true) {
+        this.loadFirstMap()
+      }
     }
   },
+
+  // WATCHERS
   watch: {
     filter (n, o) {
       this.mapList.forEach(el => {
         if (this.filterExe !== '') {
           el.visible = false
-          let tmp = el[this.filterExe].toLowerCase()
+          let tmp = el[this.filterExe].toLowerCase().toString()
+          // console.log(tmp, el[this.filterExe].toLowerCase().toString())
+          // console.log(tmp.indexOf(this.filter.toLowerCase()) !== -1)
           if (tmp.indexOf(this.filter.toLowerCase()) !== -1) {
             el.visible = true
           }
@@ -236,10 +245,9 @@ $radius: 5px
     width: 100%
     & > .imap
       width: 100%
-      height: 500px
+      height: 450px
       padding: 10px
       background: #dddddd
-      border-radius: 5px
   & > .filter-input
     display: flex
     flex-flow: column nowrap

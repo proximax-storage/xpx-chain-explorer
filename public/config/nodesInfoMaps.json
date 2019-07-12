@@ -1,0 +1,27 @@
+[
+  {
+    "name": "bctestnet1.xpxsirius.io",
+    "ip": "54.255.178.204",
+    "version": 0,
+    "location": "Malasia",
+    "lat": 0,
+    "lon": 0,
+    "height": null,
+    "status": "Online",
+    "active": false,
+    "visible": true,
+    "urlNode": "bctestnet1.xpxsirius.io:3000"
+  },
+  {
+    "name": "Another-Test-Node.io",
+    "ip": "190.130.64.170",
+    "version": 0,
+    "location": "Colombia",
+    "lat": 0,
+    "lon": 0,
+    "height": null,
+    "status": "Offline",
+    "active": false,
+    "visible": true
+  }
+]
