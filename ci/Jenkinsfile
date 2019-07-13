@@ -84,23 +84,23 @@ pipeline {
     //   }
     // }
 
-    stage('Deploy to Staging') {
+    stage('Deploy to Testnet') {
       steps {
-        echo 'Deploying to Staging'
+        echo 'Deploying to Testnet'
 
         echo 'Managing S3'
         withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
           echo 'Deleting old files'
-          s3Delete bucket: 'bcstagingexplorer.xpxsirius.io', path: './'
+          s3Delete bucket: 'bctestnetexplorer.xpxsirius.io', path: './'
 
           echo 'Uploading new files'
-          s3Upload bucket: 'bcstagingexplorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
+          s3Upload bucket: 'bctestnetexplorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
         }
 
         echo 'Managing CloudFront'
         withAWS(credentials: 'jenkins-ecr') {
           echo 'Invalidating CloudFront'
-          cfInvalidate distribution: 'E373B3Y0NEN1OB', paths: ['/*']
+          cfInvalidate distribution: 'E1RZY6CIY8D6XA', paths: ['/*']
         }
       }
 
@@ -108,7 +108,7 @@ pipeline {
         success {
           slackSend channel: '#devops',
             color: 'good',
-            message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
+            message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bctestnetexplorer.xpxsirius.io"
         }
 
         failure {
