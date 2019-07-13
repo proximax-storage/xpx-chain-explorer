@@ -23,7 +23,7 @@ export default class Utils {
   /**
    * Method to format integer with thousands separator
    * @param data
-   * @memberof Utils   
+   * @memberof Utils
    */
   static fmtIntValue(data) {
     if (!data) {
@@ -34,11 +34,11 @@ export default class Utils {
       return r + "</strong>"
     }
   }
-  
+
   /**
    * Method for currency format depending on the divisibility
-   * @param quantity 
-   * @param divisibility 
+   * @param quantity
+   * @param divisibility
    * @memberof Utils
    */
   static fmtDivisibility(quantity, divisibility) {
@@ -58,7 +58,7 @@ export default class Utils {
       return r + ".</strong><span class='dim'>" + b[1] + "</span>"
     }
   }
-  
+
   /**
    * Method for data format
    * @param format date with class date of js
@@ -67,14 +67,16 @@ export default class Utils {
   static fmtTime(format) {
     let date = new Date(format),
     day = (date.getDate() < 10) ? `0${date.getDate()}` : date.getDate(),
-    month = (date.getMonth() < 10) ? `0${date.getMonth() + 1}` : date.getMonth() + 1,
+    month = (date.getMonth() < 10) ? `0${date.getMonth()+1}` : date.getMonth()+1,
     hours = (date.getHours() < 10) ? `0${date.getHours()}` : date.getHours(),
     minutes = (date.getMinutes() < 10) ? `0${date.getMinutes()}` : date.getMinutes(),
     seconds = (date.getSeconds() < 10) ? `0${date.getSeconds()}` : date.getSeconds(),
     final = `${date.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`
+
+    // console.log(date)
     return final
   }
-   
+
   /**
    * Method to calculate the duration of a namespace
    * @param duration of namespace
@@ -89,6 +91,11 @@ export default class Utils {
     seconds -= mnts * 60
     const response = days + " days, " + hrs + " Hrs, " + mnts + " Minutes, " + seconds + " Seconds"
     return response;
+  }
+
+  static pretty(address) {
+    let tmp = address.split()
+    console.log(tmp)
   }
 }
 

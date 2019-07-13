@@ -1,19 +1,45 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Blocks from '@/components/explorer/views/Blocks.vue'
-import explorerRouter from './components/explorer/router_explorer'
-import transactionsRouter from './components/transactions/router_transactions'
 
 Vue.use(Router)
+
+const load = view => {
+  return () => import(`@/views/${view}.vue`)
+}
+
+// const loadChildren = view => {
+//   return () => import(`@/views//${view}.vue`)
+// }
 
 export default new Router({
   routes: [
     {
       path: '/',
-      component: Blocks,
-      name: 'Blocks'
+      name: 'home',
+      component: load('Home')
     },
-    explorerRouter,
-    transactionsRouter
+    {
+      path: '/networkStats',
+      name: 'networkStats',
+      component: load('NetworkStats')
+    },
+    {
+      path: '/map',
+      name: 'map',
+      component: load('Map')
+    },
+    {
+      path: '/searchResult/:type/:id',
+      name: 'searchResult',
+      component: load('SearchResult')
+    },
+    {
+      path: '*',
+      redirect: '/'
+    }
   ]
 })
+
+// component: function () {
+//   return import(/* webpackChunkName: "about" */ './views/About.vue')
+// }

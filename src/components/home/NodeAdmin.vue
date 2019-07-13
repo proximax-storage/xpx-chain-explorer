@@ -1,0 +1,272 @@
+<template>
+  <!-- Node Administrator Component -->
+  <div class="node-admin animated fast fadeIn">
+
+    <!-- Current Block Area -->
+    <div class="admin-item">
+      <h1>Current Block</h1>
+      <p>{{ updateBlock }}</p>
+    </div>
+    <!-- End Current Block Area -->
+
+    <!-- Node Selector Area -->
+    <div class="admin-item" style="flex-grow: 3">
+      <h1>Node</h1>
+      <p>
+        <mdb-dropdown style="text-align: center">
+          <mdb-dropdown-toggle slot="toggle" class="black-text" style="width:100%;padding: 5px 10px; box-shadow: 0px 0px 0px transparent">
+            <span class="button-toggle">{{ getCurrentNode || this.$store.state.currentNode }}</span>
+          </mdb-dropdown-toggle>
+          <mdb-dropdown-menu>
+            <a class="nodeLink" v-for="item in getAllNodes" :key="item.index" @click="changeNode(item.index)">
+              {{ item.name }}
+            </a>
+            <a class="nodeLink" @click="addNode('open')">Add Node</a>
+          </mdb-dropdown-menu>
+        </mdb-dropdown>
+      </p>
+    </div>
+    <!-- End Node Selector Area -->
+
+    <!-- Average Response Time -->
+    <div class="admin-item">
+      <h1>Avg Response Time</h1>
+      <p>{{ getAverage }}(ms)</p>
+    </div>
+    <!-- End Average Response Area -->
+
+    <div class="newNode" v-if="newNode">
+      <mdb-input class="place-white" style="width: 100%" v-model="newNodeValue" label="Add you new node" placeholder="mynode.io:8080"/>
+      <div>{{ nodeMessage }}</div>
+      <div>
+        <div class="closer" @click="addNode('close')">Cancel</div>
+        <div class="add" @click="addNode('add')">Add</div>
+      </div>
+    </div>
+
+  </div>
+  <!-- End Node Administratos -->
+</template>
+
+<script>
+import {
+  mdbDropdown,
+  mdbDropdownMenu,
+  mdbDropdownToggle,
+  mdbInput
+} from 'mdbvue'
+import axios from 'axios'
+
+export default {
+  name: 'NodeAdmin',
+  components: {
+    mdbDropdown,
+    mdbDropdownMenu,
+    mdbDropdownToggle,
+    mdbInput
+  },
+  data () {
+    return {
+      newNode: false,
+      newNodeValue: '',
+      nodeMessage: ''
+    }
+  },
+  computed: {
+    /**
+     * Update Block
+     *
+     * Get the last stored block from the store
+     */
+    updateBlock () {
+      return this.$store.getters.getCurrentBlock
+    },
+
+    /**
+     * Update Node
+     *
+     * Get the last stored Node from the store
+     */
+    getCurrentNode () {
+      return this.$store.getters.getCurrentNode
+    },
+
+    /**
+     * Get All Nodes
+     *
+     * Get the list of available nodes from the store
+     */
+    getAllNodes () {
+      let tmpArray = []
+      let tmp = Array.from(this.$store.getters.getAllNodes)
+      tmp.forEach((item, index) => {
+        tmpArray.push({ name: item, index: index })
+      });
+      return tmpArray
+    },
+
+    /**
+     * Get Average
+     */
+    getAverage () {
+      let ave = this.$store.getters.getAverageList
+      let count = 0
+      ave.forEach(el => {
+        count += el
+      })
+
+      count = count / ave.length
+      return count.toFixed(2)
+
+    }
+  },
+  methods: {
+    /**
+     * Change Node
+     *
+     * Execute the Change the node action and reload the page
+     */
+    changeNode (index) {
+      this.$store.dispatch('updateCurrentNode', index)
+      window.location.reload()
+    },
+
+    addNode(action) {
+      if (action == 'open') {
+        this.newNode = true
+      } else if (action == 'close') {
+        this.newNode = false
+        this.nodeMessage = ''
+        this.newNodeValue = ''
+      } else if (action == 'add') {
+        // this.newNode = false
+        if (this.newNodeValue !== '') {
+          // console.log(this.newNodeValue)
+          this.nodeMessage = ''
+          axios.get(`http://${this.newNodeValue}/node/info`).then(
+            response => {
+              this.$store.dispatch('pushNewNode', this.newNodeValue)
+              console.log(this.$storage.get('customNodes'))
+              if (this.$storage.get('customNodes') === null || this.$storage.get('customNodes') === undefined) {
+                this.$storage.set('customNodes', [this.newNodeValue])
+              } else {
+                let tmpCustomNodes = JSON.parse(this.$storage.get('customNodes'))
+                // console.log(typeof tmpCustomNodes, tmpCustomNodes)
+              }
+              this.nodeMessage = 'Node Accepted - Available from the list of nodes'
+            }
+          )
+          .catch(err => {
+            this.nodeMessage = 'Node not accepted'
+          })
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style lang="sass">
+*
+  margin: 0px
+  padding: 0px
+
+.md-form input[type=search]:focus:not([readonly])
+    box-shadow: 0 1px 0 0 #2d8e9b !important
+    border-bottom: 1px solid #2d8e9b !important
+
+.place-white
+  color: black !important
+  margin: 0px !important
+  & > input
+    color: black !important
+    border-bottom: #2d8e9b
+    margin: 0px
+  & > label
+    color: #2d8e9b !important
+    &::after
+      background: red !important
+
+.nodeLink
+  display: block
+  margin: 3px
+  font-weight: bold !important
+  padding: 5px
+  &:hover
+    background: #2d8e9b !important
+    color: white !important
+
+.newNode
+  width: 100%
+  background: white
+  padding: 15px
+  text-align: center
+  display: flex
+  flex-flow: column nowrap
+  justify-content: center
+  align-items: center
+  & > div
+    color: black
+    font-size: 10px
+    display: flex
+    flex-flow: row wrap
+    & > .closer
+      flex-grow: 1
+      color: white
+      background: red
+      border-radius: 15px
+      padding: 5px 20px
+      font-size: 12px
+      font-weight: bold
+      margin: 5px
+    & > .add
+      flex-grow: 1
+      color: white
+      background: green
+      border-radius: 15px
+      padding: 5px 20px
+      font-size: 12px
+      font-weight: bold
+      margin: 5px
+
+.node-admin
+  display: flex
+  flex-flow: row wrap
+  justify-content: space-evenly
+  position: relative
+  z-index: 3000
+  & > .admin-item
+    flex-grow: 1
+    background: white
+    padding: 10px
+    border-radius: 7px
+    min-width: 200px
+    margin: 10px
+    & > h1
+      font-size: 15px
+      margin: 0px
+      font-weight: bold
+      text-transform: uppercase
+      color: #2d8e9b
+    & > p
+      font-size: 30px
+      color: black
+      text-align: center
+
+.button-toggle
+  font-size: 20px
+  word-break: break-all
+
+@media screen and (max-width: 600px)
+  .node-admin
+    flex-flow: column nowrap
+    & > .admin-item
+      border-radius: 5px
+      & > h1
+        font-size: 10px
+      & > p
+        font-size: 15px
+
+  .button-toggle
+    font-size: 15px
+</style>

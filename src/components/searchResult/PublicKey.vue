@@ -1,0 +1,193 @@
+<template>
+  <!-- Public Key Component -->
+  <div class="publicKey animated fast fadeIn">
+
+    <!-- Up Container -->
+    <div class="pk-layout-up">
+
+      <!-- Left -->
+      <div>
+        <h1 class="supertitle">Account Info</h1>
+        <div class="up">
+          <div class="title">Address</div>
+          <div class="value link" @click="goToAddress(detail.address.pretty())">{{ detail.address.pretty() }}</div>
+        </div>
+        <div class="down">
+          <div class="title">Public Key</div>
+          <div class="value link" @click="goToAddress(detail.publicKey)">{{ detail.publicKey }}</div>
+        </div>
+      </div>
+      <!-- End Left -->
+
+      <!-- Right -->
+      <div>
+        <h1 class="supertitle">XPX Info</h1>
+        <div class="up">
+          <div class="title">Namespace Name</div>
+          <div class="value">PRX</div>
+        </div>
+        <div class="down">
+          <div class="title">XPX Mosaic Id</div>
+          <div class="value">{{ getId }}</div>
+        </div>
+      </div>
+      <!-- End Right -->
+
+    </div>
+    <!-- End Up Container -->
+
+    <!-- Down Container -->
+    <div class="pk-layout-down">
+      <h1 class="balance" v-html="formatBalance"></h1>
+    </div>
+    <!-- End Down Container -->
+
+  </div>
+  <!-- End Public Key Component -->
+</template>
+
+<script>
+import proximaxProvider from '@/services/proximaxProviders.js'
+
+export default {
+  name: 'PublicKey',
+  data () {
+    return {
+      amount: 0
+    }
+  },
+  props: {
+    detail: Object
+  },
+  mounted () {
+    console.log(this.detail)
+  },
+  computed: {
+    /**
+     * Get ID
+     *
+     * Return XPX Mosaic ID
+     */
+    getId () {
+      return proximaxProvider.mosaicXpx()
+    },
+
+    /**
+     * Get Balance
+     *
+     * This computed property obtains the balance depending on the mosaics that the component
+     * receives by parameters, analyzing the xpx mosaic and printing its value
+     */
+    getBalance () {
+      // console.log(this.detail.mosaics)
+      let xpxMosaics = this.detail.mosaics.filter(el => el.id.id.toHex().toUpperCase() === proximaxProvider.mosaicXpx())
+      // console.log(xpxMosaics)
+      let amount
+      if (xpxMosaics.length > 0) {
+        amount = this.$utils.fmtAmountValue(xpxMosaics[0].amount.compact())
+      } else {
+        amount = this.$utils.fmtAmountValue(0)
+      }
+      return amount
+    },
+
+    /**
+     * Format Balance
+     *
+     * return the balance in html format
+     */
+    formatBalance () {
+      return `<div>BALANCE: ${ this.getBalance } XPX</div>`
+    }
+  },
+  methods: {
+    goToAddress (address) {
+      let routeData = (address.length === 64) ?
+      this.$router.resolve({ path: `/searchResult/publicKey/${ address }` }) :
+      this.$router.resolve({ path: `/searchResult/address/${ address }` })
+      window.open(routeData.href, '_blank')
+    }
+  }
+}
+</script>
+
+<style lang="sass" scoped>
+$radius: 5px
+
+.link:hover
+  color: #2d8e9b
+  text-decoration: underline
+  cursor: pointer
+
+.title
+  font-size: 10px
+  font-weight: bold
+  text-transform: uppercase
+
+.value
+  font-size: 14px
+  font-weight: normal
+  text-transform: uppercase
+  word-wrap: break-word
+
+.balance
+  color: black
+  margin: 0px
+  font-weight: bold
+  font-size: 30px
+
+.supertitle
+  margin: 0px
+  font-size: 17px
+  color: white
+  padding: 0px 0px 5px 0px
+
+.up
+  background: #DDDDDD
+  border-radius: $radius $radius 0px 0px
+  padding: 10px
+
+.down
+  background: #F4F4F4
+  border-radius: 0px 0px $radius $radius
+  padding: 10px
+
+.publicKey
+  // margin: 15px 10px 0px 10px
+  background: #2d8e9b
+  padding: 10px
+  color: black
+  & > .pk-layout-up
+    background: transparent
+    margin-bottom: 10px
+    display: flex
+    flex-flow: row wrap
+    justify-content: space-evenly
+    & > div:first-child
+      flex-grow: 4
+      margin-right: 5px
+      border-radius: $radius
+    & > div:last-child
+      flex-grow: 1
+      background: transparent
+      margin-left: 5px
+      border-radius: $radius
+  & > .pk-layout-down
+    background:  #F4F4F4
+    display: flex
+    flex-flow: row nowrap
+    justify-content: center
+    align-items: center
+    border-radius: $radius
+    padding: 10px
+    margin: 0px
+
+@media screen and (max-width: 740px)
+  .publicKey
+    & > .pk-layout-up
+      flex-flow: column
+      & > div:first-child
+        margin: 0px 0px 10px 0px
+      & > div:last-child
+        margin: 0px 0px 10px 0px
+</style>

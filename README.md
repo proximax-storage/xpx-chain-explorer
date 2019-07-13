@@ -10,6 +10,10 @@ npm install
 npm run serve
 ```
 
+### Compiles and minifies for production
+```
+npm run build
+```
 
 ### Run your tests
 ```
@@ -20,25 +24,6 @@ npm run test
 ```
 npm run lint
 ```
-
-### For deployment
-
-#### Compiles and minifies for production
-```
-npm run build
-```
-
-#### Install server of node:
-```
-npm i -g serve
-```
-
-#### Serve the view:
-```
-serve -s name_folder (dist)
-```
-
-
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
