@@ -63,7 +63,7 @@ export default {
           let tmpNodes = JSON.parse(this.$storage.get('customNodes'))
           // console.log("Custom Nodes", tmpNodes)
           // console.log("Custom Nodes type", typeof tmpNodes)
-          if (typeof tmpNodes === 'object') {
+          if (tmpNodes !== null && typeof tmpNodes === 'object') {
             // console.log('Add Custom Nodes')
             // console.log(response.data.nodes, tmpNodes)
             finaldata = response.data.nodes.concat(tmpNodes)

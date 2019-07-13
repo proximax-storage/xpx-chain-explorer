@@ -36,10 +36,10 @@
     <!-- End Average Response Area -->
 
     <div class="newNode" v-if="newNode">
-      <mdb-input class="place-white" style="width: 100%" v-model="newNodeValue" label="Add you new node"/>
+      <mdb-input class="place-white" style="width: 100%" v-model="newNodeValue" label="Add you new node" placeholder="mynode.io:8080"/>
       <div>{{ nodeMessage }}</div>
       <div>
-        <div class="closer" @click="addNode('close')">Close</div>
+        <div class="closer" @click="addNode('close')">Cancel</div>
         <div class="add" @click="addNode('add')">Add</div>
       </div>
     </div>
@@ -136,6 +136,8 @@ export default {
         this.newNode = true
       } else if (action == 'close') {
         this.newNode = false
+        this.nodeMessage = ''
+        this.newNodeValue = ''
       } else if (action == 'add') {
         // this.newNode = false
         if (this.newNodeValue !== '') {
@@ -144,7 +146,7 @@ export default {
           axios.get(`http://${this.newNodeValue}/node/info`).then(
             response => {
               this.$store.dispatch('pushNewNode', this.newNodeValue)
-              // console.log(this.$storage.get('customNodes'))
+              console.log(this.$storage.get('customNodes'))
               if (this.$storage.get('customNodes') === null || this.$storage.get('customNodes') === undefined) {
                 this.$storage.set('customNodes', [this.newNodeValue])
               } else {

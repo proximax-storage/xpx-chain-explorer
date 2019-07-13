@@ -10,6 +10,11 @@
           <div class="value">{{ item.name }}</div>
         </div>
 
+        <div style="padding: 2px" v-if="titleMosaic == 'Mosaic Alias ID'" class="animated faster fadeInDown">
+          <div class="title">Mosaic Alias Name</div>
+          <div class="value">{{ mosaicAliasName }}</div>
+        </div>
+
         <div style="padding: 2px" class="animated faster fadeInDown">
           <div class="title" >Mosaic {{ amountQuantity }}</div>
           <div class="value" v-html="item.amount"></div>
@@ -31,6 +36,7 @@ export default {
       xpx: '0DC67FBE1CAD29E3',
       finalData: [],
       titleMosaic: 'Mosaic Id',
+      mosaicAliasName: '',
       amountQuantity: 'Amount'
     }
   },
@@ -61,7 +67,19 @@ export default {
               error => {
                 this.$proxProvider.getNamespacesInfo(el.id).subscribe(
                   response => {
-                    this.titleMosaic = 'Mosaic Alias'
+                    this.$proxProvider.getNamespacesName([el.id]).subscribe(
+                      nameResponse => {
+                        nameResponse = nameResponse.reverse()
+                        console.log("Name Response", nameResponse)
+                        if (nameResponse.length > 1) {
+                          this.mosaicAliasName = `${nameResponse[0].name}.${nameResponse[1].name}`
+                        } else {
+                          this.mosaicAliasName = nameResponse[0].name
+                        }
+                      }
+                    )
+                    console.log(response)
+                    this.titleMosaic = 'Mosaic Alias ID'
                     let tmpId = this.$proxProvider.createMosaicId(response.alias.mosaicId)
                     this.$proxProvider.getMosaic(tmpId).subscribe(
                       response2 => {

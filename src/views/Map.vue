@@ -34,7 +34,7 @@
       <div class="cardServe" v-for="(item, index) in mapList" :key="index" @click="activate(item)" :style="(item.visible) ? 'display: flex' : 'display: none'">
         <div>
           <div class="title">Name</div>
-          <div class="value">{{ item.name }}</div>
+          <div class="valueLower">{{ item.name }}</div>
         </div>
         <div>
           <div class="title">Ip</div>
@@ -54,7 +54,7 @@
         </div>
         <div>
           <div class="title">Status</div>
-          <div class="value">{{ item.status }}</div>
+          <div class="value" :style="(item.status == 'Online') ? 'color: #2d8e9b; font-weight: bold' : 'color: red; font-weight: bold'">{{ item.status }}</div>
         </div>
       </div>
     </div>
@@ -118,6 +118,12 @@ export default {
             el.lat = resp.data.latitude
             el.lon = resp.data.longitude
 
+            axios.get(`http://${el.urlNode}/node/info`).then(
+              response => {
+                el.version = response.data.version
+              }
+            )
+
             if (el.urlNode !== undefined) {
               axios.get(`http://${el.urlNode}/chain/height`).then(
                 response => {
@@ -166,7 +172,7 @@ export default {
         container: 'first',
         style: 'mapbox://styles/mapbox/light-v10',
         center: [lon, lat],
-        zoom: 10
+        zoom: 5
       })
 
 
@@ -245,10 +251,17 @@ $radius: 5px
   font-weight: normal
   text-transform: uppercase
   text-align: center
+
 .searchLink
   font-weight: bold
   &:hover
     background: #2d8e9b !important
+
+.valueLower
+  font-size: 14px
+  font-weight: normal
+  text-transform: lowercase
+  text-align: center
 
 .md-form > input
   color: black !important
