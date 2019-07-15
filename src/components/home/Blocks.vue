@@ -45,7 +45,7 @@
 
         <div v-if="buttonLoadMoreActive">
           <span>Load more blocks</span>
-          <span class="value" v-if="!buttonLoaderActive">Click</span>
+          <span class="value" v-if="!buttonLoaderActive">Click here</span>
           <span class="value" v-else><mdb-spinner small color="yellow"/></span>
         </div>
 
