@@ -1,23 +1,23 @@
 <template>
-  <div class="mosaics animated faster fadeInDown" v-if="showFinalData !== null && showFinalData.length > 0">
+  <div class="mosaics animated faster fadeIn" v-if="showFinalData !== null && showFinalData.length > 0">
     <h1 class="supertitle">Mosaics In Transfer</h1>
 
     <div>
       <div class="element" v-for="(item, index) in showFinalData" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
 
-        <div style="padding: 2px" class="animated faster fadeInDown">
+        <div style="padding: 5px 0px 5px 2px " class="animated faster fadeInDown">
           <div class="title">{{ titleMosaic }}</div>
-          <div class="value">{{ item.name }}</div>
+          <div class="value link" @click="(titleMosaic === 'Mosaic Id') ? goToMosaic(item.name) : goToNamespace(item.name)">{{ item.name }}</div>
         </div>
 
-        <div style="padding: 2px" v-if="titleMosaic == 'Mosaic Alias ID'" class="animated faster fadeInDown">
+        <div style="padding: 5px 0px 5px 2px " v-if="titleMosaic == 'Mosaic Alias ID'" class="animated faster fadeInDown">
           <div class="title">Mosaic Alias Name</div>
-          <div class="value">{{ mosaicAliasName }}</div>
+          <div class="value">{{ mosaicAliasName[index] }}</div>
         </div>
 
-        <div style="padding: 2px" class="animated faster fadeInDown">
+        <div style="padding: 5px 0px 5px 2px " class="animated faster fadeInDown">
           <div class="title" >Mosaic {{ amountQuantity }}</div>
-          <div class="value" v-html="item.amount"></div>
+          <div class="value" v-html="arrayAmount[index]"></div>
         </div>
 
       </div>
@@ -36,14 +36,26 @@ export default {
       xpx: '0DC67FBE1CAD29E3',
       finalData: [],
       titleMosaic: 'Mosaic Id',
-      mosaicAliasName: '',
+      mosaicAliasName: [],
+      arrayAmount: [],
       amountQuantity: 'Amount'
     }
   },
   mounted () {
+    console.log(this.params)
     //this.organizeData()
   },
   methods: {
+    goToNamespace (namespaceId) {
+      let routeData = this.$router.resolve({ path: `/searchResult/namespaceInfo/${namespaceId}` })
+      window.open(routeData.href, '_blank')
+    },
+
+    goToMosaic (mosaicId) {
+      let routeData = this.$router.resolve({ path: `/searchResult/mosaicInfo/${mosaicId}` })
+      window.open(routeData.href, '_blank')
+    },
+
     organizeData () {
       // console.log('Mounted')
       if (this.params !== null) {
@@ -71,10 +83,13 @@ export default {
                       nameResponse => {
                         nameResponse = nameResponse.reverse()
                         console.log("Name Response", nameResponse)
-                        if (nameResponse.length > 1) {
-                          this.mosaicAliasName = `${nameResponse[0].name}.${nameResponse[1].name}`
-                        } else {
-                          this.mosaicAliasName = nameResponse[0].name
+                        if (nameResponse.length === 1) {
+                          console.log()
+                          this.mosaicAliasName.push(nameResponse[0].name)
+                        } else if (nameResponse.length === 2) {
+                          this.mosaicAliasName.push(`${nameResponse[0].name}.${nameResponse[1].name}`)
+                        } else if (nameResponse.length === 3) {
+                          this.mosaicAliasName.push(`${nameResponse[0].name}.${nameResponse[1].name}.${nameResponse[2].name}`)
                         }
                       }
                     )
@@ -84,10 +99,12 @@ export default {
                     this.$proxProvider.getMosaic(tmpId).subscribe(
                       response2 => {
                         if (response2.properties.divisibility !== 0) {
-                          tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility)
+                          // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility)
+                          this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
                           this.finalData.push(tmpObj)
                         } else {
-                          tmpObj.amount = `${el.amount.compact()}`
+                          // tmpObj.amount = `${el.amount.compact()}`
+                          this.arrayAmount.push(`${el.amount.compact()}`)
                           this.finalData.push(tmpObj)
                         }
                       }
@@ -101,6 +118,7 @@ export default {
       }
     }
   },
+
   computed: {
     showFinalData () {
       return this.finalData
@@ -140,4 +158,9 @@ export default {
   text-transform: uppercase
   word-break: break-all
   color: black
+
+.link:hover
+  color: #2d8e9b
+  text-decoration: underline
+  cursor: pointer
 </style>

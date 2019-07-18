@@ -162,5 +162,5 @@ export default {
     & > figure
       width: 100%
     & > nav
-      flex-flow: column nowrap
+      flex-flow: row nowrap
 </style>

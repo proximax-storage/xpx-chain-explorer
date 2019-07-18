@@ -5,21 +5,21 @@
     <h1 class="supertitle">{{ nameLabel }}</h1>
 
     <!-- Iterated Elements (Mosaics) -->
-    <div class="element animated fast fadeIn" v-for="(item, index) in finalArray" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="redirectToDetail(index)">
+    <div class="element animated fast fadeIn" v-for="(item, index) in finalArray" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="goToMosaic(item.id)">
 
       <div class="el-left">
         <div class="title">Id</div>
         <div class="value">{{ item.id }}</div>
       </div>
 
-      <div class="el-middle" :class="(item.name) ? '' : 'mosaicNameTrans'">
+      <div class="el-middle" :class="(item.name) ? '' : 'mosaicNameTrans'" style="min-width: 200px">
         <div class="title">Name</div>
         <div class="value">{{ item.name || 'No Available' }}</div>
       </div>
 
-      <div class="el-right">
+      <div class="el-right" style="min-width: 200px">
         <div class="title">Quantity</div>
-        <div class="value" v-html="$utils.fmtAmountValue(item.amount)"></div>
+        <div class="value" v-html="arrayAmount[index]"></div>
       </div>
 
     </div>
@@ -31,6 +31,7 @@
 
 <script>
 import proximaxProvider from '@/services/proximaxProviders.js'
+import { Id } from 'tsjs-xpx-catapult-sdk'
 
 export default {
   name: 'RecentTrans',
@@ -48,7 +49,8 @@ export default {
   },
   data () {
     return {
-      arrayData: []
+      arrayData: [],
+      arrayAmount: []
     }
   },
   /**
@@ -57,8 +59,6 @@ export default {
    * Call constructorObj method
    */
   mounted () {
-    // this.mosaicName(id)
-    console.log(this.arrayTransactions)
     this.constructorObj()
   },
   methods: {
@@ -80,7 +80,7 @@ export default {
       } else {
         mosaicNames = JSON.parse(mosaicNames)
         // console.log(mosaicNames)
-        this.arrayTransactions.forEach(item => {
+        this.arrayTransactions.forEach((item, index) => {
           // this.mosaicName(item)
           let tmpitem = mosaicNames.filter(el => item.id.toHex() === el.id)
           if (tmpitem.length > 0) {
@@ -89,9 +89,10 @@ export default {
               name: tmpitem[0].name,
               amount: item.amount.compact()
             }
+            this.getAmount(item, index)
             this.arrayData.push(itemComplete)
           } else {
-            this.mosaicName(item)
+            this.mosaicName(item, index)
           }
         })
       }
@@ -103,9 +104,10 @@ export default {
      * Make a request and get information about a mosaic,
      * which is reconstructed and stored in local storage
      */
-    mosaicName (item) {
+    mosaicName (item, index) {
       let id = item.id
       let idExact = item.id.toHex()
+      this.getAmount(item, index)
       // console.log(item, id)
       let mosaics = [id]
       this.$proxProvider.getMosaicsName(mosaics).subscribe(
@@ -115,7 +117,6 @@ export default {
             name: resp[0].names[0],
             amount: item.amount.compact()
           }
-
           this.arrayData.push(itemComplete)
 
           let mosaicNames = this.$storage.get('mosaicNames')
@@ -137,6 +138,27 @@ export default {
             name: 'Communication error with the node!',
             amount: 'Communication error with the node!'
           })
+        }
+      )
+    },
+
+    getAmount (item, index) {
+      let id
+      if (typeof item.id === 'string') {
+        id = Id.fromHex(item.id)
+      } else {
+        id = item.id
+      }
+      // let amount = this.$utils.fmtAmountValue(item.amount.compact())
+      // console.log(item.id, id)
+
+      this.$proxProvider.getMosaic(id).subscribe(
+        divResp => {
+          if (divResp.divisibility > 0) {
+            this.arrayAmount.push(this.$utils.fmtDivisibility(item.amount.compact(), divResp.divisibility))
+          } else {
+            this.arrayAmount.push(item.amount.compact())
+          }
         }
       )
     },
@@ -172,6 +194,11 @@ export default {
             this.$emit('pushInfo', info)
           }
         )
+    },
+
+    goToMosaic (mosaicId) {
+      let routeData = this.$router.resolve({ path: `/searchResult/mosaicInfo/${mosaicId}` })
+      window.open(routeData.href, '_blank')
     }
   },
   computed: {

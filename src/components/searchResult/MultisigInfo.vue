@@ -54,7 +54,7 @@ export default {
     this.cosignActive = (this.cosignatories.length > 0) ? true : false
   },
   methods: {
-     goToAddress (address) {
+    goToAddress (address) {
       let routeData = this.$router.resolve({ path: `/searchResult/address/${address}` })
       window.open(routeData.href, '_blank')
     },

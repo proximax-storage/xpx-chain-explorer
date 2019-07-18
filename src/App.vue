@@ -89,17 +89,27 @@ export default {
       // Get the current Node from the persistence service
       let currentNode = this.$storage.get('currentNode')
 
+
       // In the case that there is no information in the persistence service,
       // it is obtained from es vuex or $ store
-      if (currentNode == null) {
+      if (currentNode === null) {
         currentNode = this.$store.state.currentNode
       }
 
+      if (currentNode.includes('http://')) {
+        currentNode = currentNode.substr(7)
+        currentNode = `ws://${currentNode}`
+        // console.log(currentNode)
+      } else if (currentNode.includes('https://')) {
+        currentNode = currentNode.substr(8)
+        currentNode = `wss://${currentNode}`
+        // console.log(currentNode)
+      }
       // Print current node in console
-      // console.log("NODO", currentNode)
+      // console.log("NODE", currentNode)
 
       // Run the ws using the current node
-      const listener = new Listener(`ws://${currentNode}`, WebSocket)
+      const listener = new Listener(`${currentNode}`, WebSocket)
       listener.open().then(() => {
         listener
           .newBlock()
@@ -196,12 +206,12 @@ export default {
   box-sizing: border-box
 
 html
-  background-image: url('./assets/background-proximax-explorer.jpg')
-  background-position: top center
-  background-size: 100%
-  background-repeat: no-repeat
-  background-color: #f3f3f3
-
+  // background-image: url('./assets/background-proximax-explorer.jpg')
+  // background-position: top center
+  // background-size: 100%
+  // background-repeat: no-repeat
+  // background-color: #f3f3f3
+  background: white
 body
   background: transparent
 

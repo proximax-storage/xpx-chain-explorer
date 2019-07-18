@@ -171,7 +171,11 @@ export default {
     },
 
     goTop () {
-      window.scroll(0, 0)
+      window.scrollBy({
+        top: -10000000,
+        left: 0,
+        behavior: 'smooth'
+      })
     }
 
 

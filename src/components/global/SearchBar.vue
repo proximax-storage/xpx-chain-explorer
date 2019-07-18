@@ -66,10 +66,12 @@ export default {
       typeSearch: '',
       label: 'Select search',
       searchList: [
+        { name: 'Address' },
         { name: 'Public Key' },
         { name: 'Block Height' },
         { name: 'Hash' },
-        { name: 'Address' }
+        { name: 'Namespace ID' },
+        { name: 'Mosaic ID' }
       ],
       valueSearch: '',
       // Banner
@@ -95,6 +97,10 @@ export default {
         this.typeSearch = 'transactionHash'
       } else if (item.name === 'Address') {
         this.typeSearch = 'address'
+      } else if (item.name === 'Namespace ID') {
+        this.typeSearch = 'namespaceInfo'
+      } else if (item.name === 'Mosaic ID') {
+        this.typeSearch = 'mosaicInfo'
       }
     },
 

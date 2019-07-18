@@ -27,6 +27,10 @@
     <transaction v-if="type === 'Transaction Hash'" :detail="param" @runOpen="openModal" @runPush="pushInfo"/>
     <!-- End Transaction Component -->
 
+    <namespace-info v-if="type === 'Namespace ID'" :detail="param"/>
+
+    <mosaic-info v-if="type === 'Mosaic ID'" :detail="param"/>
+
     <!-- Mosaics Component -->
     <mosaics v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
     <!-- End Mosaics Component -->
@@ -50,10 +54,12 @@ import PublicKey from '@/components/searchResult/PublicKey.vue'
 import Multisig from '@/components/searchResult/MultisigInfo.vue'
 import BlockInfo from '@/components/searchResult/BlockInfo.vue'
 import Transaction from '@/components/searchResult/Transaction.vue'
+import NamespaceInfo from '@/components/searchResult/NamespaceInfo.vue'
+import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
-import { Address, Deadline, NetworkType } from 'tsjs-xpx-catapult-sdk'
+import { Address, Deadline, NetworkType , Id } from 'tsjs-xpx-catapult-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import axios from 'axios'
 
@@ -66,6 +72,8 @@ export default {
     Multisig,
     BlockInfo,
     Transaction,
+    NamespaceInfo,
+    MosaicInfo,
     RecentTrans,
     Mosaics,
     Modal
@@ -122,6 +130,10 @@ export default {
       this.getBlockByHeight(this.$route.params.id)
     } else if (this.$route.params.type === 'transactionHash') {
       this.getInfoTransaction(this.$route.params.id)
+    } else if (this.$route.params.type === 'namespaceInfo') {
+      this.getNamespaceInfo(this.$route.params.id)
+    } else if (this.$route.params.type === 'mosaicInfo') {
+      this.getMosaicInfo(this.$route.params.id)
     }
     this.value = this.$route.params.id
   },
@@ -162,7 +174,7 @@ export default {
         }
       )
 
-      axios.get(`http://${this.$store.state.currentNode}/account/${addr.address}/multisig`)
+      axios.get(`${this.$store.state.currentNode}/account/${addr.address}/multisig`)
         .then(response => {
           let objTmp = {
             account: response.data.multisig.account,
@@ -261,6 +273,62 @@ export default {
         }
       )
     },
+
+    getNamespaceInfo (namespaceHex) {
+      let namespaceId = Id.fromHex(namespaceHex)
+      console.log('NamespaceInfo', namespaceId)
+      this.$proxProvider.getNamespacesInfo(namespaceId).subscribe(
+        response => {
+          console.log(response)
+          // this.param.id = namespaceId
+          this.$proxProvider.getNamespacesName([namespaceId]).subscribe(
+            nameResponse => {
+              this.param = response
+              nameResponse = nameResponse.reverse()
+              console.log("Name Response", nameResponse)
+              if (nameResponse.length > 1) {
+                this.param.name = `${nameResponse[0].name}.${nameResponse[1].name}`
+              } else {
+                this.param.name = nameResponse[0].name
+              }
+              this.showComponent()
+            }
+          )
+        },
+        error => {
+          this.$store.dispatch('updateErrorInfo', {
+            active: true,
+            message: 'Namespace not found',
+            submessage: 'Check the information provided and try again'
+          })
+        }
+      )
+    },
+
+    getMosaicInfo (mosaicHex) {
+      let mosaicId = Id.fromHex(mosaicHex)
+      this.$proxProvider.getMosaic(mosaicId).subscribe(
+        response => {
+          this.$proxProvider.getMosaicsName([mosaicId]).subscribe(
+            nameResponse => {
+              console.log(nameResponse[0])
+              this.param = response
+              this.param.name = nameResponse[0].names[0]
+              console.log('MosaicInfo', response)
+              this.showComponent()
+            }
+          )
+        },
+        error => {
+          this.$store.dispatch('updateErrorInfo', {
+            active: true,
+            message: 'Mosaic not found',
+            submessage: 'Check the information provided and try again'
+          })
+        }
+      )
+    },
+
     showComponent () {
       if (this.$route.params.type === 'publicKey') {
         this.type = 'Public Key'
@@ -270,6 +338,10 @@ export default {
         this.type = 'Transaction Hash'
       } else if (this.$route.params.type === 'address') {
         this.type = 'Address'
+      } else if (this.$route.params.type === 'namespaceInfo') {
+        this.type = 'Namespace ID'
+      } else if (this.$route.params.type === 'mosaicInfo') {
+        this.type = 'Mosaic ID'
       }
       this.value = this.$route.params.id
     },
@@ -365,7 +437,7 @@ export default {
   padding: 0px 10px 10px 10px
   color: #2d8e9b
   font-size: 20px
-
+  text-transform: uppercase
   font-weight: bold
   word-wrap: break-word
 </style>
