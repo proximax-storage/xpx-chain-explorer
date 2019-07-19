@@ -65,7 +65,7 @@
       <div>
         <div class="up">
           <div class="title">Mosaic Id</div>
-          <div class="value" @click="goToMosaic(getId(detail.alias.mosaicId).toHex())">
+          <div class="value link" @click="goToMosaic(getId(detail.alias.mosaicId).toHex())">
             {{ getId(detail.alias.mosaicId).toHex() }}
           </div>
         </div>
@@ -80,11 +80,11 @@
       <h1 class="supertitle">Levels</h1>
       <div v-for="(item, index) in arrayLevels" :key="index" style="padding-bottom: 10px">
         <div class="up">
-          <div class="title">Mosaic Alias Id</div>
+          <div class="title">Namespace Id</div>
           <div class="value link" @click="goToNamespace(item.id.toHex())">{{ item.id.toHex() }}</div>
         </div>
         <div class="down">
-          <div class="title">Mosaic Alias Name</div>
+          <div class="title">Name</div>
           <div class="value">{{ item.name }}</div>
         </div>
       </div>

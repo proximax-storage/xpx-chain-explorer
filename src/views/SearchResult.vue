@@ -32,7 +32,7 @@
     <mosaic-info v-if="type === 'Mosaic ID'" :detail="param"/>
 
     <!-- Mosaics Component -->
-    <mosaics v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
+    <mosaics v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Others Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
     <!-- End Mosaics Component -->
 
     <!-- Recent Transactions Component -->
