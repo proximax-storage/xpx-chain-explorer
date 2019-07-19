@@ -107,10 +107,6 @@ export default {
     }
   },
   mounted () {
-    let Height = new Id([this.detail.endHeight.lower, this.detail.endHeight.higher])
-    console.log("Convertido a ID", Height)
-    console.log("Compactando el ID", Height.toHex())
-    console.log(parseInt(Height.toHex(), 16))
     this.getMosaicName()
   },
   methods: {
