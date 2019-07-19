@@ -32,7 +32,7 @@
     <!-- Map Options Container -->
     <div class="control">
       <div class="cardServe" v-for="(item, index) in mapList" :key="index" @click="activate(item)" :style="(item.visible) ? 'display: flex' : 'display: none'">
-        <div>
+        <div style="min-width: 200px">
           <div class="title">Name</div>
           <div class="valueLower">{{ item.name }}</div>
         </div>
@@ -44,7 +44,7 @@
           <div class="title">Version</div>
           <div class="value">{{ item.version }}</div>
         </div>
-        <div>
+        <div style="min-width: 200px">
           <div class="title">Location</div>
           <div class="value">{{ item.location }}</div>
         </div>
@@ -118,14 +118,14 @@ export default {
             el.lat = resp.data.latitude
             el.lon = resp.data.longitude
 
-            axios.get(`http://${el.urlNode}/node/info`).then(
+            axios.get(`${el.urlNode}/node/info`).then(
               response => {
                 el.version = response.data.version
               }
             )
 
             if (el.urlNode !== undefined) {
-              axios.get(`http://${el.urlNode}/chain/height`).then(
+              axios.get(`${el.urlNode}/chain/height`).then(
                 response => {
                   el.height = response.data.height[0]
                 }
@@ -187,11 +187,12 @@ export default {
           </div>`
         )
 
-      let image = require('../assets/map-pointer-green-15x20.png')
+      let image = require('../assets/map-pointer-green-15x20.svg')
       let el = document.createElement('div')
-      el.style.width = '33px'
-      el.style.height = '43px'
+      el.style.width = '40px'
+      el.style.height = '52px'
       el.style.backgroundImage = `url(${image})`
+      el.style.backgroundRepeat = 'no-repeat'
 
       var marker = new mapboxgl.Marker(el)
         .setLngLat([lon, lat])
@@ -310,4 +311,8 @@ $radius: 5px
       cursor: pointer
       &:hover
         background: #f4f4f4
+
+@media screen and (max-width: 550px)
+  .map > .control > .cardServe
+    flex-flow: column
 </style>

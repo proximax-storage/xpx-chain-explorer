@@ -60,9 +60,9 @@ export default {
         next => {
           this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(next.compact()).subscribe(
             blockInfo => {
-              console.log(blockInfo)
+              // console.log(blockInfo)
               // // console.log(blockInfo.length, blockInfo.length < 100)
-                console.log(blockInfo[blockInfo.length - 1].height.compact())
+                // console.log(blockInfo[blockInfo.length - 1].height.compact())
               if (blockInfo.length < 10) {
                 this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(blockInfo[blockInfo.length - 1].height.compact() - 1).subscribe(
                   response => {
@@ -76,12 +76,12 @@ export default {
               }
             },
             error => {
-              console.log('\n\n\n\nValue of Error', error, '\n\n\n\nEnd value\n\n')
+              // console.log('\n\n\n\nValue of Error', error, '\n\n\n\nEnd value\n\n')
             }
           )
         },
         error => {
-          console.log('\n\n\n\nValue of Error2', error, '\n\n\n\nEnd value\n\n')
+          // console.log('\n\n\n\nValue of Error2', error, '\n\n\n\nEnd value\n\n')
         }
       )
     }

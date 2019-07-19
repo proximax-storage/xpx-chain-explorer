@@ -18,8 +18,8 @@ import {
 
 export default class proximaxProvider {
 
-  constructor() {
-    this.Url = `http://bctestnet1.xpxsirius.io:3000`
+  constructor(url) {
+    this.Url = url
     this.blocksHeight = new BehaviorSubject(null)
     this.blocksHeight$ = this.blocksHeight.asObservable()
     this.mosaicHttp = new MosaicHttp(this.Url)

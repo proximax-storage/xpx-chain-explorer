@@ -10,19 +10,19 @@
     "status": "Online",
     "active": false,
     "visible": true,
-    "urlNode": "bctestnet1.xpxsirius.io:3000"
+    "urlNode": "http://bctestnet1.xpxsirius.io:3000"
   },
   {
     "name": "bctestnet2.xpxsirius.io",
     "ip": "54.189.186.124",
     "version": 0,
-    "location": "United States",
+    "location": "USA",
     "lat": 0,
     "lon": 0,
     "height": null,
     "status": "Online",
     "active": false,
     "visible": true,
-    "urlNode": "bctestnet2.xpxsirius.io:3000"
+    "urlNode": "http://bctestnet2.xpxsirius.io:3000"
   }
 ]

@@ -19,6 +19,8 @@
     </nav>
     <!-- End Navigation Container -->
 
+    <div class="version">{{ softwareVersion }}</div>
+
   </div>
   <!-- End Header Component -->
 </template>
@@ -32,7 +34,8 @@ export default {
         { name: 'Transactions', route: '', class: 'active' },
         { name: 'Network stats', route: 'networkStats', class: 'inactive' },
         { name: 'Map', route: 'map', class: 'inactive' }
-      ]
+      ],
+      softwareVersion: 'v0.2.0'
     }
   },
   methods: {
@@ -126,6 +129,16 @@ export default {
   width: 270px
   height: 70px
 
+.version
+  color: black
+  background: white
+  position: fixed
+  right: 10px
+  top: 10px
+  padding: 3px 20px
+  border-radius: 30px
+  font-size: 12px
+  font-weight: bold
 .inactive
   border-bottom: 2px solid #ddd
 
@@ -162,5 +175,5 @@ export default {
     & > figure
       width: 100%
     & > nav
-      flex-flow: column nowrap
+      flex-flow: row nowrap
 </style>

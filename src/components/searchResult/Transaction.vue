@@ -62,7 +62,7 @@
 
     <!-- Center -->
     <div class="tran-layout-middle">
-      <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="calculatedAmount"></span></p>
+      <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="calculatedAmount"></span> XPX</p>
       <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
     </div>
     <!-- End Center -->

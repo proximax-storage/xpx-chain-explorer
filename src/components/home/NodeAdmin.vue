@@ -36,8 +36,9 @@
     <!-- End Average Response Area -->
 
     <div class="newNode" v-if="newNode">
-      <mdb-input class="place-white" style="width: 100%" v-model="newNodeValue" label="Add you new node" placeholder="mynode.io:8080"/>
+      <mdb-input class="place-white" style="width: 100%" v-model="newNodeValue" label="Add you new node" placeholder="http://mynode.io:8080 or https://mynode.io:8080"/>
       <div>{{ nodeMessage }}</div>
+      <mdb-progress v-if="nodeLoader === true" bgColor="cyan darken-3" style="width: 100%" indeterminate/>
       <div>
         <div class="closer" @click="addNode('close')">Cancel</div>
         <div class="add" @click="addNode('add')">Add</div>
@@ -53,7 +54,8 @@ import {
   mdbDropdown,
   mdbDropdownMenu,
   mdbDropdownToggle,
-  mdbInput
+  mdbInput,
+  mdbProgress
 } from 'mdbvue'
 import axios from 'axios'
 
@@ -63,13 +65,15 @@ export default {
     mdbDropdown,
     mdbDropdownMenu,
     mdbDropdownToggle,
-    mdbInput
+    mdbInput,
+    mdbProgress
   },
   data () {
     return {
       newNode: false,
       newNodeValue: '',
-      nodeMessage: ''
+      nodeMessage: '',
+      nodeLoader: false
     }
   },
   computed: {
@@ -140,23 +144,26 @@ export default {
         this.newNodeValue = ''
       } else if (action == 'add') {
         // this.newNode = false
+        this.nodeLoader = true
         if (this.newNodeValue !== '') {
           // console.log(this.newNodeValue)
           this.nodeMessage = ''
-          axios.get(`http://${this.newNodeValue}/node/info`).then(
+          axios.get(`${this.newNodeValue}/node/info`).then(
             response => {
               this.$store.dispatch('pushNewNode', this.newNodeValue)
-              console.log(this.$storage.get('customNodes'))
               if (this.$storage.get('customNodes') === null || this.$storage.get('customNodes') === undefined) {
                 this.$storage.set('customNodes', [this.newNodeValue])
               } else {
                 let tmpCustomNodes = JSON.parse(this.$storage.get('customNodes'))
-                // console.log(typeof tmpCustomNodes, tmpCustomNodes)
+                tmpCustomNodes.push(this.newNodeValue)
+                this.$storage.set('customNodes', JSON.stringify(tmpCustomNodes))
               }
+              this.nodeLoader = false
               this.nodeMessage = 'Node Accepted - Available from the list of nodes'
             }
           )
           .catch(err => {
+            this.nodeLoader = false
             this.nodeMessage = 'Node not accepted'
           })
         }
@@ -198,7 +205,7 @@ export default {
 
 .newNode
   width: 100%
-  background: white
+  background: #f4f4f4
   padding: 15px
   text-align: center
   display: flex
@@ -222,7 +229,7 @@ export default {
     & > .add
       flex-grow: 1
       color: white
-      background: green
+      background: #2d8e9b
       border-radius: 15px
       padding: 5px 20px
       font-size: 12px
@@ -237,7 +244,7 @@ export default {
   z-index: 3000
   & > .admin-item
     flex-grow: 1
-    background: white
+    background: #f4f4f4
     padding: 10px
     border-radius: 7px
     min-width: 200px

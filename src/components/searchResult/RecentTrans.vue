@@ -225,6 +225,7 @@ $radius: 5px
       align-items: center
       padding: 5px
       border-radius: $radius 0px 0px $radius
+      width: 450px
       & > div
         display: flex
         flex-flow: row nowrap
@@ -240,6 +241,7 @@ $radius: 5px
       flex-flow: column wrap
       align-items: center
       justify-content: center
+      padding: 5px
     & > .el-right
       flex-grow: 2
       display: flex
@@ -247,6 +249,7 @@ $radius: 5px
       align-items: center
       justify-content: center
       border-radius: 0px $radius $radius 0px
+      padding: 5px
 
 @media screen and (max-width: 741px)
   .alternate
@@ -259,6 +262,7 @@ $radius: 5px
     & > .el-left
       border-radius: $radius $radius 0px 0px
       padding: 5px
+      width: initial
       // background: #00000020
       border-bottom: 1px solid #c0c0c090
     & > .el-middle
