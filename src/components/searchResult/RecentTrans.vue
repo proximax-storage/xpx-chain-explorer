@@ -7,7 +7,7 @@
     <h1 class="supertitle">{{ nameLabel }}</h1>
 
     <!-- Iterated Elements -->
-    <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1">
+    <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #f4f4f4' : 'background: white'" v-show="index >= 0 && index < limit + 1">
 
       <div class="el-name value">{{ verifyType(item.type) }}</div>
 
@@ -52,7 +52,7 @@
 
       <div class="el-right">
         <div class="viewIcon" @click="redirectToDetail(item)">
-          <mdb-icon far icon="eye"/>
+          <img :src="require('@/assets/detail-icon.svg')" alt="detail" style="width: 15px">
         </div>
       </div>
     </div>
@@ -75,7 +75,7 @@ export default {
     limit: {
       required: false,
       type: Number,
-      default: 50
+      default: 1000
     },
     arrayTransactions: Array,
     nameLabel: {
@@ -132,7 +132,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-$radius: 5px
+$radius: 20px
 
 .link:hover
   color: #2d8e9b
@@ -143,6 +143,7 @@ $radius: 5px
   font-size: 10px
   font-weight: bold
   text-transform: uppercase
+  color: grey
   margin: 0px
 
 .value
@@ -156,12 +157,10 @@ $radius: 5px
   padding: 10px 30px
   margin: 5px
   border-radius: 5px
-  border: 1px solid grey
-  background: #cecece
-  transition: all linear 0s
+  transition: all ease .2s
   &:hover
-    background: #2d8e9b
-    border: 1px solid #2d8e9b
+    background: white
+    box-shadow: 0px 0px 5px grey
     color: white
 
 .balance
@@ -173,7 +172,7 @@ $radius: 5px
 .supertitle
   display: flex
   flex-flow: row nowrap
-  justify-content: space-between
+  justify-content: center
   margin: 0px
   font-size: 17px
   color: #2d8e9b
@@ -205,7 +204,7 @@ $radius: 5px
     background: #f4f4f4
     margin: 5px 0px
     cursor: pointer
-    border: 1px solid #dddddde4
+    border: 1px solid #f4f4f4e4
     & > .el-name
       flex-grow: 1
       font-size: 11px

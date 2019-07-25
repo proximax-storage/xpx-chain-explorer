@@ -1,6 +1,6 @@
 <template>
   <div class="mosaicInfo animated fast fadeIn">
-    <h1 class="supertitle">Mosaic Info</h1>
+    <!-- <h1 class="supertitle">Mosaic Info</h1> -->
     <div class="mos-layout-up">
       <div>
         <div class="up">
@@ -51,28 +51,28 @@
       </div>
     </div>
 
-    <div class="mos-layout-plus" style="margin-top: 7px">
-      <h1 class="supertitle">Mosaic Properties</h1>
+    <h1 class="supertitle center-text" style="margin-top: 10px">Mosaic Properties</h1>
+    <div class="mos-layout-plus">
       <div>
-        <div class="element">
+        <div class="element" style="border-radius: 20px">
           <div class="title">Transferable</div>
           <div class="value" :style="(this.detail.properties.transferable === true) ? 'color: green' : 'color: red'">
             {{ this.detail.properties.transferable }}
           </div>
         </div>
-        <div class="element">
+        <div class="element" style="border-radius: 20px">
           <div class="title">Levy Mutable</div>
           <div class="value" :style="(this.detail.properties.levyMutable === true) ? 'color: green' : 'color: red'">
             {{ this.detail.properties.levyMutable }}
           </div>
         </div>
-        <div class="element">
+        <div class="element" style="border-radius: 20px">
           <div class="title">Supply Mutable</div>
           <div class="value" :style="(this.detail.properties.supplyMutable === true) ? 'color: green' : 'color: red'">
             {{ this.detail.properties.supplyMutable }}
           </div>
         </div>
-        <div class="element">
+        <div class="element" style="border-radius: 20px">
           <div class="title">Duration</div>
           <div class="value">
             {{ $utils.calculateDuration(this.detail.duration.compact()) }}
@@ -115,27 +115,31 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-$radius: 5px
+$radius: 20px
 
 .supertitle
   margin: 0px
   font-size: 17px
-  color: white
+  color: #2d819b
   padding: 0px 0px 5px 0px
 
+.center-text
+  text-align: center
+
 .link:hover
-  color: #2d8e9b
+  color: #2d819b
   text-decoration: underline
   cursor: pointer
 
 .up
-  background: #DDDDDD
-  border-radius: $radius $radius 0px 0px
+  background: #f4f4f4
+  border-radius: $radius
   padding: 10px
+  margin-bottom: 10px
 
 .down
   background: #F4F4F4
-  border-radius: 0px 0px $radius $radius
+  border-radius: $radius
   padding: 10px
 
 .down-radius
@@ -146,12 +150,8 @@ $radius: 5px
 .element
   background: #f4f4f4
   padding: 10px
-  &:first-child
-    border-radius: $radius $radius 0px 0px
-  &:last-child
-    border-radius: 0px 0px $radius $radius
-  &:nth-child(2n)
-    background: #DDD
+  margin-bottom: 10px
+  border: $radius !important
 
 .title
   font-size: 10px
@@ -165,7 +165,6 @@ $radius: 5px
   word-break: break-all
 
 .mosaicInfo
-  background: #2d8e9b
   padding: 10px
   color: black
   & > .mos-layout-up
@@ -193,19 +192,17 @@ $radius: 5px
         flex-grow: 1
         margin: 0px
         margin-left: 5px
-  & > .mos-layout-Plus
+  & > .mos-layout-plus
     display: flex
-    justify-content: space-between
-    align-items: center
-    & > div
-      margin: 0px 5px
-      flex-grow: 1
-      &:first-child
-        border-radius: $radius $radius 0px 0px
-        margin: 0px
-        margin-right: 5px
-      &:last-child
-        border-radius: 0px 0px $radius $radius
-        margin: 0px
-        margin-left: 5px
+    flex-flow: column nowrap
+    // & > div
+    //   margin: 0px 5px
+    //   &:first-child
+    //     border-radius: $radius $radius 0px 0px
+    //     margin: 0px
+    //     margin-right: 5px
+    //   &:last-child
+    //     border-radius: 0px 0px $radius $radius
+    //     margin: 0px
+    //     margin-left: 5px
 </style>

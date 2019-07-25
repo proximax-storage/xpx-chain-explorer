@@ -9,32 +9,39 @@
 
     <!-- NEW DESIGN OF BLOCKS COMPONENT (Mobile Compatible)-->
     <div class="mobile">
+      <div class="guide" style="background: #1a1a1a">
+        <div class="title-guide">Height</div>
+        <div class="title-guide">Validator</div>
+        <div class="title-guide">Fee</div>
+        <div class="title-guide">TXS</div>
+        <div class="title-guide">Timestamp</div>
+      </div>
 
       <!-- Iterated Element of Block -->
-      <div class="element animated faster fadeInDown" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
+      <div class="element animated faster fadeInDown" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #f4f4f4' : 'background: white'">
 
-        <div>
-          <span>Height</span>
+        <div style="min-width: 55px">
+          <span class="title">Height</span>
           <router-link class="link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link>
         </div>
 
-        <div>
-          <span>Validator</span>
+        <div style="min-width: 550px">
+          <span class="title">Validator</span>
           <router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.publicKey }" target="_blank" style="word-break: break-all">{{ item.signer.publicKey }}</router-link>
         </div>
 
         <div>
-          <span>Fee</span>
+          <span class="title">Fee</span>
           <span v-html="item.totalFee" class="value"></span>
         </div>
 
         <div>
-          <span>TXS</span>
+          <span class="title">TXS</span>
           <span class="value">{{ item.numTransactions }}</span>
         </div>
 
         <div>
-          <span>Timestamp</span>
+          <span class="title">Timestamp</span>
           <span class="value">{{ item.date }}</span>
         </div>
 
@@ -45,8 +52,9 @@
 
         <div v-if="buttonLoadMoreActive">
           <span>Load more blocks</span>
-          <span class="value" v-if="!buttonLoaderActive">Click here</span>
-          <span class="value" v-else><mdb-spinner small color="yellow"/></span>
+          <span class="value" v-if="buttonLoaderActive"><mdb-spinner small color="yellow"/></span>
+          <!-- <span class="value" v-if="!buttonLoaderActive">Click here</span>
+          <span class="value" v-else><mdb-spinner small color="yellow"/></span> -->
         </div>
 
       </div>
@@ -206,6 +214,41 @@ export default {
 </script>
 
 <style lang="sass">
+.guide
+  background: red
+  display: flex
+  flex-flow: row nowrap
+  justify-content: space-around
+  border: 1px solid #f4f4f4
+  // margin: 2px 0px
+  padding: 5px
+  color: white
+  border-radius: 5px
+  width: 100%
+  padding: 10px 5px
+  & > .title-guide
+    color: white
+    font-size: 10px
+    text-transform: uppercase
+    font-weight: bold
+    text-align: center
+    &:first-child
+      width: 55px
+    &:nth-child(2n)
+      width: 550px
+    &:nth-child(3n)
+      width: 66px
+    &:nth-child(4n)
+      width: 23px
+    &:last-child
+      width: 139px
+
+.title
+  color: grey
+  font-size: 10px
+  text-transform: uppercase
+  display: none
+
 .mobile
   display: flex
   flex-flow: column
@@ -224,9 +267,9 @@ export default {
     display: flex
     flex-flow: row nowrap
     justify-content: space-around
-    border: 1px solid #dddddde4
+    border: 1px solid #f4f4f4
     // margin: 2px 0px
-    padding: 5px
+    padding: 10px 5px
     color: black
     border-radius: 5px
     & > div
@@ -234,11 +277,11 @@ export default {
       flex-flow: column
       align-items: center
       padding: 3px
-      & > span:first-child
-        font-size: 9px
-        text-transform: uppercase
-        font-weight: bold
-        color: grey
+      // & > span:first-child
+      //   font-size: 9px
+      //   text-transform: uppercase
+      //   font-weight: bold
+      //   color: red
       & > span:last-child
         text-align: center
         font-size: 14px
@@ -252,18 +295,19 @@ export default {
     display: flex
     flex-flow: row nowrap
     justify-content: space-around
-    border: 1px solid #dddddde4
-    padding: 3px
     color: white
-    border-radius: 5px
-    background: #2d8e9b
+    border-radius: 20px
+    background: transparent
     & > div
       display: flex
       flex-flow: column
       align-items: center
       padding: 5px
+      background: #2d819b
+      border-radius: 20px
+      padding: 5px 40px
       & > span:first-child
-        font-size: 15px
+        font-size: 15px !important
         text-transform: uppercase
         font-weight: bold
         color: white
@@ -283,8 +327,8 @@ export default {
   align-items: center
   position: fixed
   z-index: 1000
-  bottom: 50px
-  right: 30px
+  bottom: 20px
+  right: 20px
   border-radius: 50%
   color: #2d8e9b
   border: 2px solid #2d8e9b
@@ -342,6 +386,12 @@ td
       text-align: center
 
 @media screen and (max-width: 900px)
+  .title
+    display: block
+
+  .guide
+    display: none
+
   .link-data
     font-size: 10px
     font-weight: bold

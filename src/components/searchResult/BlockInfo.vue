@@ -6,56 +6,46 @@
     <!-- Up Container -->
     <div class="bi-layout-up">
 
-      <!-- Left -->
-      <div>
-        <h1 class="supertitle">Block Info</h1>
-        <div class="up">
-          <div class="title">Height</div>
-          <div class="value">{{ detail.height }}</div>
-        </div>
-        <div class="down">
-          <div class="title">Timestamp</div>
-          <div class="value">{{ detail.timestamp }}</div>
-        </div>
-      </div>
-      <!-- End Left -->
-
       <!-- Right -->
       <div>
-        <h1 class="supertitle" style="color: transparent">Validator</h1>
-        <div class="up">
+        <div class="item">
           <div class="title">Validator</div>
           <div class="value link" @click="goToAddress(detail.publicKey)">{{ detail.publicKey }}</div>
         </div>
-        <div class="down">
+        <div class="item">
           <div class="title">Hash</div>
           <div class="value">{{ detail.hash }}</div>
         </div>
       </div>
       <!-- End Right -->
 
-    </div>
-    <!-- End Up container -->
-
-    <!-- Down Container -->
-    <div class="bi-layout-down">
       <!-- Left -->
-      <div class="layout-down-children">
-        <div class="down-radius">
+      <div>
+        <div class="item">
+          <div class="title">Timestamp</div>
+          <div class="value">{{ detail.timestamp }}</div>
+        </div>
+        <div class="item">
           <div class="title">Difficulty</div>
           <div class="value">{{ detail.difficulty }}</div>
         </div>
       </div>
       <!-- End Left -->
 
-      <!-- Center -->
+    </div>
+    <!-- End Up container -->
+
+    <!-- Down Container -->
+    <div class="bi-layout-down">
+
+      <!-- Left -->
       <div class="layout-down-children">
-        <div class="down-radius" style="background: #ddd">
+        <div class="down-radius">
           <div class="title">Txs</div>
           <div class="value">{{ detail.txes }}</div>
         </div>
       </div>
-      <!-- End Center -->
+      <!-- End Left -->
 
       <!-- Right -->
       <div class="layout-down-children">
@@ -88,7 +78,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-$radius: 5px
+$radius: 20px
 
 .supertitle
   margin: 0px
@@ -97,22 +87,28 @@ $radius: 5px
   padding: 0px 0px 5px 0px
 
 .link:hover
-  color: #2d8e9b
+  color: #2d819b
   text-decoration: underline
   cursor: pointer
 
 .up
-  background: #DDDDDD
+  background: #ddd
   border-radius: $radius $radius 0px 0px
   padding: 10px
 
 .down
-  background: #F4F4F4
+  background: #ddd
   border-radius: 0px 0px $radius $radius
   padding: 10px
 
+.item
+  background: #f4f4f4
+  border-radius: $radius
+  padding: 10px
+  margin-top: 10px
+
 .down-radius
-  background: #F4F4F4
+  background: #f4f4f4
   border-radius: $radius
   padding: 10px
 
@@ -120,10 +116,10 @@ $radius: 5px
   font-size: 10px
   font-weight: bold
   text-transform: uppercase
+  color: grey
 
 .value
   font-size: 14px
-  font-weight: normal
   text-transform: uppercase
   word-wrap: break-word
 
@@ -132,7 +128,6 @@ $radius: 5px
 
 .blockInfo
   // margin: 15px 10px
-  background: #2d8e9b
   padding: 10px
   color: black
   & > .bi-layout-up
@@ -142,11 +137,11 @@ $radius: 5px
     flex-flow: row wrap
     justify-content: space-evenly
     & > div:first-child
-      flex-grow: 1
+      flex-grow: 2
       margin-right: 5px
       border-radius: $radius
     & > div:last-child
-      flex-grow: 4
+      flex-grow: 1
       background: transparent
       margin-left: 5px
       border-radius: $radius

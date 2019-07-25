@@ -87,9 +87,12 @@ $radius: 5px
 .supertitle
   margin: 10px 0px 0px 0px
   font-size: 17px
-  color: white
-  padding: 0px 0px 5px 0px
+  color: #2d819b
+  padding: 5px 0px
   width: 100%
+
+.modif
+  padding: 10px
 
 .element
   padding: 10px
@@ -98,8 +101,6 @@ $radius: 5px
   cursor: pointer
   background: #f4f4f4
   border-radius: $radius
-  &:nth-child(2n)
-    background: #ddd
   &:last-child
     margin: 0px
 
@@ -107,7 +108,7 @@ $radius: 5px
   font-size: 10px
   font-weight: bold
   text-transform: uppercase
-  color: black
+  color: grey
 
 .value
   font-size: 14px

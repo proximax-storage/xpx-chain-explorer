@@ -1,9 +1,9 @@
 <template>
   <div class="mosaics animated faster fadeIn" v-if="showFinalData !== null && showFinalData.length > 0">
-    <h1 class="supertitle">Mosaics In Transfer</h1>
+    <h1 class="supertitle center-text">Mosaics In Transfer</h1>
 
     <div>
-      <div class="element" v-for="(item, index) in showFinalData" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'">
+      <div class="element" v-for="(item, index) in showFinalData" :key="index">
 
         <div style="padding: 5px 0px 5px 2px " class="animated faster fadeInDown">
           <div class="title">{{ titleMosaic }}</div>
@@ -134,16 +134,25 @@ export default {
 
 <style lang="sass" scoped>
 .supertitle
-  margin: 10px 0px 0px 0px
   font-size: 17px
-  color: white
+  color: #2d819b
   padding: 0px 0px 5px 0px
   width: 100%
+
+.center-text
+  text-align: center
+
+.mosaics
+  padding: 10px
 
 .element
   padding: 10px
   margin-bottom: 10px
+  border-radius: 20px
   font-size: 10px
+  display: flex
+  justify-content: space-around
+  background: #f4f4f4
   &:last-child
     margin: 0px
 
@@ -151,7 +160,7 @@ export default {
   font-size: 10px
   font-weight: bold
   text-transform: uppercase
-  color: black
+  color: grey
 
 .value
   font-size: 13px

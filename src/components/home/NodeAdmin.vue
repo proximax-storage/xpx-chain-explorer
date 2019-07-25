@@ -2,19 +2,12 @@
   <!-- Node Administrator Component -->
   <div class="node-admin animated fast fadeIn">
 
-    <!-- Current Block Area -->
-    <div class="admin-item">
-      <h1>Current Block</h1>
-      <p>{{ updateBlock }}</p>
-    </div>
-    <!-- End Current Block Area -->
-
     <!-- Node Selector Area -->
     <div class="admin-item" style="flex-grow: 3">
       <h1>Node</h1>
       <p>
         <mdb-dropdown style="text-align: center">
-          <mdb-dropdown-toggle slot="toggle" class="black-text" style="width:100%;padding: 5px 10px; box-shadow: 0px 0px 0px transparent">
+          <mdb-dropdown-toggle slot="toggle" class="black-text" style="width:100%; padding: 5px 0px; box-shadow: 0px 0px 0px transparent">
             <span class="button-toggle">{{ getCurrentNode || this.$store.state.currentNode }}</span>
           </mdb-dropdown-toggle>
           <mdb-dropdown-menu>
@@ -27,6 +20,13 @@
       </p>
     </div>
     <!-- End Node Selector Area -->
+
+    <!-- Current Block Area -->
+    <div class="admin-item">
+      <h1>Current Block</h1>
+      <p>{{ updateBlock }}</p>
+    </div>
+    <!-- End Current Block Area -->
 
     <!-- Average Response Time -->
     <div class="admin-item">
@@ -179,18 +179,18 @@ export default {
   padding: 0px
 
 .md-form input[type=search]:focus:not([readonly])
-    box-shadow: 0 1px 0 0 #2d8e9b !important
-    border-bottom: 1px solid #2d8e9b !important
+    box-shadow: 0 1px 0 0 #2BA1B9 !important
+    border-bottom: 1px solid #2BA1B9 !important
 
 .place-white
   color: black !important
   margin: 0px !important
   & > input
     color: black !important
-    border-bottom: #2d8e9b
+    border-bottom: #2BA1B9
     margin: 0px
   & > label
-    color: #2d8e9b !important
+    color: #2BA1B9 !important
     &::after
       background: red !important
 
@@ -200,7 +200,7 @@ export default {
   font-weight: bold !important
   padding: 5px
   &:hover
-    background: #2d8e9b !important
+    background: #2BA1B9 !important
     color: white !important
 
 .newNode
@@ -212,6 +212,7 @@ export default {
   flex-flow: column nowrap
   justify-content: center
   align-items: center
+  margin-bottom: 10px
   & > div
     color: black
     font-size: 10px
@@ -229,7 +230,7 @@ export default {
     & > .add
       flex-grow: 1
       color: white
-      background: #2d8e9b
+      background: #2BA1B9
       border-radius: 15px
       padding: 5px 20px
       font-size: 12px
@@ -246,19 +247,23 @@ export default {
     flex-grow: 1
     background: #f4f4f4
     padding: 10px
-    border-radius: 7px
+    border-radius: 20px
     min-width: 200px
     margin: 10px
     & > h1
-      font-size: 15px
+      font-size: 10px
       margin: 0px
       font-weight: bold
       text-transform: uppercase
-      color: #2d8e9b
-    & > p
-      font-size: 30px
       color: black
-      text-align: center
+    & > p
+      margin: 0px
+      font-size: 20px
+      color: black
+      text-align: left
+    &:first-child
+      background: white
+      box-shadow: inset 0px 0px 0px 2px #ddd
 
 .button-toggle
   font-size: 20px

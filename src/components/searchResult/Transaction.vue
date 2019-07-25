@@ -2,12 +2,19 @@
   <!-- Transaction Component -->
   <div class="transaction animated fast fadeIn">
 
+    <!-- Center -->
+    <div class="tran-layout-middle">
+      <h1 class="supertitle" style="font-size: 20px; text-align: center">{{ transactionType || 'Hash Transaction'}}</h1>
+      <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="calculatedAmount"></span> XPX</p>
+      <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
+    </div>
+    <!-- End Center -->
+
     <!-- Up -->
     <div class="tran-layout-up">
 
       <!-- left -->
       <div>
-        <h1 class="supertitle">{{ transactionType || 'Hash Transaction'}}</h1>
         <div class="up">
           <div class="title">Sender</div>
           <div class="value link" style="cursor: pointer" @click="goToAddress(detail.signer.address.pretty())">
@@ -43,7 +50,6 @@
 
       <!-- Right -->
       <div>
-        <h1 class="supertitle" style="color: transparent">Timestamp</h1>
         <div class="up">
           <div class="title">Timestamp</div>
           <div class="value">{{ $utils.fmtTime(detail.deadline.value) }}</div>
@@ -60,21 +66,14 @@
     </div>
     <!-- End Up -->
 
-    <!-- Center -->
-    <div class="tran-layout-middle">
-      <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="calculatedAmount"></span> XPX</p>
-      <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
-    </div>
-    <!-- End Center -->
-
     <!-- Down -->
     <div class="tran-layout-down">
 
       <!-- Up Element -->
       <div class="layout-down-children">
         <div class="down-radius">
-          <div class="title">Signature</div>
-          <div class="value">{{ detail.signature }}</div>
+          <div class="title center-text">Signature</div>
+          <div class="value center-text">{{ detail.signature }}</div>
         </div>
       </div>
       <!-- End Up Element -->
@@ -82,8 +81,8 @@
       <!-- Down Element-->
       <div class="layout-down-children">
         <div class="down-radius">
-          <div class="title">Hash</div>
-          <div class="value link" @click="goToHash(detail.transactionInfo.hash)">{{ detail.transactionInfo.hash }}</div>
+          <div class="title center-text">Hash</div>
+          <div class="value link center-text" @click="goToHash(detail.transactionInfo.hash)">{{ detail.transactionInfo.hash }}</div>
         </div>
       </div>
       <!-- End Down Element-->
@@ -94,7 +93,7 @@
     <!-- Plus Area -->
     <div class="tran-layout-plus" v-if="plusInfo.length > 0">
       <!-- Name -->
-      <h1 class="supertitle">Details</h1>
+      <h1 class="supertitle center-text">Details</h1>
 
       <!-- Plus Container -->
       <div class="plus-cont">
@@ -110,15 +109,15 @@
         <!-- End Amount / Delta -->
 
         <!-- Iterated Element -->
-        <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
+        <div class="layout-plus-children" v-for="(item, index) in plusInfo" :key="index">
           <div class="title">{{ item.key }}</div>
-          <div :class="(item.class === undefined) ? 'value' : item.class" v-if="item.value !== ''">{{ item.value }}</div>
-          <div :class="(item.class === undefined) ? 'value' : item.class" v-else v-html="item.valueHtml"></div>
+          <div @click="(item.run === undefined) ? '' : item.run(item.value)" :class="(item.class === undefined) ? 'value' : item.class" v-if="item.value !== ''">{{ item.value }}</div>
+          <div @click="(item.run === undefined) ? '' : item.run(item.value)" :class="(item.class === undefined) ? 'value' : item.class" v-else v-html="item.valueHtml"></div>
         </div>
         <!-- End Iterated Element -->
 
         <!-- Mosaic Properties Area -->
-        <div class="layout-plus-children"  v-if="detail.mosaicProperties">
+        <div class="layout-plus-children" style="background: #f4f4f4; box-shadow: 0px 0px 0px 1px #2d819b" v-if="detail.mosaicProperties">
           <!-- Name -->
           <div class="title">Mosaic Properties</div>
 
@@ -210,7 +209,7 @@ export default {
       transactionType: 'Hash Transaction',
       mosaicsOfTransfer: null,
       xpx: proximaxProvider.mosaicXpx(),
-      calculatedAmount: null
+      calculatedAmount: null,
     }
   },
 
@@ -222,7 +221,8 @@ export default {
   mounted () {
     this.verifyType()
     this.verifyTransactionDetails()
-    console.log("TRANSACTION", this.detail)
+    let detail = JSON.stringify(this.detail)
+    console.log(JSON.parse(detail))
   },
   methods: {
     /**
@@ -256,7 +256,7 @@ export default {
     },
 
     analyzeMessage (message) {
-      console.log(message)
+      // console.log(message)
       let result = null
       if (message.type === 0) {
         if (message.payload === '') {
@@ -319,13 +319,19 @@ export default {
           this.plusInfo = [
             { key: 'Namespace Name', value: this.detail.namespaceName },
             { key: 'Namespace Type', value: (this.detail.namespaceType === 0) ? 'Root' : 'Sub' },
-            { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex() },
+            { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex(), class: 'value link', run: this.goToNamespace },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Parent Id', value: (this.detail.parentId !== undefined) ? this.detail.parentId.id.toHex() : 'No Available' },
-            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
-            { key: 'Version', value: this.detail.version },
-            { key: 'Duration', value: this.$utils.calculateDuration(this.detail.duration.compact()) }
+            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
+            { key: 'Version', value: this.detail.version }
           ]
+
+          if (this.detail.namespaceType === 0) {
+            this.plusInfo.push({
+              key: 'Duration',
+              value: (this.detail.duration !== undefined) ? `(Block Height: ${this.detail.transactionInfo.height.compact()}) ${this.$utils.calculateDuration(this.detail.duration.compact())}` : `(${this.detail.transactionInfo.height.compact()}) No Duration`
+            })
+          }
 
           findParent()
           // this.iterator(this.detail)
@@ -335,9 +341,18 @@ export default {
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
             { key: 'Nonce', value: (this.detail.nonce !== undefined) ? this.detail.nonce : 'No Available' },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
+            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
           ]
+
+          if (this.detail.duration !== undefined) {
+            this.plusInfo.push({
+              key: 'Duration',
+              value: (this.detail.duration !== undefined) ?
+              `(Block Height: ${this.detail.transactionInfo.height.compact()}) ${this.$utils.calculateDuration(this.detail.duration.compact())}` :
+              `(Block Height: ${this.detail.transactionInfo.height.compact()}) No Duration`
+            })
+          }
           //this.iterator(this.detail)
           break;
         case 'Mosaic supply change':
@@ -356,7 +371,7 @@ export default {
             { key: 'Minimal Removal Delta', value: this.detail.minRemovalDelta },
             { key: 'Minimal Approval Delta', value: this.detail.minApprovalDelta },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
+            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
           ]
           // this.iterator(this.detail)
@@ -372,9 +387,9 @@ export default {
             { key: 'Mosaic Id', value: this.detail.mosaic.id.toHex() },
             { key: 'Mosaic Amount', value: '', valueHtml: this.$utils.fmtAmountValue(this.detail.mosaic.amount.compact()) },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
+            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version },
-            { key: 'Duration', value: this.$utils.calculateDuration(this.detail.duration.compact()) }
+            { key: 'Duration', value: (this.detail.duration !== undefined) ? this.$utils.calculateDuration(this.detail.duration.compact()) : 'No Duration' }
           ]
           // this.iterator(this.detail)
           break;
@@ -390,13 +405,13 @@ export default {
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
             { key: 'Action Type', value: (this.detail.actionType !== undefined) ? this.detail.actionType : 'No Available' },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
+            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
           ]
 
           this.$proxProvider.getNamespacesName([this.detail.namespaceId.id]).subscribe(
             response => {
-              console.log(response[0].name)
+              // console.log(response[0].name)
               this.plusInfo.unshift({ key: 'Namespace Name', value: response[0].name })
             }
           )
@@ -425,7 +440,7 @@ export default {
             { key: 'Metadata Id', value: (this.detail.metadataId !== undefined) ? this.detail.metadataId : 'No Available' },
             { key: 'Metadata Type', value: (this.detail.metadataType !== undefined) ? this.detail.metadataType : 'No Available' },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
+            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
           ]
           // this.iterator(this.detail)
@@ -456,6 +471,16 @@ export default {
       window.open(routeData.href, '_blank')
     },
 
+    goToNamespace (namespaceId) {
+      let routeData = this.$router.resolve({ path: `/searchResult/namespaceInfo/${namespaceId}` })
+      window.open(routeData.href, '_blank')
+    },
+
+    goToMosaic (mosaicId) {
+      let routeData = this.$router.resolve({ path: `/searchResult/mosaicInfo/${mosaicId}` })
+      window.open(routeData.href, '_blank')
+    },
+
     infoReceiver (data, title) {
       this.$emit('runOpen', title)
       this.$emit('runPush', data)
@@ -469,17 +494,21 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-$radius: 5px
+$radius: 20px
 
 .link:hover
-  color: #2d8e9b
+  color: #2d819b
   text-decoration: underline
   cursor: pointer
+
+.center-text
+  text-align: center
 
 .title
   font-size: 10px
   font-weight: bold
   text-transform: uppercase
+  color: grey
 
 .value
   font-size: 13px
@@ -516,18 +545,19 @@ $radius: 5px
 .supertitle
   margin: 0px
   font-size: 17px
-  color: white
   padding: 0px 0px 5px 0px
   width: 100%
+  color: #2d8e9b
 
 .up
-  background: #DDDDDD
-  border-radius: $radius $radius 0px 0px
+  background: #f4f4f4
+  border-radius: $radius
   padding: 10px
+  margin-bottom: 10px
 
 .down
   background: #F4F4F4
-  border-radius: 0px 0px $radius $radius
+  border-radius: $radius
   padding: 10px
 
 .down-radius
@@ -540,12 +570,10 @@ $radius: 5px
 
 .transaction
   // margin: 15px 10px
-  background: #2d8e9b
-  padding: 10px
   color: black
   & > .tran-layout-up
+    padding: 10px
     background: transparent
-    margin-bottom: 10px
     display: flex
     flex-flow: row wrap
     justify-content: space-evenly
@@ -559,15 +587,16 @@ $radius: 5px
       margin-left: 5px
       border-radius: $radius
   & > .tran-layout-middle
-    background:  #F4F4F4
+    background: white
     display: flex
     flex-flow: column wrap
     justify-content: center
     align-items: center
-    border-radius: $radius
-    padding: 10px
+    padding: 20px 10px
     margin-bottom: 10px
+    border-bottom: 1px solid silver
   & > .tran-layout-down
+    padding: 10px
     display: flex
     flex-flow: column wrap
     justify-content: space-between
@@ -581,25 +610,24 @@ $radius: 5px
       width: 100%
       flex-grow: 1
   & > .tran-layout-plus
-    margin-top: 10px
+    padding: 10px
     display: flex
     flex-flow: column wrap
     box-sizing: border-box
     & > .plus-cont
       width: 100%
-      background: #f4f4f4
+      background: white
       border-radius: $radius
       padding: 0px
       display: flex
       flex-flow: column wrap
       & > .layout-plus-children
+        background: #f4f4f4
         width: 100%
         padding: 10px
         box-sizing: border-box
-        &:first-child
-          border-radius: $radius $radius 0px 0px
-        &:last-child
-          border-radius: 0px 0px $radius $radius
+        margin-bottom: 10px
+        border-radius: $radius
 
 @media screen and (max-width: 550px)
   .value
@@ -631,13 +659,10 @@ $radius: 5px
         & > .supertitle
           display: none
     & > .tran-layout-middle
-      background:  #F4F4F4
       display: flex
       flex-flow: column wrap
       justify-content: center
       align-items: center
-      border-radius: $radius
-      padding: 10px
       margin: 0px 0px 10px 0px
     & > .tran-layout-down
       display: flex

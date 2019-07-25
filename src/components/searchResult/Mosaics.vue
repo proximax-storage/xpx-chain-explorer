@@ -5,9 +5,9 @@
     <h1 class="supertitle">{{ nameLabel }}</h1>
 
     <!-- Iterated Elements (Mosaics) -->
-    <div class="element animated fast fadeIn" v-for="(item, index) in finalArray" :key="index" :style="(index % 2 === 0) ? 'background: #DDD' : 'background: #f4f4f4'" v-show="index >= 0 && index < limit + 1" @click="goToMosaic(item.id)">
+    <div class="element animated fast fadeIn" v-for="(item, index) in finalArray" :key="index" v-show="index >= 0 && index < limit + 1" @click="goToMosaic(item.id)">
 
-      <div class="el-left">
+      <div class="el-left" style="min-width: 200px">
         <div class="title">Id</div>
         <div class="value">{{ item.id }}</div>
       </div>
@@ -216,7 +216,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-$radius: 5px
+$radius: 20px
 
 .mosaicNameTrans
   opacity: 0
@@ -225,6 +225,7 @@ $radius: 5px
   font-size: 10px
   font-weight: bold
   text-transform: uppercase
+  color: grey
   margin: 0px
 
 .value
@@ -241,10 +242,10 @@ $radius: 5px
 .supertitle
   display: flex
   flex-flow: row nowrap
-  justify-content: space-between
+  justify-content: center
+  color: #2d819b
   margin: 0px
   font-size: 17px
-  color: white
   padding: 0px 0px 5px 0px
 
 .alternate
@@ -262,7 +263,6 @@ $radius: 5px
 
 .recent
   // margin: 0px 10px 10px 10px
-  background: #2d8e9b
   padding: 10px
   color: black
   & > .element
@@ -273,14 +273,13 @@ $radius: 5px
     border-radius: $radius
     background: #f4f4f4
     margin: 5px 0px
-    padding: 5px
+    padding: 10px
     cursor: pointer
     & > .el-left
       flex-grow: 1
       display: flex
       flex-flow: column nowrap
       align-items: center
-      padding: 5px
       border-radius: $radius 0px 0px $radius
       & > div
         display: flex
@@ -292,13 +291,13 @@ $radius: 5px
         & > span
           font-size: 15px
     & > .el-middle
-      flex-grow: 2
+      flex-grow: 1
       display: flex
       flex-flow: column wrap
       align-items: center
       justify-content: center
     & > .el-right
-      flex-grow: 2
+      flex-grow: 1
       display: flex
       flex-flow: column wrap
       align-items: center

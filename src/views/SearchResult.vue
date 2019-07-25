@@ -6,7 +6,7 @@
     <!-- End Search Bar Component -->
 
     <!-- Search Result Main Message Container -->
-    <div style="text-align: center; padding: 10px 0px" class="animated fast fadeIn">
+    <div class="search-cont animated fast fadeIn">
       <div class="search-type">{{ type }}</div>
       <div class="search-value">{{ value }}</div>
     </div>
@@ -258,11 +258,11 @@ export default {
      * @param { String } hast
      */
     getInfoTransaction: function (hast) {
-      console.log('Get Info Transaction')
       this.$proxProvider.getTransactionInformation(hast).subscribe(
         resp => {
           this.param = resp
           this.showComponent()
+          console.log('Get Info Transaction', resp)
         },
         error => {
           this.$store.dispatch('updateErrorInfo', {
@@ -353,7 +353,7 @@ export default {
      * @param { any } publicAccount
      */
     viewTransactionsFromPublicAccount(publicAccount) {
-      this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 400).subscribe(
+      this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
         transactions => {
           console.log("Transacciones de esta cuenta",transactions)
           if (transactions.length > 0) {
@@ -428,14 +428,19 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.search-cont
+  text-align: center
+  padding: 15px 0px
+  border-bottom: 1px solid silver
+
 .search-type
-  color: black
+  color: #2d819b
   font-weight: bold
-  font-size: 13px
+  font-size: 25px
 
 .search-value
-  padding: 0px 10px 10px 10px
-  color: #2d8e9b
+  padding: 0px 10px 5px
+  color: black
   font-size: 20px
   text-transform: uppercase
   font-weight: bold

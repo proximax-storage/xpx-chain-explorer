@@ -2,6 +2,12 @@
   <!-- Public Key Component -->
   <div class="publicKey animated fast fadeIn">
 
+    <!-- Down Container -->
+    <div class="pk-layout-down">
+      <h1 class="balance" v-html="formatBalance"></h1>
+    </div>
+    <!-- End Down Container -->
+
     <!-- Up Container -->
     <div class="pk-layout-up">
 
@@ -35,12 +41,6 @@
 
     </div>
     <!-- End Up Container -->
-
-    <!-- Down Container -->
-    <div class="pk-layout-down">
-      <h1 class="balance" v-html="formatBalance"></h1>
-    </div>
-    <!-- End Down Container -->
 
   </div>
   <!-- End Public Key Component -->
@@ -97,7 +97,7 @@ export default {
      * return the balance in html format
      */
     formatBalance () {
-      return `<div>BALANCE: ${ this.getBalance } XPX</div>`
+      return `<div><span style="color: #2d819b">Balance:</span> ${ this.getBalance } XPX</div>`
     }
   },
   methods: {
@@ -112,10 +112,10 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-$radius: 5px
+$radius: 20px
 
 .link:hover
-  color: #2d8e9b
+  color: #2d819b
   text-decoration: underline
   cursor: pointer
 
@@ -123,6 +123,7 @@ $radius: 5px
   font-size: 10px
   font-weight: bold
   text-transform: uppercase
+  color: grey
 
 .value
   font-size: 14px
@@ -133,36 +134,35 @@ $radius: 5px
 .balance
   color: black
   margin: 0px
-  font-weight: bold
   font-size: 30px
 
 .supertitle
+  color: #2d819b
   margin: 0px
   font-size: 17px
-  color: white
   padding: 0px 0px 5px 0px
 
 .up
-  background: #DDDDDD
-  border-radius: $radius $radius 0px 0px
+  background: #f4f4f4
+  border-radius: $radius
   padding: 10px
+  margin-bottom: 10px
 
 .down
   background: #F4F4F4
-  border-radius: 0px 0px $radius $radius
+  border-radius: $radius
   padding: 10px
 
 .publicKey
   // margin: 15px 10px 0px 10px
-  background: #2d8e9b
-  padding: 10px
   color: black
   & > .pk-layout-up
     background: transparent
-    margin-bottom: 10px
     display: flex
     flex-flow: row wrap
     justify-content: space-evenly
+    & > div
+      margin: 10px
     & > div:first-child
       flex-grow: 4
       margin-right: 5px
@@ -173,14 +173,13 @@ $radius: 5px
       margin-left: 5px
       border-radius: $radius
   & > .pk-layout-down
-    background:  #F4F4F4
     display: flex
     flex-flow: row nowrap
     justify-content: center
     align-items: center
-    border-radius: $radius
-    padding: 10px
     margin: 0px
+    padding: 10px
+    border-bottom: 1px solid silver
 
 @media screen and (max-width: 740px)
   .publicKey

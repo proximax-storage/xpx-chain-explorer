@@ -10,12 +10,12 @@
     <div v-if="blocks.length > 0">
       <div class="mini-two">
         <graphics :title="'Sirius unique validators daily chart'" :numGraphic="1" :params="blocks"/>
-        <graphics :title="'Sirius transaction per day chart'" :numGraphic="2" :params="blocks"/>
+        <graphics :title="'Sirius transactions per day chart'" :numGraphic="2" :params="blocks"/>
       </div>
 
       <!-- Divided Graphic Container -->
       <div class="mini-two">
-        <graphics :title="'Sirius account over time'" :numGraphic="3"/>
+        <graphics :title="'Sirius accounts over time'" :numGraphic="3"/>
         <graphics :title="'Sirius average block dificulty per day'" :numGraphic="4" :params="blocks"/>
       </div>
       <!-- Divided Graphic Container -->

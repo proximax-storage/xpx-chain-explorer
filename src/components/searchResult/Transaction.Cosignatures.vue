@@ -6,7 +6,7 @@
 
     <!-- Iterated Elements -->
     <div>
-      <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" >
+      <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 20px">
 
         <div>
           <div class="title">Signature</div>
@@ -63,14 +63,16 @@ export default {
 .supertitle
   margin: 0px
   font-size: 17px
-  color: white
+  color: #2d819b
   padding: 0px 0px 5px 0px
   width: 100%
+  text-align: center
 
 .element
   padding: 10px
   margin-bottom: 10px
   font-size: 10px
+  borde-radius: 20px
   &:last-child
     margin: 0px
   & > div
@@ -80,7 +82,7 @@ export default {
   font-size: 10px
   font-weight: bold
   text-transform: uppercase
-  color: black
+  color: grey
 
 .value
   font-size: 14px

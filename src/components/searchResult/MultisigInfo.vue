@@ -73,7 +73,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-$radius: 5px
+$radius: 20px
 
 .supertitle
   display: flex
@@ -81,7 +81,7 @@ $radius: 5px
   justify-content: space-between
   margin: 0px
   font-size: 17px
-  color: white
+  color: #2d8e9b
   padding: 0px 0px 5px 0px
 
 .title
@@ -89,6 +89,7 @@ $radius: 5px
   font-weight: bold
   text-transform: uppercase
   margin: 0px
+  color: grey
 
 .value
   font-size: 14px
@@ -97,23 +98,24 @@ $radius: 5px
   word-break: break-all
 
 .link:hover
-  color: #2d8e9b
+  color: #2d819b
   text-decoration: underline
   cursor: pointer
 
 .up
   padding: 10px
-  background: #ddd
-  border-radius: $radius $radius 0px 0px
+  background: #f4f4f4
+  border-radius: $radius
+  margin-bottom: 10px
 
 .down
+  background: #f4f4f4
   padding: 10px
-  border-radius: 0px 0px $radius $radius
+  border-radius: $radius
 
 .multisig
   // margin: 15px 10px
   padding: 10px
-  background: #2d8e9b
   color: black
   & > .info
     display: flex
@@ -123,14 +125,12 @@ $radius: 5px
     & > .left
       display: flex
       flex-flow: column nowrap
-      background: #f4f4f4
       border-radius: $radius
       flex-grow: 2
       margin-rigth: 10px
     & > .right
       display: flex
       flex-flow: column nowrap
-      background: #f4f4f4
       border-radius: $radius
       flex-grow: 1
   & > .element
