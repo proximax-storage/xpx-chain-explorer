@@ -27,10 +27,10 @@ export default {
     flex-flow: column nowrap
     justify-content: center
     align-items: center
-    border-radius: 5px
+    border-radius: 20px
+    box-shadow: 0px 0px 0px 2px rgb(243, 74, 70)
     padding: 20px
-    background: #f34a46
-    color: white
+    color: #f34a46
     & > p:first-child
       font-weight: bold
       font-size: 15px
@@ -39,7 +39,7 @@ export default {
       font-weight: bold
       font-size: 10px
       margin: 0px
-      color: rgba(255, 255, 255, 0.8)
+      color: rgba(243, 74, 70)
 
 </style>
 

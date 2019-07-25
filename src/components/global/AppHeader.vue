@@ -41,7 +41,7 @@ export default {
   data () {
     return {
       navItems: [
-        { name: 'Transactions', route: '', class: 'active' },
+        { name: 'Blocks', route: '', class: 'active' },
         { name: 'Network stats', route: 'networkStats', class: 'inactive' },
         { name: 'Map', route: 'map', class: 'inactive' }
       ],
@@ -210,7 +210,7 @@ export default {
     width: 100%
     display: flex
     flex-flow: row nowrap
-    background: -webkit-linear-gradient(top, #2d819b 50%, #1a1a1a9e)
+    background: -webkit-linear-gradient(top, #2d819b 50%, #0000009e)
     & > .nav-item
       padding: 5px
       flex-grow: 1

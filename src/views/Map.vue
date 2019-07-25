@@ -5,7 +5,9 @@
     <!-- Map Container -->
     <div class="cont animated fast fadeIn">
       <div id="first" class="imap">
-        <div class="emergent">Proximax Nodes Maps</div>
+        <div class="map-layer">
+          <img :src="require('@/assets/icon-proximax-nodes.svg')" alt="Proximax Node" width="120">
+        </div>
       </div>
       <!-- <div v-if="true" class="imap" v-for="(item, index) in mapList" v-show="item.active === true" :key="index" v-html="item.template"></div> -->
     </div>
@@ -237,7 +239,7 @@ export default {
 <style lang="sass">
 $radius: 20px
 
-.emergent
+.map-layer
   width: 100%
   height: 40px
   position: absolute
