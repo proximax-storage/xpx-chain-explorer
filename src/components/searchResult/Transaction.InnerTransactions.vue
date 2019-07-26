@@ -1,12 +1,12 @@
 <template>
   <!-- Inner Transaction Component -->
-  <div class="animated fast fadeIn">
+  <div class="inner animated fast fadeIn">
     <!-- name -->
     <h1 class="supertitle" v-if="params">Inner Transactions</h1>
 
     <!-- Iterated Element -->
     <div>
-      <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 5px" :style="(index % 2 === 0) ? 'background: #DDDDDD' : 'background: #F4F4F4'" @click="redirecToDetail(index)">
+      <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 20px" :style="(index % 2 === 0) ? 'background: #f4f4f4' : 'background: white'" @click="redirecToDetail(index)">
 
         <div style="padding: 2px">
           <div class="title">Address</div>
@@ -112,14 +112,18 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-$radius: 5px
+$radius: 20px
 
 .supertitle
   margin: 10px 0px 0px 0px
   font-size: 17px
-  color: white
+  color: #2d819b
   padding: 0px 0px 5px 0px
   width: 100%
+  text-align: center
+
+.inner
+  padding: 10px
 
 .element
   padding: 10px
@@ -133,7 +137,7 @@ $radius: 5px
   font-size: 10px
   font-weight: bold
   text-transform: uppercase
-  color: black
+  color: grey
 
 .value
   font-size: 14px

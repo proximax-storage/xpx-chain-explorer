@@ -4,7 +4,11 @@
 
     <!-- Map Container -->
     <div class="cont animated fast fadeIn">
-      <div id="first" class="imap"></div>
+      <div id="first" class="imap">
+        <div class="map-layer">
+          <img :src="require('@/assets/icon-proximax-nodes.svg')" alt="Proximax Node" width="120">
+        </div>
+      </div>
       <!-- <div v-if="true" class="imap" v-for="(item, index) in mapList" v-show="item.active === true" :key="index" v-html="item.template"></div> -->
     </div>
     <!-- End Map Container -->
@@ -14,7 +18,7 @@
       <div class="filter-input">
         <div>
           <mdb-dropdown style="width: 100%; margin-top:10px">
-            <mdb-dropdown-toggle slot="toggle" color="teal darken-1" style="width: 100%; font-weight:bold">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
+            <mdb-dropdown-toggle slot="toggle" color="black-text" style="width: 100%; font-weight:bold; border: 2px solid #2d819b; color: black; border-radius: 20px">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
             <mdb-dropdown-menu>
               <mdb-dropdown-item v-for="(item, index) in listOfOptions" :key="index" class="searchLink">
                 <a  @click="changeSearch(item)">{{ item }}</a>
@@ -54,7 +58,7 @@
         </div>
         <div>
           <div class="title">Status</div>
-          <div class="value" :style="(item.status == 'Online') ? 'color: #2d8e9b; font-weight: bold' : 'color: red; font-weight: bold'">{{ item.status }}</div>
+          <div class="value" :style="(item.status == 'Online') ? 'color: #2d819b; font-weight: bold' : 'color: red; font-weight: bold'">{{ item.status }}</div>
         </div>
       </div>
     </div>
@@ -176,14 +180,14 @@ export default {
       })
 
 
-      map.addControl(new mapboxgl.NavigationControl())
+      // map.addControl(new mapboxgl.NavigationControl())
 
       let popup = new mapboxgl.Popup({ offset: 25 })
         .setHTML(
           `<div>
-            <div><b>Name: </b> ${item.name}</div>
-            <div><b>IP: </b> ${item.ip}</div>
-            <div><b>Location: </b> ${item.location}</div>
+            <div><b>Name: </b>${item.name}</div>
+            <div><b>IP: </b>${item.ip}</div>
+            <div><b>Location: </b>${item.location}</div>
           </div>`
         )
 
@@ -220,7 +224,6 @@ export default {
             el.visible = true
           }
         }
-
       })
 
       if (this.filterExe === '') {
@@ -234,10 +237,28 @@ export default {
 </script>
 
 <style lang="sass">
-$radius: 5px
+$radius: 20px
+
+.map-layer
+  width: 100%
+  height: 40px
+  position: absolute
+  bottom: 0
+  left: 0
+  border-radius: 0px 0px $radius $radius
+  background: #2d819b
+  z-index: 10000
+  display: flex
+  justify-content: center
+  align-items: center
+  border: 2px solid #2d819b
+  color: white
+  font-weight: bold
+  font-size: 17px
 
 .mapboxgl-popup
   color: black
+  opacity: 0
 
 .title
   font-size: 9px
@@ -256,7 +277,7 @@ $radius: 5px
 .searchLink
   font-weight: bold
   &:hover
-    background: #2d8e9b !important
+    background: #2d819b !important
 
 .valueLower
   font-size: 14px
@@ -278,10 +299,11 @@ $radius: 5px
     margin: 0px
     width: 100%
     & > .imap
+      position: relative
       width: 100%
       height: 450px
-      border-radius: 5px
-      background: #dddddd
+      border-radius: 20px
+      background: #f4f4f4
   & > .filter-input
     display: flex
     flex-flow: column nowrap
@@ -303,16 +325,17 @@ $radius: 5px
       text-transform: uppercase
       font-size: 12px
       font-weight: bold
-      background: #DDD
+      background: white
       color: black
       padding: 10px
       margin: 10px 0px
+      border: 1px solid silver
       border-radius: $radius
       cursor: pointer
       &:hover
         background: #f4f4f4
 
-@media screen and (max-width: 550px)
+@media screen and (max-width: 700px)
   .map > .control > .cardServe
     flex-flow: column
 </style>

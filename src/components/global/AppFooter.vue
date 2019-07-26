@@ -1,14 +1,19 @@
 <template>
   <!-- Footer Commponent -->
   <div class="footer animated fadeIn">
-    <p>Copyright 2019. ProximaX Explorer. All rights reserved.</p>
+    <p>Copyright 2019. ProximaX. All rights reserved. <b>Sirius Explorer {{ softwareVersion }}</b></p>
   </div>
   <!-- End Footer Component -->
 </template>
 
 <script>
 export default {
-  name: 'AppFooter'
+  name: 'AppFooter',
+  data () {
+    return {
+      softwareVersion: 'v0.2.1',
+    }
+  }
 }
 </script>
 
@@ -21,4 +26,7 @@ export default {
     text-align: center
     margin: 0px
     padding: 10px
+    font-weight: bold
+    & > b
+      color: #2d819b
 </style>

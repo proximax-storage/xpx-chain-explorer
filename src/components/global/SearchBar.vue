@@ -8,10 +8,10 @@
 
         <!-- MDB Dropdown -->
         <mdb-dropdown style="text-align: center">
-          <mdb-dropdown-toggle slot="toggle" class="white-text cyan darken-3"
-          style="box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%"
+          <mdb-dropdown-toggle slot="toggle" class="black-text"
+          style="box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%; box-shadow: inset 0px 0px 0px 2px #2d819b"
           >{{ label }}</mdb-dropdown-toggle>
-          <mdb-dropdown-menu style="height: auto">
+          <mdb-dropdown-menu left>
             <mdb-dropdown-item class="searchLink" v-for="(item, index) in searchList" :key="index" style="padding: 0px">
               <a style="display: block; padding: 10px" @click.prevent="changeSearch(item)">{{ item.name }}</a>
             </mdb-dropdown-item>
@@ -32,7 +32,8 @@
 
         <!-- Input Icon -->
         <button @click.prevent="performSearch">
-          <img :src="require('@/assets/search-details-white.svg')" alt="">
+          <!-- <img :src="require('@/assets/search-details-white.svg')" alt=""> -->
+          Search
         </button>
         <!-- Input Icon -->
 
@@ -135,18 +136,18 @@ export default {
 
 <style lang="sass">
 .md-form input[type=search]:focus:not([readonly])
-    box-shadow: 0 1px 0 0 #2d8e9b !important
-    border-bottom: 1px solid #2d8e9b !important
+    box-shadow: 0 1px 0 0 #2BA1B9 !important
+    border-bottom: 1px solid #2BA1B9 !important
 
 .place-white
   color: black !important
   margin: 0px !important
   & > input
     color: black !important
-    border-bottom: #2d8e9b
+    border-bottom: #2BA1B9
     margin: 0px
   & > label
-    color: #2d8e9b !important
+    color: black !important
     &::after
       background: red !important
 
@@ -156,7 +157,7 @@ export default {
   padding: 5px
   &:hover
     color: white !important
-    background: #2d8e9b !important
+    background: #2BA1B9 !important
 
 .banner
   width: 100%
@@ -170,9 +171,9 @@ export default {
 
 .searchBar
   padding: 10px
-  margin: 10px 0px
   position: relative
   z-index: 2000
+  background: #f4f4f4
   & > .search-cont
     width: 100%
     display: flex
@@ -197,12 +198,14 @@ export default {
         flex-flow: row nowrap
         justify-content: center
         align-items: center
-        width: 40px
-        height: 40px
         margin: 0px 0px 0px 10px
-        padding: 0px
-        border-radius: 50%
-        background: rgb(45, 142, 155)
+        padding: 13px 34px
+        border-radius: 30px
+        color: white
+        text-transform: uppercase
+        font-size: 12px
+        font-weight: bold
+        background: #2BA1B9
         border: none
         & > img
           margin: 0px

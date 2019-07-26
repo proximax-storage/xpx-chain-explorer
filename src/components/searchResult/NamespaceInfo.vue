@@ -60,8 +60,8 @@
       </div>
     </div>
 
-    <div class="nam-layout-plus" style="margin-top: 7px" v-if="detail.alias.mosaicId !== undefined">
-      <h1 class="supertitle">Alias</h1>
+    <h1 class="supertitle center-text">Alias</h1>
+    <div class="nam-layout-plus" v-if="detail.alias.mosaicId !== undefined">
       <div>
         <div class="up">
           <div class="title">Mosaic Id</div>
@@ -76,9 +76,9 @@
       </div>
     </div>
 
-    <div class="nam-layout-plus" style="margin-top: 7px" v-if="arrayLevels.lenght !== 0">
-      <h1 class="supertitle">Levels</h1>
-      <div v-for="(item, index) in arrayLevels" :key="index" style="padding-bottom: 10px">
+    <h1 class="supertitle center-text">Levels</h1>
+    <div class="nam-layout-plus" v-if="arrayLevels.lenght !== 0">
+      <div v-for="(item, index) in arrayLevels" :key="index">
         <div class="up">
           <div class="title">Namespace Id</div>
           <div class="value link" @click="goToNamespace(item.id.toHex())">{{ item.id.toHex() }}</div>
@@ -173,28 +173,33 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-$radius: 5px
+$radius: 20px
 
 .supertitle
   margin: 0px
   font-size: 17px
-  color: white
+  color: #2d819b
   padding: 0px 0px 5px 0px
 
+.center-text
+  text-align: center
+
 .link:hover
-  color: #2d8e9b
+  color: #2d819b
   text-decoration: underline
   cursor: pointer
 
 .up
-  background: #DDDDDD
-  border-radius: $radius $radius 0px 0px
+  background: #f4f4f4
+  border-radius: $radius
   padding: 10px
+  margin-bottom: 10px
 
 .down
   background: #F4F4F4
-  border-radius: 0px 0px $radius $radius
+  border-radius: $radius
   padding: 10px
+  margin: 0px 0px 10px 0px
 
 .down-radius
   background: #F4F4F4
@@ -205,6 +210,7 @@ $radius: 5px
   font-size: 10px
   font-weight: bold
   text-transform: uppercase
+  color: grey
 
 .value
   font-size: 13px
@@ -213,7 +219,6 @@ $radius: 5px
   word-break: break-all
 
 .namespaceInfo
-  background: #2d8e9b
   padding: 10px
   color: black
   & > .nam-layout-up
@@ -240,17 +245,24 @@ $radius: 5px
       &:last-child
         margin: 0px
         margin-left: 5px
-  & > .nam-layout-Plus
-    display: flex
-    justify-content: space-between
-    align-items: center
+  & > .nam-layout-plus
+    display: block
+    width: 100%
+    margin-bottom: 10px
     & > div
-      margin: 0px 5px
-      flex-grow: 1
-      &:first-child
-        margin: 0px
-        margin-right: 5px
-      &:last-child
-        margin: 0px
-        margin-left: 5px
+      display: flex
+      width: 100%
+      margin-bottom: 10px
+      background: #f4f4f4
+      border-radius: 20px
+      & > div
+        flex-grow: 1
+        &.up
+          min-width: 300px
+          text-align: center
+          margin: 0px 5px 0px 0px
+        &.down
+          min-width: 300px
+          text-align: center
+          margin: 0px 0px 0px 5px
 </style>

@@ -4,6 +4,18 @@
     <!-- Image Container -->
     <figure>
       <img :src="require('@/assets/logo-proximax-sirius-explorer.svg')" alt="logo">
+      <div class="date">
+        <div class="day">
+          <div>{{ date.month }}</div>
+          <div>{{ date.day }}</div>
+        </div>
+        <div class="year">
+          <p>{{ date.year[0] }}</p>
+          <p>{{ date.year[1] }}</p>
+          <p>{{ date.year[2] }}</p>
+          <p>{{ date.year[3] }}</p>
+        </div>
+      </div>
     </figure>
     <!-- End Image Container -->
 
@@ -19,8 +31,6 @@
     </nav>
     <!-- End Navigation Container -->
 
-    <div class="version">{{ softwareVersion }}</div>
-
   </div>
   <!-- End Header Component -->
 </template>
@@ -31,11 +41,15 @@ export default {
   data () {
     return {
       navItems: [
-        { name: 'Transactions', route: '', class: 'active' },
+        { name: 'Blocks', route: '', class: 'active' },
         { name: 'Network stats', route: 'networkStats', class: 'inactive' },
         { name: 'Map', route: 'map', class: 'inactive' }
       ],
-      softwareVersion: 'v0.2.0'
+      date: {
+        day: '01',
+        month: 'Jan',
+        year: ['2', '0', '1', '9']
+      }
     }
   },
   methods: {
@@ -110,6 +124,16 @@ export default {
         message: '',
         submessage: ''
       })
+    },
+
+    defineDate () {
+      let time = new Date()
+      let allMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      this.date.day = time.getDate()
+      this.date.month = allMonths[time.getMonth()]
+      let year = Array.from(time.getFullYear().toString())
+      console.log(year)
+      this.date.year = year
     }
   },
 
@@ -120,55 +144,84 @@ export default {
    */
   mounted () {
     this.verifyRoute()
+    this.defineDate()
   }
 }
 </script>
 
 <style lang="sass" scoped>
-.logo
-  width: 270px
-  height: 70px
+.date
+  color: black
 
 .version
   color: black
-  background: white
-  position: fixed
-  right: 10px
+  position: absolute
+  text-align: center
+  right: 0
+  left: 0
   top: 10px
+  width: 100px
+  margin: auto
   padding: 3px 20px
   border-radius: 30px
   font-size: 12px
   font-weight: bold
+
 .inactive
-  border-bottom: 2px solid #ddd
+  box-shadow: inset 0px 0px 0px 0px
 
 .active
-  border-bottom: 2px solid #2d8e9b
+  box-shadow: inset 0px -3px 0px 0px
 
 .header
   width: 100%
   display: flex
   flex-flow: column nowrap
   align-items: center
-  padding: 10px
   & > figure
-    width: 300px
-    padding: 20px
+    display: flex
+    justify-content: space-between
+    width: 100%
+    padding: 15px
+    margin: 0px
+    & > img
+      width: 200px
+    & > .date
+      display: flex
+      flex-flow: column
+      & > .day
+        flex-grow: 1
+        display: flex
+        justify-content: center
+        & > div
+          font-size: 25px
+        & > div:first-child
+          padding-right: 2px
+        & > div:last-child
+          padding-left: 2px
+      & > .year
+        display: flex
+        justify-content: space-between
+        font-size: 13px
+        & > p
+          margin: 0px
+
   & > nav
     width: 100%
     display: flex
     flex-flow: row nowrap
+    background: -webkit-linear-gradient(top, #2d819b 50%, #0000009e)
     & > .nav-item
       padding: 5px
       flex-grow: 1
       text-align: center
       text-transform: uppercase
-      color: black
+      color: white
       font-weight: bold
       font-size: 15px
       cursor: pointer
       &:hover
-        border-bottom: 2px solid #2d8e9b
+        box-shadow: inset 0px -3px 0px 0px
 
 @media screen and (max-width: 550px)
   .header
