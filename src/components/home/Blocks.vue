@@ -9,7 +9,7 @@
 
     <!-- NEW DESIGN OF BLOCKS COMPONENT (Mobile Compatible)-->
     <div class="mobile">
-      <div class="guide" style="background: #1a1a1a">
+      <div class="guide">
         <div class="title-guide">Height</div>
         <div class="title-guide">Validator</div>
         <div class="title-guide">Fee</div>
@@ -20,14 +20,14 @@
       <!-- Iterated Element of Block -->
       <div class="element animated faster fadeInDown" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #f4f4f4' : 'background: white'">
 
-        <div style="min-width: 55px">
+        <div>
           <span class="title">Height</span>
-          <router-link class="link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link>
+          <router-link class="value link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link>
         </div>
 
-        <div style="min-width: 550px">
+        <div>
           <span class="title">Validator</span>
-          <router-link class="link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.publicKey }" target="_blank" style="word-break: break-all">{{ item.signer.publicKey }}</router-link>
+          <router-link class="value link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.publicKey }" target="_blank">{{ item.signer.publicKey }}</router-link>
         </div>
 
         <div>
@@ -219,42 +219,50 @@ export default {
   display: flex
   flex-flow: row nowrap
   justify-content: space-around
-  border: 1px solid #f4f4f4
   // margin: 2px 0px
   padding: 5px
   color: white
   border-radius: 5px
   width: 100%
   padding: 10px 5px
+  background: #1a1a1a
   & > .title-guide
     color: white
     font-size: 10px
     text-transform: uppercase
     font-weight: bold
     text-align: center
+    flex-grow: 1
     &:first-child
       width: 55px
     &:nth-child(2n)
-      width: 550px
+      width: 600px
     &:nth-child(3n)
       width: 66px
     &:nth-child(4n)
-      width: 23px
+      width: 60px
     &:last-child
       width: 139px
 
 .title
   color: grey
-  font-size: 10px
+  font-size: 10px !important
   text-transform: uppercase
   display: none
+
+.value
+  font-size: 14px
+  font-weight: bold
+  text-transform: uppercase
+  text-align: center
+  color: black
+  word-break: break-all !important
 
 .mobile
   display: flex
   flex-flow: column
   width: 100%
   padding: 15px
-  margin: 2px 0px
   overflow-y: auto
   &::-webkit-scrollbar
     background: transparent
@@ -276,12 +284,17 @@ export default {
       display: flex
       flex-flow: column
       align-items: center
-      padding: 3px
-      // & > span:first-child
-      //   font-size: 9px
-      //   text-transform: uppercase
-      //   font-weight: bold
-      //   color: red
+      flex-grow: 1
+      &:first-child
+        width: 55px
+      &:nth-child(2)
+        width: 600px
+      &:nth-child(3)
+        width: 66px
+      &:nth-child(4)
+        width: 60px
+      &:last-child
+        width: 139px
       & > span:last-child
         text-align: center
         font-size: 14px
@@ -331,13 +344,11 @@ export default {
   right: 20px
   border-radius: 50%
   color: #2d8e9b
-  border: 2px solid #2d8e9b
+  box-shadow: 0px 0px 10px grey
   &:hover
     background: #2d8e9b
-    border: 2px solid white
     color: white
-    box-shadow: 0px 0px 10px grey
-    transition: all linear .2s
+    transition: all ease .2s
 
 td
   text-align: center
@@ -389,13 +400,17 @@ td
   .title
     display: block
 
+  .value
+    font-size: 10px !important
+    word-break: break-all !important
+
   .guide
     display: none
 
   .link-data
     font-size: 10px
     font-weight: bold
-    color: #2d8e9b
+    color: #2d8e9b !important
     text-decoration: underline
     word-wrap: break-word
 
@@ -406,35 +421,44 @@ td
     color: white
 
   .mobile > .element
-    flex-flow: column nowrap
-    // box-shadow: 0px 3px 3px grey
-    margin: 5px 0px 5px 0px
-    &:nth-child(2n)
-      border: 1px solid silver
+    display: block
+    // flex-flow: column nowrap
+    // // box-shadow: 0px 3px 3px grey
+    // justify-content: stretch
+    // align-item: center
+    // margin: 5px 0px 5px 0px
     & > div
-      display: flex
-      flex-flow: column wrap
-      align-items: center
-      padding: 3px
+      // display: block
+      padding: 5px
+      // display: flex
+      // flex-flow: column wrap
+      // align-items: center
+      // width: 100%
       border-bottom: 1px solid #c0c0c040
+      // flex-grow: 0
+      &:first-child
+        width: 100%
+      &:nth-child(2)
+        width: 100%
+      &:nth-child(3)
+        width: 100%
+      &:nth-child(4)
+        width: 100%
+      &:last-child
+        width: 100%
       &:last-child
         border-bottom: 0px solid silver
-      &:nth-child(2n)
-        // background: #c5c5c5
-        // border-bottom: 1px solid silver
-      & > span:first-child
-        font-size: 10px
-        text-transform: uppercase
-        font-weight: bold
-        color: grey
-      & > span:last-child
-        text-align: center
-        font-size: 10px
-        text-transform: uppercase
-        font-weight: bold
-        color: black
-  td
-    padding: 3px 5px
+      // & > span:first-child
+      //   font-size: 10px
+      //   text-transform: uppercase
+      //   font-weight: bold
+      //   color: grey
+      // & > span:last-child
+      //   text-align: center
+      //   font-size: 10px
+      //   text-transform: uppercase
+      //   font-weight: bold
+      //   color: black
 
   .block
     display: flex

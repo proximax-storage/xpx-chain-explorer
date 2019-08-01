@@ -16,7 +16,7 @@
       <div>
         <div class="up">
           <div class="title">Name</div>
-          <div class="value">{{ detail.name || 'No Available' }}</div>
+          <div class="valueLower">{{ detail.name || 'No Available' }}</div>
         </div>
         <div class="down">
           <div class="title">Namespace Id</div>
@@ -34,7 +34,7 @@
         <div class="down">
           <div class="title">End Height</div>
           <div class="value">
-            {{ (typeof detail.endHeight.compact() === 'number') ? detail.endHeight.compact() : parseInt(detail.endHeight.toHex(), 16) }}
+            {{ (typeof detail.endHeight.compact() === 'number') ? detail.endHeight.compact() : preciseBigInt(detail.endHeight.toHex()) }}
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <h1 class="supertitle center-text">Alias</h1>
+    <h1 class="supertitle center-text" v-if="detail.alias.mosaicId !== undefined">Alias</h1>
     <div class="nam-layout-plus" v-if="detail.alias.mosaicId !== undefined">
       <div>
         <div class="up">
@@ -76,7 +76,7 @@
       </div>
     </div>
 
-    <h1 class="supertitle center-text">Levels</h1>
+    <h1 class="supertitle center-text" v-if="arrayLevels.lenght !== 0">Levels</h1>
     <div class="nam-layout-plus" v-if="arrayLevels.lenght !== 0">
       <div v-for="(item, index) in arrayLevels" :key="index">
         <div class="up">
@@ -85,7 +85,7 @@
         </div>
         <div class="down">
           <div class="title">Name</div>
-          <div class="value">{{ item.name }}</div>
+          <div class="valueLower">{{ item.name }}</div>
         </div>
       </div>
     </div>
@@ -142,6 +142,86 @@ export default {
         )
       })
     },
+    preciseBigInt (hexNum) {
+      /**
+       * http://www.danvk.org/hex2dec.html
+       */
+      function add(x, y, base) {
+          var z = [];
+          var n = Math.max(x.length, y.length);
+          var carry = 0;
+          var i = 0;
+          while (i < n || carry) {
+              var xi = i < x.length ? x[i] : 0;
+              var yi = i < y.length ? y[i] : 0;
+              var zi = carry + xi + yi;
+              z.push(zi % base);
+              carry = Math.floor(zi / base);
+              i++;
+          }
+          return z;
+      }
+      function multiplyByNumber(num, x, base) {
+          if (num < 0) return null;
+          if (num == 0) return [];
+
+          var result = [];
+          var power = x;
+          while (true) {
+              if (num & 1) {
+                  result = add(result, power, base);
+              }
+              num = num >> 1;
+              if (num === 0) break;
+              power = add(power, power, base);
+          }
+          return result;
+      }
+
+      function parseToDigitsArray(str, base) {
+          var digits = str.split('');
+          var ary = [];
+          for (var i = digits.length - 1; i >= 0; i--) {
+              var n = parseInt(digits[i], base);
+              if (isNaN(n)) return null;
+              ary.push(n);
+          }
+          return ary;
+      }
+      function convertBase(str, fromBase, toBase) {
+          var digits = parseToDigitsArray(str, fromBase);
+          if (digits === null) return null;
+
+          var outArray = [];
+          var power = [1];
+          for (var i = 0; i < digits.length; i++) {
+              // invariant: at this point, fromBase^i = power
+              if (digits[i]) {
+                  outArray = add(outArray, multiplyByNumber(digits[i], power, toBase), toBase);
+              }
+              power = multiplyByNumber(fromBase, power, toBase);
+          }
+
+          var out = '';
+          for (var i = outArray.length - 1; i >= 0; i--) {
+              out += outArray[i].toString(toBase);
+          }
+          return out;
+      }
+      function decToHex(decStr) {
+          var hex = convertBase(decStr, 10, 16);
+          return hex ? '0x' + hex : null;
+      }
+      function hexToDec(hexStr) {
+          if (hexStr.substring(0, 2) === '0x') hexStr = hexStr.substring(2);
+          hexStr = hexStr.toLowerCase();
+          return convertBase(hexStr, 16, 10);
+      }
+
+      let result = hexToDec(hexNum)
+      return result
+    },
+
     goToAddress (address) {
       let routeData = (address.length === 64) ?
       this.$router.resolve({ path: `/searchResult/publicKey/${ address }` }) :
@@ -218,11 +298,17 @@ $radius: 20px
   text-transform: uppercase
   word-break: break-all
 
+.valueLower
+  font-size: 13px
+  font-weight: normal
+  word-break: break-all
+
 .namespaceInfo
   padding: 10px
   color: black
   & > .nam-layout-up
     display: flex
+    flex-flow: row
     justify-content: space-between
     align-items: center
     & > div
@@ -251,18 +337,52 @@ $radius: 20px
     margin-bottom: 10px
     & > div
       display: flex
+      flex-flow: row
       width: 100%
       margin-bottom: 10px
       background: #f4f4f4
       border-radius: 20px
       & > div
-        flex-grow: 1
         &.up
-          min-width: 300px
+          flex-grow: 1
+          background: transparent
+          width: 300px
           text-align: center
           margin: 0px 5px 0px 0px
         &.down
-          min-width: 300px
+          flex-grow: 1
+          background: transparent
+          width: 300px
           text-align: center
           margin: 0px 0px 0px 5px
+
+@media screen and (max-width: 700px)
+  .value,
+  .valueLower
+    font-size: 13px
+
+  .link
+    color: #2d819b
+    text-decoration: underline
+    cursor: pointer
+
+  .namespaceInfo
+    & > .nam-layout-up
+      flex-flow: column
+      & > div
+        width: 100%
+        &:first-child
+          margin: 0px
+        &:last-child
+          margin: 0px
+    & >.nam-layout-down
+      flex-flow: column
+      & > div
+        width: 100%
+        &:first-child
+          margin: 0px
+        &:nth-child(2)
+          margin: 0px
+        &:last-child
+          margin: 0px
 </style>

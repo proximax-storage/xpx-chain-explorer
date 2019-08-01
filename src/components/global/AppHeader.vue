@@ -2,21 +2,21 @@
   <!-- Header Component -->
   <div class="header animated faster fadeIn">
     <!-- Image Container -->
-    <figure>
+    <div class="cont">
       <img :src="require('@/assets/logo-proximax-sirius-explorer.svg')" alt="logo">
       <div class="date">
         <div class="day">
           <div>{{ date.month }}</div>
-          <div>{{ date.day }}</div>
+          <div>{{ date.day }},</div>
+          <div>{{ date.year }}</div>
         </div>
-        <div class="year">
-          <p>{{ date.year[0] }}</p>
-          <p>{{ date.year[1] }}</p>
-          <p>{{ date.year[2] }}</p>
-          <p>{{ date.year[3] }}</p>
+        <div class="hours">
+          <div>{{ date.dayName }}</div>
+          <div>{{ '|' }}</div>
+          <div>{{ date.militarHour }}</div>
         </div>
       </div>
-    </figure>
+    </div>
     <!-- End Image Container -->
 
     <!-- Navigation Container -->
@@ -46,9 +46,11 @@ export default {
         { name: 'Map', route: 'map', class: 'inactive' }
       ],
       date: {
+        dayName: 'Mon.',
         day: '01',
         month: 'Jan',
-        year: ['2', '0', '1', '9']
+        year: 2019,
+        militarHour: '12:00'
       }
     }
   },
@@ -128,12 +130,15 @@ export default {
 
     defineDate () {
       let time = new Date()
-      let allMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      let allMonths = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May.', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
+      let allDays = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.']
       this.date.day = time.getDate()
       this.date.month = allMonths[time.getMonth()]
-      let year = Array.from(time.getFullYear().toString())
-      console.log(year)
+      let year = time.getFullYear()
+      // console.log(year)
       this.date.year = year
+      this.date.militarHour = `${time.getHours()}:${(time.getMinutes() < 10) ? `0${time.getMinutes()}` : time.getMinutes()}`
+      this.date.dayName = allDays[time.getDay()]
     }
   },
 
@@ -144,7 +149,9 @@ export default {
    */
   mounted () {
     this.verifyRoute()
-    this.defineDate()
+    setInterval(() => {
+      this.defineDate()
+    }, 1000)
   }
 }
 </script>
@@ -171,14 +178,14 @@ export default {
   box-shadow: inset 0px 0px 0px 0px
 
 .active
-  box-shadow: inset 0px -3px 0px 0px
+  box-shadow: inset 0px -4px 0px 0px
 
 .header
   width: 100%
   display: flex
   flex-flow: column nowrap
   align-items: center
-  & > figure
+  & > .cont
     display: flex
     justify-content: space-between
     width: 100%
@@ -195,38 +202,55 @@ export default {
         justify-content: center
         & > div
           font-size: 25px
-        & > div:first-child
-          padding-right: 2px
-        & > div:last-child
-          padding-left: 2px
-      & > .year
+          padding: 0px 3px
+      & > .hours
         display: flex
-        justify-content: space-between
+        justify-content: flex-end
         font-size: 13px
-        & > p
-          margin: 0px
+        font-weight: bold
+        & > div
+          padding: 0px 3px
 
   & > nav
     width: 100%
     display: flex
     flex-flow: row nowrap
-    background: -webkit-linear-gradient(top, #2d819b 50%, #0000009e)
+    justify-content: center
+    background: -webkit-linear-gradient(top, #33b7d2, #0f7084)
     & > .nav-item
-      padding: 5px
-      flex-grow: 1
+      padding: 5px 30px
       text-align: center
       text-transform: uppercase
       color: white
       font-weight: bold
       font-size: 15px
       cursor: pointer
-      &:hover
-        box-shadow: inset 0px -3px 0px 0px
+      // &:hover
+      //   box-shadow: inset 0px -2px 0px 0px #5bcde4
 
 @media screen and (max-width: 550px)
   .header
-    & > figure
+    & > .cont
       width: 100%
+      flex-flow: column
+      & > img
+        width: 100%
+      & > .date
+        display: flex
+        flex-flow: row
+        & > .day
+          justify-content: flex-start
+          & > div
+            font-size: 13px
+            font-weight: bold
+            text-align: left
+
     & > nav
+      justify-content: flex-start
       flex-flow: row nowrap
+      & > .nav-item
+        flex-grow: 1
+        padding: 5px 0px
+
+
 </style>

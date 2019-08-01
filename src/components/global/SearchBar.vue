@@ -10,7 +10,9 @@
         <mdb-dropdown style="text-align: center">
           <mdb-dropdown-toggle slot="toggle" class="black-text"
           style="box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%; box-shadow: inset 0px 0px 0px 2px #2d819b"
-          >{{ label }}</mdb-dropdown-toggle>
+          >
+          {{ label }}
+          </mdb-dropdown-toggle>
           <mdb-dropdown-menu left>
             <mdb-dropdown-item class="searchLink" v-for="(item, index) in searchList" :key="index" style="padding: 0px">
               <a style="display: block; padding: 10px" @click.prevent="changeSearch(item)">{{ item.name }}</a>
@@ -170,7 +172,8 @@ export default {
   justify-content: center
 
 .searchBar
-  padding: 10px
+  padding: 10px 20px
+  margin: 10px 0px 0px 0px
   position: relative
   z-index: 2000
   background: #f4f4f4
@@ -212,6 +215,9 @@ export default {
           width: 15px
 
 @media screen and (max-width: 550px)
+  .dropdown
+    width: 100% !important
+
   .searchBar
     & > .search-cont
       flex-flow: column
@@ -220,7 +226,13 @@ export default {
         flex-grow: 0
         width: 100%
       & > .search-input
+        display: flex
+        flex-flow: column
         margin: 5px
         flex-grow: 0
         width: 100%
+        & > button
+          width: 100%
+          margin: 0px
+
 </style>

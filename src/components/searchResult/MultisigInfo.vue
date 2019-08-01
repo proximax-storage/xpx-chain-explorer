@@ -144,6 +144,15 @@ $radius: 20px
     padding: 10px
 
 @media screen and (max-width: 595px)
+  .value,
+  .valueLower
+    font-size: 13px
+
+  .link
+    color: #2d819b
+    text-decoration: underline
+    cursor: pointer
+
   .multisig > .info
     flex-flow: column nowrap
     & > .left

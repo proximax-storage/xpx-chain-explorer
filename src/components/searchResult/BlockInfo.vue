@@ -159,6 +159,15 @@ $radius: 20px
       margin-left: 5px
 
 @media screen and (max-width: 741px)
+  .value,
+  .valueLower
+    font-size: 13px
+
+  .link
+    color: #2d819b
+    text-decoration: underline
+    cursor: pointer
+
   .blockInfo
     & > .bi-layout-up
       flex-flow: column wrap

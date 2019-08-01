@@ -94,4 +94,14 @@ export default {
   color: #2d8e9b
   text-decoration: underline
   cursor: pointer
+
+@media screen and (max-width: 700px)
+  .value,
+  .valueLower
+    font-size: 13px
+
+  .link
+    color: #2d819b
+    text-decoration: underline
+    cursor: pointer
 </style>

@@ -36,7 +36,7 @@
     <!-- Map Options Container -->
     <div class="control">
       <div class="cardServe" v-for="(item, index) in mapList" :key="index" @click="activate(item)" :style="(item.visible) ? 'display: flex' : 'display: none'">
-        <div style="min-width: 200px">
+        <div>
           <div class="title">Name</div>
           <div class="valueLower">{{ item.name }}</div>
         </div>
@@ -48,7 +48,7 @@
           <div class="title">Version</div>
           <div class="value">{{ item.version }}</div>
         </div>
-        <div style="min-width: 200px">
+        <div>
           <div class="title">Location</div>
           <div class="value">{{ item.location }}</div>
         </div>
@@ -107,6 +107,16 @@ export default {
       axios.get('./config/nodesInfoMaps.json').then(
         response => {
           this.mapList = response.data
+          let mapCustomNodes = this.$storage.get('mapCustomNodes')
+          if (mapCustomNodes !== null) {
+            mapCustomNodes = JSON.parse(mapCustomNodes)
+
+            mapCustomNodes.forEach(el => {
+              console.log(el)
+              this.mapList.push(el)
+            })
+          }
+
           this.analyzeMaps()
         }
       )
@@ -121,6 +131,7 @@ export default {
           resp => {
             el.lat = resp.data.latitude
             el.lon = resp.data.longitude
+            el.location = resp.data.country_name
 
             axios.get(`${el.urlNode}/node/info`).then(
               response => {
@@ -259,6 +270,8 @@ $radius: 20px
 .mapboxgl-popup
   color: black
   opacity: 0
+  position: relative
+  z-index: 30000
 
 .title
   font-size: 9px
@@ -334,8 +347,16 @@ $radius: 20px
       cursor: pointer
       &:hover
         background: #f4f4f4
+      & > div
+        width: 250px
 
 @media screen and (max-width: 700px)
   .map > .control > .cardServe
     flex-flow: column
+    & > div
+      width: 100%
+      border-bottom: 1px solid #f4f4f4
+      padding: 2px
+      &:last-child
+        border-bottom: 0px solid white
 </style>

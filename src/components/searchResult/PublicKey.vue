@@ -30,7 +30,7 @@
         <h1 class="supertitle">XPX Info</h1>
         <div class="up">
           <div class="title">Namespace Name</div>
-          <div class="value">PRX</div>
+          <div class="valueLower">PRX</div>
         </div>
         <div class="down">
           <div class="title">XPX Mosaic Id</div>
@@ -131,6 +131,11 @@ $radius: 20px
   text-transform: uppercase
   word-wrap: break-word
 
+.valueLower
+  font-size: 14px
+  font-weight: normal
+  word-wrap: break-word
+
 .balance
   color: black
   margin: 0px
@@ -157,6 +162,7 @@ $radius: 20px
   // margin: 15px 10px 0px 10px
   color: black
   & > .pk-layout-up
+    padding: 10px
     background: transparent
     display: flex
     flex-flow: row wrap
@@ -174,6 +180,7 @@ $radius: 20px
       border-radius: $radius
   & > .pk-layout-down
     display: flex
+    text-align: center
     flex-flow: row nowrap
     justify-content: center
     align-items: center
@@ -182,6 +189,15 @@ $radius: 20px
     border-bottom: 1px solid silver
 
 @media screen and (max-width: 740px)
+  .value,
+  .valueLower
+    font-size: 13px
+
+  .link
+    color: #2d819b
+    text-decoration: underline
+    cursor: pointer
+
   .publicKey
     & > .pk-layout-up
       flex-flow: column

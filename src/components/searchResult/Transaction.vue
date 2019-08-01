@@ -281,7 +281,6 @@ export default {
         case 'Transfer Transaction':
           this.plusInfo = [
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
           ]
 
@@ -304,12 +303,12 @@ export default {
                 .subscribe(response => {
                   if (response.length = 2) {
                     response.reverse()
-                    name = `${response[0].name} . ${response[1].name} . ${this.detail.namespaceName}`
-                    let parentNamespace = { key: 'Namespace Level', value: name }
+                    name = `${response[0].name}.${response[1].name}.${this.detail.namespaceName}`
+                    let parentNamespace = { key: 'Namespace Level', value: name, class: 'valueLower' }
                     this.plusInfo.unshift(parentNamespace)
                   } else if (response.length = 1) {
                     name = `${response[0].name} . ${this.detail.namespaceName}`
-                    let parentNamespace = { key: 'Namespace Level', value: name }
+                    let parentNamespace = { key: 'Namespace Level', value: name, class: 'valueLower' }
                     this.plusInfo.unshift(parentNamespace)
                   }
                 })
@@ -317,7 +316,7 @@ export default {
           }
 
           this.plusInfo = [
-            { key: 'Namespace Name', value: this.detail.namespaceName },
+            { key: 'Namespace Name', value: this.detail.namespaceName, class: 'valueLower' },
             { key: 'Namespace Type', value: (this.detail.namespaceType === 0) ? 'Root' : 'Sub' },
             { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex(), class: 'value link', run: this.goToNamespace },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
@@ -357,9 +356,8 @@ export default {
           break;
         case 'Mosaic supply change':
           this.plusInfo = [
-            { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
+            { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex(), class: 'value link', run: this.goToMosaic },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
             // { key: 'Amount', value: this.$utils.fmtAmountValue(this.detail.delta.toHex()) },
             // { key: 'Direction', value: this.detail.direction },
@@ -377,17 +375,25 @@ export default {
           // this.iterator(this.detail)
           break;
         case 'Aggregate complete':
+          this.plusInfo = [
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
+            { key: 'Version', value: this.detail.version }
+          ]
           // this.iterator(this.detail)
           break;
         case 'Aggregate bonded':
+          this.plusInfo = [
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
+            { key: 'Version', value: this.detail.version }
+          ]
           // this.iterator(this.detail)
           break;
         case 'Lock':
           this.plusInfo = [
-            { key: 'Mosaic Id', value: this.detail.mosaic.id.toHex() },
+            { key: 'Mosaic Id', value: this.detail.mosaic.id.toHex(), class: 'value link', run: this.goToMosaic },
             { key: 'Mosaic Amount', value: '', valueHtml: this.$utils.fmtAmountValue(this.detail.mosaic.amount.compact()) },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
+            { key: 'Lock Transaction Hash', value: this.detail.hash, class: 'value link', run: this.goToHash },
             { key: 'Version', value: this.detail.version },
             { key: 'Duration', value: (this.detail.duration !== undefined) ? this.$utils.calculateDuration(this.detail.duration.compact()) : 'No Duration' }
           ]
@@ -401,39 +407,64 @@ export default {
           break;
         case 'Mosaic Alias':
           this.plusInfo = [
-            { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex() },
-            { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
-            { key: 'Action Type', value: (this.detail.actionType !== undefined) ? this.detail.actionType : 'No Available' },
-            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
-            { key: 'Version', value: this.detail.version }
+            { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex(), class: 'valueLower link', run: this.goToNamespace },
+            { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex(), class: 'value link', run: this.goToMosaic },
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name }
           ]
+
+          if (this.detail.actionType === undefined) {
+            this.plusInfo.push({ key: 'Action Type', value: 'Link' })
+          } else if (this.detail.actionType === 0) {
+            this.plusInfo.push({ key: 'Action Type', value: 'Link' })
+          } else if (this.detail.actionType === 0) {
+            this.plusInfo.push({ key: 'Action Type', value: 'Unlink' })
+          }
+
+          this.plusInfo.push({ key: 'Version', value: this.detail.version })
 
           this.$proxProvider.getNamespacesName([this.detail.namespaceId.id]).subscribe(
             response => {
               // console.log(response[0].name)
-              this.plusInfo.unshift({ key: 'Namespace Name', value: response[0].name })
+              this.plusInfo.unshift({ key: 'Namespace Name', value: response[0].name, class: 'valueLower' })
             }
           )
           // this.iterator(this.detail)
           break;
         case 'Address Alias':
-          this.iterator(this.detail)
+          this.plusInfo = [
+            { key: 'Info', value: 'Not supported yet' }
+          ]
+          // this.iterator(this.detail)
           break;
         case 'Modify Account Property Address':
-          this.iterator(this.detail)
+          this.plusInfo = [
+            { key: 'Info', value: 'Not supported yet' }
+          ]
+          // this.iterator(this.detail)
           break;
         case 'Modify Account Property Mosaic':
-          this.iterator(this.detail)
+          this.plusInfo = [
+            { key: 'Info', value: 'Not supported yet' }
+          ]
+          // this.iterator(this.detail)
           break;
         case 'Modify Account Entity Type':
-          this.iterator(this.detail)
+          this.plusInfo = [
+            { key: 'Info', value: 'Not supported yet' }
+          ]
+          // this.iterator(this.detail)
           break;
         case 'Link Account':
-          this.iterator(this.detail)
+          this.plusInfo = [
+            { key: 'Info', value: 'Not supported yet' }
+          ]
+          // this.iterator(this.detail)
           break;
         case 'Modify Account Metadata':
-          this.iterator(this.detail)
+          this.plusInfo = [
+            { key: 'Info', value: 'Not supported yet' }
+          ]
+          // this.iterator(this.detail)
           break;
         case 'Modify Mosaic Metadata':
           this.plusInfo = [
@@ -446,7 +477,10 @@ export default {
           // this.iterator(this.detail)
           break;
         case 'Modify Namespace Metadata':
-          this.iterator(this.detail)
+          this.plusInfo = [
+            { key: 'Info', value: 'Not supported yet' }
+          ]
+          // this.iterator(this.detail)
           break;
       }
     },
@@ -630,15 +664,16 @@ $radius: 20px
         border-radius: $radius
 
 @media screen and (max-width: 550px)
-  .value
-    font-size: 10px
-    font-weight: normal
-    text-transform: uppercase
-    word-wrap: break-word
+  .value,
+  .valueLower
+    font-size: 13px
     &.mosaic-properties
-      display: flex
-      flex-flow: column
-      justify-content: space-around
+      flex-flow: column wrap
+
+  .link
+    color: #2d819b
+    text-decoration: underline
+    cursor: pointer
 
   .transaction
     & > .tran-layout-up

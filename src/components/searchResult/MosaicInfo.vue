@@ -5,7 +5,7 @@
       <div>
         <div class="up">
           <div class="title">Name</div>
-          <div class="value">{{ detail.name || 'No Available' }}</div>
+          <div class="valueLower">{{ detail.name || 'No Available' }}</div>
         </div>
         <div class="down">
           <div class="title">Mosaic Id</div>
@@ -75,7 +75,7 @@
         <div class="element" style="border-radius: 20px">
           <div class="title">Duration</div>
           <div class="value">
-            {{ $utils.calculateDuration(this.detail.duration.compact()) }}
+            {{ `(Block Height: ${detail.height.compact()}) ${$utils.calculateDuration(this.detail.duration.compact())}` }}
           </div>
         </div>
       </div>
@@ -91,7 +91,7 @@ export default {
     detail: Object
   },
   mounted () {
-    console.log('MosaicInfo', this.detail)
+    console.log('MosaicInfo', this.detail.toString())
   },
   methods: {
     goToAddress (address) {
@@ -157,6 +157,7 @@ $radius: 20px
   font-size: 10px
   font-weight: bold
   text-transform: uppercase
+  color: grey
 
 .value
   font-size: 13px
@@ -164,11 +165,17 @@ $radius: 20px
   text-transform: uppercase
   word-break: break-all
 
+.valueLower
+  font-size: 13px
+  font-weight: normal
+  word-break: break-all
+
 .mosaicInfo
   padding: 10px
   color: black
   & > .mos-layout-up
     display: flex
+    flex-flow: row
     justify-content: space-between
     align-items: center
     & > div
@@ -195,14 +202,35 @@ $radius: 20px
   & > .mos-layout-plus
     display: flex
     flex-flow: column nowrap
-    // & > div
-    //   margin: 0px 5px
-    //   &:first-child
-    //     border-radius: $radius $radius 0px 0px
-    //     margin: 0px
-    //     margin-right: 5px
-    //   &:last-child
-    //     border-radius: 0px 0px $radius $radius
-    //     margin: 0px
-    //     margin-left: 5px
+
+@media screen and (max-width: 700px)
+  .value,
+  .valueLower
+    font-size: 13px
+
+  .link
+    color: #2d819b
+    text-decoration: underline
+    cursor: pointer
+
+  .mosaicInfo
+    & > .mos-layout-up
+      flex-flow: column
+      & > div
+        flex-flow: column
+        width: 100%
+        &:first-child
+          margin: 0px 0px 10px 0px
+        &:last-child
+          margin: 0px
+    & > .mos-layout-down
+      flex-flow: column
+      & > div
+        flex-flow: column
+        width: 100%
+        &:first-child
+          margin: 0px 0px 10px 0px
+        &:last-child
+          margin: 0px
+
 </style>

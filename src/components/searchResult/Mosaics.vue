@@ -14,7 +14,7 @@
 
       <div class="el-middle" :class="(item.name) ? '' : 'mosaicNameTrans'" style="min-width: 200px">
         <div class="title">Name</div>
-        <div class="value">{{ item.name || 'No Available' }}</div>
+        <div class="valueLower">{{ item.name || 'No Available' }}</div>
       </div>
 
       <div class="el-right" style="min-width: 200px">
@@ -232,6 +232,12 @@ $radius: 20px
   font-size: 14px
   font-weight: normal
   text-transform: uppercase
+  word-break: break-all
+
+.valueLower
+  font-size: 14px
+  font-weight: normal
+  word-break: break-all
 
 .balance
   color: black
