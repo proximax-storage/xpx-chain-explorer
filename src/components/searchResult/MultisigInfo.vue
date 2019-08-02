@@ -81,7 +81,7 @@ $radius: 20px
   justify-content: space-between
   margin: 0px
   font-size: 17px
-  color: #2d8e9b
+  color: #2BA1B9
   padding: 0px 0px 5px 0px
 
 .title
@@ -98,7 +98,7 @@ $radius: 20px
   word-break: break-all
 
 .link:hover
-  color: #2d819b
+  color: #2BA1B9
   text-decoration: underline
   cursor: pointer
 
@@ -149,7 +149,7 @@ $radius: 20px
     font-size: 13px
 
   .link
-    color: #2d819b
+    color: #2BA1B9
     text-decoration: underline
     cursor: pointer
 

@@ -87,7 +87,7 @@ $radius: 20px
   padding: 0px 0px 5px 0px
 
 .link:hover
-  color: #2d819b
+  color: #2BA1B9
   text-decoration: underline
   cursor: pointer
 
@@ -164,7 +164,7 @@ $radius: 20px
     font-size: 13px
 
   .link
-    color: #2d819b
+    color: #2BA1B9
     text-decoration: underline
     cursor: pointer
 

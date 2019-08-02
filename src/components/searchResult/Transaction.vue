@@ -328,7 +328,9 @@ export default {
           if (this.detail.namespaceType === 0) {
             this.plusInfo.push({
               key: 'Duration',
-              value: (this.detail.duration !== undefined) ? `(Block Height: ${this.detail.transactionInfo.height.compact()}) ${this.$utils.calculateDuration(this.detail.duration.compact())}` : `(${this.detail.transactionInfo.height.compact()}) No Duration`
+              value: (this.detail.duration !== undefined) ?
+              `(Blocks: ${this.detail.duration.compact()}) ${this.$utils.calculateDuration(this.detail.duration.compact())}` :
+              `(${this.detail.transactionInfo.height.compact()}) No Duration`
             })
           }
 
@@ -348,8 +350,8 @@ export default {
             this.plusInfo.push({
               key: 'Duration',
               value: (this.detail.duration !== undefined) ?
-              `(Block Height: ${this.detail.transactionInfo.height.compact()}) ${this.$utils.calculateDuration(this.detail.duration.compact())}` :
-              `(Block Height: ${this.detail.transactionInfo.height.compact()}) No Duration`
+              `(Blocks: ${this.detail.duration.compact()}) ${this.$utils.calculateDuration(this.detail.duration.compact())}` :
+              `(Blocks: 0) No Duration`
             })
           }
           //this.iterator(this.detail)
@@ -369,9 +371,9 @@ export default {
             { key: 'Minimal Removal Delta', value: this.detail.minRemovalDelta },
             { key: 'Minimal Approval Delta', value: this.detail.minApprovalDelta },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: 'Version', value: this.detail.version }
           ]
+          // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
           // this.iterator(this.detail)
           break;
         case 'Aggregate complete':
@@ -407,9 +409,10 @@ export default {
           break;
         case 'Mosaic Alias':
           this.plusInfo = [
-            { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex(), class: 'valueLower link', run: this.goToNamespace },
+            { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex(), class: 'value link', run: this.goToNamespace },
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex(), class: 'value link', run: this.goToMosaic },
-            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name }
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
+            { key: 'Version', value: this.detail.version }
           ]
 
           if (this.detail.actionType === undefined) {
@@ -432,7 +435,9 @@ export default {
           break;
         case 'Address Alias':
           this.plusInfo = [
-            { key: 'Info', value: 'Not supported yet' }
+            { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex(), class: 'value link', run: this.goToNamespace },
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
+            { key: 'Version', value: this.detail.version }
           ]
           // this.iterator(this.detail)
           break;

@@ -63,7 +63,7 @@ export default {
 .supertitle
   margin: 0px
   font-size: 17px
-  color: #2d819b
+  color: #2BA1B9
   padding: 0px 0px 5px 0px
   width: 100%
   text-align: center
@@ -101,7 +101,7 @@ export default {
     font-size: 13px
 
   .link
-    color: #2d819b
+    color: #2BA1B9
     text-decoration: underline
     cursor: pointer
 </style>

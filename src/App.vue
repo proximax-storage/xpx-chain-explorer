@@ -12,6 +12,8 @@
     </div>
     <!-- End All View Container -->
 
+    <top-buttom/>
+
     <!-- Footer Component -->
     <app-footer/>
     <!-- End Footer Component -->
@@ -23,6 +25,7 @@
 <script>
 import AppHeader from '@/components/global/AppHeader.vue'
 import AppFooter from '@/components/global/AppFooter.vue'
+import TopButtom from '@/components/global/TopButton.vue'
 import {
   Account,
   NetworkType,
@@ -35,7 +38,8 @@ import axios from 'axios'
 export default {
   components: {
     AppHeader,
-    AppFooter
+    AppFooter,
+    TopButtom
   },
   mounted () {
     // Call Load Nodes Method

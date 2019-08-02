@@ -138,7 +138,7 @@ export default {
 <style lang="sass" scoped>
 .supertitle
   font-size: 17px
-  color: #2d819b
+  color: #2BA1B9
   padding: 0px 0px 5px 0px
   width: 100%
 
@@ -176,7 +176,7 @@ export default {
   color: black
 
 .link:hover
-  color: #2d8e9b
+  color: #2BA1B9
   text-decoration: underline
   cursor: pointer
 
@@ -186,7 +186,7 @@ export default {
     font-size: 13px
 
   .link
-    color: #2d819b
+    color: #2BA1B9
     text-decoration: underline
     cursor: pointer
 

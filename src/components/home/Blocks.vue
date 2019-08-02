@@ -64,10 +64,6 @@
     <div style="display: none">
       {{ updateTable }}
     </div>
-
-    <div class="topButton" @click="goTop">
-      <mdb-icon icon="angle-up" />
-    </div>
   </div>
   <!-- End Blocks Component -->
 
@@ -176,17 +172,7 @@ export default {
           }
         )
       }
-    },
-
-    goTop () {
-      window.scrollBy({
-        top: -10000000,
-        left: 0,
-        behavior: 'smooth'
-      })
     }
-
-
   },
   computed: {
     /**
@@ -331,25 +317,6 @@ export default {
         font-weight: bold
         color: white
 
-.topButton
-  background: #ffffffd1
-  width: 50px
-  height: 50px
-  display: flex
-  justify-content: center
-  align-items: center
-  position: fixed
-  z-index: 1000
-  bottom: 20px
-  right: 20px
-  border-radius: 50%
-  color: #2d8e9b
-  box-shadow: 0px 0px 10px grey
-  &:hover
-    background: #2d8e9b
-    color: white
-    transition: all ease .2s
-
 td
   text-align: center
   padding: 10px
@@ -414,28 +381,11 @@ td
     text-decoration: underline
     word-wrap: break-word
 
-  .topButton
-    bottom: 20px
-    right: 10px
-    background: #2d8e9b
-    color: white
-
   .mobile > .element
     display: block
-    // flex-flow: column nowrap
-    // // box-shadow: 0px 3px 3px grey
-    // justify-content: stretch
-    // align-item: center
-    // margin: 5px 0px 5px 0px
     & > div
-      // display: block
       padding: 5px
-      // display: flex
-      // flex-flow: column wrap
-      // align-items: center
-      // width: 100%
       border-bottom: 1px solid #c0c0c040
-      // flex-grow: 0
       &:first-child
         width: 100%
       &:nth-child(2)
@@ -448,17 +398,6 @@ td
         width: 100%
       &:last-child
         border-bottom: 0px solid silver
-      // & > span:first-child
-      //   font-size: 10px
-      //   text-transform: uppercase
-      //   font-weight: bold
-      //   color: grey
-      // & > span:last-child
-      //   text-align: center
-      //   font-size: 10px
-      //   text-transform: uppercase
-      //   font-weight: bold
-      //   color: black
 
   .block
     display: flex

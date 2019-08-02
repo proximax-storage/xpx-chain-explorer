@@ -1,25 +1,48 @@
 <template>
   <!-- Mosaic Component -->
-  <div class="recent animated fast fadeIn" v-if="finalArray.length > 0">
-    <!-- Name -->
-    <h1 class="supertitle">{{ nameLabel }}</h1>
-
+  <div class="recent animated fast fadeIn">
+    <!-- <h1 class="supertitle">{{ nameLabel }}</h1> -->
     <!-- Iterated Elements (Mosaics) -->
-    <div class="element animated fast fadeIn" v-for="(item, index) in finalArray" :key="index" v-show="index >= 0 && index < limit + 1" @click="goToMosaic(item.id)">
+    <div class="guide animated fast fadeIn" v-show="arrayTransactions.length > 0">
 
-      <div class="el-left" style="min-width: 200px">
-        <div class="title">Id</div>
-        <div class="value">{{ item.id }}</div>
+      <div>
+        <div class="title">Owner</div>
       </div>
 
-      <div class="el-middle" :class="(item.name) ? '' : 'mosaicNameTrans'" style="min-width: 200px">
-        <div class="title">Name</div>
-        <div class="valueLower">{{ item.name || 'No Available' }}</div>
+      <div>
+        <div class="title">Mosaic Id</div>
       </div>
 
-      <div class="el-right" style="min-width: 200px">
+      <div c>
+        <div class="title">Mosaic Name</div>
+      </div>
+
+      <div >
         <div class="title">Quantity</div>
-        <div class="value" v-html="arrayAmount[index]"></div>
+      </div>
+
+    </div>
+
+    <div class="element animated fast fadeIn" v-for="(item, index) in arrayTransactions" :key="index" v-show="arrayTransactions.length > 0">
+
+      <div>
+        <div class="title">Owner</div>
+        <div class="value" :style="(item.owner === 'true') ? 'color: green; font-weight: bold' : 'color: red; font-weight: bold'">{{ item.owner }}</div>
+      </div>
+
+      <div>
+        <div class="title">Mosaic Id</div>
+        <div class="value link" @click="goToMosaic(item.id)">{{ item.id }}</div>
+      </div>
+
+      <div c>
+        <div class="title">Mosaic Name</div>
+        <div class="valueLower">{{ item.name || 'undefined' }}</div>
+      </div>
+
+      <div >
+        <div class="title">Quantity</div>
+        <div class="value" v-html="item.quantity"></div>
       </div>
 
     </div>
@@ -31,6 +54,7 @@
 
 <script>
 import proximaxProvider from '@/services/proximaxProviders.js'
+import { mdbProgress } from 'mdbvue'
 import { Id } from 'tsjs-xpx-catapult-sdk'
 
 export default {
@@ -59,7 +83,8 @@ export default {
    * Call constructorObj method
    */
   mounted () {
-    this.constructorObj()
+    console.log("Array transaction mosaic", this.arrayTransactions)
+    // this.constructorObj()
   },
   methods: {
     /**
@@ -112,6 +137,7 @@ export default {
       let mosaics = [id]
       this.$proxProvider.getMosaicsName(mosaics).subscribe(
         resp => {
+          console.log(resp)
           let itemComplete = {
             id: idExact,
             name: resp[0].names[0],
@@ -216,7 +242,12 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-$radius: 20px
+$radius: 5px
+
+.link:hover
+  color: #2BA1B9
+  text-decoration: underline
+  cursor: pointer
 
 .mosaicNameTrans
   opacity: 0
@@ -227,6 +258,7 @@ $radius: 20px
   text-transform: uppercase
   color: grey
   margin: 0px
+  display: none
 
 .value
   font-size: 14px
@@ -249,7 +281,7 @@ $radius: 20px
   display: flex
   flex-flow: row nowrap
   justify-content: center
-  color: #2d819b
+  color: #2BA1B9
   margin: 0px
   font-size: 17px
   padding: 0px 0px 5px 0px
@@ -267,6 +299,24 @@ $radius: 20px
   border-radius: 0px 0px $radius $radius
   padding: 10px
 
+.guide
+    display: flex
+    flex-flow: row nowrap
+    justify-content: space-between
+    aling-items: center
+    border-radius: $radius
+    background: #1a1a1a
+    margin: 5px 0px
+    padding: 10px
+    cursor: pointer
+    & > div
+      width: 200px
+      flex-grow: 1
+      text-align: center
+      & > .title
+        display: block
+        color: white !important
+
 .recent
   // margin: 0px 10px 10px 10px
   padding: 10px
@@ -281,36 +331,46 @@ $radius: 20px
     margin: 5px 0px
     padding: 10px
     cursor: pointer
-    & > .el-left
+    & > div
+      width: 200px
       flex-grow: 1
-      display: flex
-      flex-flow: column nowrap
-      align-items: center
-      border-radius: $radius 0px 0px $radius
-      & > div
-        display: flex
-        flex-flow: row nowrap
-        align-items: center
-        & > figure
-          margin: 0px
-          padding: 5px
-        & > span
-          font-size: 15px
-    & > .el-middle
-      flex-grow: 1
-      display: flex
-      flex-flow: column wrap
-      align-items: center
-      justify-content: center
-    & > .el-right
-      flex-grow: 1
-      display: flex
-      flex-flow: column wrap
-      align-items: center
-      justify-content: center
-      border-radius: 0px $radius $radius 0px
+      text-align: center
+    // & > .el-left
+    //   flex-grow: 1
+    //   display: flex
+    //   flex-flow: column nowrap
+    //   align-items: center
+    //   border-radius: $radius 0px 0px $radius
+    //   & > div
+    //     display: flex
+    //     flex-flow: row nowrap
+    //     align-items: center
+    //     & > figure
+    //       margin: 0px
+    //       padding: 5px
+    //     & > span
+    //       font-size: 15px
+    // & > .el-middle
+    //   flex-grow: 1
+    //   display: flex
+    //   flex-flow: column wrap
+    //   align-items: center
+    //   justify-content: center
+    // & > .el-right
+    //   flex-grow: 1
+    //   display: flex
+    //   flex-flow: column wrap
+    //   align-items: center
+    //   justify-content: center
+    //   border-radius: 0px $radius $radius 0px
 
-@media screen and (max-width: 741px)
+@media screen and (max-width: 570px)
+  .guide
+    display: none
+
+  .title
+    display: block
+
   .alternate
     display: block
 
@@ -319,18 +379,10 @@ $radius: 20px
 
   .recent > .element
     flex-flow: column
-    & > .el-left
-      border-radius: $radius $radius 0px 0px
-      padding: 5px
-      // background: #00000020
-      border-bottom: 1px solid #c0c0c090
-    & > .el-middle
-      border-radius: 0px
-      padding: 5px
-    & > .el-right
-      // background: #00000020
-      border-top: 1px solid #c0c0c090
-      border-radius: 0px
-      padding: 5px
-      border-radius: 0px 0px $radius $radius
+    & > div
+      width: 100%
+      padding: 2px
+      border-bottom: 1px solid #ddd
+      &:last-child
+        border-bottom: 0px solid white
 </style>

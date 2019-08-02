@@ -172,8 +172,9 @@ export default {
   justify-content: center
 
 .searchBar
+  border-radius: 20px
   padding: 10px 20px
-  margin: 10px 0px 0px 0px
+  margin: 10px
   position: relative
   z-index: 2000
   background: #f4f4f4
@@ -214,7 +215,7 @@ export default {
           margin: 0px
           width: 15px
 
-@media screen and (max-width: 550px)
+@media screen and (max-width: 620px)
   .dropdown
     width: 100% !important
 

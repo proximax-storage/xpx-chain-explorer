@@ -135,7 +135,7 @@ export default {
 $radius: 20px
 
 .link:hover
-  color: #2d8e9b
+  color: #2BA1B9
   text-decoration: underline
   cursor: pointer
 
@@ -175,7 +175,7 @@ $radius: 20px
   justify-content: center
   margin: 0px
   font-size: 17px
-  color: #2d8e9b
+  color: #2BA1B9
   padding: 0px 0px 5px 0px
 
 .alternate
@@ -213,7 +213,7 @@ $radius: 20px
       flex-flow: row nowrap
       justify-content: center
       align-items: center
-      color: #2d8e9b
+      color: #2BA1B9
       font-weight: bold
       width: 200px
       padding: 5px

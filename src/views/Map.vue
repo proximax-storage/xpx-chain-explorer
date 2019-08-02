@@ -18,7 +18,7 @@
       <div class="filter-input">
         <div>
           <mdb-dropdown style="width: 100%; margin-top:10px">
-            <mdb-dropdown-toggle slot="toggle" color="black-text" style="width: 100%; font-weight:bold; border: 2px solid #2d819b; color: black; border-radius: 20px">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
+            <mdb-dropdown-toggle slot="toggle" color="black-text" style="width: 100%; font-weight:bold; border: 2px solid #2BA1B9; color: black; border-radius: 20px">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
             <mdb-dropdown-menu>
               <mdb-dropdown-item v-for="(item, index) in listOfOptions" :key="index" class="searchLink">
                 <a  @click="changeSearch(item)">{{ item }}</a>
@@ -58,7 +58,7 @@
         </div>
         <div>
           <div class="title">Status</div>
-          <div class="value" :style="(item.status == 'Online') ? 'color: #2d819b; font-weight: bold' : 'color: red; font-weight: bold'">{{ item.status }}</div>
+          <div class="value" :style="(item.status == 'Online') ? 'color: #2BA1B9; font-weight: bold' : 'color: red; font-weight: bold'">{{ item.status }}</div>
         </div>
       </div>
     </div>
@@ -187,7 +187,7 @@ export default {
         container: 'first',
         style: 'mapbox://styles/mapbox/light-v10',
         center: [lon, lat],
-        zoom: 5
+        zoom: 10
       })
 
 
@@ -257,21 +257,18 @@ $radius: 20px
   bottom: 0
   left: 0
   border-radius: 0px 0px $radius $radius
-  background: #2d819b
+  background: #2BA1B9
   z-index: 10000
   display: flex
   justify-content: center
   align-items: center
-  border: 2px solid #2d819b
+  border: 2px solid #2BA1B9
   color: white
   font-weight: bold
   font-size: 17px
 
 .mapboxgl-popup
   color: black
-  opacity: 0
-  position: relative
-  z-index: 30000
 
 .title
   font-size: 9px
@@ -290,7 +287,7 @@ $radius: 20px
 .searchLink
   font-weight: bold
   &:hover
-    background: #2d819b !important
+    background: #2BA1B9 !important
 
 .valueLower
   font-size: 14px
@@ -346,7 +343,7 @@ $radius: 20px
       border-radius: $radius
       cursor: pointer
       &:hover
-        background: #f4f4f4
+        background: #2ba1b914
       & > div
         width: 250px
 

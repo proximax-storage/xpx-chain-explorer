@@ -232,18 +232,18 @@ export default {
   .header
     & > .cont
       width: 100%
-      flex-flow: column
+      flex-flow: row
       & > img
-        width: 100%
-      & > .date
-        display: flex
-        flex-flow: row
-        & > .day
-          justify-content: flex-start
-          & > div
-            font-size: 13px
-            font-weight: bold
-            text-align: left
+        width: 150px
+      // & > .date
+      //   display: flex
+      //   flex-flow: row
+      //   & > .day
+      //     justify-content: flex-start
+      //     & > div
+      //       font-size: 13px
+      //       font-weight: bold
+      //       text-align: left
 
     & > nav
       justify-content: flex-start

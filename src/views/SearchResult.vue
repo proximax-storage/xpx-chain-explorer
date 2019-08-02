@@ -31,8 +31,30 @@
 
     <mosaic-info v-if="type === 'Mosaic ID'" :detail="param"/>
 
+    <div class="address-list" v-if="type === 'Public Key' || type === 'Address'">
+      <div class="bititle">
+        <h1 class="supertitle" :class="{ 'activeList': activeList === 'mos', 'inactiveList': activeList !== 'mos' }" @click="changeList('mos')">Other Mosaics</h1>
+        <h1 class="supertitle" :class="{ 'activeList': activeList === 'nam', 'inactiveList': activeList !== 'nam' }" @click="changeList('nam')">Namespaces</h1>
+      </div>
+      <div v-if="mosaicLoader === true" style="padding: 10px 0px">
+        <mdb-progress bgColor="cyan darken-3" indeterminate />
+      </div>
+
+      <account-namespace v-show="activeList === 'nam'" v-if="type === 'Public Key' || type === 'Address'" :namespacesList="linkNamespaces"/>
+
+      <mosaics v-show="activeList === 'mos'" v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Others Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
+
+      <div class="emptyMosNam" v-show="activeList === 'mos'" v-if="mosaicLoader === false && blockMosaics === null">
+        No mosaics yet
+      </div>
+
+      <div class="emptyMosNam" v-show="activeList === 'nam'" v-if="mosaicLoader === false && linkNamespaces === undefined || linkNamespaces.lenght === 0">
+        No namespaces yet
+      </div>
+    </div>
+
+
     <!-- Mosaics Component -->
-    <mosaics v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Others Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
     <!-- End Mosaics Component -->
 
     <!-- Recent Transactions Component -->
@@ -51,6 +73,7 @@
 import SearchBar from '@/components/global/SearchBar.vue'
 import Error from '@/components/global/Error.vue'
 import PublicKey from '@/components/searchResult/PublicKey.vue'
+import AccountNamespace from '@/components/searchResult/AccountNamespace.vue'
 import Multisig from '@/components/searchResult/MultisigInfo.vue'
 import BlockInfo from '@/components/searchResult/BlockInfo.vue'
 import Transaction from '@/components/searchResult/Transaction.vue'
@@ -61,6 +84,7 @@ import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
 import { Address, Deadline, NetworkType , Id } from 'tsjs-xpx-catapult-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
+import { mdbProgress } from 'mdbvue'
 import axios from 'axios'
 
 export default {
@@ -70,13 +94,15 @@ export default {
     Error,
     PublicKey,
     Multisig,
+    AccountNamespace,
     BlockInfo,
     Transaction,
     NamespaceInfo,
     MosaicInfo,
     RecentTrans,
     Mosaics,
-    Modal
+    Modal,
+    mdbProgress
   },
   data () {
     return {
@@ -88,8 +114,11 @@ export default {
       blockTransactions: [],
       showRecentMosaic: false,
       blockMosaics: null,
+      mosaicLoader: false,
       // Public Key
       errorPublicKey: false,
+      linkNamespaces: undefined,
+      activeList: 'mos',
 
       // Multisig
       multisigActive: false,
@@ -152,27 +181,91 @@ export default {
       const xpx = proximaxProvider.mosaicXpx()
       let errorActive1 = false
       let errorActive2 = false
+      this.mosaicLoader = true
       // console.log("ADDRESS & XPX", addr, xpx)
       this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
-          console.log('RESPONSE ACCOUNT', resp.address.pretty())
+          console.log('RESPONSE ACCOUNT', resp)
           this.param = resp
           this.showComponent()
-
           // If your account information has tiles, look up your information and name to display them in the tile table
           if (resp.mosaics.length > 0) {
             let filteredTrans = resp.mosaics.filter(el => el.id.toHex().toUpperCase() !== xpx)
-            this.blockMosaics = filteredTrans
-            // console.log("Filtered Trans", filteredTrans)
-            this.showRecentMosaic = !this.showRecentMosaic
+            console.log("Filtered Trans", filteredTrans)
+            let tmpArr = []
+
+            if (filteredTrans.length === 0) {
+              this.mosaicLoader = false
+
+            }
+
+            filteredTrans.forEach((el, index) => {
+              this.$proxProvider.getMosaic(el.id).subscribe(
+                mosaicResponse => {
+                  this.$proxProvider.getMosaicsName([el.id]).subscribe(
+                    responseName => {
+                      // console.log(mosaicResponse)
+                      // console.log('mosaicResponse', mosaicResponse, responseName[0].names)
+                      let tmpObj = {
+                        name: responseName[0].names[0],
+                        id: el.id.toHex(),
+                        owner: (resp.publicKey === mosaicResponse.owner.publicKey) ? 'true' : 'false',
+                        quantity: (mosaicResponse.divisibility === 0) ? el.amount.compact() : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility)
+                      }
+
+                      console.log(tmpObj)
+                      tmpArr.push(tmpObj)
+
+                      if (index + 1 === filteredTrans.length) {
+                        this.blockMosaics = tmpArr
+                        this.showRecentMosaic = !this.showRecentMosaic
+                        this.mosaicLoader = false
+                      }
+                    }
+                  )
+                }
+              )
+            })
+
+            // this.blockMosaics = filteredTrans
+            // this.showRecentMosaic = !this.showRecentMosaic
+          } else {
+            this.mosaicLoader = false
           }
+
           this.viewTransactionsFromPublicAccount(resp.publicAccount)
         },
         error => {
           this.errorPublicKey = true
         }
       )
+
+      axios.get(`${this.$store.state.currentNode}/account/${addr.address}/namespaces`)
+        .then(response => {
+          let tmpArr = []
+          console.log("RESPOANSE NAMESPACE", response.data)
+          if (response.data.length !== 0) {
+            response.data.forEach(el => {
+
+              let tmpObj = {
+                id: new Id(el.namespace.level0).toHex(),
+                status: (el.meta.active) ? 'Active' : 'Inactive'
+              }
+
+              this.$proxProvider.getNamespacesName([new Id(el.namespace.level0)]).subscribe(
+                responseName => {
+                  tmpObj.name = responseName[0].name
+                  // console.log(responseName)
+                  tmpArr.push(tmpObj)
+                  // console.warn("namespaces", this.linkNamespaces)
+                }
+              )
+            })
+
+            this.linkNamespaces = tmpArr
+          }
+        })
 
       axios.get(`${this.$store.state.currentNode}/account/${addr.address}/multisig`)
         .then(response => {
@@ -355,7 +448,7 @@ export default {
     viewTransactionsFromPublicAccount(publicAccount) {
       this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
         transactions => {
-          console.log("Transacciones de esta cuenta",transactions)
+          // console.log("Transacciones de esta cuenta",transactions)
           if (transactions.length > 0) {
             transactions.forEach(element => {
               element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
@@ -409,6 +502,10 @@ export default {
         message: 'Address or public key not found',
         submessage: 'Check the information provided and try again'
       })
+    },
+
+    changeList (list) {
+      this.activeList = list
     }
   },
   watch: {
@@ -428,13 +525,45 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.address-list
+
+.activeList
+  background: #2BA1B9
+  color: white !important
+
+.inactiveList
+  background: #f4f4f4
+  color: black
+  cursor: pointer
+  &:hover
+    background: silver
+    color: white
+
+.bititle
+  width: 100%
+  display: flex
+  flex-flow: row
+  padding: 0px 10px
+  & > h1
+    flex-grow: 1
+
+.supertitle
+  display: flex
+  flex-flow: row nowrap
+  justify-content: center
+  color: #2BA1B9
+  margin: 0px
+  font-size: 17px
+  padding: 5px 0px
+  border-radius: 20px
+
 .search-cont
   text-align: center
   padding: 15px 0px
   border-bottom: 1px solid silver
 
 .search-type
-  color: #2d819b
+  color: #2BA1B9
   font-weight: bold
   font-size: 25px
 
@@ -445,4 +574,13 @@ export default {
   text-transform: uppercase
   font-weight: bold
   word-wrap: break-word
+
+.emptyMosNam
+  width: 100%
+  color: grey
+  padding: 5px
+  text-align: center
+  background: #f4f4f4
+  border-radius: 20px
+  margin: 10px
 </style>
