@@ -251,6 +251,11 @@ $radius: 20px
       padding: 5px
 
 @media screen and (max-width: 741px)
+  .link
+    color: #2BA1B9
+    text-decoration: underline
+    cursor: pointer
+
   .alternate
     display: block
 

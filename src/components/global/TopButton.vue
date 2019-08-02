@@ -33,7 +33,7 @@ export default {
   justify-content: center
   align-items: center
   position: fixed
-  z-index: 1000
+  z-index: 1000000
   bottom: 20px
   right: 20px
   border-radius: 50%

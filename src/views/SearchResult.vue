@@ -583,4 +583,11 @@ export default {
   background: #f4f4f4
   border-radius: 20px
   margin: 10px
+
+@media screen and (max-width: 550px)
+  .search-type
+    font-size: 20px
+
+  .search-value
+    font-size: 15px
 </style>

@@ -411,8 +411,7 @@ export default {
           this.plusInfo = [
             { key: 'Namespace Id', value: this.detail.namespaceId.id.toHex(), class: 'value link', run: this.goToNamespace },
             { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex(), class: 'value link', run: this.goToMosaic },
-            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
-            { key: 'Version', value: this.detail.version }
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name }
           ]
 
           if (this.detail.actionType === undefined) {
