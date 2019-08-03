@@ -3,7 +3,7 @@
     <h1 class="supertitle center-text">Mosaics In Transfer</h1>
 
     <div>
-      <div class="element" v-for="(item, index) in showFinalData" :key="index">
+      <div class="element" v-for="(item, index) in showFinalData" :key="index" v-show="mosaicAliasName[index] !== 'prx.xpx'">
 
         <div class="animated faster fadeInDown">
           <div class="title">{{ titleMosaic }}</div>
@@ -12,7 +12,7 @@
 
         <div v-if="titleMosaic == 'Mosaic Alias ID'" class="animated faster fadeInDown">
           <div class="title">Mosaic Alias Name</div>
-          <div class="value">{{ mosaicAliasName[index] }}</div>
+          <div class="valueLower">{{ mosaicAliasName[index] }}</div>
         </div>
 
         <div class="animated faster fadeInDown">
@@ -44,7 +44,7 @@ export default {
   mounted () {
     console.log("param of mosaic in transfer", this.params)
     // this.params.forEach(el => {
-    //   console.log(el.amount.compact())
+    //   console.log(el.id.toHex())
     // })
     //this.organizeData()
   },
@@ -98,9 +98,11 @@ export default {
                       }
                     )
                     this.titleMosaic = 'Mosaic Alias ID'
+                    console.log(response.alias.mosaicId)
                     let tmpId = this.$proxProvider.createMosaicId(response.alias.mosaicId)
                     this.$proxProvider.getMosaic(tmpId).subscribe(
                       response2 => {
+                        console.log(response2)
                         if (response2.properties.divisibility !== 0) {
                           // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility)
                           this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
@@ -171,6 +173,12 @@ export default {
 .value
   font-size: 13px
   text-transform: uppercase
+  word-break: break-all
+  font-weight: normal
+  color: black
+
+.valueLower
+  font-size: 13px
   word-break: break-all
   font-weight: normal
   color: black

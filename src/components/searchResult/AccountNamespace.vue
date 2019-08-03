@@ -46,6 +46,9 @@ export default {
       idsArr: []
     }
   },
+  mounted () {
+    console.log(this.namespacesList)
+  },
   methods: {
     goToAddress (address) {
       let routeData = (address.length === 64) ?

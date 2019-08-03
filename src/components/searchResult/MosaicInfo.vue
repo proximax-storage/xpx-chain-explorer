@@ -75,7 +75,7 @@
         <div class="element" style="border-radius: 20px">
           <div class="title">Duration</div>
           <div class="value">
-            {{ `(Block Height: ${detail.height.compact()}) ${$utils.calculateDuration(this.detail.duration.compact())}` }}
+            {{ `(Block: ${this.detail.duration.compact()}) ${$utils.calculateDuration(this.detail.duration.compact())}` }}
           </div>
         </div>
       </div>

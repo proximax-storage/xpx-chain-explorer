@@ -3,7 +3,10 @@
   <div class="header animated faster fadeIn">
     <!-- Image Container -->
     <div class="cont">
-      <img :src="require('@/assets/logo-proximax-sirius-explorer.svg')" alt="logo">
+      <div class="imgver">
+        <img :src="require('@/assets/logo-proximax-sirius-explorer.svg')" alt="logo" class="logo">
+        <div class="vers">{{ explorerVersion }}</div>
+      </div>
       <div class="date">
         <div class="day">
           <div>{{ date.month }}</div>
@@ -51,7 +54,8 @@ export default {
         month: 'Jan',
         year: 2019,
         militarHour: '12:00'
-      }
+      },
+      explorerVersion: 'v0.2.2'
     }
   },
   methods: {
@@ -157,6 +161,21 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.logo
+  width: 200px
+
+.imgver
+  display: flex
+  width: auto
+  & > .vers
+    padding: 0px 3px
+    display: flex
+    flex-flow: row nowrap
+    justify-content: center
+    align-items: flex-end
+    color: black
+    font-size: 10px
+
 .date
   color: black
 
@@ -228,22 +247,24 @@ export default {
       // &:hover
       //   box-shadow: inset 0px -2px 0px 0px #5bcde4
 
-@media screen and (max-width: 550px)
+@media screen and (max-width: 400px)
   .header
     & > .cont
       width: 100%
-      flex-flow: row
-      & > img
+      flex-flow: column
+      & > .imgver
+        display: flex
+        justify-content: column
         width: 150px
-      // & > .date
-      //   display: flex
-      //   flex-flow: row
-      //   & > .day
-      //     justify-content: flex-start
-      //     & > div
-      //       font-size: 13px
-      //       font-weight: bold
-      //       text-align: left
+      & > .date
+        display: flex
+        flex-flow: row
+        & > .day
+          justify-content: flex-end
+          & > div
+            font-size: 13px
+            font-weight: bold
+            text-align: left
 
     & > nav
       justify-content: flex-start

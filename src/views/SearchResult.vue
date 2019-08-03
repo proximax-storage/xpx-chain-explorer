@@ -27,9 +27,9 @@
     <transaction v-if="type === 'Transaction Hash'" :detail="param" @runOpen="openModal" @runPush="pushInfo"/>
     <!-- End Transaction Component -->
 
-    <namespace-info v-if="type === 'Namespace ID'" :detail="param"/>
+    <namespace-info v-if="type === 'Namespace'" :detail="param"/>
 
-    <mosaic-info v-if="type === 'Mosaic ID'" :detail="param"/>
+    <mosaic-info v-if="type === 'Mosaic ID' || type === 'Mosaic Name'" :detail="param"/>
 
     <div class="address-list" v-if="type === 'Public Key' || type === 'Address'">
       <div class="bititle">
@@ -82,7 +82,7 @@ import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
-import { Address, Deadline, NetworkType , Id } from 'tsjs-xpx-catapult-sdk'
+import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId } from 'tsjs-xpx-catapult-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import { mdbProgress } from 'mdbvue'
 import axios from 'axios'
@@ -160,9 +160,27 @@ export default {
     } else if (this.$route.params.type === 'transactionHash') {
       this.getInfoTransaction(this.$route.params.id)
     } else if (this.$route.params.type === 'namespaceInfo') {
-      this.getNamespaceInfo(this.$route.params.id)
+      if (isNaN(parseInt(this.$route.params.id, 16))) {
+        let tmp = this.$route.params.id
+        console.log("Strind Search", tmp)
+        let tmp2 = new NamespaceId(tmp)
+        this.getNamespaceInfo(tmp2.id.toHex())
+      } else {
+        this.getNamespaceInfo(this.$route.params.id)
+      }
     } else if (this.$route.params.type === 'mosaicInfo') {
-      this.getMosaicInfo(this.$route.params.id)
+      if (isNaN(parseInt(this.$route.params.id, 16))) {
+        let tmp = this.$route.params.id
+        let tmp2 = new NamespaceId(tmp)
+        console.log(tmp2.id.toHex())
+        this.$proxProvider.getNamespacesInfo(tmp2.id).subscribe(
+          response => {
+            this.getMosaicInfo(new Id(response.alias.mosaicId).toHex())
+          }
+        )
+      } else {
+        this.getMosaicInfo(this.$route.params.id)
+      }
     }
     this.value = this.$route.params.id
   },
@@ -186,13 +204,13 @@ export default {
       this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
-          console.log('RESPONSE ACCOUNT', resp)
+          // console.log('RESPONSE ACCOUNT', resp)
           this.param = resp
           this.showComponent()
           // If your account information has tiles, look up your information and name to display them in the tile table
           if (resp.mosaics.length > 0) {
             let filteredTrans = resp.mosaics.filter(el => el.id.toHex().toUpperCase() !== xpx)
-            console.log("Filtered Trans", filteredTrans)
+            // console.log("Filtered Trans", filteredTrans)
             let tmpArr = []
 
             if (filteredTrans.length === 0) {
@@ -205,8 +223,6 @@ export default {
                 mosaicResponse => {
                   this.$proxProvider.getMosaicsName([el.id]).subscribe(
                     responseName => {
-                      // console.log(mosaicResponse)
-                      // console.log('mosaicResponse', mosaicResponse, responseName[0].names)
                       let tmpObj = {
                         name: responseName[0].names[0],
                         id: el.id.toHex(),
@@ -214,7 +230,6 @@ export default {
                         quantity: (mosaicResponse.divisibility === 0) ? el.amount.compact() : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility)
                       }
 
-                      console.log(tmpObj)
                       tmpArr.push(tmpObj)
 
                       if (index + 1 === filteredTrans.length) {
@@ -244,7 +259,7 @@ export default {
       axios.get(`${this.$store.state.currentNode}/account/${addr.address}/namespaces`)
         .then(response => {
           let tmpArr = []
-          console.log("RESPOANSE NAMESPACE", response.data)
+          let revisionArray = []
           if (response.data.length !== 0) {
             response.data.forEach(el => {
 
@@ -253,16 +268,42 @@ export default {
                 status: (el.meta.active) ? 'Active' : 'Inactive'
               }
 
-              this.$proxProvider.getNamespacesName([new Id(el.namespace.level0)]).subscribe(
+              let requestArr = []
+              let currentLevel = 0
+              if (el.namespace.level2 !== undefined) {
+                // console.log('Level 2')
+                currentLevel = 2
+                requestArr.push(new Id(el.namespace.level2))
+                requestArr.push(new Id(el.namespace.level1))
+                requestArr.push(new Id(el.namespace.level0))
+              } else if (el.namespace.level1 !== undefined) {
+                // console.log('Level 1')
+                currentLevel = 1
+                requestArr.push(new Id(el.namespace.level1))
+                requestArr.push(new Id(el.namespace.level0))
+              } else if (el.namespace.level0 !== undefined) {
+                // console.log('Level 0')
+                currentLevel = 0
+                requestArr.push(new Id(el.namespace.level0))
+              }
+
+              // console.log(currentLevel)
+              // console.log("Request Array", requestArr)
+
+              this.$proxProvider.getNamespacesName(requestArr).subscribe(
                 responseName => {
-                  tmpObj.name = responseName[0].name
-                  // console.log(responseName)
+                  console.log(responseName)
+                  if (currentLevel === 0) {
+                    tmpObj.name = responseName[0].name
+                  } else if (currentLevel === 1) {
+                    tmpObj.name = `${responseName[1].name}.${responseName[0].name}`
+                  } else if (currentLevel === 2) {
+                    tmpObj.name = `${responseName[2].name}.${responseName[1].name}.${responseName[0].name}`
+                  }
                   tmpArr.push(tmpObj)
-                  // console.warn("namespaces", this.linkNamespaces)
                 }
               )
             })
-
             this.linkNamespaces = tmpArr
           }
         })
@@ -432,9 +473,10 @@ export default {
       } else if (this.$route.params.type === 'address') {
         this.type = 'Address'
       } else if (this.$route.params.type === 'namespaceInfo') {
-        this.type = 'Namespace ID'
+        this.type = 'Namespace'
       } else if (this.$route.params.type === 'mosaicInfo') {
-        this.type = 'Mosaic ID'
+        this.type = (isNaN(parseInt(this.$route.params.id, 16))) ? 'Mosaic Name' : 'Mosaic ID'
+        // this.type = 'Mosaic ID'
       }
       this.value = this.$route.params.id
     },
@@ -544,8 +586,7 @@ export default {
   display: flex
   flex-flow: row
   padding: 0px 10px
-  & > h1
-    flex-grow: 1
+  justify-content: center
 
 .supertitle
   display: flex
@@ -554,8 +595,12 @@ export default {
   color: #2BA1B9
   margin: 0px
   font-size: 17px
-  padding: 5px 0px
+  padding: 5px 20px
   border-radius: 20px
+  &:first-child
+    border-radius: 20px 0px 0px 20px
+  &:last-child
+    border-radius: 0px 20px 20px 0px
 
 .search-cont
   text-align: center
@@ -581,8 +626,7 @@ export default {
   padding: 5px
   text-align: center
   background: #f4f4f4
-  border-radius: 20px
-  margin: 10px
+  margin: 10px 0px
 
 @media screen and (max-width: 550px)
   .search-type

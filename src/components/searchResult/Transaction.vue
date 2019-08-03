@@ -189,7 +189,6 @@ import InnerTransactions from '@/components/searchResult/Transaction.InnerTransa
 import Cosignatures from '@/components/searchResult/Transaction.Cosignatures'
 import Modifications from '@/components/searchResult/Transaction.Modifications.vue'
 import MosaicsInTransfer from '@/components/searchResult/Transaction.Mosaics.vue'
-import { loadavg } from 'os';
 
 export default {
   name: 'Transaction',
@@ -222,7 +221,7 @@ export default {
     this.verifyType()
     this.verifyTransactionDetails()
     let detail = JSON.stringify(this.detail)
-    console.log(JSON.parse(detail))
+    console.log('details', JSON.parse(detail))
   },
   methods: {
     /**
@@ -290,6 +289,21 @@ export default {
 
           if (this.detail.mosaics && this.detail.mosaics.length > 0) {
             this.mosaicsOfTransfer = this.detail.mosaics
+            // let tmpArr = []
+            // let tmpObj = {
+            //   title: 'Quantity',
+            //   id = el.id.toHex()
+            // }
+
+            // this.detail.mosaics.forEach(el => {
+            //   console.log(el.id.toHex())
+            //   this.$proxProvider.getMosaic(el.id).subscribe(
+            //     response => {
+
+            //     }
+            //   )
+
+            // })
           }
           //this.iterator(this.detail)
           break;
@@ -339,7 +353,7 @@ export default {
           break;
         case 'Mosaic definition':
           this.plusInfo = [
-            { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex() },
+            { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex(), class: 'value link', run: this.goToMosaic  },
             { key: 'Nonce', value: (this.detail.nonce !== undefined) ? this.detail.nonce : 'No Available' },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
@@ -358,12 +372,21 @@ export default {
           break;
         case 'Mosaic supply change':
           this.plusInfo = [
-            { key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex(), class: 'value link', run: this.goToMosaic },
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Version', value: this.detail.version }
             // { key: 'Amount', value: this.$utils.fmtAmountValue(this.detail.delta.toHex()) },
             // { key: 'Direction', value: this.detail.direction },
           ]
+
+          this.$proxProvider.getMosaic(this.detail.mosaicId.id).subscribe(
+            response => {
+              console.log('Si mosaico')
+              this.plusInfo.unshift({ key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex(), class: 'value link', run: this.goToMosaic },)
+            },
+            error => {
+              this.plusInfo.unshift({ key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex(), class: 'value link', run: this.goToNamespace },)
+            }
+          )
           // this.iterator(this.detail)
           break;
         case 'Modify multisig account':

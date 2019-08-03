@@ -15,7 +15,7 @@
           </mdb-dropdown-toggle>
           <mdb-dropdown-menu left>
             <mdb-dropdown-item class="searchLink" v-for="(item, index) in searchList" :key="index" style="padding: 0px">
-              <a style="display: block; padding: 10px" @click.prevent="changeSearch(item)">{{ item.name }}</a>
+              <a style="display: block; padding: 3px; text-align: center" @click.prevent="changeSearch(item)">{{ item.name }}</a>
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
         </mdb-dropdown>
@@ -73,8 +73,8 @@ export default {
         { name: 'Public Key' },
         { name: 'Block Height' },
         { name: 'Hash' },
-        { name: 'Namespace ID' },
-        { name: 'Mosaic ID' }
+        { name: 'Namespace' },
+        { name: 'Mosaic' }
       ],
       valueSearch: '',
       // Banner
@@ -100,9 +100,9 @@ export default {
         this.typeSearch = 'transactionHash'
       } else if (item.name === 'Address') {
         this.typeSearch = 'address'
-      } else if (item.name === 'Namespace ID') {
+      } else if (item.name === 'Namespace') {
         this.typeSearch = 'namespaceInfo'
-      } else if (item.name === 'Mosaic ID') {
+      } else if (item.name === 'Mosaic') {
         this.typeSearch = 'mosaicInfo'
       }
     },
@@ -120,6 +120,9 @@ export default {
             this.bannerActive = false
             this.bannerMessage = ''
           }
+
+          this.valueSearch = this.valueSearch.toLowerCase()
+          console.log("Search", typeof this.valueSearch)
 
           let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
           window.open(routeData.href, '_blank')
