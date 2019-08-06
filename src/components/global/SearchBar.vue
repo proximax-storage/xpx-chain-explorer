@@ -104,7 +104,7 @@ export default {
         this.label = 'Namespace / Sub-namespace'
       } else if (item.name === 'Mosaic') {
         this.typeSearch = 'mosaicInfo'
-        this.label = 'Mosaic Id / Mosaic Name'
+        this.label = 'Mosaic Id / Alias (e.g. prx.xpx)'
       }
 
       this.searchList.forEach(el => {
