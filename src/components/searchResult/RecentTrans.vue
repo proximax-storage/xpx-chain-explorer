@@ -52,7 +52,7 @@
 
       <div class="el-right">
         <div class="viewIcon" @click="redirectToDetail(item)">
-          <img :src="require('@/assets/detail-icon.svg')" alt="detail" style="width: 15px">
+          <img :src="require('@/assets/info.svg')" alt="detail" style="width: 17px">
         </div>
       </div>
     </div>
@@ -135,7 +135,7 @@ export default {
 $radius: 20px
 
 .link:hover
-  color: #2d8e9b
+  color: #2BA1B9
   text-decoration: underline
   cursor: pointer
 
@@ -175,7 +175,7 @@ $radius: 20px
   justify-content: center
   margin: 0px
   font-size: 17px
-  color: #2d8e9b
+  color: #2BA1B9
   padding: 0px 0px 5px 0px
 
 .alternate
@@ -213,7 +213,7 @@ $radius: 20px
       flex-flow: row nowrap
       justify-content: center
       align-items: center
-      color: #2d8e9b
+      color: #2BA1B9
       font-weight: bold
       width: 200px
       padding: 5px
@@ -251,6 +251,11 @@ $radius: 20px
       padding: 5px
 
 @media screen and (max-width: 741px)
+  .link
+    color: #2BA1B9
+    text-decoration: underline
+    cursor: pointer
+
   .alternate
     display: block
 

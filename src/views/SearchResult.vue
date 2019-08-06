@@ -27,12 +27,34 @@
     <transaction v-if="type === 'Transaction Hash'" :detail="param" @runOpen="openModal" @runPush="pushInfo"/>
     <!-- End Transaction Component -->
 
-    <namespace-info v-if="type === 'Namespace ID'" :detail="param"/>
+    <namespace-info v-if="type === 'Namespace'" :detail="param"/>
 
-    <mosaic-info v-if="type === 'Mosaic ID'" :detail="param"/>
+    <mosaic-info v-if="type === 'Mosaic ID' || type === 'Mosaic Name'" :detail="param"/>
+
+    <div class="address-list" v-if="type === 'Public Key' || type === 'Address'">
+      <div class="bititle">
+        <h1 class="supertitle" :class="{ 'activeList': activeList === 'nam', 'inactiveList': activeList !== 'nam' }" @click="changeList('nam')">Namespaces</h1>
+        <h1 class="supertitle" :class="{ 'activeList': activeList === 'mos', 'inactiveList': activeList !== 'mos' }" @click="changeList('mos')">Other Mosaics</h1>
+      </div>
+      <div v-if="mosaicLoader === true" style="padding: 10px 0px">
+        <mdb-progress bgColor="cyan darken-3" indeterminate />
+      </div>
+
+      <account-namespace v-show="activeList === 'nam'" v-if="type === 'Public Key' || type === 'Address'" :namespacesList="linkNamespaces"/>
+
+      <mosaics v-show="activeList === 'mos'" v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Others Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
+
+      <div class="emptyMosNam" v-show="activeList === 'mos'" v-if="mosaicLoader === false && blockMosaics === null">
+        No mosaics yet
+      </div>
+
+      <div class="emptyMosNam" v-show="activeList === 'nam'" v-if="mosaicLoader === false && linkNamespaces === undefined || linkNamespaces.lenght === 0">
+        No namespaces yet
+      </div>
+    </div>
+
 
     <!-- Mosaics Component -->
-    <mosaics v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Others Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
     <!-- End Mosaics Component -->
 
     <!-- Recent Transactions Component -->
@@ -51,6 +73,7 @@
 import SearchBar from '@/components/global/SearchBar.vue'
 import Error from '@/components/global/Error.vue'
 import PublicKey from '@/components/searchResult/PublicKey.vue'
+import AccountNamespace from '@/components/searchResult/AccountNamespace.vue'
 import Multisig from '@/components/searchResult/MultisigInfo.vue'
 import BlockInfo from '@/components/searchResult/BlockInfo.vue'
 import Transaction from '@/components/searchResult/Transaction.vue'
@@ -59,8 +82,9 @@ import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
-import { Address, Deadline, NetworkType , Id } from 'tsjs-xpx-catapult-sdk'
+import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId } from 'tsjs-xpx-catapult-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
+import { mdbProgress } from 'mdbvue'
 import axios from 'axios'
 
 export default {
@@ -70,13 +94,15 @@ export default {
     Error,
     PublicKey,
     Multisig,
+    AccountNamespace,
     BlockInfo,
     Transaction,
     NamespaceInfo,
     MosaicInfo,
     RecentTrans,
     Mosaics,
-    Modal
+    Modal,
+    mdbProgress
   },
   data () {
     return {
@@ -88,8 +114,11 @@ export default {
       blockTransactions: [],
       showRecentMosaic: false,
       blockMosaics: null,
+      mosaicLoader: false,
       // Public Key
       errorPublicKey: false,
+      linkNamespaces: undefined,
+      activeList: 'nam',
 
       // Multisig
       multisigActive: false,
@@ -120,7 +149,8 @@ export default {
     if (this.$route.params.type === 'publicKey' || this.$route.params.type === 'address') {
       let tmp
       if (this.$route.params.id.length === 64) {
-        tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, NetworkType.TEST_NET)
+        console.log(this.$store.state.netType)
+        tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
         // console.log("TEMPORAL", tmp)
         this.getInfoAccountAndViewTransactions(tmp.address.address)
       } else {
@@ -131,9 +161,34 @@ export default {
     } else if (this.$route.params.type === 'transactionHash') {
       this.getInfoTransaction(this.$route.params.id)
     } else if (this.$route.params.type === 'namespaceInfo') {
-      this.getNamespaceInfo(this.$route.params.id)
+      if (isNaN(parseInt(this.$route.params.id, 16))) {
+        let tmp = this.$route.params.id
+        console.log("Strind Search", tmp)
+        let tmp2 = new NamespaceId(tmp)
+        this.getNamespaceInfo(tmp2.id.toHex())
+      } else {
+        this.getNamespaceInfo(this.$route.params.id)
+      }
     } else if (this.$route.params.type === 'mosaicInfo') {
-      this.getMosaicInfo(this.$route.params.id)
+      if (isNaN(parseInt(this.$route.params.id, 16))) {
+        let tmp = this.$route.params.id
+        let tmp2 = new NamespaceId(tmp)
+        console.log(tmp2.id.toHex())
+        this.$proxProvider.getNamespacesInfo(tmp2.id).subscribe(
+          response => {
+            this.getMosaicInfo(new Id(response.alias.mosaicId).toHex())
+          },
+          error => {
+            this.$store.dispatch('updateErrorInfo', {
+              active: true,
+              message: 'Mosaic not found',
+              submessage: 'Check the information provided and try again'
+            })
+          }
+        )
+      } else {
+        this.getMosaicInfo(this.$route.params.id)
+      }
     }
     this.value = this.$route.params.id
   },
@@ -152,27 +207,121 @@ export default {
       const xpx = proximaxProvider.mosaicXpx()
       let errorActive1 = false
       let errorActive2 = false
+      this.mosaicLoader = true
       // console.log("ADDRESS & XPX", addr, xpx)
       this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
-          console.log('RESPONSE ACCOUNT', resp.address.pretty())
+          // console.log('RESPONSE ACCOUNT', resp)
           this.param = resp
           this.showComponent()
-
           // If your account information has tiles, look up your information and name to display them in the tile table
           if (resp.mosaics.length > 0) {
             let filteredTrans = resp.mosaics.filter(el => el.id.toHex().toUpperCase() !== xpx)
-            this.blockMosaics = filteredTrans
-            // console.log("Filtered Trans", filteredTrans)
-            this.showRecentMosaic = !this.showRecentMosaic
+            let tmpArr = []
+
+            if (filteredTrans.length === 0) {
+              this.mosaicLoader = false
+            }
+
+            console.log("Filtered Trans", filteredTrans)
+
+            filteredTrans.forEach((el, index) => {
+              this.$proxProvider.getMosaic(el.id).subscribe(
+                mosaicResponse => {
+                  this.$proxProvider.getMosaicsName([el.id]).subscribe(
+                    responseName => {
+                      let tmpObj = {
+                        name: responseName[0].names[0],
+                        id: el.id.toHex(),
+                        owner: (resp.publicKey === mosaicResponse.owner.publicKey) ? 'true' : 'false',
+                        quantity: (mosaicResponse.divisibility === 0) ? el.amount.compact() : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility)
+                      }
+
+                      tmpArr.push(tmpObj)
+
+                      if (index + 1 === filteredTrans.length) {
+                        this.blockMosaics = tmpArr
+                        this.showRecentMosaic = !this.showRecentMosaic
+                        this.mosaicLoader = false
+                      }
+                    },
+                    error => {
+                      console.log(error)
+                    }
+                  )
+                }, err => {
+                  console.warn("Error 1", err)
+                }
+              )
+            })
+
+            // this.blockMosaics = filteredTrans
+            // this.showRecentMosaic = !this.showRecentMosaic
+          } else {
+            this.mosaicLoader = false
           }
+
           this.viewTransactionsFromPublicAccount(resp.publicAccount)
         },
         error => {
           this.errorPublicKey = true
         }
       )
+
+      axios.get(`${this.$store.state.currentNode}/account/${addr.address}/namespaces`)
+        .then(response => {
+          let tmpArr = []
+          let revisionArray = []
+          if (response.data.length !== 0) {
+            response.data.forEach(el => {
+              console.log("NAMESPACE ELEMENT", el.namespace)
+              let tmpObj = {
+                status: (el.meta.active) ? 'Active' : 'Inactive'
+              }
+
+              let requestArr = []
+              let currentLevel = 0
+              if (el.namespace.level2 !== undefined) {
+                // console.log('Level 2')
+                currentLevel = 2
+                requestArr.push(new Id(el.namespace.level2))
+                requestArr.push(new Id(el.namespace.level1))
+                requestArr.push(new Id(el.namespace.level0))
+                tmpObj.id = new Id(el.namespace.level2).toHex()
+              } else if (el.namespace.level1 !== undefined) {
+                // console.log('Level 1')
+                currentLevel = 1
+                requestArr.push(new Id(el.namespace.level1))
+                requestArr.push(new Id(el.namespace.level0))
+                tmpObj.id = new Id(el.namespace.level1).toHex()
+              } else if (el.namespace.level0 !== undefined) {
+                // console.log('Level 0')
+                currentLevel = 0
+                requestArr.push(new Id(el.namespace.level0))
+                tmpObj.id = new Id(el.namespace.level0).toHex()
+              }
+
+              // console.log(currentLevel)
+              // console.log("Request Array", requestArr)
+
+              this.$proxProvider.getNamespacesName(requestArr).subscribe(
+                responseName => {
+                  console.log(responseName)
+                  if (currentLevel === 0) {
+                    tmpObj.name = responseName[0].name
+                  } else if (currentLevel === 1) {
+                    tmpObj.name = `${responseName[1].name}.${responseName[0].name}`
+                  } else if (currentLevel === 2) {
+                    tmpObj.name = `${responseName[2].name}.${responseName[1].name}.${responseName[0].name}`
+                  }
+                  tmpArr.push(tmpObj)
+                }
+              )
+            })
+            this.linkNamespaces = tmpArr
+          }
+        })
 
       axios.get(`${this.$store.state.currentNode}/account/${addr.address}/multisig`)
         .then(response => {
@@ -339,9 +488,10 @@ export default {
       } else if (this.$route.params.type === 'address') {
         this.type = 'Address'
       } else if (this.$route.params.type === 'namespaceInfo') {
-        this.type = 'Namespace ID'
+        this.type = 'Namespace'
       } else if (this.$route.params.type === 'mosaicInfo') {
-        this.type = 'Mosaic ID'
+        this.type = (isNaN(parseInt(this.$route.params.id, 16))) ? 'Mosaic Name' : 'Mosaic ID'
+        // this.type = 'Mosaic ID'
       }
       this.value = this.$route.params.id
     },
@@ -355,7 +505,7 @@ export default {
     viewTransactionsFromPublicAccount(publicAccount) {
       this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
         transactions => {
-          console.log("Transacciones de esta cuenta",transactions)
+          // console.log("Transacciones de esta cuenta",transactions)
           if (transactions.length > 0) {
             transactions.forEach(element => {
               element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
@@ -409,6 +559,10 @@ export default {
         message: 'Address or public key not found',
         submessage: 'Check the information provided and try again'
       })
+    },
+
+    changeList (list) {
+      this.activeList = list
     }
   },
   watch: {
@@ -428,13 +582,48 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.address-list
+
+.activeList
+  background: #2BA1B9
+  color: white !important
+
+.inactiveList
+  background: #f4f4f4
+  color: black
+  cursor: pointer
+  &:hover
+    background: silver
+    color: white
+
+.bititle
+  width: 100%
+  display: flex
+  flex-flow: row
+  padding: 0px 10px
+  justify-content: center
+
+.supertitle
+  display: flex
+  flex-flow: row nowrap
+  justify-content: center
+  color: #2BA1B9
+  margin: 0px
+  font-size: 17px
+  padding: 5px 20px
+  border-radius: 20px
+  &:first-child
+    border-radius: 20px 0px 0px 20px
+  &:last-child
+    border-radius: 0px 20px 20px 0px
+
 .search-cont
   text-align: center
   padding: 15px 0px
   border-bottom: 1px solid silver
 
 .search-type
-  color: #2d819b
+  color: #2BA1B9
   font-weight: bold
   font-size: 25px
 
@@ -445,4 +634,19 @@ export default {
   text-transform: uppercase
   font-weight: bold
   word-wrap: break-word
+
+.emptyMosNam
+  width: 100%
+  color: grey
+  padding: 5px
+  text-align: center
+  background: #f4f4f4
+  margin: 10px 0px
+
+@media screen and (max-width: 550px)
+  .search-type
+    font-size: 20px
+
+  .search-value
+    font-size: 15px
 </style>

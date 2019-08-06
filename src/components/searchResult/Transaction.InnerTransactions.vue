@@ -117,7 +117,7 @@ $radius: 20px
 .supertitle
   margin: 10px 0px 0px 0px
   font-size: 17px
-  color: #2d819b
+  color: #2BA1B9
   padding: 0px 0px 5px 0px
   width: 100%
   text-align: center
@@ -144,4 +144,14 @@ $radius: 20px
   text-transform: uppercase
   word-break: break-all
   color: black
+
+@media screen and (max-width: 700px)
+  .value,
+  .valueLower
+    font-size: 13px
+
+  .link
+    color: #2BA1B9
+    text-decoration: underline
+    cursor: pointer
 </style>

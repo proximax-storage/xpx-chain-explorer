@@ -18,7 +18,7 @@
       <div class="filter-input">
         <div>
           <mdb-dropdown style="width: 100%; margin-top:10px">
-            <mdb-dropdown-toggle slot="toggle" color="black-text" style="width: 100%; font-weight:bold; border: 2px solid #2d819b; color: black; border-radius: 20px">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
+            <mdb-dropdown-toggle slot="toggle" color="black-text" style="width: 100%; font-weight:bold; border: 2px solid #2BA1B9; color: black; border-radius: 20px">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
             <mdb-dropdown-menu>
               <mdb-dropdown-item v-for="(item, index) in listOfOptions" :key="index" class="searchLink">
                 <a  @click="changeSearch(item)">{{ item }}</a>
@@ -36,7 +36,11 @@
     <!-- Map Options Container -->
     <div class="control">
       <div class="cardServe" v-for="(item, index) in mapList" :key="index" @click="activate(item)" :style="(item.visible) ? 'display: flex' : 'display: none'">
-        <div style="min-width: 200px">
+        <div>
+          <div class="title">Owner</div>
+          <div class="icon-cont"><img :src="require(`@/assets/${item.icon}`)" alt="icon" width="21"></div>
+        </div>
+        <div>
           <div class="title">Name</div>
           <div class="valueLower">{{ item.name }}</div>
         </div>
@@ -48,7 +52,7 @@
           <div class="title">Version</div>
           <div class="value">{{ item.version }}</div>
         </div>
-        <div style="min-width: 200px">
+        <div>
           <div class="title">Location</div>
           <div class="value">{{ item.location }}</div>
         </div>
@@ -58,7 +62,7 @@
         </div>
         <div>
           <div class="title">Status</div>
-          <div class="value" :style="(item.status == 'Online') ? 'color: #2d819b; font-weight: bold' : 'color: red; font-weight: bold'">{{ item.status }}</div>
+          <div class="value" :style="(item.status == 'Online') ? 'color: #2BA1B9; font-weight: bold' : 'color: red; font-weight: bold'">{{ item.status }}</div>
         </div>
       </div>
     </div>
@@ -107,6 +111,16 @@ export default {
       axios.get('./config/nodesInfoMaps.json').then(
         response => {
           this.mapList = response.data
+          let mapCustomNodes = this.$storage.get('mapCustomNodes')
+          if (mapCustomNodes !== null) {
+            mapCustomNodes = JSON.parse(mapCustomNodes)
+
+            mapCustomNodes.forEach(el => {
+              console.log(el)
+              this.mapList.push(el)
+            })
+          }
+
           this.analyzeMaps()
         }
       )
@@ -121,6 +135,7 @@ export default {
           resp => {
             el.lat = resp.data.latitude
             el.lon = resp.data.longitude
+            el.location = resp.data.country_name
 
             axios.get(`${el.urlNode}/node/info`).then(
               response => {
@@ -176,7 +191,7 @@ export default {
         container: 'first',
         style: 'mapbox://styles/mapbox/light-v10',
         center: [lon, lat],
-        zoom: 5
+        zoom: 10
       })
 
 
@@ -191,7 +206,7 @@ export default {
           </div>`
         )
 
-      let image = require('../assets/map-pointer-green-15x20.svg')
+      let image = require('../assets/map-pointer.svg')
       let el = document.createElement('div')
       el.style.width = '40px'
       el.style.height = '52px'
@@ -246,19 +261,18 @@ $radius: 20px
   bottom: 0
   left: 0
   border-radius: 0px 0px $radius $radius
-  background: #2d819b
+  background: #2BA1B9
   z-index: 10000
   display: flex
   justify-content: center
   align-items: center
-  border: 2px solid #2d819b
+  border: 2px solid #2BA1B9
   color: white
   font-weight: bold
   font-size: 17px
 
 .mapboxgl-popup
   color: black
-  opacity: 0
 
 .title
   font-size: 9px
@@ -274,10 +288,14 @@ $radius: 20px
   text-transform: uppercase
   text-align: center
 
+.icon-cont
+  display: flex
+  justify-content: center
+
 .searchLink
   font-weight: bold
   &:hover
-    background: #2d819b !important
+    background: #2BA1B9 !important
 
 .valueLower
   font-size: 14px
@@ -333,9 +351,17 @@ $radius: 20px
       border-radius: $radius
       cursor: pointer
       &:hover
-        background: #f4f4f4
+        background: #2ba1b914
+      & > div
+        width: 200px
 
 @media screen and (max-width: 700px)
   .map > .control > .cardServe
     flex-flow: column
+    & > div
+      width: 100%
+      border-bottom: 1px solid #f4f4f4
+      padding: 2px
+      &:last-child
+        border-bottom: 0px solid white
 </style>

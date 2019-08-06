@@ -63,7 +63,7 @@ export default {
 .supertitle
   margin: 0px
   font-size: 17px
-  color: #2d819b
+  color: #2BA1B9
   padding: 0px 0px 5px 0px
   width: 100%
   text-align: center
@@ -94,4 +94,14 @@ export default {
   color: #2d8e9b
   text-decoration: underline
   cursor: pointer
+
+@media screen and (max-width: 700px)
+  .value,
+  .valueLower
+    font-size: 13px
+
+  .link
+    color: #2BA1B9
+    text-decoration: underline
+    cursor: pointer
 </style>

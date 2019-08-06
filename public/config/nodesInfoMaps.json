@@ -3,26 +3,28 @@
     "name": "bctestnet1.xpxsirius.io",
     "ip": "54.255.178.204",
     "version": 0,
-    "location": "Singapore",
+    "location": "",
     "lat": 0,
     "lon": 0,
     "height": null,
     "status": "Online",
     "active": false,
     "visible": true,
-    "urlNode": "http://bctestnet1.xpxsirius.io:3000"
+    "urlNode": "http://bctestnet1.xpxsirius.io:3000",
+    "icon": "proximax.svg"
   },
   {
     "name": "bctestnet2.xpxsirius.io",
     "ip": "54.189.186.124",
     "version": 0,
-    "location": "USA",
+    "location": "",
     "lat": 0,
     "lon": 0,
     "height": null,
     "status": "Online",
     "active": false,
     "visible": true,
-    "urlNode": "http://bctestnet2.xpxsirius.io:3000"
+    "urlNode": "http://bctestnet2.xpxsirius.io:3000",
+    "icon": "proximax.svg"
   }
 ]

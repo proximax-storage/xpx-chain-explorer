@@ -1,25 +1,48 @@
 <template>
   <!-- Mosaic Component -->
-  <div class="recent animated fast fadeIn" v-if="finalArray.length > 0">
-    <!-- Name -->
-    <h1 class="supertitle">{{ nameLabel }}</h1>
-
+  <div class="recent animated fast fadeIn">
+    <!-- <h1 class="supertitle">{{ nameLabel }}</h1> -->
     <!-- Iterated Elements (Mosaics) -->
-    <div class="element animated fast fadeIn" v-for="(item, index) in finalArray" :key="index" v-show="index >= 0 && index < limit + 1" @click="goToMosaic(item.id)">
+    <div class="guide animated fast fadeIn" v-show="arrayTransactions && arrayTransactions.length > 0">
 
-      <div class="el-left" style="min-width: 200px">
-        <div class="title">Id</div>
-        <div class="value">{{ item.id }}</div>
+      <div>
+        <div class="title">Owner</div>
       </div>
 
-      <div class="el-middle" :class="(item.name) ? '' : 'mosaicNameTrans'" style="min-width: 200px">
-        <div class="title">Name</div>
-        <div class="value">{{ item.name || 'No Available' }}</div>
+      <div>
+        <div class="title">Mosaic Id</div>
       </div>
 
-      <div class="el-right" style="min-width: 200px">
+      <div c>
+        <div class="title">{{ importantLabel }}</div>
+      </div>
+
+      <div >
         <div class="title">Quantity</div>
-        <div class="value" v-html="arrayAmount[index]"></div>
+      </div>
+
+    </div>
+
+    <div class="element animated fast fadeIn" v-for="(item, index) in arrayTransactions" :key="index" v-show="arrayTransactions && arrayTransactions.length > 0">
+
+      <div>
+        <div class="title">Owner</div>
+        <div class="value" :style="(item.owner === 'true') ? 'color: green; font-weight: bold' : 'color: red; font-weight: bold'">{{ item.owner }}</div>
+      </div>
+
+      <div>
+        <div class="title">Mosaic Id</div>
+        <div class="value link" @click="goToMosaic(item.id)">{{ item.id }}</div>
+      </div>
+
+      <div>
+        <div class="title">Mosaic Name</div>
+        <div class="valueLower">{{ item.name || 'undefined' }}</div>
+      </div>
+
+      <div>
+        <div class="title">Quantity</div>
+        <div class="value" v-html="item.quantity"></div>
       </div>
 
     </div>
@@ -31,6 +54,7 @@
 
 <script>
 import proximaxProvider from '@/services/proximaxProviders.js'
+import { mdbProgress } from 'mdbvue'
 import { Id } from 'tsjs-xpx-catapult-sdk'
 
 export default {
@@ -50,7 +74,8 @@ export default {
   data () {
     return {
       arrayData: [],
-      arrayAmount: []
+      arrayAmount: [],
+      importantLabel: 'Mosaic Name'
     }
   },
   /**
@@ -59,141 +84,18 @@ export default {
    * Call constructorObj method
    */
   mounted () {
-    this.constructorObj()
+    console.log("Array transaction mosaic", this.arrayTransactions)
+    this.analyzeElements()
   },
   methods: {
-    /**
-     * Constructor Object
-     *
-     * This method reconstructs an appropriate object to show
-     * the data with the data that you enter as a parameter
-     *
-     * Call mosaicName method
-     */
-    constructorObj () {
-      let itemComplete
-      let mosaicNames = this.$storage.get('mosaicNames')
-      if (mosaicNames === null) {
-        this.arrayTransactions.forEach(item => {
-          this.mosaicName(item)
-        })
-      } else {
-        mosaicNames = JSON.parse(mosaicNames)
-        // console.log(mosaicNames)
-        this.arrayTransactions.forEach((item, index) => {
-          // this.mosaicName(item)
-          let tmpitem = mosaicNames.filter(el => item.id.toHex() === el.id)
-          if (tmpitem.length > 0) {
-            itemComplete = {
-              id: tmpitem[0].id,
-              name: tmpitem[0].name,
-              amount: item.amount.compact()
-            }
-            this.getAmount(item, index)
-            this.arrayData.push(itemComplete)
-          } else {
-            this.mosaicName(item, index)
-          }
-        })
+
+    analyzeElements () {
+      if (this.arrayTransactions) {
+        let items = this.arrayTransactions.map(el => el.name === undefined)
+        if (items[0] === false) {
+          this.importantLabel = 'Mosaic Alias Name'
+        }
       }
-    },
-
-    /**
-     * Mosaic Name
-     *
-     * Make a request and get information about a mosaic,
-     * which is reconstructed and stored in local storage
-     */
-    mosaicName (item, index) {
-      let id = item.id
-      let idExact = item.id.toHex()
-      this.getAmount(item, index)
-      // console.log(item, id)
-      let mosaics = [id]
-      this.$proxProvider.getMosaicsName(mosaics).subscribe(
-        resp => {
-          let itemComplete = {
-            id: idExact,
-            name: resp[0].names[0],
-            amount: item.amount.compact()
-          }
-          this.arrayData.push(itemComplete)
-
-          let mosaicNames = this.$storage.get('mosaicNames')
-          if (mosaicNames === null) {
-            mosaicNames = [{
-              id: idExact,
-              name: resp[0].names[0]
-            }]
-            this.$storage.set('mosaicNames', mosaicNames)
-          } else {
-            mosaicNames = JSON.parse(mosaicNames)
-            mosaicNames.push({ id: idExact, name: resp[0].names[0] })
-            this.$storage.set('mosaicNames', JSON.stringify(mosaicNames))
-          }
-        },
-        err => {
-          this.arrayData.push({
-            id: 'Communication error with the node!',
-            name: 'Communication error with the node!',
-            amount: 'Communication error with the node!'
-          })
-        }
-      )
-    },
-
-    getAmount (item, index) {
-      let id
-      if (typeof item.id === 'string') {
-        id = Id.fromHex(item.id)
-      } else {
-        id = item.id
-      }
-      // let amount = this.$utils.fmtAmountValue(item.amount.compact())
-      // console.log(item.id, id)
-
-      this.$proxProvider.getMosaic(id).subscribe(
-        divResp => {
-          if (divResp.divisibility > 0) {
-            this.arrayAmount.push(this.$utils.fmtDivisibility(item.amount.compact(), divResp.divisibility))
-          } else {
-            this.arrayAmount.push(item.amount.compact())
-          }
-        }
-      )
-    },
-
-    redirectToDetail (index) {
-      this.$emit('viewMosaic', 'Mosaic Info')
-      let mosaicNames = this.$storage.get('mosaicNames')
-      mosaicNames = JSON.parse(mosaicNames)
-      let compatible
-      mosaicNames.forEach(el => {
-        if (el.id === this.arrayTransactions[index].id.toHex()) {
-          compatible = el
-        }
-      })
-
-      this.$proxProvider.getMosaic(this.arrayTransactions[index].id)
-        .subscribe(
-          resp => {
-            let info = [
-              { key: 'Name', value: compatible.name },
-              { key: 'Mosaic ID', value: resp.mosaicId.id.toHex() },
-              { key: 'Meta ID', value: resp.metaId },
-              { key: 'Address', value: resp.owner.address.pretty() },
-              { key: 'Public Key', value: resp.owner.publicKey },
-              { key: 'Height', value: resp.height.compact() },
-              { key: 'Divisibility', value: resp.properties.divisibility },
-              { key: 'Duration', value: resp.properties.duration.compact() },
-              { key: 'Levy Mutable', value: resp.properties.levyMutable, style: (resp.properties.levyMutable === true) ? 'color: green' : 'color: red' },
-              { key: 'Supply Mutable', value: resp.properties.supplyMutable, style: (resp.properties.supplyMutable === true) ? 'color: green' : 'color: red' },
-              { key: 'Transferable', value: resp.properties.transferable, style: (resp.properties.transferable === true) ? 'color: green' : 'color: red' },
-            ]
-
-            this.$emit('pushInfo', info)
-          }
-        )
     },
 
     goToMosaic (mosaicId) {
@@ -216,7 +118,12 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-$radius: 20px
+$radius: 5px
+
+.link:hover
+  color: #2BA1B9
+  text-decoration: underline
+  cursor: pointer
 
 .mosaicNameTrans
   opacity: 0
@@ -227,11 +134,18 @@ $radius: 20px
   text-transform: uppercase
   color: grey
   margin: 0px
+  display: none
 
 .value
   font-size: 14px
   font-weight: normal
   text-transform: uppercase
+  word-break: break-all
+
+.valueLower
+  font-size: 14px
+  font-weight: normal
+  word-break: break-all
 
 .balance
   color: black
@@ -243,7 +157,7 @@ $radius: 20px
   display: flex
   flex-flow: row nowrap
   justify-content: center
-  color: #2d819b
+  color: #2BA1B9
   margin: 0px
   font-size: 17px
   padding: 0px 0px 5px 0px
@@ -261,6 +175,24 @@ $radius: 20px
   border-radius: 0px 0px $radius $radius
   padding: 10px
 
+.guide
+    display: flex
+    flex-flow: row nowrap
+    justify-content: space-between
+    aling-items: center
+    border-radius: $radius
+    background: #1a1a1a
+    margin: 5px 0px
+    padding: 10px
+    cursor: pointer
+    & > div
+      width: 200px
+      flex-grow: 1
+      text-align: center
+      & > .title
+        display: block
+        color: white !important
+
 .recent
   // margin: 0px 10px 10px 10px
   padding: 10px
@@ -275,36 +207,46 @@ $radius: 20px
     margin: 5px 0px
     padding: 10px
     cursor: pointer
-    & > .el-left
+    & > div
+      width: 200px
       flex-grow: 1
-      display: flex
-      flex-flow: column nowrap
-      align-items: center
-      border-radius: $radius 0px 0px $radius
-      & > div
-        display: flex
-        flex-flow: row nowrap
-        align-items: center
-        & > figure
-          margin: 0px
-          padding: 5px
-        & > span
-          font-size: 15px
-    & > .el-middle
-      flex-grow: 1
-      display: flex
-      flex-flow: column wrap
-      align-items: center
-      justify-content: center
-    & > .el-right
-      flex-grow: 1
-      display: flex
-      flex-flow: column wrap
-      align-items: center
-      justify-content: center
-      border-radius: 0px $radius $radius 0px
+      text-align: center
+    // & > .el-left
+    //   flex-grow: 1
+    //   display: flex
+    //   flex-flow: column nowrap
+    //   align-items: center
+    //   border-radius: $radius 0px 0px $radius
+    //   & > div
+    //     display: flex
+    //     flex-flow: row nowrap
+    //     align-items: center
+    //     & > figure
+    //       margin: 0px
+    //       padding: 5px
+    //     & > span
+    //       font-size: 15px
+    // & > .el-middle
+    //   flex-grow: 1
+    //   display: flex
+    //   flex-flow: column wrap
+    //   align-items: center
+    //   justify-content: center
+    // & > .el-right
+    //   flex-grow: 1
+    //   display: flex
+    //   flex-flow: column wrap
+    //   align-items: center
+    //   justify-content: center
+    //   border-radius: 0px $radius $radius 0px
 
-@media screen and (max-width: 741px)
+@media screen and (max-width: 570px)
+  .guide
+    display: none
+
+  .title
+    display: block
+
   .alternate
     display: block
 
@@ -313,18 +255,10 @@ $radius: 20px
 
   .recent > .element
     flex-flow: column
-    & > .el-left
-      border-radius: $radius $radius 0px 0px
-      padding: 5px
-      // background: #00000020
-      border-bottom: 1px solid #c0c0c090
-    & > .el-middle
-      border-radius: 0px
-      padding: 5px
-    & > .el-right
-      // background: #00000020
-      border-top: 1px solid #c0c0c090
-      border-radius: 0px
-      padding: 5px
-      border-radius: 0px 0px $radius $radius
+    & > div
+      width: 100%
+      padding: 2px
+      border-bottom: 1px solid #ddd
+      &:last-child
+        border-bottom: 0px solid white
 </style>

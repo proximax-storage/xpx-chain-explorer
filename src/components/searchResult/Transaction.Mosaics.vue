@@ -3,19 +3,19 @@
     <h1 class="supertitle center-text">Mosaics In Transfer</h1>
 
     <div>
-      <div class="element" v-for="(item, index) in showFinalData" :key="index">
+      <div class="element" v-for="(item, index) in showFinalData" :key="index" v-show="mosaicAliasName[index] !== 'prx.xpx'">
 
-        <div style="padding: 5px 0px 5px 2px " class="animated faster fadeInDown">
+        <div class="animated faster fadeInDown">
           <div class="title">{{ titleMosaic }}</div>
           <div class="value link" @click="(titleMosaic === 'Mosaic Id') ? goToMosaic(item.name) : goToNamespace(item.name)">{{ item.name }}</div>
         </div>
 
-        <div style="padding: 5px 0px 5px 2px " v-if="titleMosaic == 'Mosaic Alias ID'" class="animated faster fadeInDown">
+        <div v-if="titleMosaic == 'Mosaic Alias ID'" class="animated faster fadeInDown">
           <div class="title">Mosaic Alias Name</div>
-          <div class="value">{{ mosaicAliasName[index] }}</div>
+          <div class="valueLower">{{ mosaicAliasName[index] }}</div>
         </div>
 
-        <div style="padding: 5px 0px 5px 2px " class="animated faster fadeInDown">
+        <div class="animated faster fadeInDown">
           <div class="title" >Mosaic {{ amountQuantity }}</div>
           <div class="value" v-html="arrayAmount[index]"></div>
         </div>
@@ -42,7 +42,10 @@ export default {
     }
   },
   mounted () {
-    console.log(this.params)
+    console.log("param of mosaic in transfer", this.params)
+    // this.params.forEach(el => {
+    //   console.log(el.id.toHex())
+    // })
     //this.organizeData()
   },
   methods: {
@@ -69,10 +72,12 @@ export default {
             this.$proxProvider.getMosaic(el.id).subscribe(
               response => {
                 if (response.properties.divisibility !== 0) {
-                  tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response.properties.divisibility)
+                  this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
+                  // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response.properties.divisibility)
                   this.finalData.push(tmpObj)
                 } else {
-                  tmpObj.amount = `${el.amount.compact()}`
+                  this.arrayAmount.push(`${el.amount.compact()}`)
+                  // tmpObj.amount = `${el.amount.compact()}`
                   this.finalData.push(tmpObj)
                 }
               },
@@ -84,7 +89,6 @@ export default {
                         nameResponse = nameResponse.reverse()
                         console.log("Name Response", nameResponse)
                         if (nameResponse.length === 1) {
-                          console.log()
                           this.mosaicAliasName.push(nameResponse[0].name)
                         } else if (nameResponse.length === 2) {
                           this.mosaicAliasName.push(`${nameResponse[0].name}.${nameResponse[1].name}`)
@@ -93,11 +97,12 @@ export default {
                         }
                       }
                     )
-                    console.log(response)
                     this.titleMosaic = 'Mosaic Alias ID'
+                    console.log(response.alias.mosaicId)
                     let tmpId = this.$proxProvider.createMosaicId(response.alias.mosaicId)
                     this.$proxProvider.getMosaic(tmpId).subscribe(
                       response2 => {
+                        console.log(response2)
                         if (response2.properties.divisibility !== 0) {
                           // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility)
                           this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
@@ -135,7 +140,7 @@ export default {
 <style lang="sass" scoped>
 .supertitle
   font-size: 17px
-  color: #2d819b
+  color: #2BA1B9
   padding: 0px 0px 5px 0px
   width: 100%
 
@@ -151,8 +156,11 @@ export default {
   border-radius: 20px
   font-size: 10px
   display: flex
+  flex-flow: row
   justify-content: space-around
   background: #f4f4f4
+  & > div
+    text-align: center
   &:last-child
     margin: 0px
 
@@ -166,10 +174,31 @@ export default {
   font-size: 13px
   text-transform: uppercase
   word-break: break-all
+  font-weight: normal
+  color: black
+
+.valueLower
+  font-size: 13px
+  word-break: break-all
+  font-weight: normal
   color: black
 
 .link:hover
-  color: #2d8e9b
+  color: #2BA1B9
   text-decoration: underline
   cursor: pointer
+
+@media screen and (max-width: 700px)
+  .value,
+  .valueLower
+    font-size: 13px
+
+  .link
+    color: #2BA1B9
+    text-decoration: underline
+    cursor: pointer
+
+  .elemenr
+    flex-flow: column
+
 </style>

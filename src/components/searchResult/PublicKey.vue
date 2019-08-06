@@ -30,7 +30,7 @@
         <h1 class="supertitle">XPX Info</h1>
         <div class="up">
           <div class="title">Namespace Name</div>
-          <div class="value">PRX</div>
+          <div class="valueLower">PRX</div>
         </div>
         <div class="down">
           <div class="title">XPX Mosaic Id</div>
@@ -97,7 +97,7 @@ export default {
      * return the balance in html format
      */
     formatBalance () {
-      return `<div><span style="color: #2d819b">Balance:</span> ${ this.getBalance } XPX</div>`
+      return `<div><span style="color: #2BA1B9">Balance:</span> ${ this.getBalance } XPX</div>`
     }
   },
   methods: {
@@ -115,7 +115,7 @@ export default {
 $radius: 20px
 
 .link:hover
-  color: #2d819b
+  color: #2BA1B9
   text-decoration: underline
   cursor: pointer
 
@@ -131,13 +131,18 @@ $radius: 20px
   text-transform: uppercase
   word-wrap: break-word
 
+.valueLower
+  font-size: 14px
+  font-weight: normal
+  word-wrap: break-word
+
 .balance
   color: black
   margin: 0px
   font-size: 30px
 
 .supertitle
-  color: #2d819b
+  color: #2BA1B9
   margin: 0px
   font-size: 17px
   padding: 0px 0px 5px 0px
@@ -157,12 +162,11 @@ $radius: 20px
   // margin: 15px 10px 0px 10px
   color: black
   & > .pk-layout-up
+    padding: 10px
     background: transparent
     display: flex
     flex-flow: row wrap
     justify-content: space-evenly
-    & > div
-      margin: 10px
     & > div:first-child
       flex-grow: 4
       margin-right: 5px
@@ -174,6 +178,7 @@ $radius: 20px
       border-radius: $radius
   & > .pk-layout-down
     display: flex
+    text-align: center
     flex-flow: row nowrap
     justify-content: center
     align-items: center
@@ -182,6 +187,15 @@ $radius: 20px
     border-bottom: 1px solid silver
 
 @media screen and (max-width: 740px)
+  .value,
+  .valueLower
+    font-size: 13px
+
+  .link
+    color: #2BA1B9
+    text-decoration: underline
+    cursor: pointer
+
   .publicKey
     & > .pk-layout-up
       flex-flow: column

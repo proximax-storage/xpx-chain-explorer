@@ -7,7 +7,7 @@
       <h1>Node</h1>
       <p>
         <mdb-dropdown style="text-align: center">
-          <mdb-dropdown-toggle slot="toggle" class="black-text" style="width:100%; padding: 5px 0px; box-shadow: 0px 0px 0px transparent">
+          <mdb-dropdown-toggle slot="toggle" class="button-config black-text" style="width:100%; padding: 5px 0px; box-shadow: 0px 0px 0px transparent">
             <span class="button-toggle">{{ getCurrentNode || this.$store.state.currentNode }}</span>
           </mdb-dropdown-toggle>
           <mdb-dropdown-menu>
@@ -160,6 +160,37 @@ export default {
               }
               this.nodeLoader = false
               this.nodeMessage = 'Node Accepted - Available from the list of nodes'
+
+              let tmpObj = {
+                name: response.data.friendlyName,
+                ip: response.data.host,
+                version: response.data.version,
+                location: '',
+                lat: 0,
+                lon: 0,
+                height: null,
+                status: "Online",
+                active: false,
+                visible: true,
+                urlNode: this.newNodeValue,
+                icon: 'nodes.svg'
+              }
+
+              let mapCustomNodes = this.$storage.get('mapCustomNodes')
+              console.log("mapCustomNodes", mapCustomNodes)
+              console.log(tmpObj)
+
+              if (mapCustomNodes !== null) {
+                mapCustomNodes = JSON.parse(mapCustomNodes)
+                mapCustomNodes.push(tmpObj)
+                mapCustomNodes = JSON.stringify(mapCustomNodes)
+                this.$storage.set('mapCustomNodes', mapCustomNodes)
+              } else {
+                let tmpArr = [tmpObj]
+                let strData = JSON.stringify(tmpArr)
+                this.$storage.set('mapCustomNodes', strData)
+              }
+
             }
           )
           .catch(err => {
@@ -194,11 +225,21 @@ export default {
     &::after
       background: red !important
 
+.button-config
+  background: transparent !important
+  padding: 0px 20px !important
+  border-radius: 20px
+  &:hover
+    background: #2ba1b940 !important
+  &:focus
+    background: #2ba1b940 !important
+
 .nodeLink
   display: block
   margin: 3px
   font-weight: bold !important
   padding: 5px
+  border-radius: 5px
   &:hover
     background: #2BA1B9 !important
     color: white !important
@@ -250,6 +291,10 @@ export default {
     border-radius: 20px
     min-width: 200px
     margin: 10px
+    display: flex
+    flex-flow: column
+    align-items: flex-start
+    justify-content: center
     & > h1
       font-size: 10px
       margin: 0px
@@ -273,7 +318,7 @@ export default {
   .node-admin
     flex-flow: column nowrap
     & > .admin-item
-      border-radius: 5px
+      border-radius: 20px
       & > h1
         font-size: 10px
       & > p

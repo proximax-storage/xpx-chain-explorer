@@ -45,6 +45,8 @@ export default {
   data () {
     return {
       labels: [],
+      labely: '',
+      labelx: '',
       arrData: [],
       color: 'rgba(0, 0, 255, 1)',
       backgroundColor: 'rgba(0, 0, 255, .1)',
@@ -87,7 +89,19 @@ export default {
         },
         options: {
           scales: {
+            xAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: this.labelx
+              }
+            }],
             yAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: this.labely
+              },
               ticks: {
                 beginAtZero: true
               }
@@ -111,8 +125,10 @@ export default {
             })
             this.labels = tmp1
             this.labelName = 'Closing time of the current block'
-            this.showGraphic()  
-          }, 10000);
+            this.labely = 'Seconds'
+            this.labelx = 'Blocks'
+            this.showGraphic()
+          }, 10000)
           this.arrData = Array.from(this.$store.getters.getAverageList)
           let tmp1 = Array.from(this.$store.getters.getBlockList)
           tmp1.forEach(el => {
@@ -146,6 +162,8 @@ export default {
           this.labelName = 'Last closed blocks',
           this.color = 'rgba(255, 0, 0, 1)'
           this.backgroundColor = 'rgba(255, 0, 0, .1)'
+          this.labely = 'Seconds'
+          this.labelx = 'Public Keys'
           this.showGraphic()
           break;
 
@@ -159,6 +177,8 @@ export default {
           this.labelName = 'Last closed blocks',
           this.color = 'rgba(255, 165, 0, 1)'
           this.backgroundColor = 'rgba(255, 165, 0, .1)'
+          this.labely = 'Seconds'
+          this.labelx = 'Blocks'
           this.showGraphic()
           break;
 
@@ -172,6 +192,8 @@ export default {
           this.labelName = 'Closing time of the current block',
           this.color = 'rgba(0, 255, 0, 1)'
           this.backgroundColor = 'rgba(0, 255, 0, .1)'
+          this.labely = 'Accounts'
+          this.labelx = 'Date'
           this.showGraphic()
           break;
 
@@ -185,6 +207,8 @@ export default {
           this.labelName = 'Last closed blocks',
           this.color = 'rgba(128, 0, 128, 1)'
           this.backgroundColor = 'rgba(128, 0, 128, .1)'
+          this.labely = 'Average Dificulty'
+          this.labelx = 'Blocks'
           this.showGraphic()
           break;
 

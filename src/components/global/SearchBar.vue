@@ -3,37 +3,41 @@
   <div class="searchBar animated fast fadeIn">
     <div class="search-cont">
 
-      <!-- Type Search Button -->
-      <div class="search-button">
+      <div class="selector">
 
-        <!-- MDB Dropdown -->
+        <div class="sel-item" :class="item.class" v-for="(item, index) in searchList" :key="index" @click="changeSearch(item)">{{ item.name }}</div>
+
+      </div>
+
+      <!-- Type Search Button -->
+      <!-- <div class="search-button">
+
         <mdb-dropdown style="text-align: center">
           <mdb-dropdown-toggle slot="toggle" class="black-text"
           style="box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%; box-shadow: inset 0px 0px 0px 2px #2d819b"
-          >{{ label }}</mdb-dropdown-toggle>
+          >
+          {{ label }}
+          </mdb-dropdown-toggle>
           <mdb-dropdown-menu left>
             <mdb-dropdown-item class="searchLink" v-for="(item, index) in searchList" :key="index" style="padding: 0px">
-              <a style="display: block; padding: 10px" @click.prevent="changeSearch(item)">{{ item.name }}</a>
+              <a style="display: block; padding: 3px; text-align: center" @click.prevent="changeSearch(item)">{{ item.name }}</a>
             </mdb-dropdown-item>
           </mdb-dropdown-menu>
         </mdb-dropdown>
-        <!-- End MDB Dropdown -->
 
-
-      </div>
+      </div> -->
       <!-- End Type Search Buttton -->
 
       <!-- Search Input -->
-      <form class="search-input">
+      <form class="input-cont">
 
         <!-- MDB Input -->
-        <mdb-input :label="label" type="search" class="place-white black-text" style="width: 100%" v-model="valueSearch"/>
+        <mdb-input :label="label" type="search" class="place-white black-text" v-model="valueSearch"/>
         <!-- End MDB Input -->
 
         <!-- Input Icon -->
         <button @click.prevent="performSearch">
-          <!-- <img :src="require('@/assets/search-details-white.svg')" alt=""> -->
-          Search
+          <img :src="require('@/assets/search-white.svg')" alt="search" width="15">
         </button>
         <!-- Input Icon -->
 
@@ -64,15 +68,13 @@ export default {
   },
   data () {
     return {
-      typeSearch: '',
-      label: 'Select search',
+      typeSearch: 'basic',
+      label: 'Address / Public Key / Block Height',
       searchList: [
-        { name: 'Address' },
-        { name: 'Public Key' },
-        { name: 'Block Height' },
-        { name: 'Hash' },
-        { name: 'Namespace ID' },
-        { name: 'Mosaic ID' }
+        { name: 'Basic', class: 'active-s' },
+        { name: 'Hash', class: '' },
+        { name: 'Namespace', class: '' },
+        { name: 'Mosaic', class: '' }
       ],
       valueSearch: '',
       // Banner
@@ -90,19 +92,27 @@ export default {
      */
     changeSearch (item) {
       this.label = item.name
-      if (item.name === 'Public Key') {
-        this.typeSearch = 'publicKey'
-      } else if (item.name === 'Block Height') {
-        this.typeSearch = 'blockHeight'
+
+      if (item.name === 'Basic') {
+        this.typeSearch = 'basic'
+        this.label = 'Address / Public Key / Block Height'
       } else if (item.name === 'Hash') {
         this.typeSearch = 'transactionHash'
-      } else if (item.name === 'Address') {
-        this.typeSearch = 'address'
-      } else if (item.name === 'Namespace ID') {
+        this.label = 'Hash / Id Tx'
+      } else if (item.name === 'Namespace') {
         this.typeSearch = 'namespaceInfo'
-      } else if (item.name === 'Mosaic ID') {
+        this.label = 'Namespace / Sub-namespace'
+      } else if (item.name === 'Mosaic') {
         this.typeSearch = 'mosaicInfo'
+        this.label = 'MosaicId / Alias (e.g. prx.xpx)'
       }
+
+      this.searchList.forEach(el => {
+        el.class = ''
+        if (el.name == item.name) {
+          el.class = 'active-s'
+        }
+      })
     },
 
     /**
@@ -112,12 +122,29 @@ export default {
      * taking the type of search and the value entered by the user
      */
     performSearch () {
-      if (this.typeSearch !== '') {
+      if (this.typeSearch === 'basic' || this.typeSearch === 'transactionHash' || this.typeSearch === 'namespaceInfo' || this.typeSearch === 'mosaicInfo') {
         if (this.valueSearch !== '') {
           if (this.bannerActive) {
             this.bannerActive = false
             this.bannerMessage = ''
           }
+
+          if (this.typeSearch === 'basic') {
+            console.log('Basic', this.valueSearch)
+
+            if (this.valueSearch.length === 64) {
+              console.log('Public Key')
+              this.typeSearch = 'publicKey'
+            } else if (this.valueSearch.length === 40 || this.valueSearch.length === 46) {
+              console.log('Address')
+              this.typeSearch = 'publicKey'
+            } else if (typeof parseInt(this.valueSearch) == 'number') {
+              console.log('Number')
+              this.typeSearch = 'blockHeight'
+            }
+          }
+
+          this.valueSearch = this.valueSearch.toLowerCase()
 
           let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
           window.open(routeData.href, '_blank')
@@ -125,9 +152,6 @@ export default {
           this.bannerActive = true
           this.bannerMessage = 'The value of the search can not be empty'
         }
-      } else {
-        this.bannerActive = true
-        this.bannerMessage = 'Please select a search type'
       }
     }
   }
@@ -147,7 +171,7 @@ export default {
     border-bottom: #2BA1B9
     margin: 0px
   & > label
-    color: black !important
+    color: grey !important
     &::after
       background: red !important
 
@@ -169,31 +193,43 @@ export default {
   display: flex
   justify-content: center
 
+.active-s
+  color: white !important
+  background: #2BA1B9 !important
+
+
 .searchBar
-  padding: 10px
+  border-radius: 20px
+  padding: 10px 20px
+  margin: 10px
   position: relative
   z-index: 2000
   background: #f4f4f4
   & > .search-cont
-    width: 100%
-    display: flex
-    flex-flow: row wrap
-    align-items: center
-    justify-content: space-between
-    & > .search-button
-      margin: 0px 10px
+    background: transparent
+    & > .selector
       display: flex
-      flex-flow: row wrap
+      flex-flow: row
       justify-content: center
-    & > .search-input
-      margin: 0px 10px
+      margin: 0px 0px 10px 0px
+      & > .sel-item
+        background: white
+        color: #2BA1B9
+        padding: 2px 15px
+        &:first-child
+          border-radius: 20px 0px 0px 20px
+        &:last-child
+          border-radius: 0px 20px 20px 0px
+    & > form
+      width: 100%
       display: flex
       flex-flow: row nowrap
+      justify-content: space-between
       align-items: center
-      flex-grow: 3
       & > div
-        margin: 0px
+        flex-grow: 20
       & > button
+        flex-grow: 1
         display: flex
         flex-flow: row nowrap
         justify-content: center
@@ -207,20 +243,72 @@ export default {
         font-weight: bold
         background: #2BA1B9
         border: none
-        & > img
-          margin: 0px
-          width: 15px
-
-@media screen and (max-width: 550px)
-  .searchBar
-    & > .search-cont
+@media screen and (max-width: 450px)
+    .searchBar > .search-cont > form
       flex-flow: column
-      & > .search-button
-        margin: 5px
-        flex-grow: 0
+      & > div
         width: 100%
-      & > .search-input
-        margin: 5px
-        flex-grow: 0
+      & > button
         width: 100%
+        margin: 0px 0px 3px 0px
+
+
+
+    // width: 100%
+    // display: flex
+    // flex-flow: row wrap
+    // align-items: center
+    // justify-content: space-between
+    // & > .search-button
+    //   margin: 0px 10px
+    //   display: flex
+    //   flex-flow: row wrap
+    //   justify-content: center
+    // & > .search-input
+    //   margin: 0px 10px
+    //   display: flex
+    //   flex-flow: row nowrap
+    //   align-items: center
+    //   flex-grow: 3
+    //   & > div
+    //     margin: 0px
+    //   & > button
+    //     display: flex
+    //     flex-flow: row nowrap
+    //     justify-content: center
+    //     align-items: center
+    //     margin: 0px 0px 0px 10px
+    //     padding: 13px 34px
+    //     border-radius: 30px
+    //     color: white
+    //     text-transform: uppercase
+    //     font-size: 12px
+    //     font-weight: bold
+    //     background: #2BA1B9
+    //     border: none
+    //     & > img
+    //       margin: 0px
+    //       width: 15px
+
+@media screen and (max-width: 620px)
+  // .dropdown
+  //   width: 100% !important
+
+  // .searchBar
+  //   & > .search-cont
+  //     flex-flow: column
+  //     & > .search-button
+  //       margin: 5px
+  //       flex-grow: 0
+  //       width: 100%
+  //     & > .search-input
+  //       display: flex
+  //       flex-flow: column
+  //       margin: 5px
+  //       flex-grow: 0
+  //       width: 100%
+  //       & > button
+  //         width: 100%
+  //         margin: 0px
+
 </style>
