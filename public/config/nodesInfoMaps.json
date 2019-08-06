@@ -10,7 +10,8 @@
     "status": "Online",
     "active": false,
     "visible": true,
-    "urlNode": "http://bctestnet1.xpxsirius.io:3000"
+    "urlNode": "http://bctestnet1.xpxsirius.io:3000",
+    "icon": "proximax.svg"
   },
   {
     "name": "bctestnet2.xpxsirius.io",
@@ -23,6 +24,7 @@
     "status": "Online",
     "active": false,
     "visible": true,
-    "urlNode": "http://bctestnet2.xpxsirius.io:3000"
+    "urlNode": "http://bctestnet2.xpxsirius.io:3000",
+    "icon": "proximax.svg"
   }
 ]

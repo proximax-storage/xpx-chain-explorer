@@ -167,8 +167,6 @@ $radius: 20px
     display: flex
     flex-flow: row wrap
     justify-content: space-evenly
-    & > div
-      margin: 10px
     & > div:first-child
       flex-grow: 4
       margin-right: 5px

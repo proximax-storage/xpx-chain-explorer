@@ -37,6 +37,10 @@
     <div class="control">
       <div class="cardServe" v-for="(item, index) in mapList" :key="index" @click="activate(item)" :style="(item.visible) ? 'display: flex' : 'display: none'">
         <div>
+          <div class="title">Owner</div>
+          <div class="icon-cont"><img :src="require(`@/assets/${item.icon}`)" alt="icon" width="21"></div>
+        </div>
+        <div>
           <div class="title">Name</div>
           <div class="valueLower">{{ item.name }}</div>
         </div>
@@ -202,7 +206,7 @@ export default {
           </div>`
         )
 
-      let image = require('../assets/map-pointer-green-15x20.svg')
+      let image = require('../assets/map-pointer.svg')
       let el = document.createElement('div')
       el.style.width = '40px'
       el.style.height = '52px'
@@ -284,6 +288,10 @@ $radius: 20px
   text-transform: uppercase
   text-align: center
 
+.icon-cont
+  display: flex
+  justify-content: center
+
 .searchLink
   font-weight: bold
   &:hover
@@ -345,7 +353,7 @@ $radius: 20px
       &:hover
         background: #2ba1b914
       & > div
-        width: 250px
+        width: 200px
 
 @media screen and (max-width: 700px)
   .map > .control > .cardServe

@@ -172,7 +172,8 @@ export default {
                 status: "Online",
                 active: false,
                 visible: true,
-                urlNode: this.newNodeValue
+                urlNode: this.newNodeValue,
+                icon: 'nodes.svg'
               }
 
               let mapCustomNodes = this.$storage.get('mapCustomNodes')

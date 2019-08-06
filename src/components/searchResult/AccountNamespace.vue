@@ -1,5 +1,5 @@
 <template>
-  <div class="linkedNamespace animated fast fadeIn" v-if="namespacesList.length > 0">
+  <div class="linkedNamespace animated fast fadeIn" v-if="namespacesList && namespacesList.length > 0">
     <!-- <h1 class="supertitle">Namespaces</h1> -->
     <div class="guide">
       <div>

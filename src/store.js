@@ -13,12 +13,17 @@ export default new Vuex.Store({
     average: 'Loading',
     averageList: [0],
     blockList: [],
-    rentalFeeInfo: undefined
+    rentalFeeInfo: undefined,
+    netType: undefined
   },
   mutations: {
     UPDATE_NODES: (state, data) => {
       state.nodes = data
-      state.currentNode = state.nodes[0]
+      if (localStorage.getItem('currentNode') === null && state.currentNode === '') {
+        state.currentNode = state.nodes[0]
+      } else {
+        state.currentNode = localStorage.getItem('currentNode')
+      }
     },
     UPDATE_CURRENT_NODE: (state, index) => {
       state.currentNode = state.nodes[index]
@@ -61,6 +66,9 @@ export default new Vuex.Store({
     },
     PUSH_NEW_NODE: (state, data) => {
       state.nodes.push(data)
+    },
+    SET_NETWORK_TYPE: (state, data) => {
+      state.netType = data
     }
   },
   actions: {
@@ -87,6 +95,9 @@ export default new Vuex.Store({
     },
     pushNewNode({ commit }, data) {
       commit('PUSH_NEW_NODE', data)
+    },
+    setNetworkType({commit}, data) {
+      commit('SET_NETWORK_TYPE', data)
     }
   },
   getters: {

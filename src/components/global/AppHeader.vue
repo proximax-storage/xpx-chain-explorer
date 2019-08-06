@@ -44,9 +44,9 @@ export default {
   data () {
     return {
       navItems: [
-        { name: 'Blocks', route: '', class: 'active' },
-        { name: 'Network stats', route: 'networkStats', class: 'inactive' },
-        { name: 'Map', route: 'map', class: 'inactive' }
+        { name: 'Blocks', route: '', class: 'active-h' },
+        { name: 'Network stats', route: 'networkStats', class: 'inactive-h' },
+        { name: 'Map', route: 'map', class: 'inactive-h' }
       ],
       date: {
         dayName: 'Mon.',
@@ -83,9 +83,9 @@ export default {
       let objectRoute = e.target.getAttribute('route')
 
       this.navItems.forEach(el => {
-        el.class = 'inactive'
+        el.class = 'inactive-h'
         if (el.route === objectRoute) {
-          el.class = 'active'
+          el.class = 'active-h'
         }
       })
 
@@ -117,9 +117,9 @@ export default {
     changeClass (route) {
       for (let i = 0; i < this.navItems.length; i++) {
         // console.log(this.navItems[i])
-        this.navItems[i].class = 'inactive'
+        this.navItems[i].class = 'inactive-h'
         if (this.navItems[i].route === route) {
-          this.navItems[i].class = 'active'
+          this.navItems[i].class = 'active-h'
         }
       }
     },
@@ -193,10 +193,10 @@ export default {
   font-size: 12px
   font-weight: bold
 
-.inactive
+.inactive-h
   box-shadow: inset 0px 0px 0px 0px
 
-.active
+.active-h
   box-shadow: inset 0px -4px 0px 0px
 
 .header

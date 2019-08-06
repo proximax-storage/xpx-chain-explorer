@@ -8,21 +8,37 @@ import './registerServiceWorker'
 import { Persistence } from '@/services/persistence.js'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import Utils from '@/services/Utils.js'
-import nodesConfig from '@/../public/config/nodes.json'
+import axios from 'axios'
 
 let currentNode = localStorage.getItem('currentNode')
 
 if (currentNode === null) {
-  currentNode = nodesConfig.nodes[0]
+  // currentNode = nodesConfig.nodes[0]
+  axios.get('../config/nodes.json').then(
+    response => {
+      console.log("Default Node", response.data.nodes[0])
+      currentNode = response.data.nodes[0]
+      Vue.prototype.$storage = new Persistence()
+      Vue.prototype.$utils = Utils
+      Vue.prototype.$proxProvider = new proximaxProvider(currentNode)
+      Vue.config.productionTip = false
+      new Vue({
+        router,
+        store,
+        render: function (h) { return h(App) }
+      }).$mount('#app')
+    }
+  )
+} else {
+  console.log('Node in Memory', currentNode)
+  Vue.prototype.$storage = new Persistence()
+  Vue.prototype.$utils = Utils
+  Vue.prototype.$proxProvider = new proximaxProvider(currentNode)
+  Vue.config.productionTip = false
+
+  new Vue({
+    router,
+    store,
+    render: function (h) { return h(App) }
+  }).$mount('#app')
 }
-
-Vue.prototype.$storage = new Persistence()
-Vue.prototype.$utils = Utils
-Vue.prototype.$proxProvider = new proximaxProvider(currentNode)
-Vue.config.productionTip = false
-
-new Vue({
-  router,
-  store,
-  render: function (h) { return h(App) }
-}).$mount('#app')

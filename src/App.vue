@@ -46,6 +46,7 @@ export default {
     this.readConfig()
     this.loadNodes()
     this.average()
+    this.loadNetwork()
   },
   data () {
     return {
@@ -78,6 +79,39 @@ export default {
           this.$store.dispatch('updateNodes', finaldata)
           this.runWS()
         })
+    },
+
+    loadNetwork () {
+      axios.get('./config/networkType.json').then(
+        response => {
+          console.log(response.data)
+
+          if (response.data.number === 0 || response.data.number === '') {
+            console.log('Default Network')
+            let defaultNet = {
+              "name": "TEST_NET",
+              "number": 168
+            }
+
+            this.$store.dispatch('setNetworkType', defaultNet)
+            console.log(this.$store.state.netType)
+          } else {
+            let customNetworkType = response.data
+            this.$store.dispatch('setNetworkType', customNetworkType)
+            console.log(this.$store.state.netType)
+          }
+        }
+      )
+      .catch(e => {
+        console.log('Default Network')
+        let defaultNet = {
+          "name": "TEST_NET",
+          "number": 168
+        }
+
+        this.$store.dispatch('setNetworkType', defaultNet)
+        console.log(this.$store.state.netType)
+      })
     },
 
     /**

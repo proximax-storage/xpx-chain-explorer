@@ -3,7 +3,7 @@
   <div class="recent animated fast fadeIn">
     <!-- <h1 class="supertitle">{{ nameLabel }}</h1> -->
     <!-- Iterated Elements (Mosaics) -->
-    <div class="guide animated fast fadeIn" v-show="arrayTransactions.length > 0">
+    <div class="guide animated fast fadeIn" v-show="arrayTransactions && arrayTransactions.length > 0">
 
       <div>
         <div class="title">Owner</div>
@@ -23,7 +23,7 @@
 
     </div>
 
-    <div class="element animated fast fadeIn" v-for="(item, index) in arrayTransactions" :key="index" v-show="arrayTransactions.length > 0">
+    <div class="element animated fast fadeIn" v-for="(item, index) in arrayTransactions" :key="index" v-show="arrayTransactions && arrayTransactions.length > 0">
 
       <div>
         <div class="title">Owner</div>
@@ -90,9 +90,11 @@ export default {
   methods: {
 
     analyzeElements () {
-      let items = this.arrayTransactions.map(el => el.name === undefined)
-      if (items[0] === false) {
-        this.importantLabel = 'Mosaic Alias Name'
+      if (this.arrayTransactions) {
+        let items = this.arrayTransactions.map(el => el.name === undefined)
+        if (items[0] === false) {
+          this.importantLabel = 'Mosaic Alias Name'
+        }
       }
     },
 

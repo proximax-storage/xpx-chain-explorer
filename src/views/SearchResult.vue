@@ -33,8 +33,8 @@
 
     <div class="address-list" v-if="type === 'Public Key' || type === 'Address'">
       <div class="bititle">
-        <h1 class="supertitle" :class="{ 'activeList': activeList === 'mos', 'inactiveList': activeList !== 'mos' }" @click="changeList('mos')">Other Mosaics</h1>
         <h1 class="supertitle" :class="{ 'activeList': activeList === 'nam', 'inactiveList': activeList !== 'nam' }" @click="changeList('nam')">Namespaces</h1>
+        <h1 class="supertitle" :class="{ 'activeList': activeList === 'mos', 'inactiveList': activeList !== 'mos' }" @click="changeList('mos')">Other Mosaics</h1>
       </div>
       <div v-if="mosaicLoader === true" style="padding: 10px 0px">
         <mdb-progress bgColor="cyan darken-3" indeterminate />
@@ -118,7 +118,7 @@ export default {
       // Public Key
       errorPublicKey: false,
       linkNamespaces: undefined,
-      activeList: 'mos',
+      activeList: 'nam',
 
       // Multisig
       multisigActive: false,
@@ -149,7 +149,8 @@ export default {
     if (this.$route.params.type === 'publicKey' || this.$route.params.type === 'address') {
       let tmp
       if (this.$route.params.id.length === 64) {
-        tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, NetworkType.TEST_NET)
+        console.log(this.$store.state.netType)
+        tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
         // console.log("TEMPORAL", tmp)
         this.getInfoAccountAndViewTransactions(tmp.address.address)
       } else {
@@ -176,6 +177,13 @@ export default {
         this.$proxProvider.getNamespacesInfo(tmp2.id).subscribe(
           response => {
             this.getMosaicInfo(new Id(response.alias.mosaicId).toHex())
+          },
+          error => {
+            this.$store.dispatch('updateErrorInfo', {
+              active: true,
+              message: 'Mosaic not found',
+              submessage: 'Check the information provided and try again'
+            })
           }
         )
       } else {
@@ -210,13 +218,13 @@ export default {
           // If your account information has tiles, look up your information and name to display them in the tile table
           if (resp.mosaics.length > 0) {
             let filteredTrans = resp.mosaics.filter(el => el.id.toHex().toUpperCase() !== xpx)
-            // console.log("Filtered Trans", filteredTrans)
             let tmpArr = []
 
             if (filteredTrans.length === 0) {
               this.mosaicLoader = false
-
             }
+
+            console.log("Filtered Trans", filteredTrans)
 
             filteredTrans.forEach((el, index) => {
               this.$proxProvider.getMosaic(el.id).subscribe(
@@ -237,8 +245,13 @@ export default {
                         this.showRecentMosaic = !this.showRecentMosaic
                         this.mosaicLoader = false
                       }
+                    },
+                    error => {
+                      console.log(error)
                     }
                   )
+                }, err => {
+                  console.warn("Error 1", err)
                 }
               )
             })
@@ -262,9 +275,8 @@ export default {
           let revisionArray = []
           if (response.data.length !== 0) {
             response.data.forEach(el => {
-
+              console.log("NAMESPACE ELEMENT", el.namespace)
               let tmpObj = {
-                id: new Id(el.namespace.level0).toHex(),
                 status: (el.meta.active) ? 'Active' : 'Inactive'
               }
 
@@ -276,15 +288,18 @@ export default {
                 requestArr.push(new Id(el.namespace.level2))
                 requestArr.push(new Id(el.namespace.level1))
                 requestArr.push(new Id(el.namespace.level0))
+                tmpObj.id = new Id(el.namespace.level2).toHex()
               } else if (el.namespace.level1 !== undefined) {
                 // console.log('Level 1')
                 currentLevel = 1
                 requestArr.push(new Id(el.namespace.level1))
                 requestArr.push(new Id(el.namespace.level0))
+                tmpObj.id = new Id(el.namespace.level1).toHex()
               } else if (el.namespace.level0 !== undefined) {
                 // console.log('Level 0')
                 currentLevel = 0
                 requestArr.push(new Id(el.namespace.level0))
+                tmpObj.id = new Id(el.namespace.level0).toHex()
               }
 
               // console.log(currentLevel)
