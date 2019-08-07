@@ -44,11 +44,11 @@
 
       <mosaics v-show="activeList === 'mos'" v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Others Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
 
-      <div class="emptyMosNam" v-show="activeList === 'mos'" v-if="mosaicLoader === false && blockMosaics === null">
+      <div class="emptyMosNam animated fast fadeInUp" v-show="activeList === 'mos'" v-if="mosaicLoader === false && blockMosaics === null">
         No mosaics yet
       </div>
 
-      <div class="emptyMosNam" v-show="activeList === 'nam'" v-if="mosaicLoader === false && linkNamespaces === undefined || linkNamespaces.lenght === 0">
+      <div class="emptyMosNam animated fast fadeInUp" v-show="activeList === 'nam'" v-if="mosaicLoader === false && linkNamespaces === undefined || linkNamespaces.lenght === 0">
         No namespaces yet
       </div>
     </div>
@@ -229,13 +229,17 @@ export default {
             filteredTrans.forEach((el, index) => {
               this.$proxProvider.getMosaic(el.id).subscribe(
                 mosaicResponse => {
+                  console.log(mosaicResponse, this.$store.state.currentBlock.height)
                   this.$proxProvider.getMosaicsName([el.id]).subscribe(
                     responseName => {
+                      console.log(mosaicResponse.height.compact() + mosaicResponse.duration.compact(), this.$store.state.currentBlock.height)
+                      console.log(((mosaicResponse.height.compact() + mosaicResponse.duration.compact()) >= this.$store.state.currentBlock.height))
                       let tmpObj = {
                         name: responseName[0].names[0],
                         id: el.id.toHex(),
                         owner: (resp.publicKey === mosaicResponse.owner.publicKey) ? 'true' : 'false',
-                        quantity: (mosaicResponse.divisibility === 0) ? el.amount.compact() : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility)
+                        quantity: (mosaicResponse.divisibility === 0) ? el.amount.compact() : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility),
+                        expired: (this.$store.state.currentBlock.height >= (mosaicResponse.height.compact() + mosaicResponse.duration.compact())) ? false : true
                       }
 
                       tmpArr.push(tmpObj)

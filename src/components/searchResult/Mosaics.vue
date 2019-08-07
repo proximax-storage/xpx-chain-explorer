@@ -13,12 +13,16 @@
         <div class="title">Mosaic Id</div>
       </div>
 
-      <div c>
+      <div>
         <div class="title">{{ importantLabel }}</div>
       </div>
 
-      <div >
+      <div>
         <div class="title">Quantity</div>
+      </div>
+
+      <div>
+        <div class="title">Active</div>
       </div>
 
     </div>
@@ -43,6 +47,11 @@
       <div>
         <div class="title">Quantity</div>
         <div class="value" v-html="item.quantity"></div>
+      </div>
+
+      <div>
+        <div class="title">Active</div>
+        <div class="value" :style="(item.expired === true) ? 'color: green; font-weight: bold' : 'color:red; font-weight: bold'">{{ item.expired }}</div>
       </div>
 
     </div>
@@ -101,17 +110,6 @@ export default {
     goToMosaic (mosaicId) {
       let routeData = this.$router.resolve({ path: `/searchResult/mosaicInfo/${mosaicId}` })
       window.open(routeData.href, '_blank')
-    }
-  },
-  computed: {
-    /**
-     * Final Array
-     *
-     * Observe the changes in the variable array data
-     */
-    finalArray () {
-      // console.log(this.arrayData)
-      return this.arrayData
     }
   }
 }
@@ -211,34 +209,6 @@ $radius: 5px
       width: 200px
       flex-grow: 1
       text-align: center
-    // & > .el-left
-    //   flex-grow: 1
-    //   display: flex
-    //   flex-flow: column nowrap
-    //   align-items: center
-    //   border-radius: $radius 0px 0px $radius
-    //   & > div
-    //     display: flex
-    //     flex-flow: row nowrap
-    //     align-items: center
-    //     & > figure
-    //       margin: 0px
-    //       padding: 5px
-    //     & > span
-    //       font-size: 15px
-    // & > .el-middle
-    //   flex-grow: 1
-    //   display: flex
-    //   flex-flow: column wrap
-    //   align-items: center
-    //   justify-content: center
-    // & > .el-right
-    //   flex-grow: 1
-    //   display: flex
-    //   flex-flow: column wrap
-    //   align-items: center
-    //   justify-content: center
-    //   border-radius: 0px $radius $radius 0px
 
 @media screen and (max-width: 570px)
   .guide
