@@ -236,11 +236,16 @@ export default {
       if (n !== '') {
         let filter = n.toLowerCase()
         this.mapList.forEach((el, index) => {
-          el.active = (el.name.toLowerCase().search(filter) === 0) ? true : false
-          el.active = (el.height.toString().toLowerCase().search(filter) === 0) ? true : false
-          el.active = (el.ip.toString().toLowerCase().search(filter) === 0) ? true : false
-          el.active = (el.location.toString().toLowerCase().search(filter) === 0) ? true : false
-          el.active = (el.version.toString().toLowerCase().search(filter) === 0) ? true : false
+          let activesArr = [false, false, false, false, false]
+
+          activesArr[0] = (el.name.toLowerCase().search(filter) === 0) ? true : false
+          activesArr[1] = (el.height.toString().toLowerCase().search(filter) === 0) ? true : false
+          activesArr[2] = (el.ip.toString().toLowerCase().search(filter) === 0) ? true : false
+          activesArr[3] = (el.location.toString().toLowerCase().search(filter) === 0) ? true : false
+          activesArr[4] = (el.version.toString().toLowerCase().search(filter) === 0) ? true : false
+
+          // console.log(activesArr, activesArr.some(el => el == true))
+          el.active = activesArr.some(el => el == true)
         })
       } else {
         this.mapList.forEach(el => {
