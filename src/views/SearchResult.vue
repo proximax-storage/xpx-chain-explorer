@@ -44,11 +44,11 @@
 
       <mosaics v-show="activeList === 'mos'" v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Others Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
 
-      <div class="emptyMosNam animated fast fadeInUp" v-show="activeList === 'mos'" v-if="mosaicLoader === false && blockMosaics === null">
+      <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'mos'" v-if="mosaicLoader === false && blockMosaics === null">
         No mosaics yet
       </div>
 
-      <div class="emptyMosNam animated fast fadeInUp" v-show="activeList === 'nam'" v-if="mosaicLoader === false && linkNamespaces === undefined || linkNamespaces.lenght === 0">
+      <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'nam'" v-if="mosaicLoader === false && linkNamespaces === undefined || linkNamespaces.lenght === 0">
         No namespaces yet
       </div>
     </div>
@@ -82,7 +82,7 @@ import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
-import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId } from 'tsjs-xpx-catapult-sdk'
+import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId } from 'tsjs-xpx-chain-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import { mdbProgress } from 'mdbvue'
 import axios from 'axios'
@@ -149,7 +149,6 @@ export default {
     if (this.$route.params.type === 'publicKey' || this.$route.params.type === 'address') {
       let tmp
       if (this.$route.params.id.length === 64) {
-        console.log(this.$store.state.netType)
         tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
         // console.log("TEMPORAL", tmp)
         this.getInfoAccountAndViewTransactions(tmp.address.address)
@@ -163,7 +162,6 @@ export default {
     } else if (this.$route.params.type === 'namespaceInfo') {
       if (isNaN(parseInt(this.$route.params.id, 16))) {
         let tmp = this.$route.params.id
-        console.log("Strind Search", tmp)
         let tmp2 = new NamespaceId(tmp)
         this.getNamespaceInfo(tmp2.id.toHex())
       } else {
@@ -173,7 +171,6 @@ export default {
       if (isNaN(parseInt(this.$route.params.id, 16))) {
         let tmp = this.$route.params.id
         let tmp2 = new NamespaceId(tmp)
-        console.log(tmp2.id.toHex())
         this.$proxProvider.getNamespacesInfo(tmp2.id).subscribe(
           response => {
             this.getMosaicInfo(new Id(response.alias.mosaicId).toHex())
@@ -362,7 +359,7 @@ export default {
      * @param { String } block
      */
     getBlockByHeight (block) {
-      this.$proxProvider.blockchainHttp.getBlockByHeight(parseInt(block)).subscribe(
+      this.$proxProvider.blockHttp.getBlockByHeight(parseInt(block)).subscribe(
         next => {
         next.date = this.$utils.fmtTime(new Date(next.timestamp.compact() + Deadline.timestampNemesisBlock * 1000))
         next.difficulty = (next.difficulty.compact()/Math.pow(10, 14)*100).toFixed(2) + "%"
@@ -379,7 +376,7 @@ export default {
         this.showRecentTransaction = (this.param.txes > 0) ? true : false
         this.showComponent()
         this.showInfo = true
-        this.$proxProvider.blockchainHttp.getBlockTransactions(parseInt(block)).subscribe(
+        this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block)).subscribe(
           blockTransactions => {
             this.blockTransactions = blockTransactions
             for (const index in this.blockTransactions) {

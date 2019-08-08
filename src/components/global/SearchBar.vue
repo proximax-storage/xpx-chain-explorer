@@ -123,6 +123,7 @@ export default {
      */
     performSearch () {
       if (this.typeSearch === 'basic' || this.typeSearch === 'transactionHash' || this.typeSearch === 'namespaceInfo' || this.typeSearch === 'mosaicInfo') {
+        console.log('Click', this.typeSearch, this.valueSearch)
         if (this.valueSearch !== '') {
           if (this.bannerActive) {
             this.bannerActive = false

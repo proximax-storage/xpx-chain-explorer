@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { Id } from 'tsjs-xpx-catapult-sdk'
+import { Id } from 'tsjs-xpx-chain-sdk'
 
 export default {
   name: 'NamespaceInfo',
