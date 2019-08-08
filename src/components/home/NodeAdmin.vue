@@ -151,52 +151,63 @@ export default {
           this.nodeMessage = ''
           axios.get(`${this.newNodeValue}/node/info`).then(
             response => {
+
               console.log(response.data.networkIdentifier, this.$store.state.netType.number)
-              if (response.data.networkIdentifier === this.$store.state.netType.number) {
-                this.$store.dispatch('pushNewNode', this.newNodeValue)
-                if (this.$storage.get('customNodes') === null || this.$storage.get('customNodes') === undefined) {
-                  this.$storage.set('customNodes', [this.newNodeValue])
+
+
+              if (this.$store.state.nodes.includes(this.newNodeValue) === false) {
+                console.log("This node does not exist in the current node list")
+                if (response.data.networkIdentifier === this.$store.state.netType.number) {
+                  this.$store.dispatch('pushNewNode', this.newNodeValue)
+                  if (this.$storage.get('customNodes') === null || this.$storage.get('customNodes') === undefined) {
+                    this.$storage.set('customNodes', [this.newNodeValue])
+                  } else {
+                    let tmpCustomNodes = JSON.parse(this.$storage.get('customNodes'))
+                    tmpCustomNodes.push(this.newNodeValue)
+                    this.$storage.set('customNodes', JSON.stringify(tmpCustomNodes))
+                  }
+                  this.nodeLoader = false
+                  this.nodeMessage = 'Node Accepted - Available from the list of nodes'
+
+                  let tmpObj = {
+                    name: response.data.friendlyName,
+                    ip: response.data.host,
+                    version: response.data.version,
+                    location: '',
+                    lat: 0,
+                    lon: 0,
+                    height: null,
+                    status: "Online",
+                    active: false,
+                    visible: true,
+                    urlNode: this.newNodeValue,
+                    icon: 'nodes.svg'
+                  }
+
+                  let mapCustomNodes = this.$storage.get('mapCustomNodes')
+                  console.log("mapCustomNodes", mapCustomNodes)
+                  console.log(tmpObj)
+
+                  if (mapCustomNodes !== null) {
+                    mapCustomNodes = JSON.parse(mapCustomNodes)
+                    mapCustomNodes.push(tmpObj)
+                    mapCustomNodes = JSON.stringify(mapCustomNodes)
+                    this.$storage.set('mapCustomNodes', mapCustomNodes)
+                  } else {
+                    let tmpArr = [tmpObj]
+                    let strData = JSON.stringify(tmpArr)
+                    this.$storage.set('mapCustomNodes', strData)
+                  }
                 } else {
-                  let tmpCustomNodes = JSON.parse(this.$storage.get('customNodes'))
-                  tmpCustomNodes.push(this.newNodeValue)
-                  this.$storage.set('customNodes', JSON.stringify(tmpCustomNodes))
-                }
-                this.nodeLoader = false
-                this.nodeMessage = 'Node Accepted - Available from the list of nodes'
-
-                let tmpObj = {
-                  name: response.data.friendlyName,
-                  ip: response.data.host,
-                  version: response.data.version,
-                  location: '',
-                  lat: 0,
-                  lon: 0,
-                  height: null,
-                  status: "Online",
-                  active: false,
-                  visible: true,
-                  urlNode: this.newNodeValue,
-                  icon: 'nodes.svg'
-                }
-
-                let mapCustomNodes = this.$storage.get('mapCustomNodes')
-                console.log("mapCustomNodes", mapCustomNodes)
-                console.log(tmpObj)
-
-                if (mapCustomNodes !== null) {
-                  mapCustomNodes = JSON.parse(mapCustomNodes)
-                  mapCustomNodes.push(tmpObj)
-                  mapCustomNodes = JSON.stringify(mapCustomNodes)
-                  this.$storage.set('mapCustomNodes', mapCustomNodes)
-                } else {
-                  let tmpArr = [tmpObj]
-                  let strData = JSON.stringify(tmpArr)
-                  this.$storage.set('mapCustomNodes', strData)
+                  this.nodeLoader = false
+                  this.nodeMessage = 'Node not Accepted - Incompatible Network Type'
                 }
               } else {
                 this.nodeLoader = false
-                this.nodeMessage = 'Node not Accepted - Incompatible Network Type'
+                this.nodeMessage = 'Node not Accepted - This node is already in the list'
               }
+
+
             }
           )
           .catch(err => {
