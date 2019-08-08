@@ -82,7 +82,7 @@ import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
-import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId } from 'tsjs-xpx-chain-sdk'
+import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, MosaicHttp } from 'tsjs-xpx-chain-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import { mdbProgress } from 'mdbvue'
 import axios from 'axios'
@@ -224,10 +224,12 @@ export default {
             console.log("Filtered Trans", filteredTrans)
 
             filteredTrans.forEach((el, index) => {
+              console.log('LLEGA AQUI')
               this.$proxProvider.getMosaic(el.id).subscribe(
                 mosaicResponse => {
-                  console.log(mosaicResponse, this.$store.state.currentBlock.height)
-                  this.$proxProvider.getMosaicsName([el.id]).subscribe(
+                  console.log("Elemento", mosaicResponse)
+                  console.log(mosaicResponse.mosaicId.toHex())
+                  this.$proxProvider.mosaicHttp.getMosaicsNames([mosaicResponse.mosaicId]).subscribe(
                     responseName => {
                       console.log(mosaicResponse.height.compact() + mosaicResponse.duration.compact(), this.$store.state.currentBlock.height)
                       console.log(((mosaicResponse.height.compact() + mosaicResponse.duration.compact()) >= this.$store.state.currentBlock.height))
@@ -248,7 +250,7 @@ export default {
                       }
                     },
                     error => {
-                      console.log(error)
+                      console.warn(error)
                     }
                   )
                 }, err => {
