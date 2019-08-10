@@ -152,7 +152,7 @@ export default {
           window.open(routeData.href, '_blank')
         } else {
           this.bannerActive = true
-          this.bannerMessage = 'The value of the search can not be empty'
+          this.bannerMessage = 'The search field cannot be empty'
         }
       } else if (this.typeSearch === 'namespaceInfo' || this.typeSearch === 'mosaicInfo') {
         if (this.typeSearch === 'namespaceInfo' && this.valueSearch === '') {
