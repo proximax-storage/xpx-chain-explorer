@@ -122,7 +122,9 @@ export default {
      * taking the type of search and the value entered by the user
      */
     performSearch () {
-      if (this.typeSearch === 'basic' || this.typeSearch === 'transactionHash' || this.typeSearch === 'namespaceInfo' || this.typeSearch === 'mosaicInfo') {
+      console.log(this.typeSearch)
+      console.log(this.valueSearch)
+      if (this.typeSearch === 'basic' || this.typeSearch === 'transactionHash') {
         if (this.valueSearch !== '') {
           if (this.bannerActive) {
             this.bannerActive = false
@@ -151,6 +153,17 @@ export default {
         } else {
           this.bannerActive = true
           this.bannerMessage = 'The value of the search can not be empty'
+        }
+      } else if (this.typeSearch === 'namespaceInfo' || this.typeSearch === 'mosaicInfo') {
+        if (this.typeSearch === 'namespaceInfo' && this.valueSearch === '') {
+          let routeData = this.$router.resolve({ path: `/list/namespaces` })
+          window.open(routeData.href, '_blank')
+        } else if (this.typeSearch === 'mosaicInfo' && this.valueSearch === '') {
+          let routeData = this.$router.resolve({ path: `/list/mosaics` })
+          window.open(routeData.href, '_blank')
+        } else {
+          let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
+          window.open(routeData.href, '_blank')
         }
       }
     }

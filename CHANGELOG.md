@@ -29,3 +29,8 @@
   * Bug fixes in transaction component - Aggregate bonded and Aggregate Complete details.
   * Correction of the calculation of the End Height in namespaces with BigInt data.
   * Bug fixes in detail in transaction type lock funds.
+  * Change in the design of the search bar
+
+## Release v0.2.3
+  * Added views of namespaces and mosaic lists
+  * minor bug fixes

@@ -16,7 +16,7 @@
     <!-- Input Filter Container -->
     <div class="animated fast fadeIn">
       <div class="filter-input">
-        <div>
+        <!-- <div>
           <mdb-dropdown style="width: 100%; margin-top:10px">
             <mdb-dropdown-toggle slot="toggle" color="black-text" style="width: 100%; font-weight:bold; border: 2px solid #2BA1B9; color: black; border-radius: 20px">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
             <mdb-dropdown-menu>
@@ -25,9 +25,9 @@
               </mdb-dropdown-item>
             </mdb-dropdown-menu>
           </mdb-dropdown>
-        </div>
+        </div> -->
         <div>
-          <mdb-input label="Filter Server" v-model="filter"/>
+          <mdb-input type="search" label="Filter Server" v-model="filter"/>
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
 
     <!-- Map Options Container -->
     <div class="control">
-      <div class="cardServe" v-for="(item, index) in mapList" :key="index" @click="activate(item)" :style="(item.visible) ? 'display: flex' : 'display: none'">
+      <div class="cardServe" v-for="(item, index) in mapList" :key="index" @click="activate(item)" :style="(item.visible) ? 'display: flex' : 'display: none'" v-show="item.active">
         <div>
           <div class="title">Owner</div>
           <div class="icon-cont"><img :src="require(`@/assets/${item.icon}`)" alt="icon" width="21"></div>
@@ -75,6 +75,7 @@
 <script>
 import { mdbIcon, mdbInput, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle } from 'mdbvue'
 import axios from 'axios'
+import { filter } from 'minimatch';
 
 export default {
   name: 'Map',
@@ -222,6 +223,9 @@ export default {
     verifyMapList () {
       if (this.mapList.some(el => el.lat > 0) === true) {
         this.loadFirstMap()
+        this.mapList.forEach(el => {
+          el.active = true
+        })
       }
     }
   },
@@ -229,22 +233,24 @@ export default {
   // WATCHERS
   watch: {
     filter (n, o) {
-      this.mapList.forEach(el => {
-        if (this.filterExe !== '') {
-          el.visible = false
-          let tmp = el[this.filterExe].toLowerCase().toString()
-          // console.log(tmp, el[this.filterExe].toLowerCase().toString())
-          // console.log(tmp.indexOf(this.filter.toLowerCase()) !== -1)
-          if (tmp.indexOf(this.filter.toLowerCase()) !== -1) {
-            el.visible = true
-          }
-        }
-      })
+      if (n !== '') {
+        let filter = n.toLowerCase()
+        this.mapList.forEach((el, index) => {
+          let activesArr = [false, false, false, false, false]
 
-      if (this.filterExe === '') {
+          activesArr[0] = (el.name.toLowerCase().search(filter) === 0) ? true : false
+          activesArr[1] = (el.height.toString().toLowerCase().search(filter) === 0) ? true : false
+          activesArr[2] = (el.ip.toString().toLowerCase().search(filter) === 0) ? true : false
+          activesArr[3] = (el.location.toString().toLowerCase().search(filter) === 0) ? true : false
+          activesArr[4] = (el.version.toString().toLowerCase().search(filter) === 0) ? true : false
+
+          // console.log(activesArr, activesArr.some(el => el == true))
+          el.active = activesArr.some(el => el == true)
+        })
+      } else {
         this.mapList.forEach(el => {
-          el.visible = true
-        });
+          el.active = true
+        })
       }
     }
   }

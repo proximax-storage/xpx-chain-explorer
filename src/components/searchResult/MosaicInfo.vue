@@ -39,6 +39,7 @@
           <div class="value">{{ detail.divisibility }}</div>
         </div>
       </div>
+
       <div>
         <div class="up">
           <div class="title">Height</div>
@@ -47,6 +48,22 @@
         <div class="down">
           <div class="title">Revision</div>
           <div class="value">{{ detail.revision }}</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="up">
+          <div class="title">Active</div>
+          <div class="value" style="color: orange; font-weight: bold" v-if="$store.state.currentBlock.height === 'Loading'">
+            Loading
+          </div>
+          <div class="value" :style="($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? 'color: red' : 'color: green'" v-else>
+            {{ ($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? false : true }}
+          </div>
+        </div>
+        <div class="down">
+          <div class="title">Expires</div>
+          <div class="value">{{ `Block: ${detail.height.compact() + detail.duration.compact()}` }}</div>
         </div>
       </div>
     </div>
@@ -192,9 +209,13 @@ $radius: 20px
     & > div
       margin: 0px 5px
       &:first-child
-        flex-grow: 3
+        flex-grow: 1
         margin: 0px
         margin-right: 5px
+      &:nth-child(2n)
+        flex-grow: 1
+        margin: 0px
+        margin: 0px 5px
       &:last-child
         flex-grow: 1
         margin: 0px
