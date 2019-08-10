@@ -33,8 +33,12 @@
 
     <div class="address-list" v-if="type === 'Public Key' || type === 'Address'">
       <div class="bititle">
-        <h1 class="supertitle" :class="{ 'activeList': activeList === 'nam', 'inactiveList': activeList !== 'nam' }" @click="changeList('nam')">Namespaces</h1>
-        <h1 class="supertitle" :class="{ 'activeList': activeList === 'mos', 'inactiveList': activeList !== 'mos' }" @click="changeList('mos')">Other Mosaics</h1>
+        <h1 class="supertitle" :class="{ 'activeList': activeList === 'nam', 'inactiveList': activeList !== 'nam' }" @click="changeList('nam')">
+          Namespaces
+        </h1>
+        <h1 class="supertitle" :class="{ 'activeList': activeList === 'mos', 'inactiveList': activeList !== 'mos' }" @click="changeList('mos')">
+          Other Mosaics
+        </h1>
       </div>
       <div v-if="mosaicLoader === true" style="padding: 10px 0px">
         <mdb-progress bgColor="cyan darken-3" indeterminate />
@@ -44,11 +48,11 @@
 
       <mosaics v-show="activeList === 'mos'" v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Others Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
 
-      <div class="emptyMosNam animated fast fadeInUp" v-show="activeList === 'mos'" v-if="mosaicLoader === false && blockMosaics === null">
+      <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'mos'" v-if="mosaicLoader === false && blockMosaics === null">
         No mosaics yet
       </div>
 
-      <div class="emptyMosNam animated fast fadeInUp" v-show="activeList === 'nam'" v-if="mosaicLoader === false && linkNamespaces === undefined || linkNamespaces.lenght === 0">
+      <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'nam'" v-if="linkNamespaces === undefined || linkNamespaces.length === 0">
         No namespaces yet
       </div>
     </div>
@@ -229,7 +233,7 @@ export default {
             filteredTrans.forEach((el, index) => {
               this.$proxProvider.getMosaic(el.id).subscribe(
                 mosaicResponse => {
-                  console.log(mosaicResponse, this.$store.state.currentBlock.height)
+                  // console.log(mosaicResponse, this.$store.state.currentBlock.height)
                   this.$proxProvider.getMosaicsName([el.id]).subscribe(
                     responseName => {
                       console.log(mosaicResponse.height.compact() + mosaicResponse.duration.compact(), this.$store.state.currentBlock.height)
@@ -324,7 +328,12 @@ export default {
               )
             })
             this.linkNamespaces = tmpArr
+          } else {
+            this.linkNamespaces = []
           }
+        })
+        .catch(err => {
+          this.linkNamespaces = []
         })
 
       axios.get(`${this.$store.state.currentNode}/account/${addr.address}/multisig`)

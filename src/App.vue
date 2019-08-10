@@ -84,32 +84,26 @@ export default {
     loadNetwork () {
       axios.get('./config/networkType.json').then(
         response => {
-          console.log(response.data)
-
           if (response.data.number === 0 || response.data.number === '') {
-            console.log('Default Network')
             let defaultNet = {
               "name": "TEST_NET",
               "number": 168
             }
 
             this.$store.dispatch('setNetworkType', defaultNet)
-            console.log(this.$store.state.netType)
+            console.log(this.$store.state.netType.name, this.$store.state.netType.number)
           } else {
             let customNetworkType = response.data
             this.$store.dispatch('setNetworkType', customNetworkType)
-            console.log(this.$store.state.netType)
+            console.log(this.$store.state.netType.name, this.$store.state.netType.number)
           }
         }
       )
       .catch(e => {
-        console.log('Default Network')
         let defaultNet = {
           "name": "TEST_NET",
           "number": 168
         }
-
-        this.$store.dispatch('setNetworkType', defaultNet)
         console.log(this.$store.state.netType)
       })
     },

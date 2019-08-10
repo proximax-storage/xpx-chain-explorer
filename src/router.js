@@ -34,6 +34,11 @@ export default new Router({
       component: load('SearchResult')
     },
     {
+      path: '/list/:category',
+      name: 'list',
+      component: load('List')
+    },
+    {
       path: '*',
       redirect: '/'
     }

@@ -264,6 +264,17 @@ export default class proximaxProvider {
   }
 
   /**
+   * Get Namespaces From Account
+   *
+   * @param account
+   * @returns {Observable} getNamespaces
+   * @memberof proximaxProvider
+   */
+  getNamespacesFromAccount(account) {
+    return this.namespaceHttp.getNamespacesFromAccount(account)
+  }
+
+  /**
    * Get Namespaces Name From Hexadecimal
    *
    * @param id
