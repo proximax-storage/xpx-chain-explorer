@@ -117,7 +117,7 @@
         <!-- End Iterated Element -->
 
         <!-- Mosaic Properties Area -->
-        <div class="layout-plus-children" style="background: #f4f4f4; box-shadow: 0px 0px 0px 1px #2d819b" v-if="detail.mosaicProperties">
+        <div class="layout-plus-children" style="background: #f4f4f4; box-shadow: 0px 0px 0px 1px #2BA1B9" v-if="detail.mosaicProperties">
           <!-- Name -->
           <div class="title">Mosaic Properties</div>
 
@@ -558,7 +558,7 @@ export default {
 $radius: 20px
 
 .link:hover
-  color: #2d819b
+  color: #2BA1B9
   text-decoration: underline
   cursor: pointer
 
@@ -608,7 +608,7 @@ $radius: 20px
   font-size: 17px
   padding: 0px 0px 5px 0px
   width: 100%
-  color: #2d8e9b
+  color: #2BA1B9
 
 .up
   background: #f4f4f4
@@ -698,7 +698,7 @@ $radius: 20px
       flex-flow: column wrap
 
   .link
-    color: #2d819b
+    color: #2BA1B9
     text-decoration: underline
     cursor: pointer
 

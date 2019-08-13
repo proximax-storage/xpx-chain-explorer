@@ -37,3 +37,6 @@
 
 ## Release v0.2.4
   * Minor bug Fixes
+
+## Release v0.2.5
+  * Minor bug Fixes

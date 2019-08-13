@@ -5,22 +5,22 @@
     <h1 class="supertitle">Cosignatures</h1>
 
     <!-- Iterated Elements -->
-    <div>
+    <div class="el-cont">
       <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 20px">
 
         <div>
-          <div class="title">Signature</div>
-          <div class="value">{{ item.signature }}</div>
+          <div class="title centerAlign">Signature</div>
+          <div class="value centerAlign">{{ item.signature }}</div>
         </div>
 
         <div>
-          <div class="title">Signer</div>
-          <div class="value">Address:
-            <span class="link" @click="goToAddress(item.signer.address.pretty())">{{ item.signer.address.pretty() }}</span>
-          </div>
-          <div class="value">Public Key:
-            <span class="link" @click="goToAddress(item.signer.publicKey)">{{ item.signer.publicKey }}</span>
-          </div>
+          <div class="title centerAlign">Signer Address</div>
+          <div class="value link centerAlign" @click="goToAddress(item.signer.address.pretty())">{{ item.signer.address.pretty() }}</div>
+        </div>
+
+        <div>
+          <div class="title centerAlign">Signer Public Key</div>
+          <div class="value link centerAlign" @click="goToAddress(item.signer.publicKey)">{{ item.signer.publicKey }}</div>
         </div>
 
       </div>
@@ -60,6 +60,9 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.el-cont
+  background: transparent
+
 .supertitle
   margin: 0px
   font-size: 17px
@@ -72,7 +75,8 @@ export default {
   padding: 10px
   margin-bottom: 10px
   font-size: 10px
-  borde-radius: 20px
+  borde-radius: 20px !important
+  background: #f4f4f4
   &:last-child
     margin: 0px
   & > div
@@ -90,8 +94,11 @@ export default {
   word-break: break-all
   color: black
 
+.centerAlign
+  text-align: center
+
 .link:hover
-  color: #2d8e9b
+  color: #2BA1B9
   text-decoration: underline
   cursor: pointer
 

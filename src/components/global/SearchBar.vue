@@ -98,13 +98,13 @@ export default {
         this.label = 'Address / Public Key / Block Height'
       } else if (item.name === 'Hash') {
         this.typeSearch = 'transactionHash'
-        this.label = 'Hash / Id Tx'
+        this.label = 'Hash / Tx Id'
       } else if (item.name === 'Namespace') {
         this.typeSearch = 'namespaceInfo'
         this.label = 'Namespace / Sub-namespace'
       } else if (item.name === 'Mosaic') {
         this.typeSearch = 'mosaicInfo'
-        this.label = 'MosaicId / Alias (e.g. prx.xpx)'
+        this.label = 'Mosaic Id / Alias (e.g. prx.xpx)'
       }
 
       this.searchList.forEach(el => {
