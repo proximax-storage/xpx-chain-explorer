@@ -7,8 +7,6 @@
         "http://bctestnet5.xpxsirius.io:3000",
         "http://bctestnet6.xpxsirius.io:3000",
         "http://bctestnet1-cow.xpxsirius.io:3000",
-        "http://bctestnet2-cow.xpxsirius.io:3000",
-        "https://bcstage1.xpxsirius.io",
-        "https://bcstage2.xpxsirius.io"
+        "http://bctestnet2-cow.xpxsirius.io:3000"
     ]
 }
