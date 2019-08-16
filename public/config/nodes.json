@@ -1,10 +1,10 @@
 {
   "nodes": [
-    "http://13.229.183.224:3000",
-    "http://54.179.150.234:3000",
-    "http://54.191.26.33:3000",
-    "http://34.219.220.187:3000",
-    "http://3.9.114.203:3000",
-    "http://3.8.198.129:3000"
+    "http://bctestnet1.xpxsirius.io:3000",
+    "http://bctestnet2.xpxsirius.io:3000",
+    "http://bctestnet3.xpxsirius.io:3000",
+    "http://bctestnet4.xpxsirius.io:3000",
+    "http://bctestnet5.xpxsirius.io:3000",
+    "http://bctestnet6.xpxsirius.io:3000"
   ]
 }

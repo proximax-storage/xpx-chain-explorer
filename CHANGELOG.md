@@ -8,7 +8,7 @@
 
 ## Release v0.1.2
   * User interface changes
-  * Bug fixes
+  * Bug Fixes
 
 ## Release v0.2.0
   * Added "Namespace Component Info"
@@ -32,3 +32,11 @@
   * Change in the design of the search bar
 
 ## Release v0.2.3
+  * Added views of namespaces and mosaic lists
+  * Minor bug fixes
+
+## Release v0.2.4
+  * Minor bug Fixes
+
+## Release v0.2.5
+  * Minor bug Fixes

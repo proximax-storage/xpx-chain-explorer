@@ -98,13 +98,13 @@ export default {
         this.label = 'Address / Public Key / Block Height'
       } else if (item.name === 'Hash') {
         this.typeSearch = 'transactionHash'
-        this.label = 'Hash / Id Tx'
+        this.label = 'Hash / Tx Id'
       } else if (item.name === 'Namespace') {
         this.typeSearch = 'namespaceInfo'
         this.label = 'Namespace / Sub-namespace'
       } else if (item.name === 'Mosaic') {
         this.typeSearch = 'mosaicInfo'
-        this.label = 'MosaicId / Alias (e.g. prx.xpx)'
+        this.label = 'Mosaic Id / Alias (e.g. prx.xpx)'
       }
 
       this.searchList.forEach(el => {
@@ -122,8 +122,9 @@ export default {
      * taking the type of search and the value entered by the user
      */
     performSearch () {
-      if (this.typeSearch === 'basic' || this.typeSearch === 'transactionHash' || this.typeSearch === 'namespaceInfo' || this.typeSearch === 'mosaicInfo') {
-        console.log('Click', this.typeSearch, this.valueSearch)
+      console.log(this.typeSearch)
+      console.log(this.valueSearch)
+      if (this.typeSearch === 'basic' || this.typeSearch === 'transactionHash') {
         if (this.valueSearch !== '') {
           if (this.bannerActive) {
             this.bannerActive = false
@@ -151,7 +152,18 @@ export default {
           window.open(routeData.href, '_blank')
         } else {
           this.bannerActive = true
-          this.bannerMessage = 'The value of the search can not be empty'
+          this.bannerMessage = 'The search field cannot be empty'
+        }
+      } else if (this.typeSearch === 'namespaceInfo' || this.typeSearch === 'mosaicInfo') {
+        if (this.typeSearch === 'namespaceInfo' && this.valueSearch === '') {
+          let routeData = this.$router.resolve({ path: `/list/namespaces` })
+          window.open(routeData.href, '_blank')
+        } else if (this.typeSearch === 'mosaicInfo' && this.valueSearch === '') {
+          let routeData = this.$router.resolve({ path: `/list/mosaics` })
+          window.open(routeData.href, '_blank')
+        } else {
+          let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
+          window.open(routeData.href, '_blank')
         }
       }
     }

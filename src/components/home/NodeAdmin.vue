@@ -153,8 +153,6 @@ export default {
             response => {
 
               console.log(response.data.networkIdentifier, this.$store.state.netType.number)
-
-
               if (this.$store.state.nodes.includes(this.newNodeValue) === false) {
                 console.log("This node does not exist in the current node list")
                 if (response.data.networkIdentifier === this.$store.state.netType.number) {
@@ -168,7 +166,6 @@ export default {
                   }
                   this.nodeLoader = false
                   this.nodeMessage = 'Node Accepted - Available from the list of nodes'
-
                   let tmpObj = {
                     name: response.data.friendlyName,
                     ip: response.data.host,
@@ -183,11 +180,9 @@ export default {
                     urlNode: this.newNodeValue,
                     icon: 'nodes.svg'
                   }
-
                   let mapCustomNodes = this.$storage.get('mapCustomNodes')
                   console.log("mapCustomNodes", mapCustomNodes)
                   console.log(tmpObj)
-
                   if (mapCustomNodes !== null) {
                     mapCustomNodes = JSON.parse(mapCustomNodes)
                     mapCustomNodes.push(tmpObj)

@@ -61,6 +61,11 @@ export default {
   },
   mounted () {
     console.log(this.detail)
+    this.detail.mosaics.forEach((el, index) => {
+      console.log(`el${index+1}`, el)
+      console.log(el.id.toHex())
+      console.log(el.amount.compact())
+    })
   },
   computed: {
     /**

@@ -198,6 +198,10 @@ export default class proximaxProvider {
     return this.blocksHeight$
   }
 
+  getBlockTransactions(block) {
+    return this.blockHttp.getBlockTransactions(block, 100)
+  }
+
 
   // /**
   //  * Set blocks height local
@@ -266,6 +270,17 @@ export default class proximaxProvider {
   }
 
   /**
+   * Get Namespaces From Account
+   *
+   * @param account
+   * @returns {Observable} getNamespaces
+   * @memberof proximaxProvider
+   */
+  getNamespacesFromAccount(account) {
+    return this.namespaceHttp.getNamespacesFromAccount(account)
+  }
+
+  /**
    * Get Namespaces Name From Hexadecimal
    *
    * @param id
@@ -274,7 +289,7 @@ export default class proximaxProvider {
    */
   getNamespacesNameFromHex(id) {
     const idFromHex = Id.fromHex(id)
-    const namespaceIds = this.getNameSpaceId([idFromHex.lower, idFromHex.higher])
+    const namespaceIds = new Id([idFromHex.lower, idFromHex.higher])
     return this.getNamespacesName([namespaceIds])
   }
 

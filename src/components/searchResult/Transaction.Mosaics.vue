@@ -1,23 +1,23 @@
 <template>
-  <div class="mosaics animated faster fadeIn" v-if="showFinalData !== null && showFinalData.length > 0">
+  <div class="mosaics animated faster fadeIn" v-if="params !== null && params.length > 0">
     <h1 class="supertitle center-text">Mosaics In Transfer</h1>
 
     <div>
-      <div class="element" v-for="(item, index) in showFinalData" :key="index" v-show="mosaicAliasName[index] !== 'prx.xpx'">
+      <div class="element" v-for="(item, index) in params" :key="index">
 
-        <div class="animated faster fadeInDown">
-          <div class="title">{{ titleMosaic }}</div>
-          <div class="value link" @click="(titleMosaic === 'Mosaic Id') ? goToMosaic(item.name) : goToNamespace(item.name)">{{ item.name }}</div>
+        <div class="animated faster fadeIn">
+          <div class="title">{{ (item.category === 'mosaic') ? 'Mosaic ID' : 'Mosaic Alias ID' }}</div>
+          <div class="value link" @click="(item.category === 'mosaic') ? goToMosaic(item.id) : goToNamespace(item.id)">{{ item.id }}</div>
         </div>
 
-        <div v-if="titleMosaic == 'Mosaic Alias ID'" class="animated faster fadeInDown">
+        <div v-if="item.category !== 'mosaic'" class="animated faster fadeInDown">
           <div class="title">Mosaic Alias Name</div>
-          <div class="valueLower">{{ mosaicAliasName[index] }}</div>
+          <div class="valueLower">{{ item.name }}</div>
         </div>
 
         <div class="animated faster fadeInDown">
-          <div class="title" >Mosaic {{ amountQuantity }}</div>
-          <div class="value" v-html="arrayAmount[index]"></div>
+          <div class="title" >Mosaic Quantity</div>
+          <div class="value" v-html="item.amount"></div>
         </div>
 
       </div>
@@ -121,17 +121,6 @@ export default {
           }
         })
       }
-    }
-  },
-
-  computed: {
-    showFinalData () {
-      return this.finalData
-    }
-  },
-  watch: {
-    params (nv, ov) {
-      this.organizeData()
     }
   }
 }

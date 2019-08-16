@@ -18,7 +18,7 @@
       </div>
 
       <!-- Iterated Element of Block -->
-      <div class="element animated faster fadeInDown" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #f4f4f4' : 'background: white'">
+      <div class="element animated faster fadeIn" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #f4f4f4' : 'background: white'">
 
         <div>
           <span class="title">Height</span>

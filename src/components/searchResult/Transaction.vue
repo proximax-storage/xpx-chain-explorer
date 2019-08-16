@@ -117,7 +117,7 @@
         <!-- End Iterated Element -->
 
         <!-- Mosaic Properties Area -->
-        <div class="layout-plus-children" style="background: #f4f4f4; box-shadow: 0px 0px 0px 1px #2d819b" v-if="detail.mosaicProperties">
+        <div class="layout-plus-children" style="background: #f4f4f4; box-shadow: 0px 0px 0px 1px #2BA1B9" v-if="detail.mosaicProperties">
           <!-- Name -->
           <div class="title">Mosaic Properties</div>
 
@@ -189,6 +189,7 @@ import InnerTransactions from '@/components/searchResult/Transaction.InnerTransa
 import Cosignatures from '@/components/searchResult/Transaction.Cosignatures'
 import Modifications from '@/components/searchResult/Transaction.Modifications.vue'
 import MosaicsInTransfer from '@/components/searchResult/Transaction.Mosaics.vue'
+import { Id } from 'tsjs-xpx-chain-sdk'
 
 export default {
   name: 'Transaction',
@@ -209,6 +210,7 @@ export default {
       mosaicsOfTransfer: null,
       xpx: proximaxProvider.mosaicXpx(),
       calculatedAmount: null,
+      xpx: '0dc67fbe1cad29e3'
     }
   },
 
@@ -269,6 +271,28 @@ export default {
       return result
     },
 
+    verifyId (hexId) {
+      console.log(hexId, this.xpx)
+      let status
+      if (hexId === this.xpx || hexId === this.xpx.toUpperCase()) {
+        status = true
+      } else {
+        status = false
+      }
+
+      return status
+    },
+
+    setAmount(amount, divisibility) {
+      let htmlAmount
+      if (divisibility === 6) {
+        htmlAmount = this.$utils.fmtAmountValue(amount)
+      } else {
+        htmlAmount = this.$utils.fmtDivisibility(amount, divisibility)
+      }
+      return htmlAmount
+    },
+
     /**
      * Verify Transaction Details
      *
@@ -288,7 +312,82 @@ export default {
           }
 
           if (this.detail.mosaics && this.detail.mosaics.length > 0) {
-            this.mosaicsOfTransfer = this.detail.mosaics
+            let mosaicArr = []
+            console.log("Transfer Transaction Detail", this.detail.mosaics)
+            this.detail.mosaics.forEach((el, index) => {
+              let tmpObj = {
+                id: el.id.toHex(),
+                amount: el.amount.compact(),
+                category: 'mosaic'
+              }
+
+              console.log("Temporal Obj", tmpObj)
+              this.$proxProvider.getMosaic(el.id).subscribe(
+                mosaic => {
+                  console.log(mosaic)
+                  tmpObj.amount = this.setAmount(tmpObj.amount, mosaic.divisibility)
+
+                  if (this.verifyId(el.id.toHex()) === true) {
+                    this.calculatedAmount = this.setAmount(el.amount.compact(), 6)
+                  } else {
+                    this.$proxProvider.getMosaicsName([el.id]).subscribe(
+                      responseName => {
+                        tmpObj.name = responseName[0].names[0].name
+
+                        console.log(tmpObj)
+                        mosaicArr.push(tmpObj)
+                        console.log(mosaicArr)
+
+                        if (index + 1 === this.detail.mosaics.length) {
+                          this.mosaicsOfTransfer = mosaicArr
+                        }
+                      }
+                    )
+                  }
+                },
+                error => {
+                  this.$proxProvider.getNamespacesInfo(el.id).subscribe(
+                    namespace => {
+                      if (this.verifyId(new Id(namespace.alias.mosaicId).toHex()) === true) {
+                        this.calculatedAmount = this.setAmount(el.amount.compact(), 6)
+                      } else {
+                        this.$proxProvider.getMosaic(new Id(namespace.alias.mosaicId)).subscribe(
+                          mosaicAlias => {
+                            this.$proxProvider.getNamespacesNameFromHex(el.id.toHex()).subscribe(
+                              namespaceName => {
+                                let name = ''
+                                if (namespaceName.length === 1) {
+                                  name = `${namespaceName[0].name}`
+                                } else if (namespaceName.length === 2) {
+                                  name = `${namespaceName[1].name}.${namespaceName[0].name}`
+                                } else if (namespaceName.length === 3) {
+                                  name = `${namespaceName[2].name}.${namespaceName[1].name}.${namespaceName[0].name}`
+                                } else {
+                                  name = ''
+                                }
+
+                                tmpObj.name = name
+                                tmpObj.amount = this.setAmount(tmpObj.amount, mosaicAlias.divisibility)
+                                tmpObj.category = 'namespace'
+
+                                console.log(tmpObj)
+                                mosaicArr.push(tmpObj)
+                                console.log(mosaicArr)
+
+                                if (index + 1 === this.detail.mosaics.length) {
+                                  this.mosaicsOfTransfer = mosaicArr
+                                }
+                              }
+                            )
+                          }
+                        )
+                      }
+                    }
+                  )
+                }
+              )
+            })
+            // this.mosaicsOfTransfer = this.detail.mosaics
             // let tmpArr = []
             // let tmpObj = {
             //   title: 'Quantity',
@@ -558,7 +657,7 @@ export default {
 $radius: 20px
 
 .link:hover
-  color: #2d819b
+  color: #2BA1B9
   text-decoration: underline
   cursor: pointer
 
@@ -608,7 +707,7 @@ $radius: 20px
   font-size: 17px
   padding: 0px 0px 5px 0px
   width: 100%
-  color: #2d8e9b
+  color: #2BA1B9
 
 .up
   background: #f4f4f4
@@ -698,7 +797,7 @@ $radius: 20px
       flex-flow: column wrap
 
   .link
-    color: #2d819b
+    color: #2BA1B9
     text-decoration: underline
     cursor: pointer
 

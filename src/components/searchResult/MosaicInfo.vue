@@ -9,7 +9,7 @@
         </div>
         <div class="down">
           <div class="title">Mosaic Id</div>
-          <div class="value">{{ detail.mosaicId.toHex() }}</div>
+          <div class="value">{{ detail.id }}</div>
         </div>
       </div>
       <div>
@@ -26,13 +26,9 @@
 
     <div class="mos-layout-down">
       <div>
-        <div class="up" v-if="detail.divisibility > 0">
+        <div class="up">
           <div class="title">Supply</div>
-          <div class="value" v-html="$utils.fmtDivisibility(detail.supply.compact(), detail.divisibility)"></div>
-        </div>
-        <div class="up" v-else>
-          <div class="title">Supply</div>
-          <div class="value" v-html="detail.supply.compact()"></div>
+          <div class="value" v-html="detail.supply"></div>
         </div>
         <div class="down">
           <div class="title">Divisibility</div>
@@ -43,7 +39,7 @@
       <div>
         <div class="up">
           <div class="title">Height</div>
-          <div class="value link" @click="goToBlock(detail.height.compact())">{{ detail.height.compact() }}</div>
+          <div class="value link" @click="goToBlock(detail.height)">{{ detail.height }}</div>
         </div>
         <div class="down">
           <div class="title">Revision</div>
@@ -57,13 +53,13 @@
           <div class="value" style="color: orange; font-weight: bold" v-if="$store.state.currentBlock.height === 'Loading'">
             Loading
           </div>
-          <div class="value" :style="($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? 'color: red' : 'color: green'" v-else>
-            {{ ($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? false : true }}
+          <div class="value" :style="($store.state.currentBlock.height >= detail.height + detail.duration) ? 'color: red' : 'color: green'" v-else>
+            {{ ($store.state.currentBlock.height >= detail.height + detail.duration) ? false : true }}
           </div>
         </div>
         <div class="down">
           <div class="title">Expires</div>
-          <div class="value">{{ `Block: ${detail.height.compact() + detail.duration.compact()}` }}</div>
+          <div class="value">{{ `Block: ${detail.height + detail.duration}` }}</div>
         </div>
       </div>
     </div>
@@ -77,7 +73,7 @@
             {{ this.detail.properties.transferable }}
           </div>
         </div>
-        <div class="element" style="border-radius: 20px">
+        <div class="element" style="border-radius: 20px" v-if="this.detail.properties.levyMutable !== undefined">
           <div class="title">Levy Mutable</div>
           <div class="value" :style="(this.detail.properties.levyMutable === true) ? 'color: green' : 'color: red'">
             {{ this.detail.properties.levyMutable }}
@@ -92,7 +88,7 @@
         <div class="element" style="border-radius: 20px">
           <div class="title">Duration</div>
           <div class="value">
-            {{ `(Block: ${this.detail.duration.compact()}) ${$utils.calculateDuration(this.detail.duration.compact())}` }}
+            {{ `(Block: ${detail.duration}) ${$utils.calculateDuration(detail.duration)}` }}
           </div>
         </div>
       </div>
@@ -108,7 +104,7 @@ export default {
     detail: Object
   },
   mounted () {
-    console.log('MosaicInfo', this.detail.toString())
+    console.log('MosaicInfo', this.detail)
   },
   methods: {
     goToAddress (address) {
