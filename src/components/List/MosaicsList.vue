@@ -89,6 +89,8 @@ export default {
         if (transactions.length > 0) {
           this.resp = transactions
           this.resp.forEach((el, index) => {
+            // ERROR: does not display some mosaic data correctly
+            // ERROR: No muestra correctamente algunos datos del mosaico
             this.$proxProvider.getMosaic(el.innerTransactions[0].mosaicId).subscribe(
               response => {
                 console.log(`${index}.- divisibility: `, response.divisibility)
