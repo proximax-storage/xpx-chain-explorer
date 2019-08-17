@@ -2,6 +2,7 @@
   <!-- Search Result View -->
   <div class="searchResult">
     <!-- Search Bar Component -->
+    <node-admin/>
     <search-bar/>
     <!-- End Search Bar Component -->
 
@@ -74,6 +75,7 @@
 </template>
 
 <script>
+import NodeAdmin from '@/components/home/NodeAdmin.vue'
 import SearchBar from '@/components/global/SearchBar.vue'
 import Error from '@/components/global/Error.vue'
 import PublicKey from '@/components/searchResult/PublicKey.vue'
@@ -94,6 +96,7 @@ import axios from 'axios'
 export default {
   name: 'SearchResult',
   components: {
+    NodeAdmin,
     SearchBar,
     Error,
     PublicKey,

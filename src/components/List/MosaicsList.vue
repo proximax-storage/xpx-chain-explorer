@@ -85,18 +85,20 @@ export default {
 
     this.$proxProvider.getAllTransactionsFromAccount(account, 100).subscribe(
       transactions => {
-        // console.log("Transacciones de esta cuenta",transactions)
+        console.log("Transacciones de esta cuenta",transactions)
         if (transactions.length > 0) {
           this.resp = transactions
           this.resp.forEach((el, index) => {
             // ERROR: does not display some mosaic data correctly
             // ERROR: No muestra correctamente algunos datos del mosaico
-            this.$proxProvider.getMosaic(el.innerTransactions[0].mosaicId).subscribe(
+            console.log(el.mosaicId.id)
+            this.$proxProvider.getMosaic(el.mosaicId.id).subscribe(
               response => {
-                console.log(`${index}.- divisibility: `, response.divisibility)
-                console.log(`${index}.- duration: `, response.duration)
-                console.log(`${index}.- mosaic properties duration: `, response.properties.duration)
-                response.id = el.innerTransactions[0].mosaicId.toHex()
+                // console.log(response)
+                // console.log(`${index}.- divisibility: `, response.divisibility)
+                // console.log(`${index}.- duration: `, response.duration)
+                // console.log(`${index}.- mosaic properties duration: `, response.properties.duration)
+                response.id = el.mosaicId.id.toHex()
                 this.mosaicArr.push(response)
               },
               err => {
