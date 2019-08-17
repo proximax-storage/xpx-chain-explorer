@@ -1,7 +1,8 @@
 module.exports = {
   pwa: {
     workboxOptions: {
-      skipWaiting: true
+      swSrc: ' service-worker.js ',
+      skipWaiting: true,
     }
   }
 }

@@ -1,7 +1,7 @@
 [
   {
     "name": "bctestnet1.xpxsirius.io",
-    "ip": "54.255.178.204",
+    "ip": "13.229.183.224",
     "version": 0,
     "location": "",
     "lat": 0,
@@ -15,7 +15,7 @@
   },
   {
     "name": "bctestnet2.xpxsirius.io",
-    "ip": "54.189.186.124",
+    "ip": "54.179.150.234",
     "version": 0,
     "location": "",
     "lat": 0,
@@ -25,6 +25,62 @@
     "active": false,
     "visible": true,
     "urlNode": "http://bctestnet2.xpxsirius.io:3000",
+    "icon": "proximax.svg"
+  },
+  {
+    "name": "bctestnet3.xpxsirius.io",
+    "ip": "54.191.26.33",
+    "version": 0,
+    "location": "",
+    "lat": 0,
+    "lon": 0,
+    "height": null,
+    "status": "Online",
+    "active": false,
+    "visible": true,
+    "urlNode": "http://bctestnet3.xpxsirius.io:3000",
+    "icon": "proximax.svg"
+  },
+  {
+    "name": "bctestnet4.xpxsirius.io",
+    "ip": "34.219.220.187",
+    "version": 0,
+    "location": "",
+    "lat": 0,
+    "lon": 0,
+    "height": null,
+    "status": "Online",
+    "active": false,
+    "visible": true,
+    "urlNode": "http://bctestnet4.xpxsirius.io:3000",
+    "icon": "proximax.svg"
+  },
+  {
+    "name": "bctestnet5.xpxsirius.io",
+    "ip": "3.9.114.203",
+    "version": 0,
+    "location": "",
+    "lat": 0,
+    "lon": 0,
+    "height": null,
+    "status": "Online",
+    "active": false,
+    "visible": true,
+    "urlNode": "http://bctestnet5.xpxsirius.io:3000",
+    "icon": "proximax.svg"
+  },
+  {
+    "name": "bctestnet6.xpxsirius.io",
+    "ip": "3.8.198.129",
+    "version": 0,
+    "location": "",
+    "lat": 0,
+    "lon": 0,
+    "height": null,
+    "status": "Online",
+    "active": false,
+    "visible": true,
+    "urlNode": "http://bctestnet6.xpxsirius.io:3000",
     "icon": "proximax.svg"
   }
 ]

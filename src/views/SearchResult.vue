@@ -88,7 +88,7 @@ import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
-import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, MosaicHttp } from 'tsjs-xpx-chain-sdk'
+import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, MosaicHttp, QueryParams } from 'tsjs-xpx-chain-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import { mdbProgress } from 'mdbvue'
 import axios from 'axios'
@@ -321,66 +321,6 @@ export default {
         }
       )
 
-      // axios.get(`${this.$store.state.currentNode}/account/${addr.address}/namespaces`)
-      //   .then(response => {
-      //     console.log(response)
-      //     let tmpArr = []
-      //     let revisionArray = []
-      //     if (response.data.length !== 0) {
-      //       response.data.forEach(el => {
-      //         console.log("NAMESPACE ELEMENT", el.namespace)
-      //         let tmpObj = {
-      //           status: (el.meta.active) ? 'Active' : 'Inactive'
-      //         }
-
-      //         let requestArr = []
-      //         let currentLevel = 0
-      //         if (el.namespace.level2 !== undefined) {
-      //           // console.log('Level 2')
-      //           currentLevel = 2
-      //           requestArr.push(new Id(el.namespace.level2))
-      //           requestArr.push(new Id(el.namespace.level1))
-      //           requestArr.push(new Id(el.namespace.level0))
-      //           tmpObj.id = new Id(el.namespace.level2).toHex()
-      //         } else if (el.namespace.level1 !== undefined) {
-      //           // console.log('Level 1')
-      //           currentLevel = 1
-      //           requestArr.push(new Id(el.namespace.level1))
-      //           requestArr.push(new Id(el.namespace.level0))
-      //           tmpObj.id = new Id(el.namespace.level1).toHex()
-      //         } else if (el.namespace.level0 !== undefined) {
-      //           // console.log('Level 0')
-      //           currentLevel = 0
-      //           requestArr.push(new Id(el.namespace.level0))
-      //           tmpObj.id = new Id(el.namespace.level0).toHex()
-      //         }
-
-      //         // console.log(currentLevel)
-      //         // console.log("Request Array", requestArr)
-
-      //         this.$proxProvider.getNamespacesName(requestArr).subscribe(
-      //           responseName => {
-      //             console.log(responseName)
-      //             if (currentLevel === 0) {
-      //               tmpObj.name = responseName[0].name
-      //             } else if (currentLevel === 1) {
-      //               tmpObj.name = `${responseName[1].name}.${responseName[0].name}`
-      //             } else if (currentLevel === 2) {
-      //               tmpObj.name = `${responseName[2].name}.${responseName[1].name}.${responseName[0].name}`
-      //             }
-      //             tmpArr.push(tmpObj)
-      //           }
-      //         )
-      //       })
-      //       this.linkNamespaces = tmpArr
-      //     } else {
-      //       this.linkNamespaces = []
-      //     }
-      //   })
-      //   .catch(err => {
-      //     this.linkNamespaces = []
-      //   })
-
       axios.get(`${this.$store.state.currentNode}/account/${addr.address}/multisig`)
         .then(response => {
           let objTmp = {
@@ -431,12 +371,11 @@ export default {
           txes: next.numTransactions,
           fee: next.totalFee
         }
-        console.log('Here')
         this.showRecentTransaction = (this.param.txes > 0) ? true : false
         this.showComponent()
         this.showInfo = true
         console.log(parseInt(block))
-        this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), 50).subscribe(
+        this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(100)).subscribe(
           blockTransactions => {
             console.log(blockTransactions)
             this.blockTransactions = blockTransactions
@@ -587,9 +526,9 @@ export default {
      * @param { any } publicAccount
      */
     viewTransactionsFromPublicAccount(publicAccount) {
-      this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
+      this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 50).subscribe(
         transactions => {
-          // console.log("Transacciones de esta cuenta",transactions)
+          console.log("Transacciones de esta cuenta",transactions)
           if (transactions.length > 0) {
             transactions.forEach(element => {
               element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
