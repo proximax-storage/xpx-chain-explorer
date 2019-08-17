@@ -59,7 +59,8 @@
         </div>
         <div class="down">
           <div class="title">Expires</div>
-          <div class="value">{{ `Block: ${detail.height + detail.duration}` }}</div>
+          <div class="value" v-if="detail.duration === 0">{{ `Block: 0` }}</div>
+          <div class="value" v-if="detail.duration > 0">{{ `Block: ${detail.height + detail.duration}` }}</div>
         </div>
       </div>
     </div>
@@ -103,8 +104,13 @@ export default {
   props: {
     detail: Object
   },
+  data () {
+    return {
+      dur: 0
+    }
+  },
   mounted () {
-    console.log('MosaicInfo', this.detail)
+    console.log('MosaicInfo Detail', this.detail)
   },
   methods: {
     goToAddress (address) {

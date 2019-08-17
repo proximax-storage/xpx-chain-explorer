@@ -523,6 +523,7 @@ export default {
         response => {
           console.log("Busqueda de Mosaico", response)
           let duration = (response.duration === undefined) ? 0 : response.duration.compact()
+          console.log(duration)
           this.$proxProvider.getMosaicsName([mosaicId]).subscribe(
             nameResponse => {
               console.log("NAME RESPOOONSEEE", nameResponse[0])
