@@ -99,6 +99,28 @@ export default {
           info.push({ key: 'Duration', value: this.$utils.calculateDuration(this.params[index].mosaicProperties.duration.compact()) })
           break;
 
+        case 'Modify multisig account':
+          console.log(info)
+          let newStructure = []
+          let removal = { key: 'Min Removal Delta', value: this.params[index].minRemovalDelta }
+          let approval = { key: 'Min Approval Delta', value: this.params[index].minApprovalDelta }
+          info.forEach((el, index) => {
+            console.log(el, index, info.length)
+
+            if (index === 2) {
+              newStructure.push(el)
+              newStructure.push(removal)
+              newStructure.push(approval)
+            } else {
+              newStructure.push(el)
+            }
+
+            if (index + 1 === info.length) {
+              info = newStructure
+            }
+          })
+          break;
+
         default:
           break;
       }

@@ -123,7 +123,7 @@ export default {
     z-index: 6000
     border: 1px solid white
     color: black
-    width: 85%
+    width: 95%
     max-height: 95%
     padding: 10px
     border-radius: 5px
