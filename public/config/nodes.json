@@ -1,12 +1,6 @@
 {
     "nodes": [
         "https://bctestnet1-cow.xpxsirius.io",
-        "https://bctestnet2-cow.xpxsirius.io",
-        "https://bctestnet1.xpxsirius.io",
-        "https://bctestnet2.xpxsirius.io",
-        "https://bctestnet3.xpxsirius.io",
-        "https://bctestnet4.xpxsirius.io",
-        "https://bctestnet5.xpxsirius.io",
-        "https://bctestnet6.xpxsirius.io"
+        "https://bctestnet2-cow.xpxsirius.io"
     ]
 }
