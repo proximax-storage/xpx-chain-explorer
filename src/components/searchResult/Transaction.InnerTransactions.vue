@@ -6,31 +6,30 @@
 
     <!-- Iterated Element -->
     <div>
-      <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 20px" :style="(index % 2 === 0) ? 'background: #f4f4f4' : 'background: white'" @click="redirecToDetail(index)">
+      <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 20px" @click="redirecToDetail(index)">
 
-        <div style="padding: 2px">
-          <div class="title">Address</div>
-          <div class="value">{{ item.signer.address.pretty() }}</div>
+        <div>
+          <div class="title centerAlign">Address</div>
+          <div class="value centerAlign">{{ item.signer.address.pretty() }}</div>
         </div>
 
-        <div style="padding: 2px">
-          <div class="title">Public Key</div>
-          <div class="value">{{ item.signer.publicKey }}</div>
+        <div>
+          <div class="title centerAlign">Public Key</div>
+          <div class="value centerAlign">{{ item.signer.publicKey }}</div>
         </div>
 
-        <div style="padding: 2px">
-          <div class="title">Signature</div>
-          <div class="value">{{ item.signature }}</div>
+        <div>
+          <div class="title centerAlign">Signature</div>
+          <div class="value centerAlign">{{ item.signature }}</div>
         </div>
 
-        <div style="padding: 2px" v-if="item.mosaics">
-          <div class="title">Mosaics</div>
-          <div class="value">{{ item.mosaics.length }}</div>
+        <div v-if="item.mosaics">
+          <div class="title centerAlign">Mosaics</div>
+          <div class="value centerAlign">{{ item.mosaics.length }}</div>
         </div>
 
-        <div style="padding: 2px" v-if="item.message">
-          <div class="title">Message</div>
-          <div class="value">{{ (item.message.payload !== '') ? item.message.payload : 'No Available' }}</div>
+        <div>
+          <div class="title centerAlign" style="color: orange">Click anywhere on this card to show the detail</div>
         </div>
 
       </div>
@@ -48,8 +47,6 @@ export default {
   props: {
     params: Array
   },
-  mounted () {
-  },
   methods: {
     redirecToDetail (index) {
       let typeName
@@ -61,13 +58,13 @@ export default {
       })
 
       let info = [
-        { key: 'Sender Address', value: this.params[index].signer.address.pretty(), class: 'link' },
-        { key: 'Sender Public Key', value: this.params[index].signer.publicKey, class: 'link' },
+        { key: 'Sender Address', value: this.params[index].signer.address.pretty(), class: 'link', run: this.goToAddress },
+        { key: 'Sender Public Key', value: this.params[index].signer.publicKey, class: 'link', run: this.goToAddress },
         { key: 'Signature', value: this.params[index].signature },
         { key: 'Timestamp', value: this.$utils.fmtTime(this.params[index].deadline.value) },
         { key: 'Aggregate Hash', value: this.params[index].transactionInfo.aggregateHash },
         { key: 'Aggregate Id', value: this.params[index].transactionInfo.aggregateId },
-        { key: 'Height', value: this.params[index].transactionInfo.height.compact() },
+        { key: 'Height', value: this.params[index].transactionInfo.height.compact(), class: 'link',  run: this.goToBlock },
         { key: 'Type', value: (this.params[index].type === undefined) ? 'No Available' : this.params[index].type },
         { key: 'Version', value: this.params[index].version },
         {
@@ -80,7 +77,8 @@ export default {
         info.push({
           key: 'Recipient Address',
           value: this.params[index].recipient.pretty(),
-          class: 'link'
+          class: 'link',
+          run: this.goToAddress
         })
       }
 
@@ -93,7 +91,7 @@ export default {
 
       switch (typeName) {
         case 'Mosaic definition':
-          info.unshift({ key: 'Mosaic Id', value: this.params[index].mosaicId.id.toHex() })
+          info.unshift({ key: 'Mosaic Id', value: this.params[index].mosaicId.id.toHex(), class: 'link', run: this.goToMosaic })
           info.push({ key: 'Divisibility', value: this.params[index].mosaicProperties.divisibility })
           info.push({ key: 'Levy Mutable', value: this.params[index].mosaicProperties.levyMutable, class: (this.params[index].mosaicProperties.levyMutable) ? 'true' : 'false' })
           info.push({ key: 'Supply Mutable', value: this.params[index].mosaicProperties.supplyMutable, class: (this.params[index].mosaicProperties.supplyMutable) ? 'true' : 'false' })
@@ -101,11 +99,60 @@ export default {
           info.push({ key: 'Duration', value: this.$utils.calculateDuration(this.params[index].mosaicProperties.duration.compact()) })
           break;
 
+        case 'Modify multisig account':
+          console.log(info)
+          let newStructure = []
+          let removal = { key: 'Min Removal Delta', value: this.params[index].minRemovalDelta }
+          let approval = { key: 'Min Approval Delta', value: this.params[index].minApprovalDelta }
+          info.forEach((el, index) => {
+            console.log(el, index, info.length)
+
+            if (index === 2) {
+              newStructure.push(el)
+              newStructure.push(removal)
+              newStructure.push(approval)
+            } else {
+              newStructure.push(el)
+            }
+
+            if (index + 1 === info.length) {
+              info = newStructure
+            }
+          })
+          break;
+
         default:
           break;
       }
 
       this.$emit('runModal', info, `Inner Transaction Detail - ${ typeName }`)
+    },
+
+    goToAddress (address) {
+      let routeData = (address.length === 64) ?
+      this.$router.resolve({ path: `/searchResult/publicKey/${ address }` }) :
+      this.$router.resolve({ path: `/searchResult/address/${ address }` })
+      window.open(routeData.href, '_blank')
+    },
+
+    goToBlock (height) {
+      let routeData = this.$router.resolve({ path: `/searchResult/blockHeight/${height}` })
+      window.open(routeData.href, '_blank')
+    },
+
+    goToHash (hash) {
+      let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
+      window.open(routeData.href, '_blank')
+    },
+
+    goToNamespace (namespaceId) {
+      let routeData = this.$router.resolve({ path: `/searchResult/namespaceInfo/${namespaceId}` })
+      window.open(routeData.href, '_blank')
+    },
+
+    goToMosaic (mosaicId) {
+      let routeData = this.$router.resolve({ path: `/searchResult/mosaicInfo/${mosaicId}` })
+      window.open(routeData.href, '_blank')
     }
   }
 }
@@ -130,8 +177,15 @@ $radius: 20px
   margin-bottom: 10px
   font-size: 10px
   cursor: pointer
+  border: 1px solid #f4f4f4
+  &:nth-child(odd)
+    background: #f4f4f4
+  &:nth-child(even)
+    background: white
   &:last-child
     margin: 0px
+  & > div
+    padding: 2px
 
 .title
   font-size: 10px
@@ -144,6 +198,14 @@ $radius: 20px
   text-transform: uppercase
   word-break: break-all
   color: black
+
+.link:hover
+  color: #2BA1B9
+  text-decoration: underline
+  cursor: pointer
+
+.centerAlign
+  text-align: center
 
 @media screen and (max-width: 700px)
   .value,

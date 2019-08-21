@@ -55,7 +55,7 @@ export default {
         year: 2019,
         militarHour: '12:00'
       },
-      explorerVersion: 'v0.2.4'
+      explorerVersion: 'v0.2.5'
     }
   },
   methods: {
