@@ -1,6 +1,6 @@
 {
-  "nodes": [
-    "http://bctestnet1-cow.xpxsirius.io:3000",
-    "http://bctestnet2-cow.xpxsirius.io:3000"
-  ]
+    "nodes": [
+        "https://bctestnet1-cow.xpxsirius.io",
+        "https://bctestnet2-cow.xpxsirius.io"
+    ]
 }
