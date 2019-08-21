@@ -1,6 +1,6 @@
 [
   {
-    "name": "bctestnet1.xpxsirius.io",
+    "name": "bctestnet1-cow.xpxsirius.io",
     "ip": "54.255.178.204",
     "version": 0,
     "location": "",
@@ -10,11 +10,11 @@
     "status": "Online",
     "active": false,
     "visible": true,
-    "urlNode": "http://bctestnet1.xpxsirius.io:3000",
+    "urlNode": "https://bctestnet1-cow.xpxsirius.io",
     "icon": "proximax.svg"
   },
   {
-    "name": "bctestnet2.xpxsirius.io",
+    "name": "bctestnet2-cow.xpxsirius.io",
     "ip": "54.189.186.124",
     "version": 0,
     "location": "",
@@ -24,7 +24,7 @@
     "status": "Online",
     "active": false,
     "visible": true,
-    "urlNode": "http://bctestnet2.xpxsirius.io:3000",
+    "urlNode": "https://bctestnet2-cow.xpxsirius.io",
     "icon": "proximax.svg"
   }
 ]
