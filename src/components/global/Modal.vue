@@ -1,5 +1,5 @@
 <template>
-  <div class="modal animated faster" :class="{ fadeIn: active, fadeOut: !active }" v-if="active">
+  <div class="modal animated faster fadeIn" v-if="active">
     <div class="modal-back" @click="run"></div>
     <div class="cont">
       <h1 class="supertitle">{{ title || 'Info' }}</h1>
@@ -68,7 +68,7 @@
           </div>
         </div>
 
-        <div v-if="param.recipient.value !== undefined">
+        <div v-if="param.recipient !== undefined">
           <div class="element">
             <div class="title centerAlign">Recipient</div>
             <div class="value centerAlign" :class="param.recipient.class">
@@ -92,8 +92,8 @@
       <!-- End Details -->
 
       <!-- Modifications -->
-      <div class="specificDetails" v-if="param.modifications !== undefined">
-        <h1 class="supertitle">Modification</h1>
+      <div class="specificDetails" v-if="param.modifications !== undefined && param.modifications.length > 0">
+        <h1 class="supertitle" v-if="param.modifications !== undefined && param.modifications.length > 0">Modifications</h1>
         <div class="element-mod" v-for="(item, index) in param.modifications" :key="index">
           <div>
             <div class="title centerAlign">Cosigner Address</div>
@@ -153,7 +153,6 @@ export default {
   ],
 
   mounted () {
-    console.log(this.param)
   },
 
   methods: {
@@ -297,9 +296,6 @@ export default {
       &:nth-child(2)
         margin-right: 5px
 
-  .infoMobile
-    display: none !important
-
 @media screen and (max-width: 700px)
   .element
     padding: 5px
@@ -308,9 +304,30 @@ export default {
     max-width: inherit
     width: 95%
 
-  .basicInfo
-    display: none
+  .link
+    color: #2BA1B9
+    text-decoration: underline
+    cursor: pointer
 
-  .basicInfoMobile
-    display: block
+  .basicInfo
+    & > div:nth-child(1)
+      width: 100%
+      display: block
+      & > .element
+        padding: 10px
+        flex-grow: 1
+    & > div:nth-child(2)
+      width: 100%
+      display: block
+      & > .element
+        padding: 10px
+        flex-grow: 1
+    & > div:nth-child(3)
+      width: 100%
+    & > div:nth-child(4)
+      width: 100%
+      display: block
+      & > .element
+        padding: 10px
+        flex-grow: 1
 </style>

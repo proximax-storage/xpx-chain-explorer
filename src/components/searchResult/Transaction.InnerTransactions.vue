@@ -106,8 +106,8 @@ export default {
       info.details = []
 
       switch (typeName) {
-        case 'Mosaic definition':
-          if (this.params[index].message) {
+        case 'Transfer Transaction':
+          if (this.params[index].message !== undefined && this.params[index].message.payload !== '') {
             info.details.push({ key: 'Message', value: this.params[index].message.payload })
           }
 
@@ -127,7 +127,9 @@ export default {
           info.details.push({ key: 'Min Removal Delta', value: this.params[index].minRemovalDelta })
           info.modifications = []
           let tmpModifications = []
-          if (this.params[index].modifications) {
+          console.log(this.params[index].modifications !== undefined, this.params[index].modifications.length > 0, true === false)
+          if (this.params[index].modifications !== undefined && typeof this.params[index].modifications.length > 0) {
+            console.log('Aqui 1')
             this.params[index].modifications.forEach(el => {
               let tmpObj = {
                 address: el.cosignatoryPublicAccount.address.pretty(),
@@ -137,13 +139,16 @@ export default {
 
               info.modifications.push(tmpObj)
             })
+          } else {
+            console.log('Aqui 2')
+            info.modifications === undefined
           }
           break;
 
         default:
           break;
       }
-      console.log(this.params[index])
+      console.log(info)
       this.$emit('runModal', info, `Inner Transaction - ${ typeName }`)
     },
 
