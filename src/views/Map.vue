@@ -109,9 +109,9 @@ export default {
 
   methods: {
     getInfoNodes () {
-      axios.get('./config/nodesInfoMaps.json').then(
+      axios.get('./config/config.json').then(
         response => {
-          this.mapList = response.data
+          this.mapList = response.data.MapsInfo
           let mapCustomNodes = this.$storage.get('mapCustomNodes')
           if (mapCustomNodes !== null) {
             mapCustomNodes = JSON.parse(mapCustomNodes)
