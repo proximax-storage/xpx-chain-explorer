@@ -46,7 +46,8 @@
 
         <div>
           <div class="title">Supply</div>
-          <div class="value" v-html="$utils.fmtDivisibility(item.supply.compact(), item.divisibility)"></div>
+          <div class="value" v-if="item.divisibility !== 0" v-html="$utils.fmtDivisibility(item.supply.compact(), item.divisibility)"></div>
+          <div class="value" v-if="item.divisibility === 0" style="font-weight: bold" v-html="item.supply.compact()"></div>
         </div>
 
         <div>

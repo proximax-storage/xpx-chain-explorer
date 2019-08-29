@@ -156,9 +156,8 @@ export default {
     if (this.$route.params.type === 'publicKey' || this.$route.params.type === 'address') {
       let tmp
       if (this.$route.params.id.length === 64) {
-        console.log(this.$store.state.netType.number)
-        let network = this.$store.state.netType.number
-        tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, network)
+        console.log('Type of Network', this.$store.state.netType)
+        tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
         // console.log("TEMPORAL", tmp)
         this.getInfoAccountAndViewTransactions(tmp.address.address)
       } else {
@@ -330,10 +329,11 @@ export default {
             minRemoval: response.data.multisig.minRemoval
           }
 
-          console.log(response.data.multisig.cosignatories[0])
+          console.log(response.data.multisig)
 
           this.cosignList = Array.from(response.data.multisig.cosignatories)
-          this.multisigRelatedAccount = Array.from(response.data.multisig.multisigAccounts)
+          this.multisigRelatedAccount = Array.from(response.data.multisig.multisigAccounts),
+          this.multisigConsignatories = Array.from(response.data.multisig.cosignatories)
           this.multisigData = objTmp
           this.multisigActive = true
 

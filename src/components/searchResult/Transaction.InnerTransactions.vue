@@ -9,27 +9,23 @@
       <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 20px" @click="redirecToDetail(index)">
 
         <div>
-          <div class="title centerAlign">Address</div>
-          <div class="value centerAlign">{{ item.signer.address.pretty() }}</div>
+          <div class="title centerAlign">#</div>
+          <div class="value centerAlign">{{ index + 1 }}</div>
         </div>
 
         <div>
-          <div class="title centerAlign">Public Key</div>
-          <div class="value centerAlign">{{ item.signer.publicKey }}</div>
+          <div class="title centerAlign">Type</div>
+          <div class="valueLower transacTitle centerAlign">{{ verifyType(item.type) }}</div>
         </div>
 
         <div>
-          <div class="title centerAlign">Signature</div>
-          <div class="value centerAlign">{{ item.signature }}</div>
-        </div>
-
-        <div v-if="item.mosaics">
-          <div class="title centerAlign">Mosaics</div>
-          <div class="value centerAlign">{{ item.mosaics.length }}</div>
+          <div class="title centerAlign">Height</div>
+          <div class="value centerAlign">{{ item.transactionInfo.height.compact() }}</div>
         </div>
 
         <div>
-          <div class="title centerAlign" style="color: orange">Click anywhere on this card to show the detail</div>
+          <div class="title centerAlign">Version</div>
+          <div class="value centerAlign">{{ item.version }}</div>
         </div>
 
       </div>
@@ -57,53 +53,115 @@ export default {
         }
       })
 
-      let info = [
-        { key: 'Sender Address', value: this.params[index].signer.address.pretty(), class: 'link', run: this.goToAddress },
-        { key: 'Sender Public Key', value: this.params[index].signer.publicKey, class: 'link', run: this.goToAddress },
-        { key: 'Signature', value: this.params[index].signature },
-        { key: 'Timestamp', value: this.$utils.fmtTime(this.params[index].deadline.value) },
-        { key: 'Aggregate Hash', value: this.params[index].transactionInfo.aggregateHash },
-        { key: 'Aggregate Id', value: this.params[index].transactionInfo.aggregateId },
-        { key: 'Height', value: this.params[index].transactionInfo.height.compact(), class: 'link',  run: this.goToBlock },
-        { key: 'Type', value: (this.params[index].type === undefined) ? 'No Available' : this.params[index].type },
-        { key: 'Version', value: this.params[index].version },
-        {
-          key: 'Fee', value: '',
+      let info = {
+        senderAddress: {
+          value: this.params[index].signer.address.pretty(),
+          class: 'link',
+          run: this.goToAddress
+        },
+
+        senderPublicKey: {
+          value: this.params[index].signer.publicKey,
+          class: 'link',
+          run: this.goToAddress
+        },
+
+        signature: {
+          value: this.params[index].signature
+        },
+
+        deadline: {
+          value: this.$utils.fmtTime(this.params[index].deadline.value)
+        },
+
+        aggregateId: {
+          value: this.params[index].transactionInfo.aggregateId
+        },
+
+        height: {
+          value: this.params[index].transactionInfo.height.compact(),
+          class: 'link',
+          run: this.goToBlock
+        },
+
+        type: {
+          value: (this.params[index].type === undefined) ? 'No Available' : this.params[index].type
+        },
+
+        fee: {
           valueHtml: (this.params[index].mosaicProperties !== undefined) ? this.$utils.fmtDivisibility(this.params[index].maxFee.compact(), this.params[index].mosaicProperties.divisibility) : this.$utils.fmtAmountValue(this.params[index].maxFee.compact())
         }
-      ]
+      }
 
       if (this.params[index].recipient) {
-        info.push({
-          key: 'Recipient Address',
+        info.recipient = {
           value: this.params[index].recipient.pretty(),
           class: 'link',
           run: this.goToAddress
-        })
+        }
       }
 
-      if (this.params[index].message) {
-        info.push({
-          key: 'Message',
-          value: this.params[index].message.payload
-        })
-      }
+
+
+      info.details = []
 
       switch (typeName) {
+        case 'Transfer Transaction':
+          if (this.params[index].message !== undefined && this.params[index].message.payload !== '') {
+            info.details.push({ key: 'Message', value: this.params[index].message.payload })
+          }
+
+          break;
+
         case 'Mosaic definition':
-          info.unshift({ key: 'Mosaic Id', value: this.params[index].mosaicId.id.toHex(), class: 'link', run: this.goToMosaic })
-          info.push({ key: 'Divisibility', value: this.params[index].mosaicProperties.divisibility })
-          info.push({ key: 'Levy Mutable', value: this.params[index].mosaicProperties.levyMutable, class: (this.params[index].mosaicProperties.levyMutable) ? 'true' : 'false' })
-          info.push({ key: 'Supply Mutable', value: this.params[index].mosaicProperties.supplyMutable, class: (this.params[index].mosaicProperties.supplyMutable) ? 'true' : 'false' })
-          info.push({ key: 'Transferable', value: this.params[index].mosaicProperties.transferable, class: (this.params[index].mosaicProperties.transferable) ? 'true' : 'false' })
-          info.push({ key: 'Duration', value: this.$utils.calculateDuration(this.params[index].mosaicProperties.duration.compact()) })
+          info.details.push({ key: 'Mosaic Id', value: this.params[index].mosaicId.id.toHex(), class: 'link', run: this.goToMosaic })
+          info.details.push({ key: 'Divisibility', value: this.params[index].mosaicProperties.divisibility })
+          info.details.push({ key: 'Levy Mutable', value: this.params[index].mosaicProperties.levyMutable, class: (this.params[index].mosaicProperties.levyMutable) ? 'true' : 'false' })
+          info.details.push({ key: 'Supply Mutable', value: this.params[index].mosaicProperties.supplyMutable, class: (this.params[index].mosaicProperties.supplyMutable) ? 'true' : 'false' })
+          info.details.push({ key: 'Transferable', value: this.params[index].mosaicProperties.transferable, class: (this.params[index].mosaicProperties.transferable) ? 'true' : 'false' })
+          info.details.push({ key: 'Duration', value: this.$utils.calculateDuration(this.params[index].mosaicProperties.duration.compact()) })
+          break;
+
+        case 'Modify multisig account':
+          info.details.push({ key: 'Min Approval Delta', value: this.params[index].minApprovalDelta })
+          info.details.push({ key: 'Min Removal Delta', value: this.params[index].minRemovalDelta })
+          info.modifications = []
+          let tmpModifications = []
+          console.log(this.params[index].modifications !== undefined, this.params[index].modifications.length > 0, true === false)
+          if (this.params[index].modifications !== undefined && typeof this.params[index].modifications.length > 0) {
+            console.log('Aqui 1')
+            this.params[index].modifications.forEach(el => {
+              let tmpObj = {
+                address: el.cosignatoryPublicAccount.address.pretty(),
+                publicKey: el.cosignatoryPublicAccount.publicKey,
+                type: el.type
+              }
+
+              info.modifications.push(tmpObj)
+            })
+          } else {
+            console.log('Aqui 2')
+            info.modifications === undefined
+          }
           break;
 
         default:
           break;
       }
+      console.log(info)
+      this.$emit('runModal', info, `Inner Transaction - ${ typeName }`)
+    },
 
-      this.$emit('runModal', info, `Inner Transaction Detail - ${ typeName }`)
+    verifyType (itemType) {
+      let objectOfTypes = Object.values(proximaxProvider.typeTransactions())
+      let type = undefined
+      objectOfTypes.forEach(element => {
+        // console.log(element.name)
+        if (itemType === element.id) {
+          type = element.name
+        }
+      })
+      return type
     },
 
     goToAddress (address) {
@@ -150,11 +208,17 @@ $radius: 20px
 .inner
   padding: 10px
 
+.transacTitle
+  font-weight: bold
+  color: #2BA1B9 !important
+
 .element
   padding: 10px
   margin-bottom: 10px
   font-size: 10px
   cursor: pointer
+  display: flex
+  justify-content: space-between
   border: 1px solid #f4f4f4
   &:nth-child(odd)
     background: #f4f4f4
@@ -163,6 +227,7 @@ $radius: 20px
   &:last-child
     margin: 0px
   & > div
+    width: 25%
     padding: 2px
 
 .title
@@ -172,6 +237,12 @@ $radius: 20px
   color: grey
 
 .value
+  font-size: 14px
+  text-transform: uppercase
+  word-break: break-all
+  color: black
+
+.valueLower
   font-size: 14px
   text-transform: uppercase
   word-break: break-all
@@ -194,4 +265,25 @@ $radius: 20px
     color: #2BA1B9
     text-decoration: underline
     cursor: pointer
+
+  .element
+    padding: 10px
+    margin-bottom: 10px
+    font-size: 10px
+    cursor: pointer
+    display: block
+    justify-content: space-between
+    border: 1px solid #f4f4f4
+    &:nth-child(odd)
+      background: #f4f4f4
+    &:nth-child(even)
+      background: white
+    &:last-child
+      margin: 0px
+    & > div
+      width: 100%
+      padding: 2px
+      border-bottom: 1px solid #ddd
+      &:last-child
+        border-bottom: 0px solid transparent
 </style>

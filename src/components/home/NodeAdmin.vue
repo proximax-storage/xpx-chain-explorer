@@ -105,7 +105,7 @@ export default {
       let tmp = Array.from(this.$store.getters.getAllNodes)
       tmp.forEach((item, index) => {
         tmpArray.push({ name: item, index: index })
-      });
+      })
       return tmpArray
     },
 

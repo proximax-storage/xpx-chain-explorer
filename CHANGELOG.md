@@ -1,23 +1,23 @@
 # CHANGELOG
 
 ## Release v0.1.0
-  * Refactoring-Cow
+  * Refactoring-Cow.
 
 ## Release v0.1.1
-  * Bug Fixes
+  * Bug Fixes.
 
 ## Release v0.1.2
-  * User interface changes
-  * Bug Fixes
+  * User interface changes.
+  * Bug Fixes.
 
 ## Release v0.2.0
-  * Added "Namespace Component Info"
-  * Added "Mosaic Info Component"
-  * Added "NamespaceID" in Search Bar
-  * Added "MosaicId" in Search Bar
+  * Added "Namespace Component Info".
+  * Added "Mosaic Info Component".
+  * Added "NamespaceID" in Search Bar.
+  * Added "MosaicId" in Search Bar.
 
 ## Release v0.2.1
-  * Change Explorer Design
+  * Change Explorer Design.
 
 ## Release v0.2.2
   * Automatic addition of the custom node to the map.
@@ -29,14 +29,22 @@
   * Bug fixes in transaction component - Aggregate bonded and Aggregate Complete details.
   * Correction of the calculation of the End Height in namespaces with BigInt data.
   * Bug fixes in detail in transaction type lock funds.
-  * Change in the design of the search bar
+  * Change in the design of the search bar.
 
 ## Release v0.2.3
-  * Added views of namespaces and mosaic lists
-  * Minor bug fixes
+  * Added views of namespaces and mosaic lists.
+  * Minor bug fixes.
 
 ## Release v0.2.4
-  * Minor bug Fixes
+  * Minor bug Fixes.
 
 ## Release v0.2.5
-  * Minor bug Fixes
+  * Created the file vue.config.js.
+  * Created the service-worker.js file.
+  * New automatic caché clearing feature according to version.
+  * Minor bug Fixes.
+
+## Release v.0.2.6
+  * Creation, addition and configuration of a single configuration file.
+  * Minor bug fixes in the Modal Component.
+  * minor bug fixes in the InnerTransactions Component.

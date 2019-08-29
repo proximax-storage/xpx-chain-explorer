@@ -43,10 +43,9 @@ export default {
   },
   mounted () {
     // Call Load Nodes Method
-    this.readConfig()
     this.loadNodes()
     this.average()
-    this.loadNetwork()
+    // this.loadNetwork()
   },
   data () {
     return {
@@ -62,50 +61,51 @@ export default {
      * of the proximax blockchain
      */
     loadNodes () {
-      axios.get('./config/nodes.json')
+      axios.get('./config/config.json')
         .then(response => {
-          let finaldata = response
+          let stylesCss = `
+            background: orange;
+            color: black;
+            font-weigth: bold;
+            border-radius: 5px;
+            padding: 2px;
+          `
+
+          // NODE CONFIG
+          let nodesFile = response.data.Nodes
           let tmpNodes = JSON.parse(this.$storage.get('customNodes'))
-          // console.log("Custom Nodes", tmpNodes)
-          // console.log("Custom Nodes type", typeof tmpNodes)
           if (tmpNodes !== null && typeof tmpNodes === 'object') {
-            // console.log('Add Custom Nodes')
-            // console.log(response.data.nodes, tmpNodes)
-            finaldata = response.data.nodes.concat(tmpNodes)
-            // console.log(finaldata)
+            nodesFile = response.data.Nodes.concat(tmpNodes)
           } else {
-            finaldata = response.data.nodes
+            nodesFile = response.data.Nodes
           }
-          this.$store.dispatch('updateNodes', finaldata)
+          console.log('%cNodes Set Up', stylesCss)
+          console.log(nodesFile)
+          this.$store.dispatch('updateNodes', nodesFile)
           this.runWS()
-        })
-    },
+          // END NODE CCONFIG
 
-    loadNetwork () {
-      axios.get('./config/networkType.json').then(
-        response => {
-          if (response.data.number === 0 || response.data.number === '') {
-            let defaultNet = {
-              "name": "TEST_NET",
-              "number": 168
-            }
+          // NETWORK CONFIG
+          let networksFile = response.data.NetworkType
 
-            this.$store.dispatch('setNetworkType', defaultNet)
+          if (networksFile !== undefined) {
+            this.$store.dispatch('setNetworkType', networksFile)
+            console.log('%cNetwork Type Set Up:', stylesCss)
             console.log(this.$store.state.netType.name, this.$store.state.netType.number)
-          } else {
-            let customNetworkType = response.data
-            this.$store.dispatch('setNetworkType', customNetworkType)
+          } else if (typeof networksFile !== 'object' || networksFile === undefined) {
+            this.$store.dispatch('setNetworkType', { name: "TEST_NET", number: 168 })
+            console.log('%cDefault Network Type: ', stylesCss)
             console.log(this.$store.state.netType.name, this.$store.state.netType.number)
           }
-        }
-      )
-      .catch(e => {
-        let defaultNet = {
-          "name": "TEST_NET",
-          "number": 168
-        }
-        console.log(this.$store.state.netType)
-      })
+          // END NETWORK CONFIG
+
+          // RENTAL FEE CONFIG
+          let rentalFile = response.data.RentalFeeInfo
+          this.$store.dispatch('setRentalFeeInfo', rentalFile)
+          console.log('%cRental Accounts Set Up:', stylesCss)
+          console.log(this.$store.state.rentalFeeInfo)
+          // END RENTAL FEE CONFIG
+        })
     },
 
     /**
@@ -197,14 +197,6 @@ export default {
       let time = this.averageTime
       this.$store.dispatch('updateAverage', time)
       this.averageTime = 0
-    },
-
-    readConfig () {
-      axios.get('./config/rentalFee.json')
-        .then(response => {
-          let tmp = response.data
-          this.$store.dispatch('setRentalFeeInfo', tmp)
-        })
     }
   }
 }
