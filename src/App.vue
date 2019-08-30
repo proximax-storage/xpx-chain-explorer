@@ -43,7 +43,6 @@ export default {
   },
   mounted () {
     // Call Load Nodes Method
-    this.readConfig()
     this.loadNodes()
     this.average()
     // this.loadNetwork()
@@ -72,12 +71,11 @@ export default {
             padding: 2px;
           `
 
-
           // NODE CONFIG
           let nodesFile = response.data.Nodes
           let tmpNodes = JSON.parse(this.$storage.get('customNodes'))
           if (tmpNodes !== null && typeof tmpNodes === 'object') {
-            nodesFile = response.data.nodes.concat(tmpNodes)
+            nodesFile = response.data.Nodes.concat(tmpNodes)
           } else {
             nodesFile = response.data.Nodes
           }
@@ -215,14 +213,6 @@ export default {
       let time = this.averageTime
       this.$store.dispatch('updateAverage', time)
       this.averageTime = 0
-    },
-
-    readConfig () {
-      axios.get('./config/rentalFee.json')
-        .then(response => {
-          let tmp = response.data
-          this.$store.dispatch('setRentalFeeInfo', tmp)
-        })
     }
   }
 }

@@ -14,10 +14,10 @@ let currentNode = localStorage.getItem('currentNode')
 
 if (currentNode === null) {
   // currentNode = nodesConfig.nodes[0]
-  axios.get('../config/nodes.json').then(
+  axios.get('../config/config.json').then(
     response => {
-      console.log("Default Node", response.data.nodes[0])
-      currentNode = response.data.nodes[0]
+      console.log("Default Node", response.data.Nodes[0])
+      currentNode = response.data.Nodes[0]
       Vue.prototype.$storage = new Persistence()
       Vue.prototype.$utils = Utils
       Vue.prototype.$proxProvider = new proximaxProvider(currentNode)

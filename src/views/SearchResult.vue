@@ -58,10 +58,6 @@
       </div>
     </div>
 
-
-    <!-- Mosaics Component -->
-    <!-- End Mosaics Component -->
-
     <!-- Recent Transactions Component -->
     <recent-trans v-if="showRecentTransaction && blockTransactions.length > 0 && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
     <!-- End Recent Transactions Component -->
@@ -88,7 +84,7 @@ import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
-import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId } from 'tsjs-xpx-catapult-sdk'
+import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams } from 'tsjs-xpx-catapult-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import { mdbProgress } from 'mdbvue'
 import axios from 'axios'
@@ -157,9 +153,15 @@ export default {
       let tmp
       if (this.$route.params.id.length === 64) {
         console.log('Type of Network', this.$store.state.netType)
-        tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
+        if (this.$store.state.netType === undefined) {
+          console.log('Without Storage')
+          this.emergencyNet()
+        } else {
+          console.log('With Storage')
+          tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
+          this.getInfoAccountAndViewTransactions(tmp.address.address)
+        }
         // console.log("TEMPORAL", tmp)
-        this.getInfoAccountAndViewTransactions(tmp.address.address)
       } else {
         this.getInfoAccountAndViewTransactions(this.$route.params.id)
       }
@@ -392,7 +394,7 @@ export default {
         this.showRecentTransaction = (this.param.txes > 0) ? true : false
         this.showComponent()
         this.showInfo = true
-        this.$proxProvider.blockchainHttp.getBlockTransactions(parseInt(block)).subscribe(
+        this.$proxProvider.blockchainHttp.getBlockTransactions(parseInt(block), new QueryParams(100)).subscribe(
           blockTransactions => {
             this.blockTransactions = blockTransactions
             for (const index in this.blockTransactions) {
@@ -580,6 +582,14 @@ export default {
 
     changeList (list) {
       this.activeList = list
+    },
+
+    async emergencyNet () {
+      let response = await axios.get('./config/config.json')
+      console.log('Response', response)
+
+      let tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, response.data.NetworkType.number)
+      this.getInfoAccountAndViewTransactions(tmp.address.address)
     }
   },
   watch: {
