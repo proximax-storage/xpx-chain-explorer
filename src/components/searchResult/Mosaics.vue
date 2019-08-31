@@ -108,7 +108,7 @@ export default {
     },
 
     goToMosaic (mosaicId) {
-      let routeData = this.$router.resolve({ path: `/searchResult/mosaicInfo/${mosaicId}` })
+      let routeData = this.$router.resolve({ path: `/result/mosaicInfo/${mosaicId}` })
       window.open(routeData.href, '_blank')
     }
   }

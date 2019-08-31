@@ -167,7 +167,7 @@ export default {
       }
     } else if (this.$route.params.type === 'blockHeight') {
       this.getBlockByHeight(this.$route.params.id)
-    } else if (this.$route.params.type === 'transactionHash') {
+    } else if (this.$route.params.type === 'hash') {
       this.getInfoTransaction(this.$route.params.id)
     } else if (this.$route.params.type === 'namespaceInfo') {
       if (isNaN(parseInt(this.$route.params.id, 16))) {
@@ -502,7 +502,7 @@ export default {
         this.type = 'Public Key'
       } else if (this.$route.params.type === 'blockHeight') {
         this.type = 'Block Height'
-      } else if (this.$route.params.type === 'transactionHash') {
+      } else if (this.$route.params.type === 'hash') {
         this.type = 'Transaction Hash'
       } else if (this.$route.params.type === 'address') {
         this.type = 'Address'

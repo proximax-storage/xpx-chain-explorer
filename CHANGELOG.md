@@ -53,3 +53,6 @@
   * Bug fixes in AdminNodes Component
   * Bug fixes in RecentTransactions Component
   * Bug fixes in App.vue File and SearchResult View
+
+## Release v0.2.8
+  * Changes in routes

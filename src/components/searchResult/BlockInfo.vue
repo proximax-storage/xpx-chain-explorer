@@ -70,7 +70,7 @@ export default {
 
   methods: {
     goToAddress (address) {
-      let routeData = this.$router.resolve({ path: `/searchResult/address/${ address }` })
+      let routeData = this.$router.resolve({ path: `/result/address/${ address }` })
       window.open(routeData.href, '_blank')
     }
   }
