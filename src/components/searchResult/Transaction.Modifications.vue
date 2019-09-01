@@ -64,17 +64,17 @@ export default {
   },
   methods: {
      goToAddress (address) {
-      let routeData = this.$router.resolve({ path: `/searchResult/address/${address}` })
+      let routeData = this.$router.resolve({ path: `/result/address/${address}` })
       window.open(routeData.href, '_blank')
     },
 
     goToBlock (height) {
-      let routeData = this.$router.resolve({ path: `/searchResult/blockHeight/${height}` })
+      let routeData = this.$router.resolve({ path: `/result/blockHeight/${height}` })
       window.open(routeData.href, '_blank')
     },
 
     goToHash (hash) {
-      let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
+      let routeData = this.$router.resolve({ path: `/result/hash/${hash}` })
       window.open(routeData.href, '_blank')
     }
   }

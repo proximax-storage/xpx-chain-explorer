@@ -120,28 +120,28 @@ export default {
   methods: {
     goToAddress (address) {
       let routeData = (address.length === 64) ?
-      this.$router.resolve({ path: `/searchResult/publicKey/${ address }` }) :
-      this.$router.resolve({ path: `/searchResult/address/${ address }` })
+      this.$router.resolve({ path: `/result/publicKey/${ address }` }) :
+      this.$router.resolve({ path: `/result/address/${ address }` })
       window.open(routeData.href, '_blank')
     },
 
     goToBlock (height) {
-      let routeData = this.$router.resolve({ path: `/searchResult/blockHeight/${height}` })
+      let routeData = this.$router.resolve({ path: `/result/blockHeight/${height}` })
       window.open(routeData.href, '_blank')
     },
 
     goToHash (hash) {
-      let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
+      let routeData = this.$router.resolve({ path: `/result/hash/${hash}` })
       window.open(routeData.href, '_blank')
     },
 
     goToNamespace (namespaceId) {
-      let routeData = this.$router.resolve({ path: `/searchResult/namespaceInfo/${namespaceId}` })
+      let routeData = this.$router.resolve({ path: `/result/namespaceInfo/${namespaceId}` })
       window.open(routeData.href, '_blank')
     },
 
     goToMosaic (mosaicId) {
-      let routeData = this.$router.resolve({ path: `/searchResult/mosaicInfo/${mosaicId}` })
+      let routeData = this.$router.resolve({ path: `/result/mosaicInfo/${mosaicId}` })
       window.open(routeData.href, '_blank')
     }
   }
