@@ -31,7 +31,7 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "https://bctestnet1.xpxsirius.io",
+      "urlNode": "https://bctestnet1-cow.xpxsirius.io",
       "icon": "proximax.svg"
     },
     {
@@ -45,7 +45,7 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "https://bctestnet2.xpxsirius.io",
+      "urlNode": "https://bctestnet2-cow.xpxsirius.io",
       "icon": "proximax.svg"
     }
   ]
