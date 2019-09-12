@@ -174,7 +174,7 @@ export default {
       .catch(err => {
         this.$store.dispatch('updateErrorInfo', {
           active: true,
-          message: 'Comunication error whit node!',
+          message: 'Comunication error with node!',
           submessage: 'Check the internet connection and reload the page'
         })
       })
