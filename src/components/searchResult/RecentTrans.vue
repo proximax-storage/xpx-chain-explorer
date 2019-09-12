@@ -106,12 +106,12 @@ export default {
       let hash = item.transactionInfo.hash
       console.log(hash)
 
-      let routeData = this.$router.resolve({ path: `/searchResult/transactionHash/${hash}` })
+      let routeData = this.$router.resolve({ path: `/result/hash/${hash}` })
       window.open(routeData.href, '_blank')
     },
 
     goToAddress (address) {
-      let routeData = this.$router.resolve({ path: `/searchResult/address/${address}` })
+      let routeData = this.$router.resolve({ path: `/result/address/${address}` })
       window.open(routeData.href, '_blank')
     },
     verifyType (item) {

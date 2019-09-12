@@ -22,12 +22,12 @@
 
         <div>
           <span class="title">Height</span>
-          <router-link class="value link-data" :to="{ path: '/searchResult/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link>
+          <router-link class="value link-data" :to="{ path: '/result/' + 'blockHeight/' + item.height }" target="_blank">{{ item.height }}</router-link>
         </div>
 
         <div>
           <span class="title">Validator</span>
-          <router-link class="value link-data" :to="{ path: '/searchResult/' + 'publicKey/' + item.signer.publicKey }" target="_blank">{{ item.signer.publicKey }}</router-link>
+          <router-link class="value link-data" :to="{ path: '/result/' + 'publicKey/' + item.signer.publicKey }" target="_blank">{{ item.signer.publicKey }}</router-link>
         </div>
 
         <div>

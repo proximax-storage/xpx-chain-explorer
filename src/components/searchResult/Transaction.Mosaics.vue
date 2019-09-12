@@ -50,12 +50,12 @@ export default {
   },
   methods: {
     goToNamespace (namespaceId) {
-      let routeData = this.$router.resolve({ path: `/searchResult/namespaceInfo/${namespaceId}` })
+      let routeData = this.$router.resolve({ path: `/result/namespaceInfo/${namespaceId}` })
       window.open(routeData.href, '_blank')
     },
 
     goToMosaic (mosaicId) {
-      let routeData = this.$router.resolve({ path: `/searchResult/mosaicInfo/${mosaicId}` })
+      let routeData = this.$router.resolve({ path: `/result/mosaicInfo/${mosaicId}` })
       window.open(routeData.href, '_blank')
     },
 

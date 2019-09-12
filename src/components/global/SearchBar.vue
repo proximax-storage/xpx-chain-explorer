@@ -97,7 +97,7 @@ export default {
         this.typeSearch = 'basic'
         this.label = 'Address / Public Key / Block Height'
       } else if (item.name === 'Hash') {
-        this.typeSearch = 'transactionHash'
+        this.typeSearch = 'hash'
         this.label = 'Hash / Tx ID'
       } else if (item.name === 'Namespace') {
         this.typeSearch = 'namespaceInfo'
@@ -124,7 +124,7 @@ export default {
     performSearch () {
       console.log(this.typeSearch)
       console.log(this.valueSearch)
-      if (this.typeSearch === 'basic' || this.typeSearch === 'transactionHash') {
+      if (this.typeSearch === 'basic' || this.typeSearch === 'hash') {
         if (this.valueSearch !== '') {
           if (this.bannerActive) {
             this.bannerActive = false
@@ -148,7 +148,7 @@ export default {
 
           this.valueSearch = this.valueSearch.toLowerCase()
 
-          let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
+          let routeData = this.$router.resolve({ path: `/result/${this.typeSearch}/${this.valueSearch}` })
           window.open(routeData.href, '_blank')
         } else {
           this.bannerActive = true
@@ -162,7 +162,7 @@ export default {
           let routeData = this.$router.resolve({ path: `/list/mosaics` })
           window.open(routeData.href, '_blank')
         } else {
-          let routeData = this.$router.resolve({ path: `/searchResult/${this.typeSearch}/${this.valueSearch}` })
+          let routeData = this.$router.resolve({ path: `/result/${this.typeSearch}/${this.valueSearch}` })
           window.open(routeData.href, '_blank')
         }
       }
