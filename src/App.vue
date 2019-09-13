@@ -130,11 +130,9 @@ export default {
       if (currentNode.includes('http://')) {
         currentNode = currentNode.substr(7)
         currentNode = `ws://${currentNode}`
-        console.log(currentNode)
       } else if (currentNode.includes('https://')) {
         currentNode = currentNode.substr(8)
         currentNode = `wss://${currentNode}`
-        console.log(currentNode)
       }
       // Print current node in console
       console.log("NODE", currentNode)
@@ -147,7 +145,6 @@ export default {
           .subscribe(block => {
             block.height = block.height.compact()
             if (block.numTransactions !== undefined) {
-              // console.log('block.numTransactions BIEN')
               let fee = this.$utils.fmtAmountValue(block.totalFee.compact())
               let timestamp = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
               block.numTransactions = block.numTransactions
@@ -232,6 +229,13 @@ body
   background: transparent
   &::-webkit-scrollbar
     background: red
+
+*label
+  margin: 0px 0px 0px 0px !important
+
+.mr-5
+  margin: 0px 0px 0px 0px !important
+
 
 @media screen and (min-width: 1367px)
   .view-container

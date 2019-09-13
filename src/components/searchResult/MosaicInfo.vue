@@ -110,7 +110,6 @@ export default {
     }
   },
   mounted () {
-    console.log('MosaicInfo Detail', this.detail)
   },
   methods: {
     goToAddress (address) {

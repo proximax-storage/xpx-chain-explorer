@@ -59,18 +59,13 @@ export default {
     getLastBlocks () {
       this.$proxProvider.blockchainHttp.getBlockchainHeight().subscribe(
         next => {
-          console.log(next.compact())
           let lastBlock = next.compact()
 
           this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(lastBlock, LimitType.N_50).subscribe(
             blockInfo => {
-              console.log(blockInfo)
-              console.log(blockInfo.length, blockInfo.length < 100)
-              console.log(blockInfo[blockInfo.length - 1].height.compact())
               if (blockInfo.length < 10) {
                 this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(blockInfo[blockInfo.length - 1].height.compact() - 1).subscribe(
                   response => {
-                    console.log(response)
                     blockInfo.concat(response)
                     this.blocks = blockInfo.slice(0, 9)
                   }

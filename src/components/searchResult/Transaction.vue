@@ -249,7 +249,6 @@ export default {
     verifyType () {
       let objectOfTypes = Object.values(proximaxProvider.typeTransactions())
       objectOfTypes.forEach(element => {
-        // console.log(element.name)
         if (this.detail.type === element.id) {
           this.transactionType = element.name
         }

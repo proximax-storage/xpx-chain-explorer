@@ -1,11 +1,11 @@
 {
   "Nodes": [
-    "http://bctestnet1.xpxsirius.io:3000",
-    "http://bctestnet2.xpxsirius.io:3000",
-    "http://bctestnet3.xpxsirius.io:3000",
-    "http://bctestnet4.xpxsirius.io:3000",
-    "http://bctestnet5.xpxsirius.io:3000",
-    "http://bctestnet6.xpxsirius.io:3000"
+    "https://bctestnet1.xpxsirius.io",
+    "https://bctestnet2.xpxsirius.io",
+    "https://bctestnet3.xpxsirius.io",
+    "https://bctestnet4.xpxsirius.io",
+    "https://bctestnet5.xpxsirius.io",
+    "https://bctestnet6.xpxsirius.io"
   ],
   "NetworkType": {
     "name": "TEST_NET",

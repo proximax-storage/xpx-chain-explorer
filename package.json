@@ -17,7 +17,7 @@
     "postcss-import": "^12.0.1",
     "register-service-worker": "^1.6.2",
     "rxjs": "^6.5.2",
-    "tsjs-xpx-chain-sdk": "file:../tsjs-xpx-chain-sdk",
+    "tsjs-xpx-chain-sdk": "^0.5.2",
     "utf8": "^3.0.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",

@@ -60,12 +60,6 @@ export default {
     detail: Object
   },
   mounted () {
-    console.log(this.detail)
-    this.detail.mosaics.forEach((el, index) => {
-      console.log(`el${index+1}`, el)
-      console.log(el.id.toHex())
-      console.log(el.amount.compact())
-    })
   },
   computed: {
     /**
@@ -84,9 +78,7 @@ export default {
      * receives by parameters, analyzing the xpx mosaic and printing its value
      */
     getBalance () {
-      // console.log(this.detail.mosaics)
       let xpxMosaics = this.detail.mosaics.filter(el => el.id.id.toHex().toUpperCase() === proximaxProvider.mosaicXpx())
-      // console.log(xpxMosaics)
       let amount
       if (xpxMosaics.length > 0) {
         amount = this.$utils.fmtAmountValue(xpxMosaics[0].amount.compact())

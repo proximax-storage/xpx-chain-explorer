@@ -144,17 +144,12 @@ export default {
         this.newNodeValue = ''
         this.nodeLoader = false
       } else if (action == 'add') {
-        // this.newNode = false
         this.nodeLoader = true
         if (this.newNodeValue !== '') {
-          // console.log(this.newNodeValue)
           this.nodeMessage = ''
           axios.get(`${this.newNodeValue}/node/info`).then(
             response => {
-
-              console.log(response.data.networkIdentifier, this.$store.state.netType.number)
               if (this.$store.state.nodes.includes(this.newNodeValue) === false) {
-                console.log("This node does not exist in the current node list")
                 if (response.data.networkIdentifier === this.$store.state.netType.number) {
                   this.$store.dispatch('pushNewNode', this.newNodeValue)
                   if (this.$storage.get('customNodes') === null || this.$storage.get('customNodes') === undefined) {
@@ -181,8 +176,6 @@ export default {
                     icon: 'nodes.svg'
                   }
                   let mapCustomNodes = this.$storage.get('mapCustomNodes')
-                  console.log("mapCustomNodes", mapCustomNodes)
-                  console.log(tmpObj)
                   if (mapCustomNodes !== null) {
                     mapCustomNodes = JSON.parse(mapCustomNodes)
                     mapCustomNodes.push(tmpObj)

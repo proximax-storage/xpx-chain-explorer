@@ -156,9 +156,7 @@ export default {
     if (this.$route.params.type === 'publicKey' || this.$route.params.type === 'address') {
       let tmp
       if (this.$route.params.id.length === 64) {
-        console.log('Type of Network', this.$store.state.netType)
         tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
-        // console.log("TEMPORAL", tmp)
         this.getInfoAccountAndViewTransactions(tmp.address.address)
       } else {
         this.getInfoAccountAndViewTransactions(this.$route.params.id)
@@ -213,11 +211,9 @@ export default {
       let errorActive1 = false
       let errorActive2 = false
       this.mosaicLoader = true
-      // console.log("ADDRESS & XPX", addr, xpx)
       this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
-          console.log('RESPONSE ACCOUNT', resp.account)
           this.param = resp
           this.showComponent()
           // If your account information has tiles, look up your information and name to display them in the tile table
@@ -229,21 +225,14 @@ export default {
               this.mosaicLoader = false
             }
 
-            console.log("Filtered Trans", filteredTrans)
-
             filteredTrans.forEach((el, index) => {
-              console.log('LLEGA AQUI')
               this.$proxProvider.getMosaic(el.id).subscribe(
                 mosaicResponse => {
                   let amountCompact = el.amount.compact()
                   let mosHeight = mosaicResponse.height.compact()
                   let mosDurat = (mosaicResponse.duration === undefined) ? 0 : mosaicResponse.duration.compact()
-                  console.log(amountCompact, mosHeight, mosDurat)
-                  console.log("Elemento", mosaicResponse)
-                  console.log(mosaicResponse.mosaicId.toHex())
                   this.$proxProvider.getMosaicsName([mosaicResponse.mosaicId]).subscribe(
                     responseName => {
-                      console.log(responseName)
                       let tmpObj = {
                         name: responseName[0].names[0].name,
                         id: el.id.toHex(),
@@ -315,7 +304,6 @@ export default {
           })
         },
         error => {
-          console.log('No Namespaces Yet!')
           this.linkNamespaces = []
         }
       )
@@ -328,8 +316,6 @@ export default {
             minApproval: response.data.multisig.minApproval,
             minRemoval: response.data.multisig.minRemoval
           }
-
-          console.log(response.data.multisig)
 
           this.cosignList = Array.from(response.data.multisig.cosignatories)
           this.multisigRelatedAccount = Array.from(response.data.multisig.multisigAccounts),
@@ -358,7 +344,6 @@ export default {
     getBlockByHeight (block) {
       this.$proxProvider.blockHttp.getBlockByHeight(parseInt(block)).subscribe(
         next => {
-        console.log(next)
         next.date = this.$utils.fmtTime(new Date(next.timestamp.compact() + Deadline.timestampNemesisBlock * 1000))
         next.difficulty = (next.difficulty.compact()/Math.pow(10, 14)*100).toFixed(2) + "%"
         next.totalFee = this.$utils.fmtAmountValue(next.totalFee.compact())
@@ -374,10 +359,8 @@ export default {
         this.showRecentTransaction = (this.param.txes > 0) ? true : false
         this.showComponent()
         this.showInfo = true
-        console.log(parseInt(block))
         this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(100)).subscribe(
           blockTransactions => {
-            console.log(blockTransactions)
             this.blockTransactions = blockTransactions
             for (const index in this.blockTransactions) {
               this.blockTransactions[index].fee = this.$utils.fmtAmountValue(this.blockTransactions[index].maxFee.compact())
@@ -413,7 +396,6 @@ export default {
         resp => {
           this.param = resp
           this.showComponent()
-          console.log('Get Info Transaction', resp)
         },
         error => {
           this.$store.dispatch('updateErrorInfo', {
@@ -427,16 +409,12 @@ export default {
 
     getNamespaceInfo (namespaceHex) {
       let namespaceId = Id.fromHex(namespaceHex)
-      console.log('NamespaceInfo', namespaceId)
       this.$proxProvider.getNamespacesInfo(namespaceId).subscribe(
         response => {
-          console.log(response)
-          // this.param.id = namespaceId
           this.$proxProvider.getNamespacesName([namespaceId]).subscribe(
             nameResponse => {
               this.param = response
               nameResponse = nameResponse.reverse()
-              console.log("Name Response", nameResponse)
               if (nameResponse.length > 1) {
                 this.param.name = `${nameResponse[0].name}.${nameResponse[1].name}`
               } else {
@@ -460,13 +438,9 @@ export default {
       let mosaicId = Id.fromHex(mosaicHex)
       this.$proxProvider.getMosaic(mosaicId).subscribe(
         response => {
-          console.log("Busqueda de Mosaico", response)
           let duration = (response.duration === undefined) ? 0 : response.duration.compact()
-          console.log(duration)
           this.$proxProvider.getMosaicsName([mosaicId]).subscribe(
             nameResponse => {
-              console.log("NAME RESPOOONSEEE", nameResponse[0])
-
               let tmpObj = {
                 name: (nameResponse[0].names[0] !== undefined) ? nameResponse[0].names[0].name : '',
                 id: response.mosaicId.toHex(),
@@ -480,13 +454,7 @@ export default {
                 duration: duration,
                 properties: response.properties
               }
-
-              console.log(tmpObj)
-
               this.param = tmpObj
-              // this.param.durat = duration
-              // this.param.name = nameResponse[0].names[0].name
-              console.log('MosaicInfo', response)
               this.showComponent()
             }
           )
@@ -528,7 +496,7 @@ export default {
     viewTransactionsFromPublicAccount(publicAccount) {
       this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 50).subscribe(
         transactions => {
-          console.log("Transacciones de esta cuenta",transactions)
+          // console.log("Account Transactions",transactions)
           if (transactions.length > 0) {
             transactions.forEach(element => {
               element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())

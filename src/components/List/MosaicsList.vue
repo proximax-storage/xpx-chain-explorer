@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { Address } from 'tsjs-xpx-chain-sdk'
+import { Address, QueryParams } from 'tsjs-xpx-chain-sdk'
 import { mdbProgress } from 'mdbvue'
 
 export default {
@@ -84,28 +84,32 @@ export default {
     let account = this.$proxProvider.createPublicAccount(this.$store.state.rentalFeeInfo.mosaicRentalFee.publicKey, this.$store.state.netType.number)
     let net = this.$store.state.netType.number
 
-    this.$proxProvider.getAllTransactionsFromAccount(account, 100).subscribe(
+    this.$proxProvider.getAllTransactionsFromAccount(account, new QueryParams(100)).subscribe(
       transactions => {
-        console.log("Transacciones de esta cuenta",transactions)
         if (transactions.length > 0) {
           this.resp = transactions
           this.resp.forEach((el, index) => {
-            // ERROR: does not display some mosaic data correctly
-            // ERROR: No muestra correctamente algunos datos del mosaico
-            console.log(el.mosaicId.id)
-            this.$proxProvider.getMosaic(el.mosaicId.id).subscribe(
-              response => {
-                // console.log(response)
-                // console.log(`${index}.- divisibility: `, response.divisibility)
-                // console.log(`${index}.- duration: `, response.duration)
-                // console.log(`${index}.- mosaic properties duration: `, response.properties.duration)
-                response.id = el.mosaicId.id.toHex()
-                this.mosaicArr.push(response)
-              },
-              err => {
-                console.log('Mosaic not found')
-              }
-            )
+            if (el.type === 16717) {
+              this.$proxProvider.getMosaic(el.mosaicId.id).subscribe(
+                response => {
+                  response.id = el.mosaicId.id.toHex()
+                  this.mosaicArr.push(response)
+                },
+                err => {
+                  console.log('Mosaic not found')
+                }
+              )
+            } else if (el.type === 16705) {
+              this.$proxProvider.getMosaic(el.innerTransactions[0].mosaicId.id).subscribe(
+                response => {
+                  response.id = el.mosaicId.id.toHex()
+                  this.mosaicArr.push(response)
+                },
+                err => {
+                  console.log('Mosaic not found')
+                }
+              )
+            }
           })
         }
       },

@@ -90,9 +90,7 @@ export default {
     }
   },
   mounted () {
-    // console.log(this.dataTable)
     this.viewAllBlocks()
-    //console.log('Este es el current block', this.currentBlock)
   },
   methods: {
     /**
@@ -106,7 +104,6 @@ export default {
           next = next.compact()
           this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(next, 50).subscribe(
             blockInfo => {
-              // console.log(blockInfo)
               blockInfo.forEach(element => {
                 element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())
                 element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
@@ -114,12 +111,9 @@ export default {
                 this.dataTable.push(element)
               })
 
-              // console.log(blockInfo.length, blockInfo.length < 100)
               if (blockInfo.length <= 50) {
-                // console.log(this.dataTable[this.dataTable.length-1].height)
                 this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 50).subscribe(
                   response => {
-                    // console.log(response)
                     response.forEach(element => {
                       element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())
                       element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
@@ -157,12 +151,10 @@ export default {
     },
 
     loadMore () {
-      // console.log('more blocks')
       if (this.buttonLoaderActive !== true) {
         this.buttonLoaderActive = true
         this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 100).subscribe(
           response => {
-            // console.log(response)
             response.forEach(element => {
               element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())
               element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
@@ -185,9 +177,7 @@ export default {
     updateTable () {
       let height = this.$store.getters.getCurrentBlock
       let block = this.$store.state.currentBlock
-      // console.log(height, block)
       if (height !== 'Loading') {
-        // console.log(this.dataTable[0])
         if (this.dataTable[0] !== undefined) {
           if (this.dataTable[0].height !== height) {
             this.dataTable.unshift(block)
@@ -206,7 +196,6 @@ export default {
   display: flex
   flex-flow: row nowrap
   justify-content: space-around
-  // margin: 2px 0px
   padding: 5px
   color: white
   border-radius: 5px

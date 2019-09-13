@@ -84,7 +84,6 @@ export default {
     }
   },
   data () {
-    // console.log(proximaxProvider.typeTransactions())
     return {
       typeTransactions: proximaxProvider.typeTransactions(),
       mosaicRental: this.$store.state.rentalFeeInfo.mosaicRentalFee.address,
@@ -92,8 +91,6 @@ export default {
     }
   },
   mounted () {
-    // console.log(this.arrayTransactions)
-    console.log(this.mosaicRental, this.namespaceRental)
   },
   methods: {
     /**
@@ -104,7 +101,6 @@ export default {
      */
     redirectToDetail (item) {
       let hash = item.transactionInfo.hash
-      console.log(hash)
 
       let routeData = this.$router.resolve({ path: `/result/hash/${hash}` })
       window.open(routeData.href, '_blank')
@@ -116,10 +112,8 @@ export default {
     },
     verifyType (item) {
       let name = null
-      console.log('verifyType')
       let objectOfTypes = Object.values(proximaxProvider.typeTransactions())
       objectOfTypes.forEach(element => {
-        // console.log(element.name)
         if (item === element.id) {
           name = element.name
         }

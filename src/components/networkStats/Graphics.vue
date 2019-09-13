@@ -66,9 +66,6 @@ export default {
   methods: {
     showGraphic () {
       const ctx = this.$el.querySelector('#graphic-1')
-      // console.log(ctx)
-      // console.log(this.graphicData)
-      // eslint-disable-next-line
       const graphic = new Chart(ctx, {
         type: 'line',
         data: {
