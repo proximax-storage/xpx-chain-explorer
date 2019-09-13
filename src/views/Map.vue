@@ -118,6 +118,7 @@ export default {
             mapCustomNodes = JSON.parse(mapCustomNodes)
 
             mapCustomNodes.forEach(el => {
+              // console.log(el)
               this.mapList.push(el)
             })
           }
@@ -128,7 +129,12 @@ export default {
     },
 
     analyzeMaps () {
+      console.log('Lista de Mapas',this.mapList)
+
       this.mapList.forEach((el, index) => {
+        // console.log(el)
+        // Get LatLon
+
         axios.get(`${el.urlNode}/node/info`).then(
           response => {
             console.log(response)
@@ -167,6 +173,7 @@ export default {
     },
 
     loadFirstMap () {
+      // console.log('Loading First Map')
       this.loadMap(this.mapList[0].lat, this.mapList[0].lon, this.mapList[0])
     },
 
@@ -187,11 +194,13 @@ export default {
         this.filterExe = 'status'
       }
 
+      // console.log(this.filterExe)
       this.buttonName = item
     },
 
     // Load An Map
     loadMap (lat, lon, item) {
+      // console.log(lat, lon)
       mapboxgl.accessToken = 'pk.eyJ1Ijoiai1tb3JhMTUiLCJhIjoiY2p5MGY4a2RhMDJqZjNucXh0anl0ZDd2eCJ9.Lsq-ETN03fbVIctkd9lV3Q';
       let map = new mapboxgl.Map({
         container: 'first',
@@ -199,6 +208,9 @@ export default {
         center: [lon, lat],
         zoom: 10
       })
+
+
+      // map.addControl(new mapboxgl.NavigationControl())
 
       let popup = new mapboxgl.Popup({ offset: 25 })
         .setHTML(
@@ -246,6 +258,7 @@ export default {
           activesArr[3] = (el.location.toString().toLowerCase().search(filter) === 0) ? true : false
           activesArr[4] = (el.version.toString().toLowerCase().search(filter) === 0) ? true : false
 
+          // console.log(activesArr, activesArr.some(el => el == true))
           el.active = activesArr.some(el => el == true)
         })
       } else {

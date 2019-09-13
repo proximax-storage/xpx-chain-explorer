@@ -98,13 +98,13 @@ export default {
         this.label = 'Address / Public Key / Block Height'
       } else if (item.name === 'Hash') {
         this.typeSearch = 'hash'
-        this.label = 'Hash / Tx ID'
+        this.label = 'Hash / Tx Id'
       } else if (item.name === 'Namespace') {
         this.typeSearch = 'namespaceInfo'
         this.label = 'Namespace / Sub-namespace'
       } else if (item.name === 'Mosaic') {
         this.typeSearch = 'mosaicInfo'
-        this.label = 'Mosaic ID / Alias (e.g. prx.xpx)'
+        this.label = 'Mosaic Id / Alias (e.g. prx.xpx)'
       }
 
       this.searchList.forEach(el => {
@@ -122,6 +122,8 @@ export default {
      * taking the type of search and the value entered by the user
      */
     performSearch () {
+      console.log(this.typeSearch)
+      console.log(this.valueSearch)
       if (this.typeSearch === 'basic' || this.typeSearch === 'hash') {
         if (this.valueSearch !== '') {
           if (this.bannerActive) {
@@ -130,11 +132,16 @@ export default {
           }
 
           if (this.typeSearch === 'basic') {
+            console.log('Basic', this.valueSearch)
+
             if (this.valueSearch.length === 64) {
+              console.log('Public Key')
               this.typeSearch = 'publicKey'
             } else if (this.valueSearch.length === 40 || this.valueSearch.length === 46) {
+              console.log('Address')
               this.typeSearch = 'publicKey'
             } else if (typeof parseInt(this.valueSearch) == 'number') {
+              console.log('Number')
               this.typeSearch = 'blockHeight'
             }
           }
@@ -250,25 +257,71 @@ export default {
         background: #2BA1B9
         border: none
 @media screen and (max-width: 450px)
-  .searchBar > .search-cont
-    & > form
+    .searchBar > .search-cont > form
       flex-flow: column
       & > div
         width: 100%
       & > button
         width: 100%
         margin: 0px 0px 3px 0px
-    // & > .selector
-    //   flex-flow: column
 
-@media screen and (max-width: 375px)
-  .searchBar > .search-cont
-    & > .selector
-      flex-flow: column
-      & > .sel-item
-        &:first-child
-          border-radius: 10px 10px 0px 0px
-        &:last-child
-          border-radius: 0px 0px 10px 10px
+
+
+    // width: 100%
+    // display: flex
+    // flex-flow: row wrap
+    // align-items: center
+    // justify-content: space-between
+    // & > .search-button
+    //   margin: 0px 10px
+    //   display: flex
+    //   flex-flow: row wrap
+    //   justify-content: center
+    // & > .search-input
+    //   margin: 0px 10px
+    //   display: flex
+    //   flex-flow: row nowrap
+    //   align-items: center
+    //   flex-grow: 3
+    //   & > div
+    //     margin: 0px
+    //   & > button
+    //     display: flex
+    //     flex-flow: row nowrap
+    //     justify-content: center
+    //     align-items: center
+    //     margin: 0px 0px 0px 10px
+    //     padding: 13px 34px
+    //     border-radius: 30px
+    //     color: white
+    //     text-transform: uppercase
+    //     font-size: 12px
+    //     font-weight: bold
+    //     background: #2BA1B9
+    //     border: none
+    //     & > img
+    //       margin: 0px
+    //       width: 15px
+
+@media screen and (max-width: 620px)
+  // .dropdown
+  //   width: 100% !important
+
+  // .searchBar
+  //   & > .search-cont
+  //     flex-flow: column
+  //     & > .search-button
+  //       margin: 5px
+  //       flex-grow: 0
+  //       width: 100%
+  //     & > .search-input
+  //       display: flex
+  //       flex-flow: column
+  //       margin: 5px
+  //       flex-grow: 0
+  //       width: 100%
+  //       & > button
+  //         width: 100%
+  //         margin: 0px
 
 </style>

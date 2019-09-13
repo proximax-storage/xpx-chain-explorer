@@ -64,7 +64,7 @@
 <script>
 import proximaxProvider from '@/services/proximaxProviders.js'
 import { mdbProgress } from 'mdbvue'
-import { Id } from 'tsjs-xpx-chain-sdk'
+import { Id } from 'tsjs-xpx-catapult-sdk'
 
 export default {
   name: 'RecentTrans',
@@ -93,6 +93,7 @@ export default {
    * Call constructorObj method
    */
   mounted () {
+    console.log("Array transaction mosaic", this.arrayTransactions)
     this.analyzeElements()
   },
   methods: {

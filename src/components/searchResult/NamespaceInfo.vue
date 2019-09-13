@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { Id } from 'tsjs-xpx-chain-sdk'
+import { Id } from 'tsjs-xpx-catapult-sdk'
 
 export default {
   name: 'NamespaceInfo',
@@ -123,12 +123,15 @@ export default {
             if (nameResponse.length === 1) {
               el.name = nameResponse[0].name
               nameResponse = nameResponse.reverse()
+              console.log("Name Response", nameResponse)
               el.name = nameResponse[0].name
             } else if (nameResponse.length === 2) {
               nameResponse = nameResponse.reverse()
+              console.log("Name Response", nameResponse)
               el.name = `${nameResponse[0].name}.${nameResponse[1].name}`
             } else if (nameResponse.length === 3) {
               nameResponse = nameResponse.reverse()
+              console.log("Name Response", nameResponse)
               el.name = `${nameResponse[0].name}.${nameResponse[1].name}.${nameResponse[2].name}`
             }
 
