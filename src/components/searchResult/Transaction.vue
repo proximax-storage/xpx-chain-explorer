@@ -207,7 +207,7 @@ export default {
       plusInfo: [],
       transactionType: 'Hash Transaction',
       mosaicsOfTransfer: null,
-      xpx: proximaxProvider.mosaicXpx(),
+      xpx: this.$store.state.xpx,
       calculatedAmount: null,
     }
   },
