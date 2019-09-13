@@ -131,7 +131,6 @@ export default {
       console.log('Lista de Mapas',this.mapList)
 
       this.mapList.forEach((el, index) => {
-<<<<<<< HEAD
         // console.log(el)
         // Get LatLon
 
@@ -165,18 +164,6 @@ export default {
                 }
 
                 this.verifyMapList()
-=======
-        // Get LatLon
-        axios.get(`https://geoip-db.com/json/${el.ip}`).then(
-          resp => {
-            el.lat = resp.data.latitude
-            el.lon = resp.data.longitude
-            el.location = resp.data.country_name
-
-            axios.get(`${el.urlNode}/node/info`).then(
-              response => {
-                el.version = response.data.version
->>>>>>> parent of ecbf2d6... Bug fixes
               }
             )
 
