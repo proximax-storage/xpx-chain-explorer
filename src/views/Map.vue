@@ -111,6 +111,7 @@ export default {
     getInfoNodes () {
       axios.get('./config/config.json').then(
         response => {
+          // console.log(response.data.MapsInfo)
           this.mapList = response.data.MapsInfo
           let mapCustomNodes = this.$storage.get('mapCustomNodes')
           if (mapCustomNodes !== null) {
@@ -128,27 +129,38 @@ export default {
 
     analyzeMaps () {
       this.mapList.forEach((el, index) => {
-        // Get LatLon
-        axios.get(`https://geoip-db.com/json/${el.ip}`).then(
-          resp => {
-            el.lat = resp.data.latitude
-            el.lon = resp.data.longitude
-            el.location = resp.data.country_name
+        axios.get(`${el.urlNode}/node/info`).then(
+          response => {
+            console.log(response)
+            el.ip = response.data.host
+            el.version = response.data.version
 
-            axios.get(`${el.urlNode}/node/info`).then(
-              response => {
-                el.version = response.data.version
+            let url = `https://geoip-db.com/json/${el.ip}`
+            axios.get(url).then(
+              resp => {
+                console.log(resp)
+
+                el.lat = resp.data.latitude
+                el.lon = resp.data.longitude
+                el.location = resp.data.country_name
+
+                axios.get(`${el.urlNode}/node/info`).then(
+                  response => {
+                    el.version = response.data.version
+                  }
+                )
+
+                if (el.urlNode !== undefined) {
+                  axios.get(`${el.urlNode}/chain/height`).then(
+                    response => {
+                      el.height = response.data.height[0]
+                    }
+                  )
+                }
+
+                this.verifyMapList()
               }
             )
-
-            if (el.urlNode !== undefined) {
-              axios.get(`${el.urlNode}/chain/height`).then(
-                response => {
-                  el.height = response.data.height[0]
-                }
-              )
-            }
-            this.verifyMapList()
           }
         )
       })

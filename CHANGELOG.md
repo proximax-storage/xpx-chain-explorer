@@ -44,7 +44,15 @@
   * New automatic caché clearing feature according to version.
   * Minor bug Fixes.
 
-## Release v.0.2.6
+## Release v0.2.6
   * Creation, addition and configuration of a single configuration file.
   * Minor bug fixes in the Modal Component.
   * minor bug fixes in the InnerTransactions Component.
+
+## Release v0.2.7
+  * Bug fixes in AdminNodes Component
+  * Bug fixes in RecentTransactions Component
+  * Bug fixes in App.vue File and SearchResult View
+
+## Release v0.2.8
+  * Changes in routes
