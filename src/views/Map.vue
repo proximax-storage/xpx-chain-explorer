@@ -128,7 +128,7 @@ export default {
     },
 
     analyzeMaps () {
-      console.log('Lista de Mapas',this.mapList)
+      // console.log('Lista de Mapas',this.mapList)
 
       this.mapList.forEach((el, index) => {
         // console.log(el)
@@ -136,14 +136,14 @@ export default {
 
         axios.get(`${el.urlNode}/node/info`).then(
           response => {
-            console.log(response)
+            // console.log(response)
             el.ip = response.data.host
             el.version = response.data.version
 
             let url = `https://geoip-db.com/json/${el.ip}`
             axios.get(url).then(
               resp => {
-                console.log(resp)
+                // console.log(resp)
 
                 el.lat = resp.data.latitude
                 el.lon = resp.data.longitude

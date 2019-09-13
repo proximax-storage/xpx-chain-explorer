@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { Address } from 'tsjs-xpx-catapult-sdk'
+import { Address } from 'tsjs-xpx-chain-sdk'
 import { mdbProgress } from 'mdbvue'
 
 export default {

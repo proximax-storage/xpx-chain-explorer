@@ -102,7 +102,7 @@ export default {
      */
     getAllNodes () {
       let tmpArray = []
-      let tmp = Array.from(this.$store.getters.getAllNodes)
+      let tmp = Array.from(this.$store.state.nodes)
       tmp.forEach((item, index) => {
         tmpArray.push({ name: item, index: index })
       });

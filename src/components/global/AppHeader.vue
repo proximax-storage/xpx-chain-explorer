@@ -55,7 +55,7 @@ export default {
         year: 2019,
         militarHour: '12:00'
       },
-      explorerVersion: 'v0.2.8'
+      explorerVersion: 'v0.3.1'
     }
   },
   methods: {
@@ -208,7 +208,7 @@ export default {
     display: flex
     justify-content: space-between
     width: 100%
-    padding: 15px
+    padding: 10px
     margin: 0px
     & > img
       width: 200px

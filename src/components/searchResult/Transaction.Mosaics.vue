@@ -33,7 +33,7 @@ export default {
   },
   data () {
     return {
-      xpx: '0DC67FBE1CAD29E3',
+      xpx: this.$store.state.xpx,
       finalData: [],
       titleMosaic: 'Mosaic Id',
       mosaicAliasName: [],
@@ -42,11 +42,6 @@ export default {
     }
   },
   mounted () {
-    console.log("param of mosaic in transfer", this.params)
-    // this.params.forEach(el => {
-    //   console.log(el.id.toHex())
-    // })
-    //this.organizeData()
   },
   methods: {
     goToNamespace (namespaceId) {
@@ -64,7 +59,7 @@ export default {
       if (this.params !== null) {
         this.params.forEach(el => {
           let tmpObj = {}
-          if (el.id.toHex().toUpperCase() === this.xpx) {
+          if (el.id.toHex() === this.xpx) {
             this.$emit('returnAmount', this.$utils.fmtAmountValue(el.amount.compact()))
           } else {
             this.amountQuantity = 'Quantity'
@@ -72,7 +67,7 @@ export default {
             this.$proxProvider.getMosaic(el.id).subscribe(
               response => {
                 if (response.properties.divisibility !== 0) {
-                  this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
+                  this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response.properties.divisibility))
                   // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response.properties.divisibility)
                   this.finalData.push(tmpObj)
                 } else {

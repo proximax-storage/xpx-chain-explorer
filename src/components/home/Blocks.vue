@@ -71,7 +71,7 @@
 
 <script>
 import { mdbProgress, mdbSpinner, mdbIcon } from 'mdbvue'
-import { Deadline } from 'tsjs-xpx-catapult-sdk'
+import { Deadline } from 'tsjs-xpx-chain-sdk'
 
 export default {
   name: 'Blocks',
@@ -101,9 +101,9 @@ export default {
      * Method to see recently closed blocks
      */
     viewAllBlocks () {
-      this.$proxProvider.blockchainHttp.getBlockchainHeight().subscribe(
+      this.$proxProvider.chainHttp.getBlockchainHeight().subscribe(
         next => {
-          this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(next.compact(), 50).subscribe(
+          this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(next.compact(), 50).subscribe(
             blockInfo => {
               // console.log(blockInfo)
               blockInfo.forEach(element => {
@@ -116,7 +116,7 @@ export default {
               // console.log(blockInfo.length, blockInfo.length < 100)
               if (blockInfo.length <= 50) {
                 // console.log(this.dataTable[this.dataTable.length-1].height)
-                this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 50).subscribe(
+                this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 50).subscribe(
                   response => {
                     // console.log(response)
                     response.forEach(element => {
@@ -159,7 +159,7 @@ export default {
       // console.log('more blocks')
       if (this.buttonLoaderActive !== true) {
         this.buttonLoaderActive = true
-        this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 100).subscribe(
+        this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 100).subscribe(
           response => {
             // console.log(response)
             response.forEach(element => {

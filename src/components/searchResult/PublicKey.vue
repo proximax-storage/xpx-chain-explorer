@@ -69,7 +69,7 @@ export default {
      * Return XPX Mosaic ID
      */
     getId () {
-      return proximaxProvider.mosaicXpx()
+      return this.$store.state.xpx
     },
 
     /**
@@ -80,7 +80,7 @@ export default {
      */
     getBalance () {
       // console.log(this.detail.mosaics)
-      let xpxMosaics = this.detail.mosaics.filter(el => el.id.id.toHex().toUpperCase() === proximaxProvider.mosaicXpx())
+      let xpxMosaics = this.detail.mosaics.filter(el => el.id.id.toHex() === this.$store.state.xpx)
       // console.log(xpxMosaics)
       let amount
       if (xpxMosaics.length > 0) {
