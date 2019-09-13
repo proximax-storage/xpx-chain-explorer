@@ -58,6 +58,10 @@
       </div>
     </div>
 
+
+    <!-- Mosaics Component -->
+    <!-- End Mosaics Component -->
+
     <!-- Recent Transactions Component -->
     <recent-trans v-if="showRecentTransaction && blockTransactions.length > 0 && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
     <!-- End Recent Transactions Component -->
@@ -152,6 +156,7 @@ export default {
     if (this.$route.params.type === 'publicKey' || this.$route.params.type === 'address') {
       let tmp
       if (this.$route.params.id.length === 64) {
+<<<<<<< HEAD
         console.log('Type of Network', this.$store.state.netType)
         if (this.$store.state.netType === undefined) {
           console.log('Without Storage')
@@ -162,6 +167,10 @@ export default {
           this.getInfoAccountAndViewTransactions(tmp.address.address)
         }
         // console.log("TEMPORAL", tmp)
+=======
+        tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
+        this.getInfoAccountAndViewTransactions(tmp.address.address)
+>>>>>>> parent of ecbf2d6... Bug fixes
       } else {
         this.getInfoAccountAndViewTransactions(this.$route.params.id)
       }
@@ -582,14 +591,6 @@ export default {
 
     changeList (list) {
       this.activeList = list
-    },
-
-    async emergencyNet () {
-      let response = await axios.get('./config/config.json')
-      console.log('Response', response)
-
-      let tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, response.data.NetworkType.number)
-      this.getInfoAccountAndViewTransactions(tmp.address.address)
     }
   },
   watch: {

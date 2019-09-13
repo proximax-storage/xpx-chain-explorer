@@ -55,7 +55,11 @@ export default {
         year: 2019,
         militarHour: '12:00'
       },
+<<<<<<< HEAD
       explorerVersion: 'v0.2.8'
+=======
+      explorerVersion: 'v0.3.1'
+>>>>>>> parent of ecbf2d6... Bug fixes
     }
   },
   methods: {
