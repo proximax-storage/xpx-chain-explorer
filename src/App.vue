@@ -43,7 +43,6 @@ export default {
   },
   mounted () {
     // Call Load Nodes Method
-    console.log('Running')
     this.loadNodes()
     this.average()
     console.log('Running app')
