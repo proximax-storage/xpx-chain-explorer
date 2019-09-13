@@ -84,7 +84,7 @@ import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
-import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams } from 'tsjs-xpx-catapult-sdk'
+import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams } from 'tsjs-xpx-chain-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import { mdbProgress } from 'mdbvue'
 import axios from 'axios'
@@ -238,21 +238,20 @@ export default {
             filteredTrans.forEach((el, index) => {
               this.$proxProvider.getMosaic(el.id).subscribe(
                 mosaicResponse => {
-                  // console.log(mosaicResponse, this.$store.state.currentBlock.height)
-                  this.$proxProvider.getMosaicsName([el.id]).subscribe(
+                  let amountCompact = el.amount.compact()
+                  let mosHeight = mosaicResponse.height.compact()
+                  let mosDurat = (mosaicResponse.duration === undefined) ? 0 : mosaicResponse.duration.compact()
+                  console.log(mosaicResponse)
+                  this.$proxProvider.getMosaicsName([mosaicResponse.mosaicId]).subscribe(
                     responseName => {
-                      console.log(mosaicResponse.height.compact() + mosaicResponse.duration.compact(), this.$store.state.currentBlock.height)
-                      console.log(((mosaicResponse.height.compact() + mosaicResponse.duration.compact()) >= this.$store.state.currentBlock.height))
                       let tmpObj = {
-                        name: responseName[0].names[0],
+                        name: responseName[0].names[0].name,
                         id: el.id.toHex(),
                         owner: (resp.publicKey === mosaicResponse.owner.publicKey) ? 'true' : 'false',
-                        quantity: (mosaicResponse.divisibility === 0) ? el.amount.compact() : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility),
-                        expired: (this.$store.state.currentBlock.height >= (mosaicResponse.height.compact() + mosaicResponse.duration.compact())) ? false : true
+                        quantity: (mosaicResponse.divisibility === 0) ? amountCompact : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility),
+                        expired: (this.$store.state.currentBlock.height >= (mosHeight + mosDurat)) ? false : true
                       }
-
                       tmpArr.push(tmpObj)
-
                       if (index + 1 === filteredTrans.length) {
                         this.blockMosaics = tmpArr
                         this.showRecentMosaic = !this.showRecentMosaic
@@ -260,11 +259,14 @@ export default {
                       }
                     },
                     error => {
-                      console.log(error)
+                      console.warn(error)
+                      this.blockMosaics = null
+                      this.showRecentMosaic = !this.showRecentMosaic
+                      this.mosaicLoader = false
                     }
                   )
                 }, err => {
-                  console.warn("Error 1", err)
+                  console.warn(err)
                 }
               )
             })
@@ -377,7 +379,7 @@ export default {
      * @param { String } block
      */
     getBlockByHeight (block) {
-      this.$proxProvider.blockchainHttp.getBlockByHeight(parseInt(block)).subscribe(
+      this.$proxProvider.blockHttp.getBlockByHeight(parseInt(block)).subscribe(
         next => {
         next.date = this.$utils.fmtTime(new Date(next.timestamp.compact() + Deadline.timestampNemesisBlock * 1000))
         next.difficulty = (next.difficulty.compact()/Math.pow(10, 14)*100).toFixed(2) + "%"
@@ -394,7 +396,7 @@ export default {
         this.showRecentTransaction = (this.param.txes > 0) ? true : false
         this.showComponent()
         this.showInfo = true
-        this.$proxProvider.blockchainHttp.getBlockTransactions(parseInt(block), new QueryParams(100)).subscribe(
+        this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(100)).subscribe(
           blockTransactions => {
             this.blockTransactions = blockTransactions
             for (const index in this.blockTransactions) {

@@ -32,7 +32,7 @@ import {
   Listener,
   Deadline,
   Address
-} from 'tsjs-xpx-catapult-sdk'
+} from 'tsjs-xpx-chain-sdk'
 import axios from 'axios'
 
 export default {
@@ -159,7 +159,7 @@ export default {
               // console.log('Block TXS', block.numTransactions)
             } else if (block.numTransactions === undefined) {
               // console.log('block.numTransactions es indefinido')
-              this.$proxProvider.blockchainHttp.getBlockByHeight(block.height).subscribe(
+              this.$proxProvider.blockHttp.getBlockByHeight(block.height).subscribe(
                 response => {
                   // console.log(response)
                   block.numTransactions = response.numTransactions

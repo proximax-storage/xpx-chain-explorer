@@ -72,7 +72,7 @@ export default {
             this.$proxProvider.getMosaic(el.id).subscribe(
               response => {
                 if (response.properties.divisibility !== 0) {
-                  this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
+                  this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response.properties.divisibility))
                   // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response.properties.divisibility)
                   this.finalData.push(tmpObj)
                 } else {
