@@ -13,7 +13,7 @@
   },
   "RentalFeeInfo": {
     "namespaceRentalFee": {
-      "name": "TESTNET Namepsace Rental Fee Sink",
+      "name": "TESTNET Namespace Rental Fee Sink",
       "address": "VBH4NR-KUNINP-7HW6ZB-OECMIN-X3BCB4-ZDXKDM-KIWG",
       "publicKey": "F3B8194C36CC55500DCB8CD3734DFA07FE8B649219BE315C8DFAE1DAC59F3595"
     },
@@ -26,7 +26,7 @@
   "MapsInfo": [
     {
       "name": "bctestnet1.xpxsirius.io",
-      "ip": "13.229.183.224",
+      "ip": "",
       "version": 0,
       "location": "",
       "lat": 0,
@@ -35,12 +35,12 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://bctestnet1.xpxsirius.io:3000",
+      "urlNode": "https://bctestnet1.xpxsirius.io",
       "icon": "proximax.svg"
     },
     {
       "name": "bctestnet2.xpxsirius.io",
-      "ip": "54.179.150.234",
+      "ip": "",
       "version": 0,
       "location": "",
       "lat": 0,
@@ -49,12 +49,12 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://bctestnet2.xpxsirius.io:3000",
+      "urlNode": "https://bctestnet2.xpxsirius.io",
       "icon": "proximax.svg"
     },
     {
       "name": "bctestnet3.xpxsirius.io",
-      "ip": "54.191.26.33",
+      "ip": "",
       "version": 0,
       "location": "",
       "lat": 0,
@@ -63,12 +63,12 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://bctestnet3.xpxsirius.io:3000",
+      "urlNode": "https://bctestnet3.xpxsirius.io",
       "icon": "proximax.svg"
     },
     {
       "name": "bctestnet4.xpxsirius.io",
-      "ip": "34.219.220.187",
+      "ip": "",
       "version": 0,
       "location": "",
       "lat": 0,
@@ -77,12 +77,12 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://bctestnet4.xpxsirius.io:3000",
+      "urlNode": "https://bctestnet4.xpxsirius.io",
       "icon": "proximax.svg"
     },
     {
       "name": "bctestnet5.xpxsirius.io",
-      "ip": "3.9.114.203",
+      "ip": "",
       "version": 0,
       "location": "",
       "lat": 0,
@@ -91,12 +91,12 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://bctestnet5.xpxsirius.io:3000",
+      "urlNode": "https://bctestnet5.xpxsirius.io",
       "icon": "proximax.svg"
     },
     {
       "name": "bctestnet6.xpxsirius.io",
-      "ip": "3.8.198.129",
+      "ip": "",
       "version": 0,
       "location": "",
       "lat": 0,
@@ -105,7 +105,7 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://bctestnet6.xpxsirius.io:3000",
+      "urlNode": "https://bctestnet6.xpxsirius.io",
       "icon": "proximax.svg"
     }
   ]

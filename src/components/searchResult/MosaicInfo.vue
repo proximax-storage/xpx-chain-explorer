@@ -5,11 +5,11 @@
       <div>
         <div class="up">
           <div class="title">Name</div>
-          <div class="valueLower">{{ detail.name || 'No Available' }}</div>
+          <div class="valueLower">{{ detail.name.name || 'No Available' }}</div>
         </div>
         <div class="down">
           <div class="title">Mosaic Id</div>
-          <div class="value">{{ detail.id }}</div>
+          <div class="value">{{ detail.mosaicId.toHex() }}</div>
         </div>
       </div>
       <div>
@@ -26,9 +26,13 @@
 
     <div class="mos-layout-down">
       <div>
-        <div class="up">
+        <div class="up" v-if="detail.divisibility > 0">
           <div class="title">Supply</div>
-          <div class="value" v-html="detail.supply"></div>
+          <div class="value" v-html="$utils.fmtDivisibility(detail.supply.compact(), detail.divisibility)"></div>
+        </div>
+        <div class="up" v-else>
+          <div class="title">Supply</div>
+          <div class="value" v-html="detail.supply.compact()"></div>
         </div>
         <div class="down">
           <div class="title">Divisibility</div>
@@ -39,7 +43,7 @@
       <div>
         <div class="up">
           <div class="title">Height</div>
-          <div class="value link" @click="goToBlock(detail.height)">{{ detail.height }}</div>
+          <div class="value link" @click="goToBlock(detail.height.compact())">{{ detail.height.compact() }}</div>
         </div>
         <div class="down">
           <div class="title">Revision</div>
@@ -53,14 +57,17 @@
           <div class="value" style="color: orange; font-weight: bold" v-if="$store.state.currentBlock.height === 'Loading'">
             Loading
           </div>
-          <div class="value" :style="($store.state.currentBlock.height >= detail.height + detail.duration) ? 'color: red' : 'color: green'" v-else>
-            {{ ($store.state.currentBlock.height >= detail.height + detail.duration) ? false : true }}
+          <div class="value" style="color: green" v-else-if="detail.name.name === 'prx.xpx' || detail.id === this.$store.state.xpx">
+            true
+          </div>
+          <div class="value" :style="($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? 'color: red' : 'color: green'" v-else>
+            {{ ($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? false : true }}
           </div>
         </div>
         <div class="down">
           <div class="title">Expires</div>
-          <div class="value" v-if="detail.duration === 0">{{ `Block: 0` }}</div>
-          <div class="value" v-if="detail.duration > 0">{{ `Block: ${detail.height + detail.duration}` }}</div>
+          <div class="value" v-if="detail.duration.compact() === 0">{{ `Block: 0` }}</div>
+          <div class="value" v-else>{{ `Block: ${detail.height.compact() + detail.duration.compact()}` }}</div>
         </div>
       </div>
     </div>
@@ -74,7 +81,7 @@
             {{ this.detail.properties.transferable }}
           </div>
         </div>
-        <div class="element" style="border-radius: 20px" v-if="this.detail.properties.levyMutable !== undefined">
+        <div class="element" style="border-radius: 20px">
           <div class="title">Levy Mutable</div>
           <div class="value" :style="(this.detail.properties.levyMutable === true) ? 'color: green' : 'color: red'">
             {{ this.detail.properties.levyMutable }}
@@ -89,7 +96,7 @@
         <div class="element" style="border-radius: 20px">
           <div class="title">Duration</div>
           <div class="value">
-            {{ `(Block: ${detail.duration}) ${$utils.calculateDuration(detail.duration)}` }}
+            {{ `(Block: ${this.detail.duration.compact()}) ${$utils.calculateDuration(this.detail.duration.compact())}` }}
           </div>
         </div>
       </div>
@@ -104,12 +111,8 @@ export default {
   props: {
     detail: Object
   },
-  data () {
-    return {
-      dur: 0
-    }
-  },
   mounted () {
+    console.log('MosaicInfo', this.detail.toString())
   },
   methods: {
     goToAddress (address) {
@@ -250,11 +253,9 @@ $radius: 20px
       & > div
         flex-flow: column
         width: 100%
-        & > .down
-          margin-bottom: 10px
         &:first-child
           margin: 0px 0px 10px 0px
         &:last-child
-          margin: 0px 0px 10px 0px
+          margin: 0px
 
 </style>

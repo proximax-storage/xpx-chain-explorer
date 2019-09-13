@@ -73,6 +73,7 @@ export default class Utils {
     seconds = (date.getSeconds() < 10) ? `0${date.getSeconds()}` : date.getSeconds(),
     final = `${date.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`
 
+    // console.log(date)
     return final
   }
 
@@ -94,6 +95,7 @@ export default class Utils {
 
   static pretty(address) {
     let tmp = address.split()
+    console.log(tmp)
   }
 }
 

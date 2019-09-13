@@ -116,6 +116,7 @@ export default {
      */
     changeClass (route) {
       for (let i = 0; i < this.navItems.length; i++) {
+        // console.log(this.navItems[i])
         this.navItems[i].class = 'inactive-h'
         if (this.navItems[i].route === route) {
           this.navItems[i].class = 'active-h'
@@ -138,6 +139,7 @@ export default {
       this.date.day = time.getDate()
       this.date.month = allMonths[time.getMonth()]
       let year = time.getFullYear()
+      // console.log(year)
       this.date.year = year
       this.date.militarHour = `${time.getHours()}:${(time.getMinutes() < 10) ? `0${time.getMinutes()}` : time.getMinutes()}`
       this.date.dayName = allDays[time.getDay()]

@@ -8,7 +8,7 @@
       <p>
         <mdb-dropdown style="text-align: center">
           <mdb-dropdown-toggle slot="toggle" class="button-config black-text" style="width:100%; padding: 5px 0px; box-shadow: 0px 0px 0px transparent">
-            <span class="button-toggle">{{ getCurrentNode }}</span>
+            <span class="button-toggle">{{ getCurrentNode || this.$store.state.currentNode }}</span>
           </mdb-dropdown-toggle>
           <mdb-dropdown-menu>
             <a class="nodeLink" v-for="item in getAllNodes" :key="item.index" @click="changeNode(item.index)">
@@ -92,8 +92,7 @@ export default {
      * Get the last stored Node from the store
      */
     getCurrentNode () {
-      // return this.$store.getters.getCurrentNode
-      return this.$store.state.currentNode
+      return this.$store.getters.getCurrentNode
     },
 
     /**
@@ -103,10 +102,10 @@ export default {
      */
     getAllNodes () {
       let tmpArray = []
-      let tmp = Array.from(this.$store.getters.getAllNodes)
+      let tmp = Array.from(this.$store.state.nodes)
       tmp.forEach((item, index) => {
         tmpArray.push({ name: item, index: index })
-      })
+      });
       return tmpArray
     },
 
@@ -145,12 +144,16 @@ export default {
         this.newNodeValue = ''
         this.nodeLoader = false
       } else if (action == 'add') {
+        // this.newNode = false
         this.nodeLoader = true
         if (this.newNodeValue !== '') {
+          // console.log(this.newNodeValue)
           this.nodeMessage = ''
           axios.get(`${this.newNodeValue}/node/info`).then(
             response => {
+              console.log(response.data.networkIdentifier, this.$store.state.netType.number)
               if (this.$store.state.nodes.includes(this.newNodeValue) === false) {
+                console.log("This node does not exist in the current node list")
                 if (response.data.networkIdentifier === this.$store.state.netType.number) {
                   this.$store.dispatch('pushNewNode', this.newNodeValue)
                   if (this.$storage.get('customNodes') === null || this.$storage.get('customNodes') === undefined) {
@@ -177,6 +180,8 @@ export default {
                     icon: 'nodes.svg'
                   }
                   let mapCustomNodes = this.$storage.get('mapCustomNodes')
+                  console.log("mapCustomNodes", mapCustomNodes)
+                  console.log(tmpObj)
                   if (mapCustomNodes !== null) {
                     mapCustomNodes = JSON.parse(mapCustomNodes)
                     mapCustomNodes.push(tmpObj)
@@ -195,8 +200,6 @@ export default {
                 this.nodeLoader = false
                 this.nodeMessage = 'Node not Accepted - This node is already in the list'
               }
-
-
             }
           )
           .catch(err => {

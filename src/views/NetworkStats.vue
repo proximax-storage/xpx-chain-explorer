@@ -16,7 +16,7 @@
       <!-- Divided Graphic Container -->
       <div class="mini-two">
         <graphics :title="'Sirius accounts over time'" :numGraphic="3"/>
-        <graphics :title="'Sirius average block difficulty per day'" :numGraphic="4" :params="blocks"/>
+        <graphics :title="'Sirius average block dificulty per day'" :numGraphic="4" :params="blocks"/>
       </div>
       <!-- Divided Graphic Container -->
     </div>
@@ -34,7 +34,6 @@
  */
 import Graphics from '@/components/networkStats/Graphics.vue'
 import { mdbProgress } from 'mdbvue'
-import { LimitType } from 'tsjs-xpx-chain-sdk'
 
 export default {
   name: 'NetworkStats',
@@ -57,15 +56,17 @@ export default {
      * Method to see recently closed blocks
      */
     getLastBlocks () {
-      this.$proxProvider.blockchainHttp.getBlockchainHeight().subscribe(
+      this.$proxProvider.chainHttp.getBlockchainHeight().subscribe(
         next => {
-          let lastBlock = next.compact()
-
-          this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(lastBlock, LimitType.N_50).subscribe(
+          this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(next.compact()).subscribe(
             blockInfo => {
+              // console.log(blockInfo)
+              // // console.log(blockInfo.length, blockInfo.length < 100)
+                // console.log(blockInfo[blockInfo.length - 1].height.compact())
               if (blockInfo.length < 10) {
                 this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(blockInfo[blockInfo.length - 1].height.compact() - 1).subscribe(
                   response => {
+                    console.log(response)
                     blockInfo.concat(response)
                     this.blocks = blockInfo.slice(0, 9)
                   }

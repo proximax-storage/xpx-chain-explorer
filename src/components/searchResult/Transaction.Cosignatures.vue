@@ -44,6 +44,7 @@ export default {
   },
   mounted () {
     if (this.params && this.params.length !== 0) {
+      console.log('Si llega')
       this.visible = true
     }
   },

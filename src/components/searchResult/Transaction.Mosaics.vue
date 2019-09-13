@@ -1,23 +1,23 @@
 <template>
-  <div class="mosaics animated faster fadeIn" v-if="params !== null && params.length > 0">
+  <div class="mosaics animated faster fadeIn" v-if="showFinalData !== null && showFinalData.length > 0">
     <h1 class="supertitle center-text">Mosaics In Transfer</h1>
 
     <div>
-      <div class="element" v-for="(item, index) in params" :key="index">
+      <div class="element" v-for="(item, index) in showFinalData" :key="index" v-show="mosaicAliasName[index] !== 'prx.xpx'">
 
-        <div class="animated faster fadeIn">
-          <div class="title">{{ (item.category === 'mosaic') ? 'Mosaic ID' : 'Mosaic Alias ID' }}</div>
-          <div class="value link" @click="(item.category === 'mosaic') ? goToMosaic(item.id) : goToNamespace(item.id)">{{ item.id }}</div>
+        <div class="animated faster fadeInDown">
+          <div class="title">{{ titleMosaic }}</div>
+          <div class="value link" @click="(titleMosaic === 'Mosaic Id') ? goToMosaic(item.name) : goToNamespace(item.name)">{{ item.name }}</div>
         </div>
 
-        <div v-if="item.category !== 'mosaic'" class="animated faster fadeInDown">
+        <div v-if="titleMosaic == 'Mosaic Alias ID'" class="animated faster fadeInDown">
           <div class="title">Mosaic Alias Name</div>
-          <div class="valueLower">{{ item.name }}</div>
+          <div class="valueLower">{{ mosaicAliasName[index] }}</div>
         </div>
 
         <div class="animated faster fadeInDown">
-          <div class="title" >Mosaic Quantity</div>
-          <div class="value" v-html="item.amount"></div>
+          <div class="title" >Mosaic {{ amountQuantity }}</div>
+          <div class="value" v-html="arrayAmount[index]"></div>
         </div>
 
       </div>
@@ -33,7 +33,7 @@ export default {
   },
   data () {
     return {
-      xpx: '0DC67FBE1CAD29E3',
+      xpx: this.$store.state.xpx,
       finalData: [],
       titleMosaic: 'Mosaic Id',
       mosaicAliasName: [],
@@ -55,10 +55,11 @@ export default {
     },
 
     organizeData () {
+      // console.log('Mounted')
       if (this.params !== null) {
         this.params.forEach(el => {
           let tmpObj = {}
-          if (el.id.toHex().toUpperCase() === this.xpx) {
+          if (el.id.toHex() === this.xpx) {
             this.$emit('returnAmount', this.$utils.fmtAmountValue(el.amount.compact()))
           } else {
             this.amountQuantity = 'Quantity'
@@ -66,7 +67,7 @@ export default {
             this.$proxProvider.getMosaic(el.id).subscribe(
               response => {
                 if (response.properties.divisibility !== 0) {
-                  this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
+                  this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response.properties.divisibility))
                   // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response.properties.divisibility)
                   this.finalData.push(tmpObj)
                 } else {
@@ -81,6 +82,7 @@ export default {
                     this.$proxProvider.getNamespacesName([el.id]).subscribe(
                       nameResponse => {
                         nameResponse = nameResponse.reverse()
+                        console.log("Name Response", nameResponse)
                         if (nameResponse.length === 1) {
                           this.mosaicAliasName.push(nameResponse[0].name)
                         } else if (nameResponse.length === 2) {
@@ -91,9 +93,11 @@ export default {
                       }
                     )
                     this.titleMosaic = 'Mosaic Alias ID'
+                    console.log(response.alias.mosaicId)
                     let tmpId = this.$proxProvider.createMosaicId(response.alias.mosaicId)
                     this.$proxProvider.getMosaic(tmpId).subscribe(
                       response2 => {
+                        console.log(response2)
                         if (response2.properties.divisibility !== 0) {
                           // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility)
                           this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
@@ -112,6 +116,17 @@ export default {
           }
         })
       }
+    }
+  },
+
+  computed: {
+    showFinalData () {
+      return this.finalData
+    }
+  },
+  watch: {
+    params (nv, ov) {
+      this.organizeData()
     }
   }
 }

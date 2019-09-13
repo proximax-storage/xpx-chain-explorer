@@ -57,6 +57,7 @@ export default {
     }
   },
   mounted () {
+    console.log("Params", this.params)
     if (this.params && this.params.length !== 0) {
       this.visible = true
     }

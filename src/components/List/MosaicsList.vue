@@ -83,7 +83,6 @@ export default {
   mounted () {
     let account = this.$proxProvider.createPublicAccount(this.$store.state.rentalFeeInfo.mosaicRentalFee.publicKey, this.$store.state.netType.number)
     let net = this.$store.state.netType.number
-
     this.$proxProvider.getAllTransactionsFromAccount(account, new QueryParams(100)).subscribe(
       transactions => {
         if (transactions.length > 0) {
@@ -102,7 +101,7 @@ export default {
             } else if (el.type === 16705) {
               this.$proxProvider.getMosaic(el.innerTransactions[0].mosaicId.id).subscribe(
                 response => {
-                  response.id = el.mosaicId.id.toHex()
+                  response.id = response.mosaicId.id.toHex()
                   this.mosaicArr.push(response)
                 },
                 err => {

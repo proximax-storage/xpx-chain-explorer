@@ -59,6 +59,7 @@ export default {
     }
   },
   mounted () {
+    console.log("Multisig", Array.from(this.info), this.cosignatories)
     this.cosignActive = (this.cosignatories.length > 0) ? true : false
   },
   methods: {

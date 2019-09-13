@@ -1,7 +1,7 @@
 import { Observable, BehaviorSubject } from 'rxjs'
 import {
-  ChainHttp,
   BlockHttp,
+  ChainHttp,
   QueryParams,
   MosaicHttp,
   Address,
@@ -24,8 +24,8 @@ export default class proximaxProvider {
     this.blocksHeight = new BehaviorSubject(null)
     this.blocksHeight$ = this.blocksHeight.asObservable()
     this.mosaicHttp = new MosaicHttp(this.Url)
-    this.blockchainHttp = new ChainHttp(this.Url)
     this.blockHttp = new BlockHttp(this.Url)
+    this.chainHttp = new ChainHttp(this.Url)
     this.accountHttp = new AccountHttp(this.Url)
     this.namespaceHttp = new NamespaceHttp(this.Url)
     this.transactionHttp = new TransactionHttp(this.Url)
@@ -41,7 +41,7 @@ export default class proximaxProvider {
    * @memberof proximaxProvider
    */
   static mosaicXpx(){
-    return '0DC67FBE1CAD29E3'
+    return '3c0f3de5298ced2d'
   }
 
   /**
@@ -51,8 +51,8 @@ export default class proximaxProvider {
    */
   static mosaicFullXpx(){
     return {
-      id: '0DC67FBE1CAD29E3',
-      name: 'prx:xpx'
+      id: '3c0f3de5298ced2d',
+      name: 'prx.xpx'
     }
   }
 
@@ -198,10 +198,6 @@ export default class proximaxProvider {
     return this.blocksHeight$
   }
 
-  getBlockTransactions(block) {
-    return this.blockHttp.getBlockTransactions(block, 100)
-  }
-
 
   // /**
   //  * Set blocks height local
@@ -289,7 +285,7 @@ export default class proximaxProvider {
    */
   getNamespacesNameFromHex(id) {
     const idFromHex = Id.fromHex(id)
-    const namespaceIds = new Id([idFromHex.lower, idFromHex.higher])
+    const namespaceIds = this.getNameSpaceId([idFromHex.lower, idFromHex.higher])
     return this.getNamespacesName([namespaceIds])
   }
 

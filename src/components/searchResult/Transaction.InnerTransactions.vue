@@ -127,7 +127,9 @@ export default {
           info.details.push({ key: 'Min Removal Delta', value: this.params[index].minRemovalDelta })
           info.modifications = []
           let tmpModifications = []
+          console.log(this.params[index].modifications !== undefined, this.params[index].modifications.length > 0, true === false)
           if (this.params[index].modifications !== undefined && typeof this.params[index].modifications.length > 0) {
+            console.log('Aqui 1')
             this.params[index].modifications.forEach(el => {
               let tmpObj = {
                 address: el.cosignatoryPublicAccount.address.pretty(),
@@ -138,6 +140,7 @@ export default {
               info.modifications.push(tmpObj)
             })
           } else {
+            console.log('Aqui 2')
             info.modifications === undefined
           }
           break;
@@ -145,6 +148,7 @@ export default {
         default:
           break;
       }
+      console.log(info)
       this.$emit('runModal', info, `Inner Transaction - ${ typeName }`)
     },
 
@@ -152,6 +156,7 @@ export default {
       let objectOfTypes = Object.values(proximaxProvider.typeTransactions())
       let type = undefined
       objectOfTypes.forEach(element => {
+        // console.log(element.name)
         if (itemType === element.id) {
           type = element.name
         }
