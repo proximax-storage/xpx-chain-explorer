@@ -32,7 +32,7 @@ import {
   Listener,
   Deadline,
   Address
-} from 'tsjs-xpx-catapult-sdk'
+} from 'tsjs-xpx-chain-sdk'
 import axios from 'axios'
 
 export default {
@@ -45,6 +45,7 @@ export default {
     // Call Load Nodes Method
     this.loadNodes()
     this.average()
+    console.log('Running app')
     // this.loadNetwork()
   },
   data () {
@@ -121,7 +122,6 @@ export default {
       // Get the current Node from the persistence service
       let currentNode = this.$storage.get('currentNode')
 
-
       // In the case that there is no information in the persistence service,
       // it is obtained from es vuex or $ store
       if (currentNode === null) {
@@ -131,14 +131,12 @@ export default {
       if (currentNode.includes('http://')) {
         currentNode = currentNode.substr(7)
         currentNode = `ws://${currentNode}`
-        // console.log(currentNode)
       } else if (currentNode.includes('https://')) {
         currentNode = currentNode.substr(8)
         currentNode = `wss://${currentNode}`
-        // console.log(currentNode)
       }
       // Print current node in console
-      // console.log("NODE", currentNode)
+      console.log("NODE", currentNode)
 
       // Run the ws using the current node
       const listener = new Listener(`${currentNode}`, WebSocket)
@@ -147,51 +145,36 @@ export default {
           .newBlock()
           .subscribe(block => {
             block.height = block.height.compact()
-
             if (block.numTransactions !== undefined) {
-              // console.log('block.numTransactions BIEN')
+              let fee = this.$utils.fmtAmountValue(block.totalFee.compact())
+              let timestamp = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
               block.numTransactions = block.numTransactions
-              block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
-              block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+              block.totalFee = fee
+              block.date = timestamp
               this.$store.dispatch('changeCurrentBlock', block)
               this.reset()
-              // console.log('Block TXS', block.numTransactions)
             } else if (block.numTransactions === undefined) {
-              // console.log('block.numTransactions es indefinido')
-              this.$proxProvider.blockchainHttp.getBlockByHeight(block.height).subscribe(
+              this.$proxProvider.blockHttp.getBlockByHeight(block.height).subscribe(
                 response => {
-                  // console.log(response)
+                  let fee = this.$utils.fmtAmountValue(response.totalFee.compact())
+                  let timestamp = this.$utils.fmtTime(new Date(response.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
                   block.numTransactions = response.numTransactions
-                  block.totalFee = this.$utils.fmtAmountValue(response.totalFee.compact())
-                  block.date = this.$utils.fmtTime(new Date(response.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
+                  block.totalFee = fee
+                  block.date = timestamp
                   this.$store.dispatch('changeCurrentBlock', block)
                   this.reset()
-                  // console.log('Block TXS', block.numTransactions)
-                  // console.log("Blockchain Query", response.numTransactions)
-                  // console.log("getBlockByHeight", response)
                 }
               )
             }
-
-            // block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
-            // block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
-            // this.$store.dispatch('changeCurrentBlock', block)
-            // this.reset()
-            // console.log('Block TXS', block.numTransactions)
-            // console.log('Block', block)
           })
         }
       )
       .catch(err => {
-        // Show error message in the console
-        // console.log('AQUI')
         this.$store.dispatch('updateErrorInfo', {
           active: true,
-          message: 'Comunication error whit node!',
+          message: 'Comunication error with node!',
           submessage: 'Check the internet connection and reload the page'
         })
-
-        // console.error(err)
       })
     },
 
@@ -201,7 +184,6 @@ export default {
     average () {
       setInterval(() => {
         this.averageTime += 1
-        // console.log(this.averageTime)
       }, 1)
     },
 
@@ -236,6 +218,7 @@ html
   // background-repeat: no-repeat
   // background-color: #f3f3f3
   background: white
+
 body
   background: transparent
 
@@ -247,6 +230,13 @@ body
   background: transparent
   &::-webkit-scrollbar
     background: red
+
+*label
+  margin: 0px 0px 0px 0px !important
+
+.mr-5
+  margin: 0px 0px 0px 0px !important
+
 
 @media screen and (min-width: 1367px)
   .view-container

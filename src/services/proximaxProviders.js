@@ -1,6 +1,7 @@
 import { Observable, BehaviorSubject } from 'rxjs'
 import {
-  BlockchainHttp,
+  ChainHttp,
+  BlockHttp,
   QueryParams,
   MosaicHttp,
   Address,
@@ -14,7 +15,7 @@ import {
   MosaicInfo,
   MosaicService,
   NetworkType
-} from 'tsjs-xpx-catapult-sdk'
+} from 'tsjs-xpx-chain-sdk'
 
 export default class proximaxProvider {
 
@@ -23,7 +24,8 @@ export default class proximaxProvider {
     this.blocksHeight = new BehaviorSubject(null)
     this.blocksHeight$ = this.blocksHeight.asObservable()
     this.mosaicHttp = new MosaicHttp(this.Url)
-    this.blockchainHttp = new BlockchainHttp(this.Url)
+    this.blockchainHttp = new ChainHttp(this.Url)
+    this.blockHttp = new BlockHttp(this.Url)
     this.accountHttp = new AccountHttp(this.Url)
     this.namespaceHttp = new NamespaceHttp(this.Url)
     this.transactionHttp = new TransactionHttp(this.Url)
@@ -196,6 +198,10 @@ export default class proximaxProvider {
     return this.blocksHeight$
   }
 
+  getBlockTransactions(block) {
+    return this.blockHttp.getBlockTransactions(block, 100)
+  }
+
 
   // /**
   //  * Set blocks height local
@@ -260,7 +266,7 @@ export default class proximaxProvider {
    * @memberof proximaxProvider
    */
   getMosaicsName(mosaicIds) {
-    return this.mosaicHttp.getMosaicNames(mosaicIds)
+    return this.mosaicHttp.getMosaicsNames(mosaicIds)
   }
 
   /**
@@ -283,7 +289,7 @@ export default class proximaxProvider {
    */
   getNamespacesNameFromHex(id) {
     const idFromHex = Id.fromHex(id)
-    const namespaceIds = this.getNameSpaceId([idFromHex.lower, idFromHex.higher])
+    const namespaceIds = new Id([idFromHex.lower, idFromHex.higher])
     return this.getNamespacesName([namespaceIds])
   }
 

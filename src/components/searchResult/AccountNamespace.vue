@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { Id } from 'tsjs-xpx-catapult-sdk'
+import { Id } from 'tsjs-xpx-chain-sdk'
 
 export default {
   props: {
@@ -47,7 +47,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.namespacesList)
   },
   methods: {
     goToAddress (address) {

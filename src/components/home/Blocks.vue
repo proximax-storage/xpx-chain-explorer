@@ -18,7 +18,7 @@
       </div>
 
       <!-- Iterated Element of Block -->
-      <div class="element animated faster fadeInDown" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #f4f4f4' : 'background: white'">
+      <div class="element animated faster fadeIn" v-for="(item, index) in dataTable" :key="index" :style="(index % 2 === 0) ? 'background: #f4f4f4' : 'background: white'">
 
         <div>
           <span class="title">Height</span>
@@ -71,7 +71,7 @@
 
 <script>
 import { mdbProgress, mdbSpinner, mdbIcon } from 'mdbvue'
-import { Deadline } from 'tsjs-xpx-catapult-sdk'
+import { Deadline, Listener } from 'tsjs-xpx-chain-sdk'
 
 export default {
   name: 'Blocks',
@@ -90,9 +90,7 @@ export default {
     }
   },
   mounted () {
-    // console.log(this.dataTable)
     this.viewAllBlocks()
-    //console.log('Este es el current block', this.currentBlock)
   },
   methods: {
     /**
@@ -103,9 +101,9 @@ export default {
     viewAllBlocks () {
       this.$proxProvider.blockchainHttp.getBlockchainHeight().subscribe(
         next => {
-          this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(next.compact(), 50).subscribe(
+          next = next.compact()
+          this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(next, 50).subscribe(
             blockInfo => {
-              // console.log(blockInfo)
               blockInfo.forEach(element => {
                 element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())
                 element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
@@ -113,12 +111,9 @@ export default {
                 this.dataTable.push(element)
               })
 
-              // console.log(blockInfo.length, blockInfo.length < 100)
               if (blockInfo.length <= 50) {
-                // console.log(this.dataTable[this.dataTable.length-1].height)
-                this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 50).subscribe(
+                this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 50).subscribe(
                   response => {
-                    // console.log(response)
                     response.forEach(element => {
                       element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())
                       element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
@@ -137,8 +132,8 @@ export default {
             error => {
               this.$store.dispatch('updateErrorInfo', {
                 active: true,
-                message: 'Comunication error whit node!',
-                submessage: 'Check the internet connection and reload the page'
+                message: 'Comunication error with node!',
+                submessage: 'Check your internet connection and reload the page'
               })
               this.loaderStatus = false
             }
@@ -147,8 +142,8 @@ export default {
         error => {
           this.$store.dispatch('updateErrorInfo', {
             active: true,
-            message: 'Comunication error whit node!',
-            submessage: 'Check the internet connection and reload the page'
+            message: 'Comunication error with node!',
+            submessage: 'Check your internet connection and reload the page'
           })
           this.loaderStatus = false
         }
@@ -156,12 +151,10 @@ export default {
     },
 
     loadMore () {
-      // console.log('more blocks')
       if (this.buttonLoaderActive !== true) {
         this.buttonLoaderActive = true
-        this.$proxProvider.blockchainHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 100).subscribe(
+        this.$proxProvider.blockHttp.getBlocksByHeightWithLimit(this.dataTable[this.dataTable.length-1].height-1, 100).subscribe(
           response => {
-            // console.log(response)
             response.forEach(element => {
               element.totalFee = this.$utils.fmtAmountValue(element.totalFee.compact())
               element.date = this.$utils.fmtTime(new Date(element.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
@@ -184,9 +177,7 @@ export default {
     updateTable () {
       let height = this.$store.getters.getCurrentBlock
       let block = this.$store.state.currentBlock
-      // console.log(height, block)
       if (height !== 'Loading') {
-        // console.log(this.dataTable[0])
         if (this.dataTable[0] !== undefined) {
           if (this.dataTable[0].height !== height) {
             this.dataTable.unshift(block)
@@ -205,7 +196,6 @@ export default {
   display: flex
   flex-flow: row nowrap
   justify-content: space-around
-  // margin: 2px 0px
   padding: 5px
   color: white
   border-radius: 5px
