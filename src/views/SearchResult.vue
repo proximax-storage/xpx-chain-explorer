@@ -58,6 +58,10 @@
       </div>
     </div>
 
+
+    <!-- Mosaics Component -->
+    <!-- End Mosaics Component -->
+
     <!-- Recent Transactions Component -->
     <recent-trans v-if="showRecentTransaction && blockTransactions.length > 0 && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
     <!-- End Recent Transactions Component -->
@@ -584,14 +588,6 @@ export default {
 
     changeList (list) {
       this.activeList = list
-    },
-
-    async emergencyNet () {
-      let response = await axios.get('./config/config.json')
-      console.log('Response', response)
-
-      let tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, response.data.NetworkType.number)
-      this.getInfoAccountAndViewTransactions(tmp.address.address)
     }
   },
   watch: {

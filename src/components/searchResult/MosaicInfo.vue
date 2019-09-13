@@ -253,11 +253,9 @@ $radius: 20px
       & > div
         flex-flow: column
         width: 100%
-        & > .down
-          margin-bottom: 10px
         &:first-child
           margin: 0px 0px 10px 0px
         &:last-child
-          margin: 0px 0px 10px 0px
+          margin: 0px
 
 </style>

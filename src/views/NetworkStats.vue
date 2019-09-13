@@ -16,7 +16,7 @@
       <!-- Divided Graphic Container -->
       <div class="mini-two">
         <graphics :title="'Sirius accounts over time'" :numGraphic="3"/>
-        <graphics :title="'Sirius average block difficulty per day'" :numGraphic="4" :params="blocks"/>
+        <graphics :title="'Sirius average block dificulty per day'" :numGraphic="4" :params="blocks"/>
       </div>
       <!-- Divided Graphic Container -->
     </div>

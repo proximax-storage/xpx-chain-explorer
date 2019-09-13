@@ -43,7 +43,6 @@ export default {
   },
   mounted () {
     // Call Load Nodes Method
-    console.log('Running')
     this.loadNodes()
     this.average()
     // this.loadNetwork()
@@ -188,7 +187,7 @@ export default {
         // console.log('AQUI')
         this.$store.dispatch('updateErrorInfo', {
           active: true,
-          message: 'Comunication error with node!',
+          message: 'Comunication error whit node!',
           submessage: 'Check the internet connection and reload the page'
         })
 

@@ -8,7 +8,7 @@
       <p>
         <mdb-dropdown style="text-align: center">
           <mdb-dropdown-toggle slot="toggle" class="button-config black-text" style="width:100%; padding: 5px 0px; box-shadow: 0px 0px 0px transparent">
-            <span class="button-toggle">{{ getCurrentNode }}</span>
+            <span class="button-toggle">{{ getCurrentNode || this.$store.state.currentNode }}</span>
           </mdb-dropdown-toggle>
           <mdb-dropdown-menu>
             <a class="nodeLink" v-for="item in getAllNodes" :key="item.index" @click="changeNode(item.index)">
@@ -92,8 +92,7 @@ export default {
      * Get the last stored Node from the store
      */
     getCurrentNode () {
-      // return this.$store.getters.getCurrentNode
-      return this.$store.state.currentNode
+      return this.$store.getters.getCurrentNode
     },
 
     /**

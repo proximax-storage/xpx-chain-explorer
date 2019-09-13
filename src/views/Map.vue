@@ -111,7 +111,6 @@ export default {
     getInfoNodes () {
       axios.get('./config/config.json').then(
         response => {
-          // console.log(response.data.MapsInfo)
           this.mapList = response.data.MapsInfo
           let mapCustomNodes = this.$storage.get('mapCustomNodes')
           if (mapCustomNodes !== null) {
@@ -167,6 +166,15 @@ export default {
                 this.verifyMapList()
               }
             )
+
+            if (el.urlNode !== undefined) {
+              axios.get(`${el.urlNode}/chain/height`).then(
+                response => {
+                  el.height = response.data.height[0]
+                }
+              )
+            }
+            this.verifyMapList()
           }
         )
       })
