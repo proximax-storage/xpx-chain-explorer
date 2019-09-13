@@ -45,6 +45,7 @@ export default {
     // Call Load Nodes Method
     this.loadNodes()
     this.average()
+    console.log('Running app')
     // this.loadNetwork()
   },
   data () {
