@@ -315,12 +315,12 @@ export default {
               let name
               this.$proxProvider.getNamespacesName([this.detail.parentId])
                 .subscribe(response => {
-                  if (response.length = 2) {
+                  if (response.length === 2) {
                     response.reverse()
                     name = `${response[0].name}.${response[1].name}.${this.detail.namespaceName}`
                     let parentNamespace = { key: 'Namespace Level', value: name, class: 'valueLower' }
                     this.plusInfo.unshift(parentNamespace)
-                  } else if (response.length = 1) {
+                  } else if (response.length === 1) {
                     name = `${response[0].name} . ${this.detail.namespaceName}`
                     let parentNamespace = { key: 'Namespace Level', value: name, class: 'valueLower' }
                     this.plusInfo.unshift(parentNamespace)
