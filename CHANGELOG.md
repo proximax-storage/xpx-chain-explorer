@@ -50,9 +50,18 @@
   * minor bug fixes in the InnerTransactions Component.
 
 ## Release v0.2.7
-  * Bug fixes in AdminNodes Component
-  * Bug fixes in RecentTransactions Component
-  * Bug fixes in App.vue File and SearchResult View
+  * Bug fixes in AdminNodes Component.
+  * Bug fixes in RecentTransactions Component.
+  * Bug fixes in App.vue File and SearchResult View.
 
 ## Release v0.2.8
-  * Changes in routes
+  * Changes in routes.
+
+## Release v0.3.0
+  * Refactoring-Dragon.
+
+## Release v0.3.1
+  * Bug fixes in dependecies.
+
+## Release v0.3.2
+  * General changes, bug fixes and spelling corrections.
