@@ -248,6 +248,20 @@ body
   &::-webkit-scrollbar
     background: red
 
+label
+  margin: 0px 0px 0px 0px !important
+  margin-top: 0px !important
+  margin-left: 0px !important
+  margin-rigth: 0px !important
+  margin-bottom: 0px !important
+
+.mr-5
+  margin: 0px 0px 0px 0px !important
+  margin-top: 0px !important
+  margin-left: 0px !important
+  margin-rigth: 0px !important
+  margin-bottom: 0px !important
+
 @media screen and (min-width: 1367px)
   .view-container
     display: flex

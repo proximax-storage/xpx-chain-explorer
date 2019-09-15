@@ -588,6 +588,12 @@ export default {
 
     changeList (list) {
       this.activeList = list
+    },
+
+    async emergencyNet () {
+      let response = await axios.get('./config/config.json')
+      let tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, response.data.NetworkType.number)
+      this.getInfoAccountAndViewTransactions(tmp.address.address)
     }
   },
   watch: {
