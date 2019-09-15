@@ -154,6 +154,9 @@ export default {
                     el.version = response.data.version
                   }
                 )
+                .catch(error => {
+                  el.status = 'Offline'
+                })
 
                 if (el.urlNode !== undefined) {
                   axios.get(`${el.urlNode}/chain/height`).then(
