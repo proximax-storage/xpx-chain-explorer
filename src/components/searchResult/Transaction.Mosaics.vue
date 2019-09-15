@@ -1,6 +1,8 @@
 <template>
   <div class="mosaics animated faster fadeIn" v-if="showFinalData !== null && showFinalData.length > 0">
-    <h1 class="supertitle center-text">Mosaics In Transfer</h1>
+    <h1 class="supertitle center-text" v-show="mosaicAliasName.length !== 1 && mosaicAliasName[0] !== 'prx.xpx'">
+      Mosaics In Transfer
+    </h1>
 
     <div>
       <div class="element" v-for="(item, index) in showFinalData" :key="index" v-show="mosaicAliasName[index] !== 'prx.xpx'">
@@ -26,6 +28,8 @@
 </template>
 
 <script>
+import { Id } from 'tsjs-xpx-chain-sdk'
+
 export default {
   name: 'MosaicsInTransfer',
   props: {
@@ -82,7 +86,7 @@ export default {
                     this.$proxProvider.getNamespacesName([el.id]).subscribe(
                       nameResponse => {
                         nameResponse = nameResponse.reverse()
-                        console.log("Name Response", nameResponse)
+                        // console.log("Name Response", nameResponse)
                         if (nameResponse.length === 1) {
                           this.mosaicAliasName.push(nameResponse[0].name)
                         } else if (nameResponse.length === 2) {
@@ -93,22 +97,26 @@ export default {
                       }
                     )
                     this.titleMosaic = 'Mosaic Alias ID'
-                    console.log(response.alias.mosaicId)
-                    let tmpId = this.$proxProvider.createMosaicId(response.alias.mosaicId)
-                    this.$proxProvider.getMosaic(tmpId).subscribe(
-                      response2 => {
-                        console.log(response2)
-                        if (response2.properties.divisibility !== 0) {
-                          // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility)
-                          this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
-                          this.finalData.push(tmpObj)
-                        } else {
-                          // tmpObj.amount = `${el.amount.compact()}`
-                          this.arrayAmount.push(`${el.amount.compact()}`)
-                          this.finalData.push(tmpObj)
+                    // console.log('//////////////////RESULT', new Id(response.alias.mosaicId).toHex())
+                    let tmpId = new Id(response.alias.mosaicId).toHex()
+                    if (tmpId === this.xpx) {
+                      this.$emit('returnAmount', this.$utils.fmtAmountValue(el.amount.compact()))
+                    } else {
+                      this.$proxProvider.getMosaic(tmpId).subscribe(
+                        response2 => {
+                          console.log(response2)
+                          if (response2.properties.divisibility !== 0) {
+                            // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility)
+                            this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
+                            this.finalData.push(tmpObj)
+                          } else {
+                            // tmpObj.amount = `${el.amount.compact()}`
+                            this.arrayAmount.push(`${el.amount.compact()}`)
+                            this.finalData.push(tmpObj)
+                          }
                         }
-                      }
-                    )
+                      )
+                    }
                   }
                 )
               }
