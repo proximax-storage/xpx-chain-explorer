@@ -93,7 +93,6 @@ export default {
    * Call constructorObj method
    */
   mounted () {
-    console.log("Array transaction mosaic", this.arrayTransactions)
     this.analyzeElements()
   },
   methods: {

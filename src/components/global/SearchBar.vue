@@ -9,25 +9,6 @@
 
       </div>
 
-      <!-- Type Search Button -->
-      <!-- <div class="search-button">
-
-        <mdb-dropdown style="text-align: center">
-          <mdb-dropdown-toggle slot="toggle" class="black-text"
-          style="box-shadow: none; border-radius: 30px; font-weight: bold; width: 100%; box-shadow: inset 0px 0px 0px 2px #2d819b"
-          >
-          {{ label }}
-          </mdb-dropdown-toggle>
-          <mdb-dropdown-menu left>
-            <mdb-dropdown-item class="searchLink" v-for="(item, index) in searchList" :key="index" style="padding: 0px">
-              <a style="display: block; padding: 3px; text-align: center" @click.prevent="changeSearch(item)">{{ item.name }}</a>
-            </mdb-dropdown-item>
-          </mdb-dropdown-menu>
-        </mdb-dropdown>
-
-      </div> -->
-      <!-- End Type Search Buttton -->
-
       <!-- Search Input -->
       <form class="input-cont">
 
@@ -122,8 +103,6 @@ export default {
      * taking the type of search and the value entered by the user
      */
     performSearch () {
-      console.log(this.typeSearch)
-      console.log(this.valueSearch)
       if (this.typeSearch === 'basic' || this.typeSearch === 'hash') {
         if (this.valueSearch !== '') {
           if (this.bannerActive) {
@@ -132,16 +111,11 @@ export default {
           }
 
           if (this.typeSearch === 'basic') {
-            console.log('Basic', this.valueSearch)
-
             if (this.valueSearch.length === 64) {
-              console.log('Public Key')
               this.typeSearch = 'publicKey'
             } else if (this.valueSearch.length === 40 || this.valueSearch.length === 46) {
-              console.log('Address')
               this.typeSearch = 'publicKey'
             } else if (typeof parseInt(this.valueSearch) == 'number') {
-              console.log('Number')
               this.typeSearch = 'blockHeight'
             }
           }

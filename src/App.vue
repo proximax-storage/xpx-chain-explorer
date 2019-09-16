@@ -79,8 +79,6 @@ export default {
           } else {
             nodesFile = response.data.Nodes
           }
-          console.log('%cNodes Set Up', stylesCss)
-          console.log(nodesFile)
           this.$store.dispatch('updateNodes', nodesFile)
           this.runWS()
           // END NODE CCONFIG
@@ -90,20 +88,14 @@ export default {
 
           if (networksFile !== undefined) {
             this.$store.dispatch('setNetworkType', networksFile)
-            console.log('%cNetwork Type Set Up:', stylesCss)
-            console.log(this.$store.state.netType.name, this.$store.state.netType.number)
           } else if (typeof networksFile !== 'object' || networksFile === undefined) {
             this.$store.dispatch('setNetworkType', { name: "TEST_NET", number: 168 })
-            console.log('%cDefault Network Type: ', stylesCss)
-            console.log(this.$store.state.netType.name, this.$store.state.netType.number)
           }
           // END NETWORK CONFIG
 
           // RENTAL FEE CONFIG
           let rentalFile = response.data.RentalFeeInfo
           this.$store.dispatch('setRentalFeeInfo', rentalFile)
-          console.log('%cRental Accounts Set Up:', stylesCss)
-          console.log(this.$store.state.rentalFeeInfo)
           // END RENTAL FEE CONFIG
         })
     },
@@ -131,14 +123,11 @@ export default {
       if (currentNode.includes('http://')) {
         currentNode = currentNode.substr(7)
         currentNode = `ws://${currentNode}`
-        // console.log(currentNode)
       } else if (currentNode.includes('https://')) {
         currentNode = currentNode.substr(8)
         currentNode = `wss://${currentNode}`
-        // console.log(currentNode)
       }
       // Print current node in console
-      // console.log("NODE", currentNode)
 
       // Run the ws using the current node
       const listener = new Listener(`${currentNode}`, WebSocket)
@@ -149,26 +138,19 @@ export default {
             block.height = block.height.compact()
 
             if (block.numTransactions !== undefined) {
-              // console.log('block.numTransactions BIEN')
               block.numTransactions = block.numTransactions
               block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
               block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
               this.$store.dispatch('changeCurrentBlock', block)
               this.reset()
-              // console.log('Block TXS', block.numTransactions)
             } else if (block.numTransactions === undefined) {
-              // console.log('block.numTransactions es indefinido')
               this.$proxProvider.blockHttp.getBlockByHeight(block.height).subscribe(
                 response => {
-                  // console.log(response)
                   block.numTransactions = response.numTransactions
                   block.totalFee = this.$utils.fmtAmountValue(response.totalFee.compact())
                   block.date = this.$utils.fmtTime(new Date(response.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
                   this.$store.dispatch('changeCurrentBlock', block)
                   this.reset()
-                  // console.log('Block TXS', block.numTransactions)
-                  // console.log("Blockchain Query", response.numTransactions)
-                  // console.log("getBlockByHeight", response)
                 }
               )
             }
@@ -177,14 +159,11 @@ export default {
             // block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
             // this.$store.dispatch('changeCurrentBlock', block)
             // this.reset()
-            // console.log('Block TXS', block.numTransactions)
-            // console.log('Block', block)
           })
         }
       )
       .catch(err => {
         // Show error message in the console
-        // console.log('AQUI')
         this.$store.dispatch('updateErrorInfo', {
           active: true,
           message: 'Comunication error with node!',
@@ -201,7 +180,6 @@ export default {
     average () {
       setInterval(() => {
         this.averageTime += 1
-        // console.log(this.averageTime)
       }, 1)
     },
 
@@ -247,6 +225,20 @@ body
   background: transparent
   &::-webkit-scrollbar
     background: red
+
+label
+  margin: 0px 0px 0px 0px !important
+  margin-top: 0px !important
+  margin-left: 0px !important
+  margin-rigth: 0px !important
+  margin-bottom: 0px !important
+
+.mr-5
+  margin: 0px 0px 0px 0px !important
+  margin-top: 0px !important
+  margin-left: 0px !important
+  margin-rigth: 0px !important
+  margin-bottom: 0px !important
 
 @media screen and (min-width: 1367px)
   .view-container

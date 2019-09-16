@@ -46,7 +46,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params.category)
     this.typeList = this.$route.params.category
     /* http://localhost:8080/#/list/mosaics */
 

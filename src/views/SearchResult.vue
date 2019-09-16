@@ -156,16 +156,12 @@ export default {
     if (this.$route.params.type === 'publicKey' || this.$route.params.type === 'address') {
       let tmp
       if (this.$route.params.id.length === 64) {
-        console.log('Type of Network', this.$store.state.netType)
         if (this.$store.state.netType === undefined) {
-          console.log('Without Storage')
           this.emergencyNet()
         } else {
-          console.log('With Storage')
           tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
           this.getInfoAccountAndViewTransactions(tmp.address.address)
         }
-        // console.log("TEMPORAL", tmp)
       } else {
         this.getInfoAccountAndViewTransactions(this.$route.params.id)
       }
@@ -176,7 +172,6 @@ export default {
     } else if (this.$route.params.type === 'namespaceInfo') {
       if (isNaN(parseInt(this.$route.params.id, 16))) {
         let tmp = this.$route.params.id
-        console.log("Strind Search", tmp)
         let tmp2 = new NamespaceId(tmp)
         this.getNamespaceInfo(tmp2.id.toHex())
       } else {
@@ -186,7 +181,6 @@ export default {
       if (isNaN(parseInt(this.$route.params.id, 16))) {
         let tmp = this.$route.params.id
         let tmp2 = new NamespaceId(tmp)
-        console.log(tmp2.id.toHex())
         this.$proxProvider.getNamespacesInfo(tmp2.id).subscribe(
           response => {
             this.getMosaicInfo(new Id(response.alias.mosaicId).toHex())
@@ -221,11 +215,9 @@ export default {
       let errorActive1 = false
       let errorActive2 = false
       this.mosaicLoader = true
-      // console.log("ADDRESS & XPX", addr, xpx)
       this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
-          // console.log('RESPONSE ACCOUNT', resp)
           this.param = resp
           this.showComponent()
           // If your account information has tiles, look up your information and name to display them in the tile table
@@ -237,7 +229,6 @@ export default {
               this.mosaicLoader = false
             }
 
-            console.log("Filtered Trans", filteredTrans)
 
             filteredTrans.forEach((el, index) => {
               this.$proxProvider.getMosaic(el.id).subscribe(
@@ -245,7 +236,6 @@ export default {
                   let amountCompact = el.amount.compact()
                   let mosHeight = mosaicResponse.height.compact()
                   let mosDurat = (mosaicResponse.duration === undefined) ? 0 : mosaicResponse.duration.compact()
-                  console.log(mosaicResponse)
                   this.$proxProvider.getMosaicsName([mosaicResponse.mosaicId]).subscribe(
                     responseName => {
                       let tmpObj = {
@@ -294,7 +284,6 @@ export default {
           let revisionArray = []
           if (response.data.length !== 0) {
             response.data.forEach(el => {
-              console.log("NAMESPACE ELEMENT", el.namespace)
               let tmpObj = {
                 status: (el.meta.active) ? 'Active' : 'Inactive'
               }
@@ -302,31 +291,25 @@ export default {
               let requestArr = []
               let currentLevel = 0
               if (el.namespace.level2 !== undefined) {
-                // console.log('Level 2')
                 currentLevel = 2
                 requestArr.push(new Id(el.namespace.level2))
                 requestArr.push(new Id(el.namespace.level1))
                 requestArr.push(new Id(el.namespace.level0))
                 tmpObj.id = new Id(el.namespace.level2).toHex()
               } else if (el.namespace.level1 !== undefined) {
-                // console.log('Level 1')
                 currentLevel = 1
                 requestArr.push(new Id(el.namespace.level1))
                 requestArr.push(new Id(el.namespace.level0))
                 tmpObj.id = new Id(el.namespace.level1).toHex()
               } else if (el.namespace.level0 !== undefined) {
-                // console.log('Level 0')
                 currentLevel = 0
                 requestArr.push(new Id(el.namespace.level0))
                 tmpObj.id = new Id(el.namespace.level0).toHex()
               }
 
-              // console.log(currentLevel)
-              // console.log("Request Array", requestArr)
 
               this.$proxProvider.getNamespacesName(requestArr).subscribe(
                 responseName => {
-                  console.log(responseName)
                   if (currentLevel === 0) {
                     tmpObj.name = responseName[0].name
                   } else if (currentLevel === 1) {
@@ -356,7 +339,6 @@ export default {
             minRemoval: response.data.multisig.minRemoval
           }
 
-          console.log(response.data.multisig)
 
           this.cosignList = Array.from(response.data.multisig.cosignatories)
           this.multisigRelatedAccount = Array.from(response.data.multisig.multisigAccounts),
@@ -369,7 +351,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log('No data of multisig account')
           this.errorMultisig = true
         })
     },
@@ -436,7 +417,6 @@ export default {
         resp => {
           this.param = resp
           this.showComponent()
-          console.log('Get Info Transaction', resp)
         },
         error => {
           this.$store.dispatch('updateErrorInfo', {
@@ -450,16 +430,13 @@ export default {
 
     getNamespaceInfo (namespaceHex) {
       let namespaceId = Id.fromHex(namespaceHex)
-      console.log('NamespaceInfo', namespaceId)
       this.$proxProvider.getNamespacesInfo(namespaceId).subscribe(
         response => {
-          console.log(response)
           // this.param.id = namespaceId
           this.$proxProvider.getNamespacesName([namespaceId]).subscribe(
             nameResponse => {
               this.param = response
               nameResponse = nameResponse.reverse()
-              console.log("Name Response", nameResponse)
               if (nameResponse.length > 1) {
                 this.param.name = `${nameResponse[0].name}.${nameResponse[1].name}`
               } else {
@@ -485,10 +462,8 @@ export default {
         response => {
           this.$proxProvider.getMosaicsName([mosaicId]).subscribe(
             nameResponse => {
-              console.log(nameResponse[0])
               this.param = response
               this.param.name = nameResponse[0].names[0]
-              console.log('MosaicInfo', response)
               this.showComponent()
             }
           )
@@ -530,7 +505,6 @@ export default {
     viewTransactionsFromPublicAccount(publicAccount) {
       this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
         transactions => {
-          // console.log("Transacciones de esta cuenta",transactions)
           if (transactions.length > 0) {
             transactions.forEach(element => {
               element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
@@ -588,6 +562,12 @@ export default {
 
     changeList (list) {
       this.activeList = list
+    },
+
+    async emergencyNet () {
+      let response = await axios.get('./config/config.json')
+      let tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, response.data.NetworkType.number)
+      this.getInfoAccountAndViewTransactions(tmp.address.address)
     }
   },
   watch: {
