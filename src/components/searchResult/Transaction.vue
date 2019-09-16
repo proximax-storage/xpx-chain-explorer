@@ -221,7 +221,6 @@ export default {
     this.verifyType()
     this.verifyTransactionDetails()
     let detail = JSON.stringify(this.detail)
-    console.log('details', JSON.parse(detail))
   },
   methods: {
     /**
@@ -247,7 +246,6 @@ export default {
     verifyType () {
       let objectOfTypes = Object.values(proximaxProvider.typeTransactions())
       objectOfTypes.forEach(element => {
-        // console.log(element.name)
         if (this.detail.type === element.id) {
           this.transactionType = element.name
         }
@@ -255,7 +253,6 @@ export default {
     },
 
     analyzeMessage (message) {
-      // console.log(message)
       let result = null
       if (message.type === 0) {
         if (message.payload === '') {
@@ -289,23 +286,7 @@ export default {
 
           if (this.detail.mosaics && this.detail.mosaics.length > 0) {
             this.mosaicsOfTransfer = this.detail.mosaics
-            // let tmpArr = []
-            // let tmpObj = {
-            //   title: 'Quantity',
-            //   id = el.id.toHex()
-            // }
-
-            // this.detail.mosaics.forEach(el => {
-            //   console.log(el.id.toHex())
-            //   this.$proxProvider.getMosaic(el.id).subscribe(
-            //     response => {
-
-            //     }
-            //   )
-
-            // })
           }
-          //this.iterator(this.detail)
           break;
         case 'Register Namespace Transaction':
           let findParent = async () => {
@@ -380,7 +361,6 @@ export default {
 
           this.$proxProvider.getMosaic(this.detail.mosaicId.id).subscribe(
             response => {
-              console.log('Si mosaico')
               this.plusInfo.unshift({ key: 'Mosaic Id', value: this.detail.mosaicId.id.toHex(), class: 'value link', run: this.goToMosaic },)
             },
             error => {
@@ -449,7 +429,6 @@ export default {
 
           this.$proxProvider.getNamespacesName([this.detail.namespaceId.id]).subscribe(
             response => {
-              // console.log(response[0].name)
               this.plusInfo.unshift({ key: 'Namespace Name', value: response[0].name, class: 'valueLower' })
             }
           )

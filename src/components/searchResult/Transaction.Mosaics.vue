@@ -59,7 +59,6 @@ export default {
     },
 
     organizeData () {
-      // console.log('Mounted')
       if (this.params !== null) {
         this.params.forEach(el => {
           let tmpObj = {}
@@ -86,7 +85,6 @@ export default {
                     this.$proxProvider.getNamespacesName([el.id]).subscribe(
                       nameResponse => {
                         nameResponse = nameResponse.reverse()
-                        // console.log("Name Response", nameResponse)
                         if (nameResponse.length === 1) {
                           this.mosaicAliasName.push(nameResponse[0].name)
                         } else if (nameResponse.length === 2) {
@@ -97,20 +95,16 @@ export default {
                       }
                     )
                     this.titleMosaic = 'Mosaic Alias ID'
-                    // console.log('//////////////////RESULT', new Id(response.alias.mosaicId).toHex())
                     let tmpId = new Id(response.alias.mosaicId).toHex()
                     if (tmpId === this.xpx) {
                       this.$emit('returnAmount', this.$utils.fmtAmountValue(el.amount.compact()))
                     } else {
                       this.$proxProvider.getMosaic(tmpId).subscribe(
                         response2 => {
-                          console.log(response2)
                           if (response2.properties.divisibility !== 0) {
-                            // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility)
                             this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
                             this.finalData.push(tmpObj)
                           } else {
-                            // tmpObj.amount = `${el.amount.compact()}`
                             this.arrayAmount.push(`${el.amount.compact()}`)
                             this.finalData.push(tmpObj)
                           }

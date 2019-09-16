@@ -76,7 +76,6 @@ export default {
 
     this.$proxProvider.getAllTransactionsFromAccount(account, 100).subscribe(
       transactions => {
-        // console.log("Transacciones de esta cuenta",transactions)
         if (transactions.length > 0) {
           this.resp = transactions
 
@@ -94,8 +93,6 @@ export default {
                     } else if (responseName.length === 1) {
                       name = `${responseName[0].name}`
                     }
-
-                    // console.log("NAME",name)
                     response.name = name
 
                     if (this.idList.includes(el.namespaceId.toHex()) !== true) {
@@ -106,7 +103,7 @@ export default {
                 )
               },
               err => {
-                console.log('Namespace not found')
+                console.warn('Namespace not found')
               }
             )
           })

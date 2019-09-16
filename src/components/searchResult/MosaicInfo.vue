@@ -112,7 +112,6 @@ export default {
     detail: Object
   },
   mounted () {
-    console.log('MosaicInfo', this.detail.toString())
   },
   methods: {
     goToAddress (address) {

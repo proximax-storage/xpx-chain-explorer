@@ -95,7 +95,7 @@ export default {
                   this.mosaicArr.push(response)
                 },
                 err => {
-                  console.log('Mosaic not found')
+                  console.error('Mosaic not found')
                 }
               )
             } else if (el.type === 16705) {
@@ -105,7 +105,7 @@ export default {
                   this.mosaicArr.push(response)
                 },
                 err => {
-                  console.log('Mosaic not found')
+                  console.error('Mosaic not found')
                 }
               )
             }

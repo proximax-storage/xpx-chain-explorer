@@ -47,7 +47,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.namespacesList)
   },
   methods: {
     goToAddress (address) {
