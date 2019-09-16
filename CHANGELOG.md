@@ -65,3 +65,6 @@
 
 ## Release v0.3.2
   * General changes, bug fixes and spelling corrections.
+
+## Release v0.3.3
+  * Bug Fixes and console logs deleted
