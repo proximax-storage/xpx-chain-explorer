@@ -63,14 +63,6 @@ export default {
     loadNodes () {
       axios.get('./config/config.json')
         .then(response => {
-          let stylesCss = `
-            background: orange;
-            color: black;
-            font-weigth: bold;
-            border-radius: 5px;
-            padding: 2px;
-          `
-
           // NODE CONFIG
           let nodesFile = response.data.Nodes
           let tmpNodes = JSON.parse(this.$storage.get('customNodes'))
