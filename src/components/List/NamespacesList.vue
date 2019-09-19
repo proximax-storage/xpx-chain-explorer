@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { Address } from 'tsjs-xpx-chain-sdk'
+import { Address, QueryParams } from 'tsjs-xpx-chain-sdk'
 import { mdbProgress } from 'mdbvue'
 
 export default {
@@ -71,50 +71,64 @@ export default {
     }
   },
   mounted () {
-    let account = this.$proxProvider.createPublicAccount(this.$store.state.rentalFeeInfo.namespaceRentalFee.publicKey, this.$store.state.netType.number)
-    let net = this.$store.state.netType.number
-
-    this.$proxProvider.getAllTransactionsFromAccount(account, 100).subscribe(
-      transactions => {
-        if (transactions.length > 0) {
-          this.resp = transactions
-
-          this.resp.forEach(el => {
-            this.$proxProvider.getNamespacesInfo(el.namespaceId).subscribe(
-              response => {
-                this.$proxProvider.getNamespacesName([el.namespaceId]).subscribe(
-                  responseName => {
-                    let name = ''
-
-                    if (responseName.length === 3) {
-                      name = `${responseName[2].name}.${responseName[1].name}.${responseName[0].name}`
-                    } else if (responseName.length === 2) {
-                      name = `${responseName[1].name}.${responseName[0].name}`
-                    } else if (responseName.length === 1) {
-                      name = `${responseName[0].name}`
-                    }
-                    response.name = name
-
-                    if (this.idList.includes(el.namespaceId.toHex()) !== true) {
-                      this.namespacesArr.push(response)
-                    }
-                    this.idList.push(el.namespaceId.toHex())
-                  }
-                )
-              },
-              err => {
-                console.warn('Namespace not found')
-              }
-            )
-          })
-        }
-      },
-      error => {
-        console.error('ACCOUNT ERROR....', error)
-      }
-    )
+    this.checkNode()
   },
   methods: {
+    checkNode () {
+      if (this.$store.state.currentNode !== undefined || this.$store.state.currentNode !== '' ) {
+        this.searchList()
+        console.log('Check List')
+      } else {
+        this.checkNode()
+        console.log('Check Node')
+      }
+    },
+
+    searchList () {
+      let account = this.$proxProvider.createPublicAccount(this.$store.state.rentalFeeInfo.namespaceRentalFee.publicKey, this.$store.state.netType.number)
+      let net = this.$store.state.netType.number
+
+      this.$proxProvider.getAllTransactionsFromAccount(account, new QueryParams(100)).subscribe(
+        transactions => {
+          if (transactions.length > 0) {
+            this.resp = transactions
+
+            this.resp.forEach(el => {
+              this.$proxProvider.getNamespacesInfo(el.namespaceId).subscribe(
+                response => {
+                  this.$proxProvider.getNamespacesName([el.namespaceId]).subscribe(
+                    responseName => {
+                      let name = ''
+
+                      if (responseName.length === 3) {
+                        name = `${responseName[2].name}.${responseName[1].name}.${responseName[0].name}`
+                      } else if (responseName.length === 2) {
+                        name = `${responseName[1].name}.${responseName[0].name}`
+                      } else if (responseName.length === 1) {
+                        name = `${responseName[0].name}`
+                      }
+                      response.name = name
+
+                      if (this.idList.includes(el.namespaceId.toHex()) !== true) {
+                        this.namespacesArr.push(response)
+                      }
+                      this.idList.push(el.namespaceId.toHex())
+                    }
+                  )
+                },
+                err => {
+                  console.warn('Namespace not found')
+                }
+              )
+            })
+          }
+        },
+        error => {
+          console.error('ACCOUNT ERROR....', error)
+        }
+      )
+    },
+
     goToAddress (address) {
       let routeData = (address.length === 64) ?
       this.$router.resolve({ path: `/result/publicKey/${ address }` }) :

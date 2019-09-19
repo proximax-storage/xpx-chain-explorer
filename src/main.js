@@ -17,6 +17,7 @@ if (currentNode === null) {
   axios.get('../config/config.json').then(
     response => {
       currentNode = response.data.Nodes[0]
+      localStorage.setItem('currentNode', currentNode)
       Vue.prototype.$storage = new Persistence()
       Vue.prototype.$utils = Utils
       Vue.prototype.$proxProvider = new proximaxProvider(currentNode)

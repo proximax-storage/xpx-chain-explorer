@@ -81,43 +81,57 @@ export default {
     }
   },
   mounted () {
-    let account = this.$proxProvider.createPublicAccount(this.$store.state.rentalFeeInfo.mosaicRentalFee.publicKey, this.$store.state.netType.number)
-    let net = this.$store.state.netType.number
-    this.$proxProvider.getAllTransactionsFromAccount(account, new QueryParams(100)).subscribe(
-      transactions => {
-        if (transactions.length > 0) {
-          this.resp = transactions
-          this.resp.forEach((el, index) => {
-            if (el.type === 16717) {
-              this.$proxProvider.getMosaic(el.mosaicId.id).subscribe(
-                response => {
-                  response.id = el.mosaicId.id.toHex()
-                  this.mosaicArr.push(response)
-                },
-                err => {
-                  console.error('Mosaic not found')
-                }
-              )
-            } else if (el.type === 16705) {
-              this.$proxProvider.getMosaic(el.innerTransactions[0].mosaicId.id).subscribe(
-                response => {
-                  response.id = response.mosaicId.id.toHex()
-                  this.mosaicArr.push(response)
-                },
-                err => {
-                  console.error('Mosaic not found')
-                }
-              )
-            }
-          })
-        }
-      },
-      error => {
-        console.error('ACCOUNT ERROR....', error)
-      }
-    )
+    this.checkNode()
   },
   methods: {
+    checkNode () {
+      if (this.$store.state.currentNode !== undefined || this.$store.state.currentNode !== '' ) {
+        this.searchList()
+        console.log('Check List')
+      } else {
+        this.checkNode()
+        console.log('Check Node')
+      }
+    },
+
+    searchList () {
+      let account = this.$proxProvider.createPublicAccount(this.$store.state.rentalFeeInfo.mosaicRentalFee.publicKey, this.$store.state.netType.number)
+      let net = this.$store.state.netType.number
+      this.$proxProvider.getAllTransactionsFromAccount(account, new QueryParams(100)).subscribe(
+        transactions => {
+          if (transactions.length > 0) {
+            this.resp = transactions
+            this.resp.forEach((el, index) => {
+              if (el.type === 16717) {
+                this.$proxProvider.getMosaic(el.mosaicId.id).subscribe(
+                  response => {
+                    response.id = el.mosaicId.id.toHex()
+                    this.mosaicArr.push(response)
+                  },
+                  err => {
+                    console.error('Mosaic not found')
+                  }
+                )
+              } else if (el.type === 16705) {
+                this.$proxProvider.getMosaic(el.innerTransactions[0].mosaicId.id).subscribe(
+                  response => {
+                    response.id = response.mosaicId.id.toHex()
+                    this.mosaicArr.push(response)
+                  },
+                  err => {
+                    console.error('Mosaic not found')
+                  }
+                )
+              }
+            })
+          }
+        },
+        error => {
+          console.error('ACCOUNT ERROR....', error)
+        }
+      )
+    },
+
     goToAddress (address) {
       let routeData = (address.length === 64) ?
       this.$router.resolve({ path: `/result/publicKey/${ address }` }) :

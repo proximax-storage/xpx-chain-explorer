@@ -102,10 +102,12 @@ export default {
      */
     getAllNodes () {
       let tmpArray = []
-      let tmp = Array.from(this.$store.state.nodes)
-      tmp.forEach((item, index) => {
-        tmpArray.push({ name: item, index: index })
-      });
+      console.log(this.$store.getters.getAllNodes)
+      if (this.$store.getters.getAllNodes !== undefined || this.$store.getters.getAllNodes !== null) {
+        this.$store.getters.getAllNodes.forEach((item, index) => {
+          tmpArray.push({ name: item, index: index })
+        })
+      }
       return tmpArray
     },
 
@@ -118,10 +120,8 @@ export default {
       ave.forEach(el => {
         count += el
       })
-
       count = count / ave.length
       return count.toFixed(2)
-
     }
   },
   methods: {
