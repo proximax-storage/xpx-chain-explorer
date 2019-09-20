@@ -20,11 +20,11 @@
 
     <dir class="empty" v-show="namespacesArr.length === 0">
       <div>
-        Loading namespaces please wait a few moments
+        {{ loaderMessage }}
       </div>
 
       <div>
-        <mdb-progress bgColor="cyan darken-3" style="width: 100%" indeterminate/>
+        <mdb-progress bgColor="cyan darken-3" style="width: 100%" indeterminate v-if="loaderProgress"/>
       </div>
     </dir>
 
@@ -57,6 +57,7 @@
 <script>
 import { Address, QueryParams } from 'tsjs-xpx-chain-sdk'
 import { mdbProgress } from 'mdbvue'
+import axios from 'axios'
 
 export default {
   name: 'NamespacesList',
@@ -67,28 +68,42 @@ export default {
     return {
       resp: undefined,
       namespacesArr: [],
-      idList: []
+      idList: [],
+      // LOADER
+      loaderMessage: 'Loading namespaces please wait a few moments',
+      loaderProgress: true
     }
   },
   mounted () {
-    this.checkNode()
+    this.checkInfo()
   },
   methods: {
-    checkNode () {
-      if (this.$store.state.currentNode !== undefined || this.$store.state.currentNode !== '' ) {
-        this.searchList()
-        console.log('Check List')
+    async checkInfo () {
+      console.log('Run')
+      if (this.$store.state.rentalFeeInfo === undefined) {
+        console.log("INDEFINIDO")
+        try {
+          let response = await axios.get('./config/config.json')
+          let publicKey = response.data.RentalFeeInfo.namespaceRentalFee.publicKey
+          let netType = response.data.NetworkType.number
+          console.log(publicKey, netType)
+          this.searchList(publicKey, netType)
+        } catch (e) {
+          console.log(e)
+          this.loaderMessage = 'System error'
+          this.loaderProgress = false
+        }
       } else {
-        this.checkNode()
-        console.log('Check Node')
+        console.log(this.$store.state.rentalFeeInfo.namespaceRentalFee.publicKey, this.$store.state.netType.number)
+        this.searchList(this.$store.state.rentalFeeInfo.namespaceRentalFee.publicKey, this.$store.state.netType.number)
       }
     },
 
-    searchList () {
-      let account = this.$proxProvider.createPublicAccount(this.$store.state.rentalFeeInfo.namespaceRentalFee.publicKey, this.$store.state.netType.number)
+    searchList (publicKey, netType) {
+      let account = this.$proxProvider.createPublicAccount(publicKey, netType)
       let net = this.$store.state.netType.number
 
-      this.$proxProvider.getAllTransactionsFromAccount(account, new QueryParams(100)).subscribe(
+      this.$proxProvider.getAllTransactionsFromAccount(account, 100).subscribe(
         transactions => {
           if (transactions.length > 0) {
             this.resp = transactions
@@ -96,6 +111,7 @@ export default {
             this.resp.forEach(el => {
               this.$proxProvider.getNamespacesInfo(el.namespaceId).subscribe(
                 response => {
+
                   this.$proxProvider.getNamespacesName([el.namespaceId]).subscribe(
                     responseName => {
                       let name = ''
@@ -117,7 +133,7 @@ export default {
                   )
                 },
                 err => {
-                  console.warn('Namespace not found')
+                  console.log('Namespace not found')
                 }
               )
             })
@@ -125,6 +141,8 @@ export default {
         },
         error => {
           console.error('ACCOUNT ERROR....', error)
+          this.loaderMessage = 'System error'
+          this.loaderProgress = false
         }
       )
     },

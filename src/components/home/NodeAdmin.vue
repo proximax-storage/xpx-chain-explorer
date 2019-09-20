@@ -36,7 +36,8 @@
     <!-- End Average Response Area -->
 
     <div class="newNode" v-if="newNode">
-      <mdb-input class="place-white" style="width: 100%" v-model="newNodeValue" label="Add you new node" placeholder="http://mynode.io:8080 or https://mynode.io:8080"/>
+      <input type="search" class="place-white black-text optional-in" v-model="newNodeValue" placeholder="http://mynode.io:8080 or https://mynode.io:8080">
+      <!-- <mdb-input class="place-white" style="width: 100%" v-model="newNodeValue" label="Add you new node" placeholder="http://mynode.io:8080 or https://mynode.io:8080"/> -->
       <div>{{ nodeMessage }}</div>
       <mdb-progress v-if="nodeLoader === true" bgColor="cyan darken-3" style="width: 100%" indeterminate/>
       <div>
@@ -228,6 +229,17 @@ export default {
     color: #2BA1B9 !important
     &::after
       background: red !important
+
+.optional-in
+  background: transparent
+  border: 0px
+  border-bottom: 1px solid grey
+  outline: none
+  width: 100%
+  padding: 5px 0px
+  margin: 5px 0px !important
+  &:focus
+    border-bottom: 1px solid #2BA1B9
 
 .button-config
   background: transparent !important
