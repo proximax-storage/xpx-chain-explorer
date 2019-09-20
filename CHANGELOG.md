@@ -71,3 +71,10 @@
 
 ## Release v0.3.4
   * Bug Fixes.
+
+## Release v0.3.5
+  * Bug Fixes in SearchBar component.
+
+## Release v0.3.6
+  * Bug Fixes in NodeAdmin component.
+  * Bug Fixes in Mosaics and Namespaces List Components.
