@@ -13,7 +13,8 @@
       <form class="input-cont">
 
         <!-- MDB Input -->
-        <mdb-input :label="label" type="search" class="place-white black-text" v-model="valueSearch"/>
+        <input type="search" id="searchBarInput" class="place-white black-text optional-in" v-model="valueSearch" :placeholder="label">
+        <!-- <mdb-input :label="label" type="text" class="place-white black-text" v-model="valueSearch"/> -->
         <!-- End MDB Input -->
 
         <!-- Input Icon -->
@@ -103,13 +104,9 @@ export default {
      * taking the type of search and the value entered by the user
      */
     performSearch () {
+      this.bannerActive = false
       if (this.typeSearch === 'basic' || this.typeSearch === 'hash') {
         if (this.valueSearch !== '') {
-          if (this.bannerActive) {
-            this.bannerActive = false
-            this.bannerMessage = ''
-          }
-
           if (this.typeSearch === 'basic') {
             if (this.valueSearch.length === 64) {
               this.typeSearch = 'publicKey'
@@ -183,6 +180,17 @@ export default {
 .active-s
   color: white !important
   background: #2BA1B9 !important
+
+.optional-in
+  background: transparent
+  border: 0px
+  border-bottom: 1px solid grey
+  outline: none
+  width: 100%
+  padding: 5px 0px
+  margin: 5px 0px !important
+  &:focus
+    border-bottom: 1px solid #2BA1B9
 
 
 .searchBar

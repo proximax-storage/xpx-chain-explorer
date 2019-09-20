@@ -27,7 +27,8 @@
           </mdb-dropdown>
         </div> -->
         <div>
-          <mdb-input type="search" label="Filter Server" v-model="filter"/>
+          <!-- <mdb-input type="search" label="Filter Server" v-model="filter"/> -->
+          <input type="search" class="optional-in" v-model="filter" placeholder="Filter">
         </div>
       </div>
     </div>
@@ -327,6 +328,17 @@ $radius: 20px
 
 .md-form > input
   color: black !important
+
+.optional-in
+  background: transparent
+  border: 0px
+  border-bottom: 1px solid grey
+  outline: none
+  width: 100%
+  padding: 5px 0px
+  margin: 5px 0px !important
+  &:focus
+    border-bottom: 1px solid #2BA1B9
 
 .map
   display: block
