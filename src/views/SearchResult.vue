@@ -173,6 +173,7 @@ export default {
       if (isNaN(parseInt(this.$route.params.id, 16))) {
         let tmp = this.$route.params.id
         let tmp2 = new NamespaceId(tmp)
+        console.log(tmp2)
         this.getNamespaceInfo(tmp2.id.toHex())
       } else {
         this.getNamespaceInfo(this.$route.params.id)
@@ -181,6 +182,7 @@ export default {
       if (isNaN(parseInt(this.$route.params.id, 16))) {
         let tmp = this.$route.params.id
         let tmp2 = new NamespaceId(tmp)
+        console.log(tmp2)
         this.$proxProvider.getNamespacesInfo(tmp2.id).subscribe(
           response => {
             this.getMosaicInfo(new Id(response.alias.mosaicId).toHex())
@@ -432,7 +434,6 @@ export default {
       let namespaceId = Id.fromHex(namespaceHex)
       this.$proxProvider.getNamespacesInfo(namespaceId).subscribe(
         response => {
-          // this.param.id = namespaceId
           this.$proxProvider.getNamespacesName([namespaceId]).subscribe(
             nameResponse => {
               this.param = response

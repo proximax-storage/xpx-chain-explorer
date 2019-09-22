@@ -117,9 +117,9 @@ export default {
             }
           }
 
-          this.valueSearch = this.valueSearch.toLowerCase()
+          let lowerValue = this.valueSearch.toLowerCase()
 
-          let routeData = this.$router.resolve({ path: `/result/${this.typeSearch}/${this.valueSearch}` })
+          let routeData = this.$router.resolve({ path: `/result/${this.typeSearch}/${lowerValue}` })
           window.open(routeData.href, '_blank')
         } else {
           this.bannerActive = true
@@ -133,7 +133,8 @@ export default {
           let routeData = this.$router.resolve({ path: `/list/mosaics` })
           window.open(routeData.href, '_blank')
         } else {
-          let routeData = this.$router.resolve({ path: `/result/${this.typeSearch}/${this.valueSearch}` })
+          let lowerValue = this.valueSearch.toLowerCase()
+          let routeData = this.$router.resolve({ path: `/result/${this.typeSearch}/${lowerValue}` })
           window.open(routeData.href, '_blank')
         }
       }
