@@ -32,7 +32,7 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://arcturus.xpxsirius.io",
+      "urlNode": "http://arcturus.xpxsirius.io:3000",
       "icon": "proximax.svg"
     },
     {
@@ -46,7 +46,7 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://aldebaran.xpxsirius.io",
+      "urlNode": "http://aldebaran.xpxsirius.io:3000",
       "icon": "proximax.svg"
     },
     {
@@ -60,7 +60,7 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://betelgeuse.xpxsirius.io",
+      "urlNode": "http://betelgeuse.xpxsirius.io:3000",
       "icon": "proximax.svg"
     }
   ]
