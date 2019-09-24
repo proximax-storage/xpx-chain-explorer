@@ -173,6 +173,7 @@ export default {
       if (isNaN(parseInt(this.$route.params.id, 16))) {
         let tmp = this.$route.params.id
         let tmp2 = new NamespaceId(tmp)
+        console.log(tmp2)
         this.getNamespaceInfo(tmp2.id.toHex())
       } else {
         this.getNamespaceInfo(this.$route.params.id)
@@ -181,6 +182,7 @@ export default {
       if (isNaN(parseInt(this.$route.params.id, 16))) {
         let tmp = this.$route.params.id
         let tmp2 = new NamespaceId(tmp)
+        console.log(tmp2)
         this.$proxProvider.getNamespacesInfo(tmp2.id).subscribe(
           response => {
             this.getMosaicInfo(new Id(response.alias.mosaicId).toHex())
@@ -238,8 +240,9 @@ export default {
                   let mosDurat = (mosaicResponse.duration === undefined) ? 0 : mosaicResponse.duration.compact()
                   this.$proxProvider.getMosaicsName([mosaicResponse.mosaicId]).subscribe(
                     responseName => {
+                      console.log(responseName)
                       let tmpObj = {
-                        name: responseName[0].names[0].name,
+                        name: (responseName[0].names.length > 0) ? responseName[0].names[0].names : '',
                         id: el.id.toHex(),
                         owner: (resp.publicKey === mosaicResponse.owner.publicKey) ? 'true' : 'false',
                         quantity: (mosaicResponse.divisibility === 0) ? amountCompact : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility),
@@ -432,7 +435,6 @@ export default {
       let namespaceId = Id.fromHex(namespaceHex)
       this.$proxProvider.getNamespacesInfo(namespaceId).subscribe(
         response => {
-          // this.param.id = namespaceId
           this.$proxProvider.getNamespacesName([namespaceId]).subscribe(
             nameResponse => {
               this.param = response
