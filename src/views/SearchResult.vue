@@ -240,8 +240,9 @@ export default {
                   let mosDurat = (mosaicResponse.duration === undefined) ? 0 : mosaicResponse.duration.compact()
                   this.$proxProvider.getMosaicsName([mosaicResponse.mosaicId]).subscribe(
                     responseName => {
+                      console.log(responseName)
                       let tmpObj = {
-                        name: responseName[0].names[0].name,
+                        name: (responseName[0].names.length > 0) ? responseName[0].names[0].names : '',
                         id: el.id.toHex(),
                         owner: (resp.publicKey === mosaicResponse.owner.publicKey) ? 'true' : 'false',
                         quantity: (mosaicResponse.divisibility === 0) ? amountCompact : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility),
