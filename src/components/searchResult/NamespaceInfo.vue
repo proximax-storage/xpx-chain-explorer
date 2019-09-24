@@ -40,8 +40,9 @@
       </div>
       <div>
         <div class="up">
-          <div class="title">Parent Id</div>
-          <div class="value">{{ detail.parentId.toHex() }}</div>
+          <div class="title">Parent ID</div>
+          <div class="value" v-if="parseInt(detail.parentId.toHex()) === 0">No parent ID</div>
+          <div class="value" v-else>{{ detail.parentId.toHex() }}</div>
         </div>
         <div class="down">
           <div class="title">Depth</div>

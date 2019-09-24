@@ -111,8 +111,8 @@ export default {
             if (this.valueSearch.length === 64) {
               this.typeSearch = 'publicKey'
             } else if (this.valueSearch.length === 40 || this.valueSearch.length === 46) {
-              this.typeSearch = 'publicKey'
-            } else if (typeof parseInt(this.valueSearch) == 'number') {
+              this.typeSearch = 'address'
+            } else if (this.valueSearch.length < 40 && typeof parseInt(this.valueSearch) == 'number') {
               this.typeSearch = 'blockHeight'
             }
           }
@@ -212,6 +212,7 @@ export default {
         background: white
         color: #2BA1B9
         padding: 2px 15px
+        cursor: pointer
         &:first-child
           border-radius: 20px 0px 0px 20px
         &:last-child

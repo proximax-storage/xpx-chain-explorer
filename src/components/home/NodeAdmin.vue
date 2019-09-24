@@ -103,7 +103,6 @@ export default {
      */
     getAllNodes () {
       let tmpArray = []
-      console.log(this.$store.getters.getAllNodes)
       if (this.$store.getters.getAllNodes !== undefined) {
         this.$store.getters.getAllNodes.forEach((item, index) => {
           tmpArray.push({ name: item, index: index })

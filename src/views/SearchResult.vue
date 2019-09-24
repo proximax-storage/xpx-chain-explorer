@@ -162,7 +162,7 @@ export default {
           tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
           this.getInfoAccountAndViewTransactions(tmp.address.address)
         }
-      } else {
+      } else if (this.$route.params.id.length === 40 || this.$route.params.id.length === 46) {
         this.getInfoAccountAndViewTransactions(this.$route.params.id)
       }
     } else if (this.$route.params.type === 'blockHeight') {
@@ -170,19 +170,17 @@ export default {
     } else if (this.$route.params.type === 'hash') {
       this.getInfoTransaction(this.$route.params.id)
     } else if (this.$route.params.type === 'namespaceInfo') {
-      if (isNaN(parseInt(this.$route.params.id, 16))) {
+      if (this.isHex(this.$route.params.id) === false) {
         let tmp = this.$route.params.id
         let tmp2 = new NamespaceId(tmp)
-        console.log(tmp2)
         this.getNamespaceInfo(tmp2.id.toHex())
       } else {
         this.getNamespaceInfo(this.$route.params.id)
       }
     } else if (this.$route.params.type === 'mosaicInfo') {
-      if (isNaN(parseInt(this.$route.params.id, 16))) {
+      if (this.isHex(this.$route.params.id) === false) {
         let tmp = this.$route.params.id
         let tmp2 = new NamespaceId(tmp)
-        console.log(tmp2)
         this.$proxProvider.getNamespacesInfo(tmp2.id).subscribe(
           response => {
             this.getMosaicInfo(new Id(response.alias.mosaicId).toHex())
@@ -240,9 +238,8 @@ export default {
                   let mosDurat = (mosaicResponse.duration === undefined) ? 0 : mosaicResponse.duration.compact()
                   this.$proxProvider.getMosaicsName([mosaicResponse.mosaicId]).subscribe(
                     responseName => {
-                      console.log(responseName)
                       let tmpObj = {
-                        name: (responseName[0].names.length > 0) ? responseName[0].names[0].names : '',
+                        name: (responseName[0].names.length > 0) ? responseName[0].names[0].name : '',
                         id: el.id.toHex(),
                         owner: (resp.publicKey === mosaicResponse.owner.publicKey) ? 'true' : 'false',
                         quantity: (mosaicResponse.divisibility === 0) ? amountCompact : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility),
@@ -465,7 +462,7 @@ export default {
           this.$proxProvider.getMosaicsName([mosaicId]).subscribe(
             nameResponse => {
               this.param = response
-              this.param.name = nameResponse[0].names[0]
+              this.param.name = (nameResponse[0].names) ? nameResponse[0].names[0].name : undefined
               this.showComponent()
             }
           )
@@ -570,6 +567,11 @@ export default {
       let response = await axios.get('./config/config.json')
       let tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, response.data.NetworkType.number)
       this.getInfoAccountAndViewTransactions(tmp.address.address)
+    },
+
+    isHex (value) {
+      let regex =  /^[0-9A-Fa-f]+$/
+      return regex.test(value)
     }
   },
   watch: {

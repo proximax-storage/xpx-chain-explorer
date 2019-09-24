@@ -51,7 +51,7 @@
       <!-- Right -->
       <div>
         <div class="up">
-          <div class="title">Timestamp</div>
+          <div class="title">Deadline</div>
           <div class="value">{{ $utils.fmtTime(detail.deadline.value) }}</div>
         </div>
         <div class="down">
