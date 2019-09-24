@@ -5,24 +5,24 @@
     "http://betelgeuse.xpxsirius.io:3000"
   ],
   "NetworkType": {
-    "name": "TEST_NET",
+    "name": "public",
     "number": 184
   },
   "RentalFeeInfo": {
     "namespaceRentalFee": {
-      "name": "TESTNET Namespace Rental Fee Sink",
+      "name": "Namespace Rental Fee Sink",
       "address": "XA7KWF-N5CMLV-G7W3OH-Z5CV3G-3VYH3N-5EQQTK-OVJH",
       "publicKey": "9FF38184F03950C09FFFF4A90C171E4C3C566985EEACA486A59CC8B607C10BF6"
     },
     "mosaicRentalFee": {
-      "name": "TESTNET Mosaic Rental Fee Sink",
+      "name": "Mosaic Rental Fee Sink",
       "address": "XC5ZZN-SYLOXO-EQIAAF-N6B5S6-QAQSFF-5TEVC4-XLTV",
       "publicKey": "94A9BB9660037E622C8F626E061DB1557CBBED0338402E82E796168E80EF9765"
     }
   },
   "MapsInfo": [
     {
-      "name": "bctestnet1.xpxsirius.io",
+      "name": "arcturus.xpxsirius.io",
       "ip": "",
       "version": 0,
       "location": "",
@@ -32,11 +32,11 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "https://bctestnet1.xpxsirius.io",
+      "urlNode": "http://arcturus.xpxsirius.io:3000",
       "icon": "proximax.svg"
     },
     {
-      "name": "bctestnet2.xpxsirius.io",
+      "name": "aldebaran.xpxsirius.io",
       "ip": "",
       "version": 0,
       "location": "",
@@ -46,11 +46,11 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "https://bctestnet2.xpxsirius.io",
+      "urlNode": "http://aldebaran.xpxsirius.io:3000",
       "icon": "proximax.svg"
     },
     {
-      "name": "bctestnet3.xpxsirius.io",
+      "name": "betelgeuse.xpxsirius.io",
       "ip": "",
       "version": 0,
       "location": "",
@@ -60,49 +60,7 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "https://bctestnet3.xpxsirius.io",
-      "icon": "proximax.svg"
-    },
-    {
-      "name": "bctestnet4.xpxsirius.io",
-      "ip": "",
-      "version": 0,
-      "location": "",
-      "lat": 0,
-      "lon": 0,
-      "height": null,
-      "status": "Online",
-      "active": false,
-      "visible": true,
-      "urlNode": "https://bctestnet4.xpxsirius.io",
-      "icon": "proximax.svg"
-    },
-    {
-      "name": "bctestnet5.xpxsirius.io",
-      "ip": "",
-      "version": 0,
-      "location": "",
-      "lat": 0,
-      "lon": 0,
-      "height": null,
-      "status": "Online",
-      "active": false,
-      "visible": true,
-      "urlNode": "https://bctestnet5.xpxsirius.io",
-      "icon": "proximax.svg"
-    },
-    {
-      "name": "bctestnet6.xpxsirius.io",
-      "ip": "",
-      "version": 0,
-      "location": "",
-      "lat": 0,
-      "lon": 0,
-      "height": null,
-      "status": "Online",
-      "active": false,
-      "visible": true,
-      "urlNode": "https://bctestnet6.xpxsirius.io",
+      "urlNode": "http://betelgeuse.xpxsirius.io:3000",
       "icon": "proximax.svg"
     }
   ]
