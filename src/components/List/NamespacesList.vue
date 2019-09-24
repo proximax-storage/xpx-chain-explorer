@@ -79,22 +79,17 @@ export default {
   },
   methods: {
     async checkInfo () {
-      console.log('Run')
       if (this.$store.state.rentalFeeInfo === undefined) {
-        console.log("INDEFINIDO")
         try {
           let response = await axios.get('./config/config.json')
           let publicKey = response.data.RentalFeeInfo.namespaceRentalFee.publicKey
           let netType = response.data.NetworkType.number
-          console.log(publicKey, netType)
           this.searchList(publicKey, netType)
         } catch (e) {
-          console.log(e)
           this.loaderMessage = 'System error'
           this.loaderProgress = false
         }
       } else {
-        console.log(this.$store.state.rentalFeeInfo.namespaceRentalFee.publicKey, this.$store.state.netType.number)
         this.searchList(this.$store.state.rentalFeeInfo.namespaceRentalFee.publicKey, this.$store.state.netType.number)
       }
     },
@@ -133,7 +128,7 @@ export default {
                   )
                 },
                 err => {
-                  console.log('Namespace not found')
+                  console.warn('Namespace not found')
                 }
               )
             })

@@ -40,7 +40,7 @@
       </div>
 
       <div>
-        <div class="title">Mosaic Name</div>
+        <div class="title">{{ importantLabel }}</div>
         <div class="valueLower">{{ item.name || 'undefined' }}</div>
       </div>
 

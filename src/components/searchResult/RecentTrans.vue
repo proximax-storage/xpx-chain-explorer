@@ -38,7 +38,7 @@
 
       <!-- Center -->
       <div class="el-middle">
-        <div class="title">Timestamp</div>
+        <div class="title">Deadline</div>
         <div class="value">{{ item.deadline }}</div>
       </div>
       <!-- End Center -->

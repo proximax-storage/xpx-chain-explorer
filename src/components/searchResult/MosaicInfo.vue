@@ -5,7 +5,8 @@
       <div>
         <div class="up">
           <div class="title">Name</div>
-          <div class="valueLower">{{ detail.name.name || 'No Available' }}</div>
+          <div class="valueLower" v-if="detail.mosaicId.toHex() === this.$store.state.xpx">prx.xpx</div>
+          <div class="valueLower">{{ (detail.name) ? detail.name.name : 'NO AVAILABLE' || 'NO AVAILABLE' }}</div>
         </div>
         <div class="down">
           <div class="title">Mosaic Id</div>
@@ -57,7 +58,7 @@
           <div class="value" style="color: orange; font-weight: bold" v-if="$store.state.currentBlock.height === 'Loading'">
             Loading
           </div>
-          <div class="value" style="color: green" v-else-if="detail.name.name === 'prx.xpx' || detail.id === this.$store.state.xpx">
+          <div class="value" style="color: green" v-else-if="detail.mosaicId.toHex() === this.$store.state.xpx || detail.name && detail.name.name === 'prx.xpx'">
             true
           </div>
           <div class="value" :style="($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? 'color: red' : 'color: green'" v-else>
@@ -79,12 +80,6 @@
           <div class="title">Transferable</div>
           <div class="value" :style="(this.detail.properties.transferable === true) ? 'color: green' : 'color: red'">
             {{ this.detail.properties.transferable }}
-          </div>
-        </div>
-        <div class="element" style="border-radius: 20px">
-          <div class="title">Levy Mutable</div>
-          <div class="value" :style="(this.detail.properties.levyMutable === true) ? 'color: green' : 'color: red'">
-            {{ this.detail.properties.levyMutable }}
           </div>
         </div>
         <div class="element" style="border-radius: 20px">
