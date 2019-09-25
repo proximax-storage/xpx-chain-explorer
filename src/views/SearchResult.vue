@@ -310,13 +310,30 @@ export default {
 
               this.$proxProvider.getNamespacesName(requestArr).subscribe(
                 responseName => {
+                  let verifyLength = (arr) => {
+                    let arrResult
+                    let biggerNumber = 0
+                    let index = undefined
+
+                    arrResult = arr.map(el => el.length)
+
+                    arrResult.forEach(el => {
+                      if (el > biggerNumber) {
+                        biggerNumber = el
+                      }
+                    })
+
+                    return arr[arrResult.indexOf(biggerNumber)]
+                  }
+
                   if (currentLevel === 0) {
                     tmpObj.name = responseName[0].name
                   } else if (currentLevel === 1) {
-                    tmpObj.name = `${responseName[1].name}.${responseName[0].name}`
+                    tmpObj.name = verifyLength([responseName[0].name, responseName[1].name])
                   } else if (currentLevel === 2) {
-                    tmpObj.name = `${responseName[2].name}.${responseName[1].name}.${responseName[0].name}`
+                    tmpObj.name = verifyLength([responseName[0].name, responseName[1].name, responseName[2].name])
                   }
+
                   tmpArr.push(tmpObj)
                 }
               )
@@ -381,7 +398,19 @@ export default {
         this.showRecentTransaction = (this.param.txes > 0) ? true : false
         this.showComponent()
         this.showInfo = true
-        this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(100)).subscribe(
+
+        let transactions = 100
+        if (next.numTransactions < 100 && next.numTransactions > 75) {
+          transactions = 75
+        } else if (next.numTransactions < 75 && next.numTransactions > 50) {
+          transactions = 50
+        } else if (next.numTransactions < 50 && next.numTransactions > 25) {
+          transactions = 25
+        } else if (next.numTransactions < 25 && next.numTransactions > 10) {
+          transactions = 10
+        }
+
+        this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(transactions)).subscribe(
           blockTransactions => {
             this.blockTransactions = blockTransactions
             for (const index in this.blockTransactions) {
