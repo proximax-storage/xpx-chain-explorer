@@ -78,3 +78,14 @@
 ## Release v0.3.6
   * Bug Fixes in NodeAdmin component.
   * Bug Fixes in Mosaics and Namespaces List Components.
+
+## Release v0.3.7
+  * Update tsjs-xpx-chain-sdk to version 0.5.5.
+  * Minor bug fix.
+
+## MainNet Release v0.0.1
+  * General changes and Bug fixes.
+
+## MainNet Release v0.0.2
+  * Bug fixes in names of namespaces in Address / Public Key info view.
+  * Bug fixes in recent transactions of Blocks Info.
