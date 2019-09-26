@@ -218,7 +218,6 @@ export default {
    * Call Verify Type and Verify Transaction Details
    */
   mounted () {
-    console.log(this.detail)
     this.verifyType()
     this.verifyTransactionDetails()
     let detail = JSON.stringify(this.detail)
