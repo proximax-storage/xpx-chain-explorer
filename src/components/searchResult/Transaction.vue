@@ -4,7 +4,7 @@
 
     <!-- Center -->
     <div class="tran-layout-middle">
-      <h1 class="supertitle" style="font-size: 20px; text-align: center">{{ transactionType || 'Hash Transaction'}}</h1>
+      <h1 class="supertitle" style="font-size: 20px; text-align: center">{{ transactionType || 'Transaction'}}</h1>
       <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="calculatedAmount"></span> XPX</p>
       <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
     </div>
@@ -218,10 +218,12 @@ export default {
    * Call Verify Type and Verify Transaction Details
    */
   mounted () {
+    console.log(this.detail)
     this.verifyType()
     this.verifyTransactionDetails()
     let detail = JSON.stringify(this.detail)
   },
+
   methods: {
     /**
      * Iterator
