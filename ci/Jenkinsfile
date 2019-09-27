@@ -17,12 +17,12 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        echo 'Writing Nexus Credentials'
-        script {
+        // echo 'Writing Nexus Credentials'
+        // script {
           // Writes a multi-line .npmrc file with the authentication hash for Nexus
           // to download proximax SDK from public repository 
 	 //writeFile file: '.npmrc', text: 'registry=https://nexus.internal.proximax.io/repository/npm-group/\n@scope:registry=https://nexus.internal.proximax.io/repository/npm-private/\nemail=jenkins@proximax.io\nalways-auth=true\n_auth=' + env.nexusAuth + '\n'
-        }
+        // }
 
         echo 'Starting Docker Container'
         withDockerContainer(image: 'node:8') {
