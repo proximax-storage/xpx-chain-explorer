@@ -89,3 +89,7 @@
 ## MainNet Release v0.0.2
   * Bug fixes in names of namespaces in Address / Public Key info view.
   * Bug fixes in recent transactions of Blocks Info.
+
+## MainNet Release v0.0.3
+  * Update SDK to version 0.6.0
+  * Minor bugs fixed

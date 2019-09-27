@@ -136,14 +136,6 @@
               Supply Mutable: <b style="color: red">{{ detail.mosaicProperties.supplyMutable }} <mdb-icon icon="times"/></b>
             </span>
 
-            <span v-if="detail.mosaicProperties.levyMutable">
-              Levy Mutable: <b style="color: green">{{ detail.mosaicProperties.levyMutable }} <mdb-icon icon="check"/></b>
-            </span>
-
-            <span v-if="!detail.mosaicProperties.levyMutable">
-              Levy Mutable: <b style="color: red">{{ detail.mosaicProperties.levyMutable }} <mdb-icon icon="times"/></b>
-            </span>
-
             <span v-if="detail.mosaicProperties.transferable">
               Transferable: <b style="color: green">{{ detail.mosaicProperties.transferable }} <mdb-icon icon="check"/></b>
             </span>

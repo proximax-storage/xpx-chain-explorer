@@ -6,7 +6,7 @@
         <div class="up">
           <div class="title">Name</div>
           <div class="valueLower" v-if="detail.mosaicId.toHex() === this.$store.state.xpx">prx.xpx</div>
-          <div class="valueLower">{{ (detail.name) ? detail.name.name : 'NO AVAILABLE' || 'NO AVAILABLE' }}</div>
+          <div class="valueLower" v-else>{{ (detail.name !== undefined) ? detail.name : 'No Available' }}</div>
         </div>
         <div class="down">
           <div class="title">Mosaic Id</div>
@@ -55,7 +55,9 @@
       <div>
         <div class="up">
           <div class="title">Active</div>
-          <div class="value" style="color: orange; font-weight: bold" v-if="$store.state.currentBlock.height === 'Loading'">
+          <div class="value" v-if="(statusActive === true || statusActive === false) ? 'color: green' : 'color: red'" :style="(statusActive === true) ? 'color: green' : 'color: red'">{{ statusActive }}</div>
+          <div class="value" v-if="statusActive === 'Loading'" style="color: orange">{{ statusActive }}</div>
+          <!-- <div class="value" style="color: orange; font-weight: bold" v-if="$store.state.currentBlock.height === 'Loading'">
             Loading
           </div>
           <div class="value" style="color: green" v-else-if="detail.mosaicId.toHex() === this.$store.state.xpx || detail.name && detail.name.name === 'prx.xpx'">
@@ -63,7 +65,7 @@
           </div>
           <div class="value" :style="($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? 'color: red' : 'color: green'" v-else>
             {{ ($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? false : true }}
-          </div>
+          </div> -->
         </div>
         <div class="down">
           <div class="title">Expires</div>
@@ -106,8 +108,38 @@ export default {
   props: {
     detail: Object
   },
+
   mounted () {
   },
+
+  computed: {
+    statusActive () {
+      let currenBlockHeight = this.$sessionStorage.get('currentBlockHeight')
+      let storeBlockHeight = this.$store.state.currentBlock.height
+      let result
+
+      if (this.detail.duration.compact() === 0) {
+        result = true
+      } else if (this.detail.name && this.detail.name.name === 'prx.xpx' ) {
+        result = true
+      } else if (this.detail.mosaicId.toHex() === this.$store.state.xpx) {
+        result = true
+      } else if (currenBlockHeight >= this.detail.height.compact() + this.detail.duration.compact()) {
+        result = true
+      } else if (currenBlockHeight <= this.detail.height.compact() + this.detail.duration.compact()) {
+        result = false
+      } else if (storeBlockHeight === 'Loading') {
+        result = 'Loading'
+      } else if (storeBlockHeight >= this.detail.height.compact() + this.detail.duration.compact()) {
+        result = true
+      } else if (storeBlockHeight <= this.detail.height.compact() + this.detail.duration.compact()) {
+        result = false
+      }
+
+      return result
+    }
+  },
+
   methods: {
     goToAddress (address) {
       let routeData = (address.length === 64) ?

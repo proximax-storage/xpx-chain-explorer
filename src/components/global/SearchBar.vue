@@ -13,7 +13,7 @@
       <form class="input-cont">
 
         <!-- MDB Input -->
-        <input type="search" id="searchBarInput" class="place-white black-text optional-in" v-model="valueSearch" :placeholder="label">
+        <input type="search" id="searchBarInput" class="place-white black-text optional-in" v-model="valueSearch" :placeholder="label" autocomplete="off">
         <!-- <mdb-input :label="label" type="text" class="place-white black-text" v-model="valueSearch"/> -->
         <!-- End MDB Input -->
 
