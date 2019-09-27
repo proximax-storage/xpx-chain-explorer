@@ -83,6 +83,11 @@
   * Update tsjs-xpx-chain-sdk to version 0.5.5.
   * Minor bug fix.
 
+## Release v0.3.8
+  * Update tsjs-xpx-chain-sdk to version 0.5.5.
+  * Minor bug fix.
+
+
 ## MainNet Release v0.0.1
   * General changes and Bug fixes.
 

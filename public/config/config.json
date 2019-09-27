@@ -1,12 +1,12 @@
 {
   "Nodes": [
-    "http://arcturus.xpxsirius.io:3000",
-    "http://aldebaran.xpxsirius.io:3000",
-    "http://betelgeuse.xpxsirius.io:3000"
+    "http://18.138.51.117:3000",
+    "http://13.229.155.165:3000",
+    "http://13.251.128.180:3000"
   ],
   "NetworkType": {
-    "name": "public",
-    "number": 184
+    "name": "publicTest",
+    "number": 168
   },
   "RentalFeeInfo": {
     "namespaceRentalFee": {
@@ -22,7 +22,7 @@
   },
   "MapsInfo": [
     {
-      "name": "arcturus.xpxsirius.io",
+      "name": "18.138.51.117",
       "ip": "",
       "version": 0,
       "location": "",
@@ -32,11 +32,11 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://arcturus.xpxsirius.io:3000",
+      "urlNode": "http://18.138.51.117:3000",
       "icon": "proximax.svg"
     },
     {
-      "name": "aldebaran.xpxsirius.io",
+      "name": "13.229.155.165",
       "ip": "",
       "version": 0,
       "location": "",
@@ -46,11 +46,11 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://aldebaran.xpxsirius.io:3000",
+      "urlNode": "http://13.229.155.165:3000",
       "icon": "proximax.svg"
     },
     {
-      "name": "betelgeuse.xpxsirius.io",
+      "name": "13.251.128.180",
       "ip": "",
       "version": 0,
       "location": "",
@@ -60,7 +60,7 @@
       "status": "Online",
       "active": false,
       "visible": true,
-      "urlNode": "http://betelgeuse.xpxsirius.io:3000",
+      "urlNode": "http://13.251.128.180:3000",
       "icon": "proximax.svg"
     }
   ]
