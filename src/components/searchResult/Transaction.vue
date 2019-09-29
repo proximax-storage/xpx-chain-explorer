@@ -197,7 +197,7 @@ export default {
   data () {
     return {
       plusInfo: [],
-      transactionType: 'Hash Transaction',
+      transactionType: 'Transaction',
       mosaicsOfTransfer: null,
       xpx: this.$store.state.xpx,
       calculatedAmount: null,
@@ -414,7 +414,7 @@ export default {
             this.plusInfo.push({ key: 'Action Type', value: 'Link' })
           } else if (this.detail.actionType === 0) {
             this.plusInfo.push({ key: 'Action Type', value: 'Link' })
-          } else if (this.detail.actionType === 0) {
+          } else if (this.detail.actionType === 1) {
             this.plusInfo.push({ key: 'Action Type', value: 'Unlink' })
           }
 
@@ -433,6 +433,14 @@ export default {
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Version', value: this.detail.version }
           ]
+
+          if (this.detail.actionType === undefined) {
+            this.plusInfo.push({ key: 'Action Type', value: 'Link' })
+          } else if (this.detail.actionType === 0) {
+            this.plusInfo.push({ key: 'Action Type', value: 'Link' })
+          } else if (this.detail.actionType === 1) {
+            this.plusInfo.push({ key: 'Action Type', value: 'Unlink' })
+          }
           // this.iterator(this.detail)
           break;
         case 'Modify Account Property Address':
@@ -481,6 +489,11 @@ export default {
           ]
           // this.iterator(this.detail)
           break;
+        default:
+          this.plusInfo = [
+            { key: 'Info', value: 'Not supported yet' }
+          ]
+          break
       }
     },
 
