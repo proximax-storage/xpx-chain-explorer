@@ -41,7 +41,7 @@ export default class proximaxProvider {
    * @memberof proximaxProvider
    */
   static mosaicXpx(){
-    return '13BFC518E40549D7'
+    return '13bfc518e40549d7'
   }
 
   /**
@@ -51,7 +51,7 @@ export default class proximaxProvider {
    */
   static mosaicFullXpx(){
     return {
-      id: '13BFC518E40549D7',
+      id: '13bfc518e40549d7',
       name: 'prx.xpx'
     }
   }
