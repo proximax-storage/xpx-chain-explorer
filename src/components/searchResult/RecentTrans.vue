@@ -44,10 +44,10 @@
       <!-- End Center -->
 
       <!-- Right -->
-      <div class="el-middle">
+      <!-- <div class="el-middle">
         <div class="title">Fee</div>
         <div class="value" v-html="item.fee"></div>
-      </div>
+      </div> -->
       <!-- End Right -->
 
       <div class="el-right">

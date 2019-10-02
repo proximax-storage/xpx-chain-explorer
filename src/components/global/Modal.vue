@@ -84,9 +84,10 @@
         <h1 class="supertitle">Details</h1>
         <div class="element" v-for="(item, index) in param.details" :key="index">
           <div class="title centerAlign">{{ item.key }}</div>
-          <div class="value centerAlign" :class="param.type.class">
+          <div class="value centerAlign" v-if="item.value" :class="param.type.class">
             {{ item.value }}
           </div>
+          <div class="value centerAlign" v-else-if="item.valueHtml" :class="param.type.class" v-html="item.valueHtml"></div>
         </div>
       </div>
       <!-- End Details -->
