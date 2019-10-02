@@ -107,8 +107,21 @@ export default {
 
       switch (typeName) {
         case 'Transfer Transaction':
+          console.log(this.params[index].mosaics[0].id.toHex(), this.$store.state.xpx)
           if (this.params[index].message !== undefined && this.params[index].message.payload !== '') {
             info.details.push({ key: 'Message', value: this.params[index].message.payload })
+          }
+
+          let amountXpx
+          if (this.params[index].mosaics && this.params[index].mosaics.length > 0) {
+            amountXpx = this.params[index].mosaics.filter(el => el.id.toHex() === this.$store.state.xpx)
+            if (amountXpx.length > 0) {
+              amountXpx = this.$utils.fmtDivisibility(amountXpx[0].amount.compact(), 6)
+              info.details.push({ key: 'Amount', valueHtml: amountXpx })
+            } else {
+              amountXpx = this.$utils.fmtDivisibility(0, 6)
+              info.details.push({ key: 'Amount', valueHtml: amountXpx })
+            }
           }
 
           break;
