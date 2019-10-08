@@ -20,6 +20,12 @@
       "publicKey": "94A9BB9660037E622C8F626E061DB1557CBBED0338402E82E796168E80EF9765"
     }
   },
+  "NativeMosaicInfo": {
+    "name": "Native currency mosaic",
+    "id": "402b2f579faebc59",
+    "namespaceId": "prx.xpx",
+    "nativeCurName": "XPX"
+  },
   "MapsInfo": [
     {
       "name": "arcturus.xpxsirius.io",

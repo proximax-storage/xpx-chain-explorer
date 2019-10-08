@@ -14,12 +14,13 @@ import {
   TransactionHttp,
   MosaicInfo,
   MosaicService,
-  NetworkType
+  NetworkType,
+  NamespaceId
 } from 'tsjs-xpx-chain-sdk'
 
 export default class proximaxProvider {
 
-  constructor(url) {
+  constructor(url, nativeCurMosaicId, nativeCurNamespaceId) {
     this.Url = url
     this.blocksHeight = new BehaviorSubject(null)
     this.blocksHeight$ = this.blocksHeight.asObservable()
@@ -33,39 +34,9 @@ export default class proximaxProvider {
     this.mosaicService = new MosaicService(this.accountHttp, this.mosaicHttp, this.namespaceHttp)
     this.accountInfo = {}
     this.NetworkType = NetworkType
-  }
-
-  /**
-   * Get id mosaic xpx
-   *
-   * @memberof proximaxProvider
-   */
-  static mosaicXpx(){
-    return '402b2f579faebc59'
-  }
-
-  /**
-   * Get id,name mosaic xpx
-   *
-   * @memberof proximaxProvider
-   */
-  static mosaicFullXpx(){
-    return {
-      id: '402b2f579faebc59',
-      name: 'prx.xpx'
-    }
-  }
-
-  /**
-   * Get id,name namespace xpx
-   *
-   * @memberof proximaxProvider
-   */
-  static namespaceXpx(){
-    return {
-      id: '316d77fd8b6fb3be',
-      name: 'prx'
-    }
+    this.nativeCurMosaicId = nativeCurMosaicId
+    this.nativeCurNamespaceId = nativeCurNamespaceId
+    this.nativeCurNamespacePath = nativeCurNamespaceId.split('.')
   }
 
   /**
@@ -151,6 +122,39 @@ export default class proximaxProvider {
         id: TransactionType.MODIFY_NAMESPACE_METADATA,
         name: 'Modify Namespace Metadata'
       }
+    }
+  }
+
+  /**
+   * Get id mosaic native Currency
+   *
+   * @memberof proximaxProvider
+   */
+  mosaicNative(){
+    return this.nativeCurMosaicId
+  }
+
+  /**
+   * Get id,name mosaic native Currency
+   *
+   * @memberof proximaxProvider
+   */
+  mosaicFullNative(){
+    return {
+      id: this.nativeCurMosaicId,
+      name: this.nativeCurNamespaceId
+    }
+  }
+
+  /**
+   * Get id,name namespace native Currency
+   *
+   * @memberof proximaxProvider
+   */
+  namespaceNative(){
+    return {
+      id: new NamespaceId(this.nativeCurNamespacePath[0]).toHex(),
+      name: this.nativeCurNamespacePath[0]
     }
   }
 

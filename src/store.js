@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { NamespaceId } from 'tsjs-xpx-chain-sdk'
 
 Vue.use(Vuex)
 
@@ -15,7 +16,7 @@ export default new Vuex.Store({
     blockList: [],
     rentalFeeInfo: undefined,
     netType: undefined,
-    xpx: '402b2f579faebc59'
+    nativeCurInfo: undefined
   },
   mutations: {
     UPDATE_NODES: (state, data) => {
@@ -70,6 +71,16 @@ export default new Vuex.Store({
     },
     SET_NETWORK_TYPE: (state, data) => {
       state.netType = data
+    },
+    SET_NATIVE_MOSAIC: (state, data) => {
+
+      state.nativeCurInfo = {
+        mosaicId : data.id.toLowerCase(),
+        namespaceFullName : data.namespaceId,
+        name : data.nativeCurName,
+        namespaceId : new NamespaceId(data.namespaceId).toHex(),
+        namespacePath : data.namespaceId.split('.')
+      }
     }
   },
   actions: {
@@ -99,6 +110,9 @@ export default new Vuex.Store({
     },
     setNetworkType({commit}, data) {
       commit('SET_NETWORK_TYPE', data)
+    },
+    setNativeMosaicInfo({commit}, data) {
+      commit('SET_NATIVE_MOSAIC', data)
     }
   },
   getters: {

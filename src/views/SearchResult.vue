@@ -211,7 +211,7 @@ export default {
      */
     getInfoAccountAndViewTransactions (account) {
       const addr = Address.createFromRawAddress(account)
-      const xpx = this.$store.state.xpx
+      const nativeMosaicIdHex = this.$store.state.nativeCurInfo.mosaicId
       let errorActive1 = false
       let errorActive2 = false
       this.mosaicLoader = true
@@ -222,7 +222,7 @@ export default {
           this.showComponent()
           // If your account information has tiles, look up your information and name to display them in the tile table
           if (resp.mosaics.length > 0) {
-            let filteredTrans = resp.mosaics.filter(el => el.id.toHex() !== xpx)
+            let filteredTrans = resp.mosaics.filter(el => el.id.toHex() !== nativeMosaicIdHex)
             let tmpArr = []
 
             if (filteredTrans.length === 0) {

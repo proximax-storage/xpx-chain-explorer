@@ -5,7 +5,7 @@
       <div>
         <div class="up">
           <div class="title">Name</div>
-          <div class="valueLower" v-if="detail.mosaicId.toHex() === this.$store.state.xpx">prx.xpx</div>
+          <div class="valueLower" v-if="detail.mosaicId.toHex() === this.$store.state.nativeCurInfo.mosaicId ">{{ this.$store.state.nativeCurInfo.namespaceFullName }}</div>
           <div class="valueLower">{{ (detail.name) ? detail.name.name : 'NO AVAILABLE' || 'NO AVAILABLE' }}</div>
         </div>
         <div class="down">
@@ -58,7 +58,7 @@
           <div class="value" style="color: orange; font-weight: bold" v-if="$store.state.currentBlock.height === 'Loading'">
             Loading
           </div>
-          <div class="value" style="color: green" v-else-if="detail.mosaicId.toHex() === this.$store.state.xpx || detail.name && detail.name.name === 'prx.xpx'">
+          <div class="value" style="color: green" v-else-if="detail.mosaicId.toHex() === this.$store.state.nativeCurInfo.mosaicId || detail.name && detail.name.name === this.$store.state.nativeCurInfo.namespaceFullName">
             true
           </div>
           <div class="value" :style="($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? 'color: red' : 'color: green'" v-else>

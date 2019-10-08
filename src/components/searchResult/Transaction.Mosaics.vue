@@ -1,11 +1,11 @@
 <template>
   <div class="mosaics animated faster fadeIn" v-if="showFinalData !== null && showFinalData.length > 0">
-    <h1 class="supertitle center-text" v-show="mosaicAliasName.length !== 1 && mosaicAliasName[0] !== 'prx.xpx'">
+    <h1 class="supertitle center-text" v-show="mosaicAliasName.length !== 1 && mosaicAliasName[0] !== this.$store.state.nativeCurInfo.namespaceFullName ">
       Mosaics In Transfer
     </h1>
 
     <div>
-      <div class="element" v-for="(item, index) in showFinalData" :key="index" v-show="mosaicAliasName[index] !== 'prx.xpx'">
+      <div class="element" v-for="(item, index) in showFinalData" :key="index" v-show="mosaicAliasName[index] !== this.$store.state.nativeCurInfo.namespaceFullName ">
 
         <div class="animated faster fadeInDown">
           <div class="title">{{ titleMosaic }}</div>
@@ -37,7 +37,7 @@ export default {
   },
   data () {
     return {
-      xpx: this.$store.state.xpx,
+      nativeCurMosaicId: this.$store.state.nativeCurInfo.mosaicId,
       finalData: [],
       titleMosaic: 'Mosaic Id',
       mosaicAliasName: [],
@@ -62,7 +62,7 @@ export default {
       if (this.params !== null) {
         this.params.forEach(el => {
           let tmpObj = {}
-          if (el.id.toHex() === this.xpx) {
+          if (el.id.toHex() === this.nativeCurMosaicId) {
             this.$emit('returnAmount', this.$utils.fmtAmountValue(el.amount.compact()))
           } else {
             this.amountQuantity = 'Quantity'
@@ -96,7 +96,7 @@ export default {
                     )
                     this.titleMosaic = 'Mosaic Alias ID'
                     let tmpId = new Id(response.alias.mosaicId).toHex()
-                    if (tmpId === this.xpx) {
+                    if (tmpId === this.nativeCurMosaicId) {
                       this.$emit('returnAmount', this.$utils.fmtAmountValue(el.amount.compact()))
                     } else {
                       this.$proxProvider.getMosaic(tmpId).subscribe(

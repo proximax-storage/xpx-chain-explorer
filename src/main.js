@@ -12,31 +12,24 @@ import axios from 'axios'
 
 let currentNode = localStorage.getItem('currentNode')
 
-if (currentNode === null) {
-  // currentNode = nodesConfig.nodes[0]
-  axios.get('../config/config.json').then(
-    response => {
-      currentNode = response.data.Nodes[0]
+axios.get('../config/config.json').then(
+  response => {
+    var responseData = response.data
+
+    if (currentNode === null) {
+      // currentNode = nodesConfig.nodes[0]
+      currentNode = responseData.Nodes[0]
       localStorage.setItem('currentNode', currentNode)
-      Vue.prototype.$storage = new Persistence()
-      Vue.prototype.$utils = Utils
-      Vue.prototype.$proxProvider = new proximaxProvider(currentNode)
-      Vue.config.productionTip = false
-      new Vue({
-        router,
-        store,
-        render: function (h) { return h(App) }
-      }).$mount('#app')
     }
-  )
-} else {
-  Vue.prototype.$storage = new Persistence()
-  Vue.prototype.$utils = Utils
-  Vue.prototype.$proxProvider = new proximaxProvider(currentNode)
-  Vue.config.productionTip = false
-  new Vue({
-    router,
-    store,
-    render: function (h) { return h(App) }
-  }).$mount('#app')
-}
+    
+    Vue.prototype.$storage = new Persistence()
+    Vue.prototype.$utils = Utils
+    Vue.prototype.$proxProvider = new proximaxProvider(currentNode, responseData.NativeMosaicInfo.id, responseData.NativeMosaicInfo.namespaceId)
+    Vue.config.productionTip = false
+    new Vue({
+      router,
+      store,
+      render: function (h) { return h(App) }
+    }).$mount('#app')
+  }
+)

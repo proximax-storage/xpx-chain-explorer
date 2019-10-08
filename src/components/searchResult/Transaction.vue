@@ -5,7 +5,7 @@
     <!-- Center -->
     <div class="tran-layout-middle">
       <h1 class="supertitle" style="font-size: 20px; text-align: center">{{ transactionType || 'Transaction'}}</h1>
-      <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="calculatedAmount"></span> XPX</p>
+      <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="calculatedAmount"></span> {{ this.$store.state.nativeCurInfo.name }}</p>
       <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
     </div>
     <!-- End Center -->
@@ -207,7 +207,7 @@ export default {
       plusInfo: [],
       transactionType: 'Hash Transaction',
       mosaicsOfTransfer: null,
-      xpx: this.$store.state.xpx,
+      nativeCur: this.$store.state.nativeCurInfo.mosaicId,
       calculatedAmount: null,
     }
   },

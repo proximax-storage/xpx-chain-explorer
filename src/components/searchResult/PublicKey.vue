@@ -27,13 +27,13 @@
 
       <!-- Right -->
       <div>
-        <h1 class="supertitle">XPX Info</h1>
+        <h1 class="supertitle"> {{ this.$store.state.nativeCurInfo.name }} Info</h1>
         <div class="up">
           <div class="title">Namespace Name</div>
-          <div class="valueLower">PRX</div>
+          <div class="value">{{ getParentNamespace }}</div>
         </div>
         <div class="down">
-          <div class="title">XPX Mosaic Id</div>
+          <div class="title"> {{ this.$store.state.nativeCurInfo.name }} Mosaic Id</div>
           <div class="value">{{ getId }}</div>
         </div>
       </div>
@@ -65,23 +65,33 @@ export default {
     /**
      * Get ID
      *
-     * Return XPX Mosaic ID
+     * Return Native Currency Mosaic ID
      */
     getId () {
-      return this.$store.state.xpx
+      return this.$store.state.nativeCurInfo.mosaicId
+    },
+
+    /**
+     * Get parent namespace
+     *
+     * Return Native Currency Parent Namespace
+     */
+    getParentNamespace () {
+      return this.$store.state.nativeCurInfo.namespacePath.length > 1 ? 
+        this.$store.state.nativeCurInfo.namespacePath.splice(0, this.$store.state.nativeCurInfo.namespacePath.length-1).join('.') : "-" 
     },
 
     /**
      * Get Balance
      *
      * This computed property obtains the balance depending on the mosaics that the component
-     * receives by parameters, analyzing the xpx mosaic and printing its value
+     * receives by parameters, analyzing the native currency mosaic and printing its value
      */
     getBalance () {
-      let xpxMosaics = this.detail.mosaics.filter(el => el.id.id.toHex() === this.$store.state.xpx)
+      let nativeCurMosaics = this.detail.mosaics.filter(el => el.id.id.toHex() === this.$store.state.nativeCurInfo.mosaicId)
       let amount
-      if (xpxMosaics.length > 0) {
-        amount = this.$utils.fmtAmountValue(xpxMosaics[0].amount.compact())
+      if (nativeCurMosaics.length > 0) {
+        amount = this.$utils.fmtAmountValue(nativeCurMosaics[0].amount.compact())
       } else {
         amount = this.$utils.fmtAmountValue(0)
       }
@@ -94,7 +104,7 @@ export default {
      * return the balance in html format
      */
     formatBalance () {
-      return `<div><span style="color: #2BA1B9">Balance:</span> ${ this.getBalance } XPX</div>`
+      return `<div><span style="color: #2BA1B9">Balance:</span> ${ this.getBalance } ${ this.$store.state.nativeCurInfo.name }</div>`
     }
   },
   methods: {

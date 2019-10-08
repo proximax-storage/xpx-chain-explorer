@@ -89,6 +89,11 @@ export default {
           let rentalFile = response.data.RentalFeeInfo
           this.$store.dispatch('setRentalFeeInfo', rentalFile)
           // END RENTAL FEE CONFIG
+
+          // NATIVE MOSAIC CONFIG
+          let mosaicFile = response.data.NativeMosaicInfo
+          this.$store.dispatch('setNativeMosaicInfo', mosaicFile)
+          // END NATIVE MOSAIC CONFIG
         })
     },
 
