@@ -6,7 +6,12 @@
     <div class="tran-layout-middle">
       <h1 class="supertitle" style="font-size: 20px; text-align: center">{{ transactionType || 'Transaction'}}</h1>
       <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="calculatedAmount"></span> XPX</p>
-      <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
+      <p class="fee" v-if="[16961, 16705].includes(this.detail.type) === false">Fee:
+        <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span>
+      </p>
+      <p class="fee" v-else>Fee:
+        <span v-html="$utils.fmtAmountValue(this.effectiveFee)"></span>
+      </p>
     </div>
     <!-- End Center -->
 
@@ -201,6 +206,7 @@ export default {
       mosaicsOfTransfer: null,
       xpx: this.$store.state.xpx,
       calculatedAmount: null,
+      effectiveFee: null
     }
   },
 
@@ -212,7 +218,9 @@ export default {
   mounted () {
     this.verifyType()
     this.verifyTransactionDetails()
-    let detail = JSON.stringify(this.detail)
+    if ([16961, 16705].includes(this.detail.type) === true) {
+      this.getEffectiveFee()
+    }
   },
 
   methods: {
@@ -257,6 +265,14 @@ export default {
         result = { key: 'Message', value: 'Encrypted Message', class: 'valueLower' }
       }
       return result
+    },
+
+    getEffectiveFee() {
+      this.$proxProvider.blockHttp.getBlockByHeight(this.detail.transactionInfo.height.compact()).subscribe(
+        response => {
+          this.effectiveFee = response.feeMultiplier * this.detail.size
+        }
+      )
     },
 
     /**
