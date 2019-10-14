@@ -491,7 +491,7 @@ export default {
           this.$proxProvider.getMosaicsName([mosaicId]).subscribe(
             nameResponse => {
               this.param = response
-              this.param.name = (nameResponse[0].names) ? nameResponse[0].names[0].name : undefined
+              this.param.name = (nameResponse[0].names && nameResponse[0].names.length !== 0) ? nameResponse[0].names[0].name : undefined
               this.showComponent()
             }
           )
