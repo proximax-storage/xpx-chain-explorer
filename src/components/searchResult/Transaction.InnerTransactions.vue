@@ -107,7 +107,6 @@ export default {
 
       switch (typeName) {
         case 'Transfer Transaction':
-          console.log(this.params[index].mosaics[0].id.toHex(), this.$store.state.xpx)
           if (this.params[index].message !== undefined && this.params[index].message.payload !== '') {
             info.details.push({ key: 'Message', value: this.params[index].message.payload })
           }
