@@ -24,11 +24,6 @@ export default new Router({
       component: load('NetworkStats')
     },
     {
-      path: '/map',
-      name: 'map',
-      component: load('Map')
-    },
-    {
       path: '/result/:type/:id',
       name: 'searchResult',
       component: load('SearchResult')

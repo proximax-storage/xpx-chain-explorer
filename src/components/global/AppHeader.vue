@@ -3,20 +3,27 @@
   <div class="header animated faster fadeIn">
     <!-- Image Container -->
     <div class="cont">
-      <div class="imgver">
-        <img :src="require('@/assets/logo-proximax-sirius-explorer.svg')" alt="logo" class="logo">
-        <div class="vers">{{ explorerVersion }}</div>
-      </div>
-      <div class="date">
-        <div class="day">
-          <div>{{ date.month }}</div>
-          <div>{{ date.day }},</div>
-          <div>{{ date.year }}</div>
+      <div class="comlogo">
+        <div class="imgver">
+          <img :src="require('@/assets/logo-proximax-sirius-explorer.svg')" alt="logo" class="logo">
+          <div class="vers">{{ explorerVersion }}</div>
         </div>
-        <div class="hours">
-          <div>{{ date.dayName }}</div>
-          <div>|</div>
-          <div>{{ date.militarHour }}</div>
+        <div class="imgmid">
+          <img :src="require('@/assets/niosh.jpg')" alt="logo" class="logo">
+        </div>
+      </div>
+      <div class="datetimeSect">
+        <div class="date">
+          <div class="day">
+            <div>{{ date.month }}</div>
+            <div>{{ date.day }},</div>
+            <div>{{ date.year }}</div>
+          </div>
+          <div class="hours">
+            <div>{{ date.dayName }}</div>
+            <div>|</div>
+            <div>{{ date.militarHour }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -160,12 +167,26 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.comlogo
+  display: flex
+  width: auto
+  flex-basis: 60%
+
+.datetimeSect
+  display: flex
+  width: auto
+  flex-basis: 40%
+
 .logo
   width: 200px
+  max-height: 100px
+  object-fit: contain
 
 .imgver
   display: flex
   width: auto
+  align-items: flex-end
+  flex-basis: 30%
   & > .vers
     padding: 0px 3px
     display: flex
@@ -174,6 +195,11 @@ export default {
     align-items: flex-end
     color: black
     font-size: 10px
+
+.imgmid
+  display: flex
+  align-items: center
+  flex-basis: 30%
 
 .date
   color: black
@@ -209,25 +235,27 @@ export default {
     width: 100%
     padding: 10px
     margin: 0px
-    & > img
-      width: 200px
-    & > .date
-      display: flex
-      flex-flow: column
-      & > .day
-        flex-grow: 1
+    flex-wrap: wrap
+    & > .datetimeSect
+      & > .date
         display: flex
-        justify-content: center
-        & > div
-          font-size: 25px
-          padding: 0px 3px
-      & > .hours
-        display: flex
-        justify-content: flex-end
-        font-size: 13px
-        font-weight: bold
-        & > div
-          padding: 0px 3px
+        width: 100%
+        flex-flow: column
+        & > .day
+          flex-grow: 1
+          display: flex
+          flex-basis: 100%
+          justify-content: flex-end
+          & > div
+            font-size: 25px
+            padding: 0px 3px
+        & > .hours
+          display: flex
+          justify-content: flex-end
+          font-size: 13px
+          font-weight: bold
+          & > div
+            padding: 0px 3px
 
   & > nav
     width: 100%
@@ -246,24 +274,65 @@ export default {
       // &:hover
       //   box-shadow: inset 0px -2px 0px 0px #5bcde4
 
-@media screen and (max-width: 400px)
+@media screen and (max-width: 746px)
+
+  .logo
+    max-width: 150px
+    max-height: 70px
+
+  .header
+    & > .cont
+      width: 100%
+      flex-flow: row
+      & > .comlogo
+        flex-basis: 60%
+        & > .imgver
+          display: flex
+          justify-content: column
+          flex-basis: 30%
+        & > .imgmid
+          display: flex
+          justify-content: column
+          flex-basis: 30%
+      & > .datetimeSect
+        flex-basis: 40%
+        & > .date
+          display: flex
+          flex-flow: column
+          & > .day
+            justify-content: flex-end
+            & > div
+              font-size: 15px
+              font-weight: bold
+              text-align: left
+
+@media screen and (max-width: 480px)
   .header
     & > .cont
       width: 100%
       flex-flow: column
-      & > .imgver
-        display: flex
-        justify-content: column
-        width: 150px
-      & > .date
-        display: flex
-        flex-flow: row
-        & > .day
-          justify-content: flex-end
-          & > div
-            font-size: 13px
-            font-weight: bold
-            text-align: left
+      & > .comlogo
+        flex-flow: column
+        & > .imgver
+          display: flex
+          justify-content: center
+        & > .imgmid
+          padding: 10px 0 !important
+          display: flex
+          justify-content: center
+      & > .datetimeSect
+        justify-content: center
+        & > .date
+          width : auto
+          display: flex
+          flex-flow: row
+          justify-content: center
+          & > .day
+            justify-content: flex-end
+            & > div
+              font-size: 13px
+              font-weight: bold
+              text-align: left
 
     & > nav
       justify-content: flex-start
@@ -271,6 +340,5 @@ export default {
       & > .nav-item
         flex-grow: 1
         padding: 5px 0px
-
 
 </style>
