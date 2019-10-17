@@ -56,11 +56,6 @@
           </div>
 
           <div class="element">
-            <div class="title">Fee</div>
-            <div class="value" :class="param.signature.class" v-html="param.fee.valueHtml"></div>
-          </div>
-
-          <div class="element">
             <div class="title">Type</div>
             <div class="value" :class="param.type.class">
               {{ param.type.value }}

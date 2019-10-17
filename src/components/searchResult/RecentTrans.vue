@@ -43,13 +43,6 @@
       </div>
       <!-- End Center -->
 
-      <!-- Right -->
-      <div class="el-middle">
-        <div class="title">Fee</div>
-        <div class="value" v-html="item.fee"></div>
-      </div>
-      <!-- End Right -->
-
       <div class="el-right">
         <div class="viewIcon" @click="redirectToDetail(item)">
           <img :src="require('@/assets/info.svg')" alt="detail" style="width: 17px">

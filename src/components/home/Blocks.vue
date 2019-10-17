@@ -12,7 +12,6 @@
       <div class="guide">
         <div class="title-guide">Height</div>
         <div class="title-guide">Validator</div>
-        <div class="title-guide">Fee</div>
         <div class="title-guide">TXS</div>
         <div class="title-guide">Timestamp</div>
       </div>
@@ -28,11 +27,6 @@
         <div>
           <span class="title">Validator</span>
           <router-link class="value link-data" :to="{ path: '/result/' + 'publicKey/' + item.signer.publicKey }" target="_blank">{{ item.signer.publicKey }}</router-link>
-        </div>
-
-        <div>
-          <span class="title">Fee</span>
-          <span v-html="item.totalFee" class="value"></span>
         </div>
 
         <div>

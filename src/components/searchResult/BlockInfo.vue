@@ -47,14 +47,7 @@
       </div>
       <!-- End Left -->
 
-      <!-- Right -->
-      <div class="layout-down-children">
-        <div class="down-radius">
-          <div class="title">Fees</div>
-          <div class="value" v-html="detail.fee"></div>
-        </div>
-      </div>
-      <!-- End Right -->
+      
 
     </div>
     <!-- End Down Container -->
