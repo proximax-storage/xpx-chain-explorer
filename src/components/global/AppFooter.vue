@@ -11,7 +11,7 @@ export default {
   name: 'AppFooter',
   data () {
     return {
-      softwareVersion: 'v0.3.11',
+      softwareVersion: 'v0.3.12',
     }
   }
 }
