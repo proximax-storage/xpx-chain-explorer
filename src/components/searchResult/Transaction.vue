@@ -36,8 +36,8 @@
           <div class="value link" v-if="transactionType === 'Register Namespace Transaction'" @click="goToAddress($store.state.rentalFeeInfo.namespaceRentalFee.address)">
             {{ $store.state.rentalFeeInfo.namespaceRentalFee.address }}
           </div>
-          <div class="value link" v-else-if="transactionType === 'Mosaic definition'" @click="goToAddress($store.state.rentalFeeInfo.namespaceRentalFee.address)">
-            {{ $store.state.rentalFeeInfo.namespaceRentalFee.address }}
+          <div class="value link" v-else-if="transactionType === 'Mosaic definition'" @click="goToAddress($store.state.rentalFeeInfo.mosaicRentalFee.address)">
+            {{ $store.state.rentalFeeInfo.mosaicRentalFee.address }}
           </div>
           <div class="value" :class="(detail.recipient === undefined) ? '' : 'link'" v-else-if="transactionType !== 'Register Namespace Transaction' || transactionType !== 'Mosaic definition'" :style="(detail.recipient === undefined) ? '' : 'cursor: pointer'" @click="(detail.recipient === undefined) ? '' : goToAddress(detail.recipient.pretty())">
             {{ (detail.recipient === undefined) ? 'No Available' : detail.recipient.pretty() }}
