@@ -53,18 +53,74 @@ export default {
       typeSearch: 'basic',
       label: 'Address / Public Key / Block Height',
       searchList: [
-        { name: 'Basic', class: 'active-s' },
-        { name: 'Hash', class: '' },
-        { name: 'Namespace', class: '' },
-        { name: 'Mosaic', class: '' }
+        { name: 'Basic', class : this.isTabActive('Basic') ? 'active-s' : '' },
+        { name: 'Hash', class: this.isTabActive('Hash') ? 'active-s' : '' },
+        { name: 'Namespace', class: this.isTabActive('Namespace') ? 'active-s' : '' },
+        { name: 'Mosaic', class: this.isTabActive('Mosaic') ? 'active-s' : '' }
       ],
+      tabSearch: 'basic',
       valueSearch: '',
       // Banner
       bannerActive: false,
       bannerMessage: ''
     }
   },
+  mounted(){
+    this.setSearchOnRoute()
+  },
   methods: {
+    /**
+     * set the searching params
+     *
+     * This method get the current route and params 
+     * and return true or false for the active css classes
+     */
+    setSearchOnRoute () {
+
+        let searchingItem = {
+          name : ""
+        }
+
+        if(this.isTabActive('Basic')){
+          searchingItem.name = "Basic"
+        }
+        else if(this.isTabActive('Hash')){
+          searchingItem.name = "Hash"
+        }
+        else if(this.isTabActive('Namespace')){
+          searchingItem.name = "Namespace"
+        }
+        else if(this.isTabActive('Mosaic')){
+          searchingItem.name = "Mosaic"
+        }
+
+        this.changeSearch(searchingItem)
+    },
+
+    /**
+     * get Active Tab
+     *
+     * This method get the current route and params 
+     * and return true or false for the active css classes
+     */
+    isTabActive (tabName) {
+
+      let basicTypes = ["publicKey", "address", "blockHeight"];
+
+      switch(tabName){
+        case "Basic":
+          return this.$route.name === "home" || this.$route.name === "searchResult" && basicTypes.includes(this.$route.params.type)
+        case "Hash":
+          return this.$route.name === "searchResult" && this.$route.params.type === "hash"
+        case "Namespace":
+          return this.$route.name === "searchResult" && this.$route.params.type === "namespaceInfo"
+             || this.$route.name === "list" && this.$route.params.category === "namespaces"
+        case "Mosaic": 
+          return this.$route.name === "searchResult" && this.$route.params.type === "mosaicInfo" 
+            || this.$route.name === "list" && this.$route.params.category === "mosaics"
+      }
+    },
+
     /**
      * Change Search
      *
@@ -76,16 +132,16 @@ export default {
       this.label = item.name
 
       if (item.name === 'Basic') {
-        this.typeSearch = 'basic'
+        this.tabSearch = 'basic'
         this.label = 'Address / Public Key / Block Height'
       } else if (item.name === 'Hash') {
-        this.typeSearch = 'hash'
+        this.tabSearch = 'hash'
         this.label = 'Hash / Tx ID'
       } else if (item.name === 'Namespace') {
-        this.typeSearch = 'namespaceInfo'
+        this.tabSearch = 'namespaceInfo'
         this.label = 'Namespace / Sub-namespace'
       } else if (item.name === 'Mosaic') {
-        this.typeSearch = 'mosaicInfo'
+        this.tabSearch = 'mosaicInfo'
         this.label = `Mosaic ID / Alias (e.g. ${this.$store.state.nativeCurInfo.namespaceFullName})`
       }
 
@@ -104,10 +160,13 @@ export default {
      * taking the type of search and the value entered by the user
      */
     performSearch () {
+
+      this.valueSearch = this.valueSearch.trim()
+
       this.bannerActive = false
-      if (this.typeSearch === 'basic' || this.typeSearch === 'hash') {
+      if (this.tabSearch === 'basic' || this.tabSearch === 'hash') {
         if (this.valueSearch !== '') {
-          if (this.typeSearch === 'basic') {
+          if (this.tabSearch === 'basic') {
             if (this.valueSearch.length === 64) {
               this.typeSearch = 'publicKey'
             } else if (this.valueSearch.length === 40 || this.valueSearch.length === 46) {
@@ -115,6 +174,8 @@ export default {
             } else if (this.valueSearch.length < 40 && typeof parseInt(this.valueSearch) == 'number') {
               this.typeSearch = 'blockHeight'
             }
+          } else if (this.tabSearch === 'hash') {
+            this.typeSearch = this.tabSearch
           }
 
           let lowerValue = this.valueSearch.toLowerCase()
@@ -125,11 +186,12 @@ export default {
           this.bannerActive = true
           this.bannerMessage = 'The search field cannot be empty'
         }
-      } else if (this.typeSearch === 'namespaceInfo' || this.typeSearch === 'mosaicInfo') {
-        if (this.typeSearch === 'namespaceInfo' && this.valueSearch === '') {
+      } else if (this.tabSearch === 'namespaceInfo' || this.tabSearch === 'mosaicInfo') {
+        this.typeSearch = this.tabSearch
+        if (this.tabSearch === 'namespaceInfo' && this.valueSearch === '') {
           let routeData = this.$router.resolve({ path: `/list/namespaces` })
           window.open(routeData.href, '_blank')
-        } else if (this.typeSearch === 'mosaicInfo' && this.valueSearch === '') {
+        } else if (this.tabSearch === 'mosaicInfo' && this.valueSearch === '') {
           let routeData = this.$router.resolve({ path: `/list/mosaics` })
           window.open(routeData.href, '_blank')
         } else {
