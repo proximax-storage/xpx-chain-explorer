@@ -121,6 +121,18 @@ export default class proximaxProvider {
       modifyNamespaceMetadata: {
         id: TransactionType.MODIFY_NAMESPACE_METADATA,
         name: 'Modify Namespace Metadata'
+      },
+      modifyContract :{
+        id : TransactionType.MODIFY_CONTRACT,
+        name: "Modify Contract"
+      },
+      chainUpgrade :{
+        id : TransactionType.CHAIN_UPGRADE,
+        name: "Chain Upgrade"
+      },
+      chainConfigure :{
+        id : TransactionType.CHAIN_CONFIGURE,
+        name: "Chain Configure"
       }
     }
   }
