@@ -54,9 +54,7 @@ export default {
       label: 'Address / Public Key / Block Height',
       searchList: [
         { name: 'Basic', class : this.isTabActive('Basic') ? 'active-s' : '' },
-        { name: 'Hash', class: this.isTabActive('Hash') ? 'active-s' : '' },
-        { name: 'Namespace', class: this.isTabActive('Namespace') ? 'active-s' : '' },
-        { name: 'Mosaic', class: this.isTabActive('Mosaic') ? 'active-s' : '' }
+        { name: 'Hash', class: this.isTabActive('Hash') ? 'active-s' : '' }
       ],
       tabSearch: 'basic',
       valueSearch: '',
