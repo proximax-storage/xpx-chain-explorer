@@ -38,9 +38,9 @@ pipeline {
 
         echo 'Leaving Container'
 
-        echo 'Compressing Artifacts'
-        // Creates an XZ compressed archive
-        sh "tar cJfv proximax-catapult-explorer-${env.GIT_BRANCH}.tar.xz dist"
+        // echo 'Compressing Artifacts'
+        // // Creates an XZ compressed archive
+        // sh "tar cJfv proximax-catapult-explorer-${env.GIT_BRANCH}.tar.xz dist"
       }
 
       post {
@@ -131,6 +131,15 @@ pipeline {
     //     }
     //   }
     // }
+    stage('Publishing Artifact') {
+      when {
+        tag 'v*'
+      }
+      steps {
+        echo 'Archiving Artifacts'
+        archiveArtifacts artifacts: 'dist', onlyIfSuccessful: true
+      }
+    }
 
     stage('Deploy to Testnet') {
       when {
