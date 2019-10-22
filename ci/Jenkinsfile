@@ -137,7 +137,7 @@ pipeline {
       }
       steps {
         echo 'Archiving Artifacts'
-        archiveArtifacts artifacts: 'dist', onlyIfSuccessful: true
+        archiveArtifacts artifacts: 'dist/*', onlyIfSuccessful: true
       }
     }
 
