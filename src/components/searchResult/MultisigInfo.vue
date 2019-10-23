@@ -5,11 +5,11 @@
       <div class="left" v-if="!info.minRemoval > 0 && !info.minApproval > 0">
         <div class="up">
           <div class="title">Address</div>
-          <div class="value">{{ info.account }}</div>
+          <div class="value">{{ account.address.pretty() }}</div>
         </div>
         <div class="down">
-          <div class="title">Account Address</div>
-          <div class="value">{{ info.accountAddress }}</div>
+          <div class="title">Public Key</div>
+          <div class="value">{{ info.account }}</div>
         </div>
       </div>
       <div class="right" v-if="info.minRemoval > 0 && info.minApproval > 0">
@@ -44,15 +44,16 @@ export default {
     cosignatories: Array,
     relatedAccount: Array,
     multisigConsignatories: Array,
-
   },
   data () {
     return {
-      cosignActive: false
+      cosignActive: false,
+      address: ''
     }
   },
   mounted () {
     this.cosignActive = (this.cosignatories.length > 0) ? true : false
+    this.account = this.$proxProvider.createPublicAccount(this.info.account, this.$store.state.netType.number)
   },
   methods: {
     goToAddress (address) {
