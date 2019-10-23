@@ -3,7 +3,7 @@
     <h1 class="supertitle">Multisig Account Info</h1>
     <div class="info">
       <div class="left" v-if="!info.minRemoval > 0 && !info.minApproval > 0">
-        <div class="up">
+        <div class="up" v-if="account !== ''">
           <div class="title">Address</div>
           <div class="value">{{ account.address.pretty() }}</div>
         </div>
@@ -48,7 +48,7 @@ export default {
   data () {
     return {
       cosignActive: false,
-      address: ''
+      account: ''
     }
   },
   mounted () {
