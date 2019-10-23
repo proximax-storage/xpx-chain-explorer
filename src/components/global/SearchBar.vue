@@ -5,7 +5,9 @@
 
       <div class="selector">
 
-        <div class="sel-item" :class="item.class" v-for="(item, index) in searchList" :key="index" @click="changeSearch(item)">{{ item.name }}</div>
+        <div class="sel-item" :class="item.class" v-for="(item, index) in searchList" :key="index" @click="changeSearch(item)">
+          {{ item.name }}
+        </div>
 
       </div>
 
@@ -13,7 +15,7 @@
       <form class="input-cont">
 
         <!-- MDB Input -->
-        <input type="search" id="searchBarInput" class="place-white black-text optional-in" v-model="valueSearch" :placeholder="label" autocomplete="off">
+        <input type="search" id="searchBarInput" class="place-white black-text optional-in" v-model="valueSearch" :placeholder="label" autocomplete="off" @keyup="isValid">
         <!-- <mdb-input :label="label" type="text" class="place-white black-text" v-model="valueSearch"/> -->
         <!-- End MDB Input -->
 
@@ -59,6 +61,7 @@ export default {
         { name: 'Mosaic', class: '' }
       ],
       valueSearch: '',
+      validSearch: false,
       // Banner
       bannerActive: false,
       bannerMessage: ''
@@ -89,12 +92,80 @@ export default {
         this.label = 'Mosaic ID / Alias (e.g. prx.xpx)'
       }
 
+      this.isValid()
       this.searchList.forEach(el => {
         el.class = ''
         if (el.name == item.name) {
           el.class = 'active-s'
         }
       })
+    },
+
+    cleanSearchBar() {
+      this.searchList.forEach(el => { el.class = '' })
+      this.searchList[0].class = 'active-s'
+      this.typeSearch = 'basic'
+      this.valueSearch = ''
+      this.label = 'Address / Public Key / Block Height'
+    },
+
+    isHex (value) {
+      let regex =  /^[0-9A-Fa-f]+$/
+      return regex.test(value)
+    },
+
+    isOnlyNumber(value) {
+      let regex =  /^[0-9]+$/
+      return regex.test(value)
+    },
+
+    isValid() {
+      let valid = false
+
+      switch (this.typeSearch) {
+        case 'basic':
+          if (this.valueSearch.length === 64 && this.isHex(this.valueSearch) === true) {
+            valid = true
+          } else if (this.valueSearch.length === 40 || this.valueSearch.length === 46) {
+            valid = true
+          } else if (this.valueSearch.length < 40 && typeof parseInt(this.valueSearch) == 'number' && this.isOnlyNumber(this.valueSearch) === true) {
+            valid = true
+          } else {
+            valid = false
+          }
+          break;
+
+        case 'hash':
+          if (this.valueSearch.length === 64 && this.isHex(this.valueSearch) === true) {
+            valid = true
+          } else {
+            valid = false
+          }
+          break;
+
+        case 'namespaceInfo':
+          valid = true
+          break;
+
+        case 'mosaicInfo':
+          valid = true
+          break;
+      }
+
+      if (valid === false) {
+        if (this.valueSearch !== '') {
+          this.bannerActive = true
+          this.bannerMessage = 'Invalid search value'
+        } else {
+          this.bannerActive = false
+          this.bannerMessage = ''
+        }
+      } else {
+        this.bannerActive = false
+        this.bannerMessage = ''
+      }
+
+      this.validSearch = valid
     },
 
     /**
@@ -107,20 +178,36 @@ export default {
       this.bannerActive = false
       if (this.typeSearch === 'basic' || this.typeSearch === 'hash') {
         if (this.valueSearch !== '') {
-          if (this.typeSearch === 'basic') {
-            if (this.valueSearch.length === 64) {
-              this.typeSearch = 'publicKey'
-            } else if (this.valueSearch.length === 40 || this.valueSearch.length === 46) {
-              this.typeSearch = 'address'
-            } else if (this.valueSearch.length < 40 && typeof parseInt(this.valueSearch) == 'number') {
-              this.typeSearch = 'blockHeight'
+          try {
+            if (this.typeSearch === 'basic') {
+              if (this.valueSearch.length === 64 && this.isHex(this.valueSearch) === true) {
+                this.typeSearch = 'publicKey'
+              } else if (this.valueSearch.length === 40 || this.valueSearch.length === 46) {
+                this.typeSearch = 'address'
+              } else if (this.valueSearch.length < 40 && typeof parseInt(this.valueSearch) == 'number' && this.isOnlyNumber(this.valueSearch) === true) {
+                this.typeSearch = 'blockHeight'
+              } else {
+                throw 'Invalid search value'
+              }
+            } else if (this.typeSearch === 'hash') {
+              if (this.valueSearch.length === 64 && this.isHex(this.valueSearch) === true) {
+                this.typeSearch = 'hash'
+              }
             }
+
+            let lowerValue = this.valueSearch.toLowerCase()
+
+            if (this.validSearch) {
+              let routeData = this.$router.resolve({ path: `/result/${this.typeSearch}/${lowerValue}` })
+              window.open(routeData.href, '_blank')
+              this.cleanSearchBar()
+            } else {
+              throw 'Invalid search value'
+            }
+          } catch (e) {
+            this.bannerActive = true
+            this.bannerMessage = e
           }
-
-          let lowerValue = this.valueSearch.toLowerCase()
-
-          let routeData = this.$router.resolve({ path: `/result/${this.typeSearch}/${lowerValue}` })
-          window.open(routeData.href, '_blank')
         } else {
           this.bannerActive = true
           this.bannerMessage = 'The search field cannot be empty'
@@ -137,6 +224,7 @@ export default {
           let routeData = this.$router.resolve({ path: `/result/${this.typeSearch}/${lowerValue}` })
           window.open(routeData.href, '_blank')
         }
+        this.cleanSearchBar()
       }
     }
   }
