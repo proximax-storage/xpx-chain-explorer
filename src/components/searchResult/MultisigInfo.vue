@@ -26,7 +26,7 @@
     <h1 class="supertitle" v-show="cosignatories.length > 0" style="padding-top: 10px">Cosignatories</h1>
     <div class="element" v-show="cosignatories.length > 0" v-for="(item, index) in cosignatories" :key="index + 'cosignatories'">
       <div class="title">Cosigner {{ index + 1 }}: </div>
-      <div class="value">{{ item }}</div>
+      <div class="value link" @click="goToAddress(item)">{{ item }}</div>
     </div>
     <h1 class="supertitle" v-show="relatedAccount.length > 0" style="padding-top: 10px">Related Multisig Account</h1>
     <div class="element" v-show="relatedAccount.length > 0" v-for="(item, index) in relatedAccount" :key="index + 'relatedAccount'">
@@ -56,7 +56,12 @@ export default {
   },
   methods: {
     goToAddress (address) {
-      let routeData = this.$router.resolve({ path: `/result/address/${address}` })
+      let routeData
+      if (address.length === 40 || address.length === 46) {
+        routeData = this.$router.resolve({ path: `/result/address/${address}` })
+      } else if (address.length === 64) {
+        routeData = this.$router.resolve({ path: `/result/publicKey/${address}` })
+      }
       window.open(routeData.href, '_blank')
     },
 
