@@ -31,15 +31,8 @@
     <h1 class="supertitle" v-show="relatedAccount.length > 0" style="padding-top: 10px">Related Multisig Account</h1>
     <div class="element" v-show="relatedAccount.length > 0" v-for="(item, index) in relatedAccount" :key="index + 'relatedAccount'">
       <div class="title">Account {{ index + 1 }}: </div>
-      <div class="value">{{ item }}</div>
+      <div class="value link" @click="goToAddress(item)">{{ item }}</div>
     </div>
-
-    <h1 class="supertitle" v-show="relatedAccount.length > 0" style="padding-top: 10px">Related Multisig Account</h1>
-    <div class="element" v-show="relatedAccount.length > 0" v-for="(item, index) in relatedAccount" :key="index + 'relatedAccount'">
-      <div class="title">Account {{ index + 1 }}: </div>
-      <div class="value">{{ item }}</div>
-    </div>
-
   </div>
 </template>
 
