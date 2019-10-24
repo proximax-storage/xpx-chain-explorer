@@ -39,7 +39,7 @@
       <!-- Center -->
       <div class="el-middle">
         <div class="title">Deadline</div>
-        <div class="value">{{ item.deadline }}</div>
+        <div class="value">{{ $utils.fmtTime(item.deadline.value) }}</div>
       </div>
       <!-- End Center -->
 
@@ -67,7 +67,7 @@ import proximaxProvider from '@/services/proximaxProviders.js'
 import { mdbIcon } from 'mdbvue'
 
 export default {
-  name: 'RecentTrans',
+  name: 'IncomingTrans',
   components: {
     mdbIcon
   },
@@ -80,7 +80,7 @@ export default {
     arrayTransactions: Array,
     nameLabel: {
       type: String,
-      default: 'Recent Transactions'
+      default: 'Incoming Transactions'
     }
   },
   data () {

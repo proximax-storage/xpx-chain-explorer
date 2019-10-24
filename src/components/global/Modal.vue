@@ -15,9 +15,9 @@
           </div>
 
           <div class="element">
-            <div class="title">DeadLine</div>
-            <div class="value" :class="param.deadline.class">
-              {{ param.deadline.value }}
+            <div class="title">Aggregate Id</div>
+            <div class="value" :class="param.aggregateId.class">
+              {{ param.aggregateId.value }}
             </div>
           </div>
         </div>
@@ -31,9 +31,9 @@
           </div>
 
           <div class="element">
-            <div class="title">Height</div>
-            <div class="value" :class="param.height.class" @click="param.height.run(param.height.value)">
-              {{ param.height.value }}
+            <div class="title">Type</div>
+            <div class="value" :class="param.type.class">
+              {{ param.type.value }}
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@
           </div>
         </div>
 
-        <div>
+        <!-- <div>
           <div class="element">
             <div class="title">Aggregate Id</div>
             <div class="value" :class="param.aggregateId.class">
@@ -66,7 +66,7 @@
               {{ param.type.value }}
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div v-if="param.recipient !== undefined">
           <div class="element">
@@ -84,9 +84,10 @@
         <h1 class="supertitle">Details</h1>
         <div class="element" v-for="(item, index) in param.details" :key="index">
           <div class="title centerAlign">{{ item.key }}</div>
-          <div class="value centerAlign" :class="param.type.class">
+          <div class="value centerAlign" v-if="item.value" :class="param.type.class">
             {{ item.value }}
           </div>
+          <div class="value centerAlign" v-else-if="item.valueHtml" :class="param.type.class" v-html="item.valueHtml"></div>
         </div>
       </div>
       <!-- End Details -->

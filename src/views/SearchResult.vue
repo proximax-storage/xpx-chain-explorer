@@ -64,6 +64,8 @@
 
     <!-- Recent Transactions Component -->
     <recent-trans v-if="showRecentTransaction && blockTransactions.length > 0 && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
+
+    <incoming-trans v-if="type === 'Address' && param.publicKey === '0000000000000000000000000000000000000000000000000000000000000000'" :arrayTransactions="incomingTransactions"/>
     <!-- End Recent Transactions Component -->
 
     <!-- Modal Component -->
@@ -87,6 +89,7 @@ import NamespaceInfo from '@/components/searchResult/NamespaceInfo.vue'
 import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
+import IncomingTrans from '@/components/searchResult/IncomingTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
 import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams } from 'tsjs-xpx-chain-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
@@ -109,7 +112,8 @@ export default {
     RecentTrans,
     Mosaics,
     Modal,
-    mdbProgress
+    mdbProgress,
+    IncomingTrans
   },
   data () {
     return {
@@ -119,6 +123,7 @@ export default {
       recent: [],
       showRecentTransaction: false,
       blockTransactions: [],
+      incomingTransactions: [],
       showRecentMosaic: false,
       blockMosaics: null,
       mosaicLoader: false,
@@ -215,10 +220,28 @@ export default {
       let errorActive1 = false
       let errorActive2 = false
       this.mosaicLoader = true
+
+      this.$proxProvider.accountHttp.incomingTransactions(addr).subscribe(
+        response => {
+          this.incomingTransactions = response
+        }
+      )
+
       this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
-          this.param = resp
+          console.log(resp)
+
+          if ([null, undefined].includes(resp.publicKey)) {
+            let tmpObj = {
+              address: resp.address,
+              publicKey: '0000000000000000000000000000000000000000000000000000000000000000'
+            }
+            this.param = tmpObj
+          } else {
+            this.param = resp
+          }
+
           this.showComponent()
           // If your account information has tiles, look up your information and name to display them in the tile table
           if (resp.mosaics.length > 0) {
@@ -491,7 +514,7 @@ export default {
           this.$proxProvider.getMosaicsName([mosaicId]).subscribe(
             nameResponse => {
               this.param = response
-              this.param.name = (nameResponse[0].names) ? nameResponse[0].names[0].name : undefined
+              this.param.name = (nameResponse[0].names && nameResponse[0].names.length !== 0) ? nameResponse[0].names[0].name : undefined
               this.showComponent()
             }
           )

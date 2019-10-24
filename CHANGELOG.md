@@ -89,3 +89,15 @@
 ## MainNet Release v0.0.2
   * Bug fixes in names of namespaces in Address / Public Key info view.
   * Bug fixes in recent transactions of Blocks Info.
+
+## MainNet Release v0.0.3
+  * Update SDK to version 0.6.0.
+  * Minor bugs fixed.
+
+## MainNet Release v0.0.4
+  * Update SDK to version 0.6.1.
+  * Bug fix in inner transactions modal.
+  * Bug fix in fee calculated in transaction, show effective fee in all transactions.
+  * Change in search bar validations.
+  * Bug fix in Account Info without public key valid for blockchain, show incoming transactions.
+  * Minor bugs fixed.

@@ -18,7 +18,8 @@ if (currentNode === null) {
     response => {
       currentNode = response.data.Nodes[0]
       localStorage.setItem('currentNode', currentNode)
-      Vue.prototype.$storage = new Persistence()
+      Vue.prototype.$storage = new Persistence(localStorage)
+      Vue.prototype.$sessionStorage = new Persistence(sessionStorage)
       Vue.prototype.$utils = Utils
       Vue.prototype.$proxProvider = new proximaxProvider(currentNode)
       Vue.config.productionTip = false
@@ -30,7 +31,8 @@ if (currentNode === null) {
     }
   )
 } else {
-  Vue.prototype.$storage = new Persistence()
+  Vue.prototype.$storage = new Persistence(localStorage)
+  Vue.prototype.$sessionStorage = new Persistence(sessionStorage)
   Vue.prototype.$utils = Utils
   Vue.prototype.$proxProvider = new proximaxProvider(currentNode)
   Vue.config.productionTip = false

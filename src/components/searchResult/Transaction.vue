@@ -6,7 +6,12 @@
     <div class="tran-layout-middle">
       <h1 class="supertitle" style="font-size: 20px; text-align: center">{{ transactionType || 'Transaction'}}</h1>
       <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="calculatedAmount"></span> XPX</p>
-      <p class="fee">Fee: <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span></p>
+      <!-- <p class="fee" v-if="[16961, 16705].includes(this.detail.type) === false">Fee:
+        <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span>
+      </p> -->
+      <p class="fee">Fee:
+        <span v-html="this.effectiveFee"></span>
+      </p>
     </div>
     <!-- End Center -->
 
@@ -136,14 +141,6 @@
               Supply Mutable: <b style="color: red">{{ detail.mosaicProperties.supplyMutable }} <mdb-icon icon="times"/></b>
             </span>
 
-            <span v-if="detail.mosaicProperties.levyMutable">
-              Levy Mutable: <b style="color: green">{{ detail.mosaicProperties.levyMutable }} <mdb-icon icon="check"/></b>
-            </span>
-
-            <span v-if="!detail.mosaicProperties.levyMutable">
-              Levy Mutable: <b style="color: red">{{ detail.mosaicProperties.levyMutable }} <mdb-icon icon="times"/></b>
-            </span>
-
             <span v-if="detail.mosaicProperties.transferable">
               Transferable: <b style="color: green">{{ detail.mosaicProperties.transferable }} <mdb-icon icon="check"/></b>
             </span>
@@ -205,10 +202,11 @@ export default {
   data () {
     return {
       plusInfo: [],
-      transactionType: 'Hash Transaction',
+      transactionType: 'Transaction',
       mosaicsOfTransfer: null,
       xpx: this.$store.state.xpx,
       calculatedAmount: null,
+      effectiveFee: null
     }
   },
 
@@ -220,7 +218,7 @@ export default {
   mounted () {
     this.verifyType()
     this.verifyTransactionDetails()
-    let detail = JSON.stringify(this.detail)
+    this.getEffectiveFee()
   },
 
   methods: {
@@ -265,6 +263,14 @@ export default {
         result = { key: 'Message', value: 'Encrypted Message', class: 'valueLower' }
       }
       return result
+    },
+
+    getEffectiveFee() {
+      this.$proxProvider.blockHttp.getBlockByHeight(this.detail.transactionInfo.height.compact()).subscribe(
+        response => {
+          this.effectiveFee = this.$utils.fmtAmountValue(response.feeMultiplier * this.detail.size)
+        }
+      )
     },
 
     /**
@@ -422,7 +428,7 @@ export default {
             this.plusInfo.push({ key: 'Action Type', value: 'Link' })
           } else if (this.detail.actionType === 0) {
             this.plusInfo.push({ key: 'Action Type', value: 'Link' })
-          } else if (this.detail.actionType === 0) {
+          } else if (this.detail.actionType === 1) {
             this.plusInfo.push({ key: 'Action Type', value: 'Unlink' })
           }
 
@@ -441,6 +447,14 @@ export default {
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Version', value: this.detail.version }
           ]
+
+          if (this.detail.actionType === undefined) {
+            this.plusInfo.push({ key: 'Action Type', value: 'Link' })
+          } else if (this.detail.actionType === 0) {
+            this.plusInfo.push({ key: 'Action Type', value: 'Link' })
+          } else if (this.detail.actionType === 1) {
+            this.plusInfo.push({ key: 'Action Type', value: 'Unlink' })
+          }
           // this.iterator(this.detail)
           break;
         case 'Modify Account Property Address':
@@ -489,6 +503,11 @@ export default {
           ]
           // this.iterator(this.detail)
           break;
+        default:
+          this.plusInfo = [
+            { key: 'Info', value: 'Not supported yet' }
+          ]
+          break
       }
     },
 

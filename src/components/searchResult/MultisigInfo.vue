@@ -3,13 +3,13 @@
     <h1 class="supertitle">Multisig Account Info</h1>
     <div class="info">
       <div class="left" v-if="!info.minRemoval > 0 && !info.minApproval > 0">
-        <div class="up">
+        <div class="up" v-if="account !== ''">
           <div class="title">Address</div>
-          <div class="value">{{ info.account }}</div>
+          <div class="value">{{ account.address.pretty() }}</div>
         </div>
         <div class="down">
-          <div class="title">Account Address</div>
-          <div class="value">{{ info.accountAddress }}</div>
+          <div class="title">Public Key</div>
+          <div class="value">{{ info.account }}</div>
         </div>
       </div>
       <div class="right" v-if="info.minRemoval > 0 && info.minApproval > 0">
@@ -26,20 +26,13 @@
     <h1 class="supertitle" v-show="cosignatories.length > 0" style="padding-top: 10px">Cosignatories</h1>
     <div class="element" v-show="cosignatories.length > 0" v-for="(item, index) in cosignatories" :key="index + 'cosignatories'">
       <div class="title">Cosigner {{ index + 1 }}: </div>
-      <div class="value">{{ item }}</div>
+      <div class="value link" @click="goToAddress(item)">{{ item }}</div>
     </div>
     <h1 class="supertitle" v-show="relatedAccount.length > 0" style="padding-top: 10px">Related Multisig Account</h1>
     <div class="element" v-show="relatedAccount.length > 0" v-for="(item, index) in relatedAccount" :key="index + 'relatedAccount'">
       <div class="title">Account {{ index + 1 }}: </div>
-      <div class="value">{{ item }}</div>
+      <div class="value link" @click="goToAddress(item)">{{ item }}</div>
     </div>
-
-    <h1 class="supertitle" v-show="relatedAccount.length > 0" style="padding-top: 10px">Related Multisig Account</h1>
-    <div class="element" v-show="relatedAccount.length > 0" v-for="(item, index) in relatedAccount" :key="index + 'relatedAccount'">
-      <div class="title">Account {{ index + 1 }}: </div>
-      <div class="value">{{ item }}</div>
-    </div>
-
   </div>
 </template>
 
@@ -51,19 +44,25 @@ export default {
     cosignatories: Array,
     relatedAccount: Array,
     multisigConsignatories: Array,
-
   },
   data () {
     return {
-      cosignActive: false
+      cosignActive: false,
+      account: ''
     }
   },
   mounted () {
     this.cosignActive = (this.cosignatories.length > 0) ? true : false
+    this.account = this.$proxProvider.createPublicAccount(this.info.account, this.$store.state.netType.number)
   },
   methods: {
     goToAddress (address) {
-      let routeData = this.$router.resolve({ path: `/result/address/${address}` })
+      let routeData
+      if (address.length === 40 || address.length === 46) {
+        routeData = this.$router.resolve({ path: `/result/address/${address}` })
+      } else if (address.length === 64) {
+        routeData = this.$router.resolve({ path: `/result/publicKey/${address}` })
+      }
       window.open(routeData.href, '_blank')
     },
 

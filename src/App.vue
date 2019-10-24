@@ -128,7 +128,7 @@ export default {
           .newBlock()
           .subscribe(block => {
             block.height = block.height.compact()
-
+            this.$sessionStorage.set('currentBlockHeight', block.height)
             if (block.numTransactions !== undefined) {
               block.numTransactions = block.numTransactions
               block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
