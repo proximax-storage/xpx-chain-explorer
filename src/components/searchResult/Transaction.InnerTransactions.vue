@@ -37,6 +37,7 @@
 
 <script>
 import proximaxProvider from '@/services/proximaxProviders'
+import { Id } from 'tsjs-xpx-chain-sdk'
 
 export default {
   name: 'InnerTransaction',
@@ -112,17 +113,53 @@ export default {
           }
 
           let amountXpx
+          let others
           if (this.params[index].mosaics && this.params[index].mosaics.length > 0) {
+            others = this.params[index].mosaics.filter(el => el.id.toHex() !== this.$store.state.xpx)
             amountXpx = this.params[index].mosaics.filter(el => el.id.toHex() === this.$store.state.xpx)
             if (amountXpx.length > 0) {
               amountXpx = this.$utils.fmtDivisibility(amountXpx[0].amount.compact(), 6)
               info.details.push({ key: 'Amount', valueHtml: amountXpx })
-            } else {
-              amountXpx = this.$utils.fmtDivisibility(0, 6)
-              info.details.push({ key: 'Amount', valueHtml: amountXpx })
+            }
+
+            if (others.length > 0) {
+              let tmpArr = []
+              let tmpObj
+              others.forEach(async mosaic => {
+                try {
+                  let response = await this.$proxProvider.mosaicHttp.getMosaic(mosaic.id).toPromise()
+                  let responseName = await this.$proxProvider.mosaicHttp.getMosaicsNames([mosaic.id]).toPromise()
+
+                  tmpObj = {
+                    key: `Quantity Mosaic: ${(responseName.length > 0) ? responseName[0].names[0].name : mosaic.id.toHex()}`,
+                    valueHtml: this.$utils.fmtDivisibility(mosaic.amount.compact(), response.divisibility)
+                  }
+                  info.details.push(tmpObj)
+                } catch (e) {
+                  if (e.statusCode === 404) {
+                    if (mosaic.id.toHex() === this.$store.state.namespaceXpx) {
+                      tmpObj = {
+                        key: `Amount`,
+                        valueHtml: this.$utils.fmtDivisibility(mosaic.amount.compact(), 6)
+                      }
+
+                      info.details.push(tmpObj)
+                    } else if (mosaic.id.toHex() !== this.$store.state.namespaceXpx) {
+                      let mosaicData = await this.getNamespaceInfo(mosaic)
+                      let mosaicName = await this.$proxProvider.mosaicHttp.getMosaicsNames([mosaic.id]).toPromise()
+
+                      if (mosaicName.length === 0) {
+                        mosaicData.key = `Quantity Mosaic: ${(responseName.length > 0) ? responseName[0].names[0].name : mosaic.id.toHex()}`
+                        info.details.push(mosaicData)
+                      } else {
+                        info.details.push(mosaicData)
+                      }
+                    }
+                  }
+                }
+              })
             }
           }
-
           break;
 
         case 'Mosaic definition':
@@ -169,6 +206,24 @@ export default {
         }
       })
       return type
+    },
+
+    async getNamespaceInfo (mosaic) {
+      let tmpObj
+      try {
+        let namespace = await this.$proxProvider.namespaceHttp.getNamespace(mosaic.id).toPromise()
+        let mosaicId = new Id(namespace.alias.mosaicId)
+        let mosaicInfo = await this.$proxProvider.mosaicHttp.getMosaic(mosaicId).toPromise()
+        console.log(mosaicInfo)
+        tmpObj = {
+          key: `Quantity Mosaic: ${mosaic.id.toHex()}`,
+          valueHtml: this.$utils.fmtDivisibility(mosaic.amount.compact(), mosaicInfo.divisibility)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+
+      return tmpObj
     },
 
     goToAddress (address) {

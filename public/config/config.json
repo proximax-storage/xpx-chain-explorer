@@ -23,43 +23,19 @@
   "MapsInfo": [
     {
       "name": "18.138.51.117",
-      "ip": "",
-      "version": 0,
-      "location": "",
-      "lat": 0,
-      "lon": 0,
-      "height": null,
-      "status": "Online",
-      "active": false,
-      "visible": true,
+      "ip": "18.138.51.117",
       "urlNode": "http://18.138.51.117:3000",
       "icon": "proximax.svg"
     },
     {
       "name": "13.229.155.165",
-      "ip": "",
-      "version": 0,
-      "location": "",
-      "lat": 0,
-      "lon": 0,
-      "height": null,
-      "status": "Online",
-      "active": false,
-      "visible": true,
+      "ip": "13.229.155.165",
       "urlNode": "http://13.229.155.165:3000",
       "icon": "proximax.svg"
     },
     {
       "name": "13.251.128.180",
-      "ip": "",
-      "version": 0,
-      "location": "",
-      "lat": 0,
-      "lon": 0,
-      "height": null,
-      "status": "Online",
-      "active": false,
-      "visible": true,
+      "ip": "13.251.128.180",
       "urlNode": "http://13.251.128.180:3000",
       "icon": "proximax.svg"
     }
