@@ -27,14 +27,14 @@
 
       <!-- Right -->
       <div>
-        <h1 class="supertitle">XPX Info</h1>
+        <h1 class="supertitle">{{ $config.coin.name }} Info</h1>
         <div class="up">
           <div class="title">Namespace Name</div>
           <div class="valueLower">PRX</div>
         </div>
         <div class="down">
-          <div class="title">XPX Mosaic Id</div>
-          <div class="value">{{ getId }}</div>
+          <div class="title">{{ $config.coin.name }} Mosaic Id</div>
+          <div class="value">{{ $config.coin.mosaic.id }}</div>
         </div>
       </div>
       <!-- End Right -->

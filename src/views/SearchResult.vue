@@ -214,18 +214,20 @@ export default {
      *
      * @param { String } Account
      */
-    getInfoAccountAndViewTransactions (account) {
+    async getInfoAccountAndViewTransactions (account) {
       const addr = Address.createFromRawAddress(account)
       const xpx = this.$store.state.xpx
       let errorActive1 = false
       let errorActive2 = false
       this.mosaicLoader = true
 
-      this.$proxProvider.accountHttp.incomingTransactions(addr).subscribe(
-        response => {
-          this.incomingTransactions = response
-        }
-      )
+      let incoming = await this.$proxProvider.accountHttp.incomingTransactions(addr).toPromise()
+      this.incomingTransactions = incoming
+      // this.$proxProvider.accountHttp.incomingTransactions(addr).subscribe(
+      //   response => {
+      //     this.incomingTransactions = response
+      //   }
+      // )
 
       this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
