@@ -31,19 +31,19 @@
     {
       "name": "arcturus",
       "ip": "13.250.17.22",
-      "urlNode": "http://arcturus.xpxsirius.io:3000",
+      "urlNode": "https://arcturus.xpxsirius.io",
       "icon": "proximax.svg"
     },
     {
       "name": "aldebaran",
       "ip": "13.250.17.22",
-      "urlNode": "http://aldebaran.xpxsirius.io:3000",
+      "urlNode": "https://aldebaran.xpxsirius.io",
       "icon": "proximax.svg"
     },
     {
       "name": "betelgeuse",
       "ip": "13.250.17.22",
-      "urlNode": "http://betelgeuse.xpxsirius.io:3000",
+      "urlNode": "https://betelgeuse.xpxsirius.io",
       "icon": "proximax.svg"
     }
   ]
