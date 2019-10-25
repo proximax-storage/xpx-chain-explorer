@@ -1,4 +1,11 @@
 {
+  "Coin": {
+    "name": "XPX",
+    "coinMosaicId": "402b2f579faebc59",
+    "coinMosaicName": "xpx",
+    "coinNamespaceId": "bffb42a19116bdf6",
+    "coinNamespaceName": "prx.xpx"
+  },
   "Nodes": [
     "https://arcturus.xpxsirius.io",
     "https://aldebaran.xpxsirius.io",
@@ -12,7 +19,7 @@
     "https://lyrasithara.xpxsirius.io"
   ],
   "NetworkType": {
-    "name": "public",
+    "name": "Public",
     "number": 184
   },
   "RentalFeeInfo": {

@@ -9,36 +9,40 @@ import { Persistence } from '@/services/persistence.js'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import Utils from '@/services/Utils.js'
 import axios from 'axios'
+import { Config } from '@/services/configService.js'
 
 let currentNode = localStorage.getItem('currentNode')
 
-if (currentNode === null) {
-  // currentNode = nodesConfig.nodes[0]
-  axios.get('../config/config.json').then(
-    response => {
-      currentNode = response.data.Nodes[0]
-      localStorage.setItem('currentNode', currentNode)
-      Vue.prototype.$storage = new Persistence(localStorage)
-      Vue.prototype.$sessionStorage = new Persistence(sessionStorage)
-      Vue.prototype.$utils = Utils
+Vue.prototype.$storage = new Persistence(localStorage)
+Vue.prototype.$sessionStorage = new Persistence(sessionStorage)
+Vue.prototype.$utils = Utils
+Vue.config.productionTip = false
+
+const configIntegration = async (currentNodeExist = false) => {
+  try {
+    let configInfo = await axios.get('../config/config.json')
+    Vue.prototype.$config = new Config(configInfo.data)
+    if (currentNodeExist === false) {
+      localStorage.setItem('currentNode', configInfo.data.Nodes[0])
+      Vue.prototype.$proxProvider = new proximaxProvider(configInfo.data.Nodes[0])
+    } else {
       Vue.prototype.$proxProvider = new proximaxProvider(currentNode)
-      Vue.config.productionTip = false
-      new Vue({
-        router,
-        store,
-        render: function (h) { return h(App) }
-      }).$mount('#app')
     }
-  )
-} else {
-  Vue.prototype.$storage = new Persistence(localStorage)
-  Vue.prototype.$sessionStorage = new Persistence(sessionStorage)
-  Vue.prototype.$utils = Utils
-  Vue.prototype.$proxProvider = new proximaxProvider(currentNode)
-  Vue.config.productionTip = false
+  } catch (e) {
+    console.error(e);
+  }
+
   new Vue({
     router,
     store,
     render: function (h) { return h(App) }
   }).$mount('#app')
+}
+
+if (currentNode === null) {
+  console.log('No Current Node')
+  configIntegration(false)
+} else {
+  console.log('Current Node is', currentNode)
+  configIntegration(true)
 }
