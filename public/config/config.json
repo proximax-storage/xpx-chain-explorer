@@ -1,8 +1,15 @@
 {
   "Nodes": [
-    "http://arcturus.xpxsirius.io:3000",
-    "http://aldebaran.xpxsirius.io:3000",
-    "http://betelgeuse.xpxsirius.io:3000"
+    "https://arcturus.xpxsirius.io",
+    "https://aldebaran.xpxsirius.io",
+    "https://betelgeuse.xpxsirius.io",
+    "https://bigcalvin.xpxsirius.io",
+    "https://westerlund.xpxsirius.io",
+    "https://canismajor.xpxsirius.io",
+    "https://coronaborealis.xpxsirius.io",
+    "https://delphinus.xpxsirius.io",
+    "https://eridanus.xpxsirius.io",
+    "https://lyrasithara.xpxsirius.io"
   ],
   "NetworkType": {
     "name": "public",
