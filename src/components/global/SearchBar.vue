@@ -15,7 +15,7 @@
       <form class="input-cont">
 
         <!-- MDB Input -->
-        <input type="search" id="searchBarInput" class="place-white black-text optional-in" v-model="valueSearch" :placeholder="label" autocomplete="off" @keyup="isValid">
+        <input type="search" id="searchBarInput" class="place-white black-text optional-in" v-model="valueSearch" :placeholder="label" autocomplete="off" @keyup="isValid" @focusout="isValid">
         <!-- <mdb-input :label="label" type="text" class="place-white black-text" v-model="valueSearch"/> -->
         <!-- End MDB Input -->
 
@@ -53,6 +53,7 @@ export default {
   data () {
     return {
       typeSearch: 'basic',
+      pathSearch: '',
       label: 'Address / Public Key / Block Height',
       searchList: [
         { name: 'Basic', class: 'active-s' },
@@ -121,14 +122,18 @@ export default {
 
     isValid() {
       let valid = false
+      let path = ''
 
       switch (this.typeSearch) {
         case 'basic':
           if (this.valueSearch.length === 64 && this.isHex(this.valueSearch) === true) {
+            path = 'publicKey'
             valid = true
           } else if (this.valueSearch.length === 40 || this.valueSearch.length === 46) {
+            path = 'address'
             valid = true
-          } else if (this.valueSearch.length < 40 && typeof parseInt(this.valueSearch) == 'number' && this.isOnlyNumber(this.valueSearch) === true) {
+          } else if (this.isOnlyNumber(this.valueSearch) === true) {
+            path = 'blockHeight'
             valid = true
           } else {
             valid = false
@@ -137,6 +142,7 @@ export default {
 
         case 'hash':
           if (this.valueSearch.length === 64 && this.isHex(this.valueSearch) === true) {
+            path = 'hash'
             valid = true
           } else {
             valid = false
@@ -144,10 +150,12 @@ export default {
           break;
 
         case 'namespaceInfo':
+          path = 'namespaceInfo'
           valid = true
           break;
 
         case 'mosaicInfo':
+          path = 'mosaicInfo'
           valid = true
           break;
       }
@@ -164,7 +172,7 @@ export default {
         this.bannerActive = false
         this.bannerMessage = ''
       }
-
+      this.pathSearch = path
       this.validSearch = valid
     },
 
@@ -176,55 +184,32 @@ export default {
      */
     performSearch () {
       this.bannerActive = false
-      if (this.typeSearch === 'basic' || this.typeSearch === 'hash') {
-        if (this.valueSearch !== '') {
-          try {
-            if (this.typeSearch === 'basic') {
-              if (this.valueSearch.length === 64 && this.isHex(this.valueSearch) === true) {
-                this.typeSearch = 'publicKey'
-              } else if (this.valueSearch.length === 40 || this.valueSearch.length === 46) {
-                this.typeSearch = 'address'
-              } else if (this.valueSearch.length < 40 && typeof parseInt(this.valueSearch) == 'number' && this.isOnlyNumber(this.valueSearch) === true) {
-                this.typeSearch = 'blockHeight'
+      let routeData
+      let lowerValue = this.valueSearch.toLowerCase()
+      try {
+        switch (this.validSearch) {
+          case true:
+            if (['basic', 'hash'].includes(this.typeSearch)) {
+              if (this.validSearch !== '') {
+                routeData = this.$router.resolve({ path: `/result/${this.pathSearch}/${lowerValue}` })
               } else {
-                throw 'Invalid search value'
+                throw 'The search field cannot be empty'
               }
-            } else if (this.typeSearch === 'hash') {
-              if (this.valueSearch.length === 64 && this.isHex(this.valueSearch) === true) {
-                this.typeSearch = 'hash'
-              }
+            } else if (['namespaceInfo', 'mosaicInfo'].includes(this.typeSearch)) {
+              routeData = this.$router.resolve({ path: `/result/${this.pathSearch}/${lowerValue}` })
             }
 
-            let lowerValue = this.valueSearch.toLowerCase()
+            window.open(routeData.href, '_blank')
+            this.cleanSearchBar()
+            break;
 
-            if (this.validSearch) {
-              let routeData = this.$router.resolve({ path: `/result/${this.typeSearch}/${lowerValue}` })
-              window.open(routeData.href, '_blank')
-              this.cleanSearchBar()
-            } else {
-              throw 'Invalid search value'
-            }
-          } catch (e) {
-            this.bannerActive = true
-            this.bannerMessage = e
-          }
-        } else {
-          this.bannerActive = true
-          this.bannerMessage = 'The search field cannot be empty'
+          case false:
+            throw 'Invalid search value'
+            break;
         }
-      } else if (this.typeSearch === 'namespaceInfo' || this.typeSearch === 'mosaicInfo') {
-        if (this.typeSearch === 'namespaceInfo' && this.valueSearch === '') {
-          let routeData = this.$router.resolve({ path: `/list/namespaces` })
-          window.open(routeData.href, '_blank')
-        } else if (this.typeSearch === 'mosaicInfo' && this.valueSearch === '') {
-          let routeData = this.$router.resolve({ path: `/list/mosaics` })
-          window.open(routeData.href, '_blank')
-        } else {
-          let lowerValue = this.valueSearch.toLowerCase()
-          let routeData = this.$router.resolve({ path: `/result/${this.typeSearch}/${lowerValue}` })
-          window.open(routeData.href, '_blank')
-        }
-        this.cleanSearchBar()
+      } catch (error) {
+        this.bannerActive = true
+        this.bannerMessage = error
       }
     }
   }

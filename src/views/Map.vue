@@ -77,6 +77,7 @@
 import { mdbIcon, mdbInput, mdbDropdown, mdbDropdownItem, mdbDropdownMenu, mdbDropdownToggle } from 'mdbvue'
 import axios from 'axios'
 import { filter } from 'minimatch';
+import { Id } from 'tsjs-xpx-chain-sdk'
 
 export default {
   name: 'Map',
@@ -109,73 +110,60 @@ export default {
   },
 
   methods: {
-    getInfoNodes () {
-      axios.get('./config/config.json').then(
-        response => {
-          this.mapList = response.data.MapsInfo
-          let mapCustomNodes = this.$storage.get('mapCustomNodes')
-          if (mapCustomNodes !== null) {
-            mapCustomNodes = JSON.parse(mapCustomNodes)
+    async getInfoNodes () {
+      let maps = await axios.get('./config/config.json')
+      maps = maps.data.MapsInfo
 
-            mapCustomNodes.forEach(el => {
-              this.mapList.push(el)
-            })
-          }
-
-          this.analyzeMaps()
+      let formatMaps = []
+      maps.forEach(map => {
+        let tmpObj = {
+          name: map.name,
+          ip: map.ip,
+          version: 0,
+          location: "",
+          lat: 0,
+          lon: 0,
+          height: null,
+          status: "Online",
+          active: false,
+          visible: false,
+          urlNode: map.urlNode,
+          icon: "proximax.svg"
         }
-      )
+
+        formatMaps.push(tmpObj)
+      })
+
+      formatMaps[0].active = true
+      formatMaps[0].visible = true
+      this.mapList = formatMaps
+      this.analyzeMaps()
     },
 
     analyzeMaps () {
+      this.mapList.forEach(async map => {
+        try {
+          let location = await axios.get(`https://geoip-db.com/json/${map.ip}`)
+          let nodeInfo = await axios.get(`${map.urlNode}/node/info`)
+          let height = await axios.get(`${map.urlNode}/chain/height`)
 
-      this.mapList.forEach((el, index) => {
-        // Get LatLon
+          map.lat = location.data.latitude
+          map.lon = location.data.longitude
+          map.location = location.data.country_name
+          map.version = nodeInfo.data.version
+          map.height = (new Id(height.data.height)).compact()
+          map.status = 'Online'
 
-        axios.get(`${el.urlNode}/node/info`).then(
-          response => {
-            el.ip = response.data.host
-            el.version = response.data.version
+        } catch (e) {
+          map.lat = ''
+          map.lon = ''
+          map.location = ''
+          map.version = 0
+          map.height = 0
+          map.status = 'Offline'
+        }
 
-            let url = `https://geoip-db.com/json/${el.ip}`
-            axios.get(url).then(
-              resp => {
-
-                el.lat = resp.data.latitude
-                el.lon = resp.data.longitude
-                el.location = resp.data.country_name
-
-                axios.get(`${el.urlNode}/node/info`).then(
-                  response => {
-                    el.version = response.data.version
-                  }
-                )
-                .catch(error => {
-                  el.status = 'Offline'
-                })
-
-                if (el.urlNode !== undefined) {
-                  axios.get(`${el.urlNode}/chain/height`).then(
-                    response => {
-                      el.height = response.data.height[0]
-                    }
-                  )
-                }
-
-                this.verifyMapList()
-              }
-            )
-
-            if (el.urlNode !== undefined) {
-              axios.get(`${el.urlNode}/chain/height`).then(
-                response => {
-                  el.height = response.data.height[0]
-                }
-              )
-            }
-            this.verifyMapList()
-          }
-        )
+        this.verifyMapList()
       })
     },
 

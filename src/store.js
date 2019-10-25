@@ -15,7 +15,8 @@ export default new Vuex.Store({
     blockList: [],
     rentalFeeInfo: undefined,
     netType: undefined,
-    xpx: '402b2f579faebc59'
+    xpx: '402b2f579faebc59',
+    namespaceXpx: 'bffb42a19116bdf6'
   },
   mutations: {
     UPDATE_NODES: (state, data) => {
