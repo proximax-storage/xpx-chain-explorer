@@ -196,7 +196,16 @@ export default {
                 throw 'The search field cannot be empty'
               }
             } else if (['namespaceInfo', 'mosaicInfo'].includes(this.typeSearch)) {
-              routeData = this.$router.resolve({ path: `/result/${this.pathSearch}/${lowerValue}` })
+              if (lowerValue === '') {
+                routeData = this.$router.resolve({
+                  path: `/list/${(this.pathSearch === 'mosaicInfo') ? 'mosaics' : 'namespaces'}`
+                })
+              } else {
+                routeData = this.$router.resolve({
+                  path: `/result/${this.pathSearch}/${lowerValue}`
+                })
+              }
+
             }
 
             window.open(routeData.href, '_blank')
