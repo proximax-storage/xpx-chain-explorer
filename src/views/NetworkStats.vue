@@ -9,14 +9,14 @@
     <mdb-progress v-if="blocks.length === 0" bgColor="cyan darken-3" style="width: 100%" indeterminate/>
     <div v-if="blocks.length > 0">
       <div class="mini-two">
-        <graphics :title="'Sirius unique validators daily chart'" :numGraphic="1" :params="blocks"/>
-        <graphics :title="'Sirius transactions per day chart'" :numGraphic="2" :params="blocks"/>
+        <graphics :title="'unique block generators daily chart'" :numGraphic="1" :params="blocks"/>
+        <graphics :title="'transactions per day chart'" :numGraphic="2" :params="blocks"/>
       </div>
 
       <!-- Divided Graphic Container -->
       <div class="mini-two">
-        <graphics :title="'Sirius accounts over time'" :numGraphic="3"/>
-        <graphics :title="'Sirius average block dificulty per day'" :numGraphic="4" :params="blocks"/>
+        <graphics :title="'accounts over time'" :numGraphic="3"/>
+        <graphics :title="'average block dificulty per day'" :numGraphic="4" :params="blocks"/>
       </div>
       <!-- Divided Graphic Container -->
     </div>

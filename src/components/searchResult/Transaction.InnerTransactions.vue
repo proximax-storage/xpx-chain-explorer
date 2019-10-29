@@ -108,7 +108,7 @@ export default {
       switch (typeName) {
         case 'Transfer Transaction':
           if (this.params[index].message !== undefined && this.params[index].message.payload !== '') {
-            info.details.push({ key: 'Message', value: this.params[index].message.payload })
+            info.details.push({ key: 'Data', value: this.params[index].message.payload })
           }
 
           break;

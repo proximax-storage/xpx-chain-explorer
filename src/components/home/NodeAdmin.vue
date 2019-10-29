@@ -23,7 +23,7 @@
 
     <!-- Current Block Area -->
     <div class="admin-item">
-      <h1>Current Block</h1>
+      <h1>Number of Blocks</h1>
       <p>{{ updateBlock }}</p>
     </div>
     <!-- End Current Block Area -->

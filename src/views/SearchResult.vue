@@ -21,7 +21,7 @@
     <!-- End Public Key Component -->
 
     <!-- Block Info Component -->
-    <block-info v-if="type === 'Block Height'" :detail="param"/>
+    <block-info v-if="type === 'Block Number'" :detail="param"/>
     <!-- Block Info Component -->
 
     <!-- Transaction Component -->
@@ -510,7 +510,7 @@ export default {
       if (this.$route.params.type === 'publicKey') {
         this.type = 'Public Key'
       } else if (this.$route.params.type === 'blockHeight') {
-        this.type = 'Block Height'
+        this.type = 'Block Number'
       } else if (this.$route.params.type === 'hash') {
         this.type = 'Transaction Hash'
       } else if (this.$route.params.type === 'address') {

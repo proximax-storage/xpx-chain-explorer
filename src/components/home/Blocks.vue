@@ -10,9 +10,9 @@
     <!-- NEW DESIGN OF BLOCKS COMPONENT (Mobile Compatible)-->
     <div class="mobile">
       <div class="guide">
-        <div class="title-guide">Height</div>
-        <div class="title-guide">Validator</div>
-        <div class="title-guide">TXS</div>
+        <div class="title-guide">Block Number</div>
+        <div class="title-guide">Block Generator</div>
+        <div class="title-guide">Records</div>
         <div class="title-guide">Timestamp</div>
       </div>
 
@@ -25,7 +25,7 @@
         </div>
 
         <div>
-          <span class="title">Validator</span>
+          <span class="title">Block Generator</span>
           <router-link class="value link-data" :to="{ path: '/result/' + 'publicKey/' + item.signer.publicKey }" target="_blank">{{ item.signer.publicKey }}</router-link>
         </div>
 

@@ -51,7 +51,7 @@ export default {
   data () {
     return {
       typeSearch: 'basic',
-      label: 'Address / Public Key / Block Height',
+      label: 'Address / Block Generator / Block Number',
       searchList: [
         { name: 'Basic', class : this.isTabActive('Basic') ? 'active-s' : '' },
         { name: 'Hash', class: this.isTabActive('Hash') ? 'active-s' : '' }
@@ -131,10 +131,10 @@ export default {
 
       if (item.name === 'Basic') {
         this.tabSearch = 'basic'
-        this.label = 'Address / Public Key / Block Height'
+        this.label = 'Address / Block Generator / Block Number'
       } else if (item.name === 'Hash') {
         this.tabSearch = 'hash'
-        this.label = 'Hash / Tx ID'
+        this.label = 'Hash / Record ID'
       } else if (item.name === 'Namespace') {
         this.tabSearch = 'namespaceInfo'
         this.label = 'Namespace / Sub-namespace'

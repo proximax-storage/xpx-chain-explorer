@@ -9,7 +9,7 @@
       <!-- Right -->
       <div>
         <div class="item">
-          <div class="title">Validator</div>
+          <div class="title">Block Generator</div>
           <div class="value link" @click="goToAddress(detail.publicKey)">{{ detail.publicKey }}</div>
         </div>
         <div class="item">
@@ -41,7 +41,7 @@
       <!-- Left -->
       <div class="layout-down-children">
         <div class="down-radius">
-          <div class="title">Txs</div>
+          <div class="title">Records</div>
           <div class="value">{{ detail.txes }}</div>
         </div>
       </div>

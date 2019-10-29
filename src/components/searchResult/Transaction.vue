@@ -54,7 +54,7 @@
           <div class="value">{{ $utils.fmtTime(detail.deadline.value) }}</div>
         </div>
         <div class="down">
-          <div class="title">Block Height</div>
+          <div class="title">Block Number</div>
           <div class="value link" @click="goToBlock(detail.transactionInfo.height.compact())">
             {{ detail.transactionInfo.height.compact() }}
           </div>
@@ -68,6 +68,16 @@
     <!-- Down -->
     <div class="tran-layout-down">
 
+      <!-- Iterated Element -->
+      <div class="layout-down-children" v-for="(item, index) in mainInfo" :key="index">
+        <div class="down-radius">
+          <div class="title">{{ item.key }}</div>
+          <div @click="(item.run === undefined) ? '' : item.run(item.value)" :class="(item.class === undefined) ? 'value' : item.class" v-if="item.value !== ''">{{ item.value }}</div>
+          <div @click="(item.run === undefined) ? '' : item.run(item.value)" :class="(item.class === undefined) ? 'value' : item.class" v-else v-html="item.valueHtml"></div>
+        </div>
+      </div>
+      <!-- End Iterated Element -->
+
       <!-- Up Element -->
       <div class="layout-down-children">
         <div class="down-radius">
@@ -77,18 +87,9 @@
       </div>
       <!-- End Up Element -->
 
-      <!-- Down Element-->
-      <div class="layout-down-children">
-        <div class="down-radius">
-          <div class="title center-text">Hash</div>
-          <div class="value link center-text" @click="goToHash(detail.transactionInfo.hash)">{{ detail.transactionInfo.hash }}</div>
-        </div>
-      </div>
-      <!-- End Down Element-->
-
     </div>
     <!-- End Down -->
-
+    
     <!-- Plus Area -->
     <div class="tran-layout-plus" v-if="plusInfo.length > 0">
       <!-- Name -->
@@ -204,6 +205,7 @@ export default {
   data () {
     return {
       plusInfo: [],
+      mainInfo: [],
       transactionType: 'Hash Transaction',
       mosaicsOfTransfer: null,
       nativeCur: this.$store.state.nativeCurInfo.mosaicId,
@@ -256,12 +258,12 @@ export default {
       let result = null
       if (message.type === 0) {
         if (message.payload === '') {
-          result = { key: 'Message', value: 'Empty Message', class: 'valueLower' }
+          result = { key: 'Data', value: 'Empty Data', class: 'valueLower' }
         } else {
-          result = { key: 'Message', value: message.payload, class: 'valueLower' }
+          result = { key: 'Data', value: message.payload, class: 'valueLower' }
         }
       } else {
-        result = { key: 'Message', value: 'Encrypted Message', class: 'valueLower' }
+        result = { key: 'Data', value: 'Encrypted Data', class: 'valueLower' }
       }
       return result
     },
@@ -275,13 +277,16 @@ export default {
     verifyTransactionDetails () {
       switch (this.transactionType) {
         case 'Transfer Transaction':
+          /*
           this.plusInfo = [
             { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
             { key: 'Version', value: this.detail.version }
           ]
+          */
 
           if (this.detail.message !== undefined) {
-            this.plusInfo.push(this.analyzeMessage(this.detail.message))
+            this.mainInfo.push(this.analyzeMessage(this.detail.message))
+            //this.plusInfo.push(this.analyzeMessage(this.detail.message))
           }
 
           if (this.detail.mosaics && this.detail.mosaics.length > 0) {
