@@ -3,9 +3,11 @@
   <div class="publicKey animated fast fadeIn">
 
     <!-- Down Container -->
+    <!--
     <div class="pk-layout-down">
       <h1 class="balance" v-html="formatBalance"></h1>
     </div>
+    -->
     <!-- End Down Container -->
 
     <!-- Up Container -->
@@ -14,18 +16,21 @@
       <!-- Left -->
       <div>
         <h1 class="supertitle">Account Info</h1>
-        <div class="up">
+        <div class="up" v-if="this.$route.params.type === 'publicKey'">
           <div class="title">Address</div>
           <div class="value link" @click="goToAddress(detail.address.pretty())">{{ detail.address.pretty() }}</div>
         </div>
-        <div class="down">
+        
+        <div class="down" v-if="this.$route.params.type === 'address'">
           <div class="title">Public Key</div>
           <div class="value link" @click="goToAddress(detail.publicKey)">{{ detail.publicKey }}</div>
         </div>
+        
       </div>
       <!-- End Left -->
 
       <!-- Right -->
+      <!--
       <div>
         <h1 class="supertitle"> {{ this.$store.state.nativeCurInfo.name }} Info</h1>
         <div class="up">
@@ -37,6 +42,7 @@
           <div class="value">{{ getId }}</div>
         </div>
       </div>
+      -->
       <!-- End Right -->
 
     </div>

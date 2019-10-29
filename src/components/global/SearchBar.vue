@@ -51,7 +51,7 @@ export default {
   data () {
     return {
       typeSearch: 'basic',
-      label: 'Address / Block Generator / Block Number',
+      label: 'Address / Block Generator Public Key / Block Number',
       searchList: [
         { name: 'Basic', class : this.isTabActive('Basic') ? 'active-s' : '' },
         { name: 'Hash', class: this.isTabActive('Hash') ? 'active-s' : '' }
@@ -131,7 +131,7 @@ export default {
 
       if (item.name === 'Basic') {
         this.tabSearch = 'basic'
-        this.label = 'Address / Block Generator / Block Number'
+        this.label = 'Address / Block Generator Public Key / Block Number'
       } else if (item.name === 'Hash') {
         this.tabSearch = 'hash'
         this.label = 'Hash / Record ID'

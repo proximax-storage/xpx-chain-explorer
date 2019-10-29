@@ -1,12 +1,11 @@
 {
   "Nodes": [
-    "http://arcturus.xpxsirius.io:3000",
-    "http://aldebaran.xpxsirius.io:3000",
-    "http://betelgeuse.xpxsirius.io:3000"
+    "https://blockchain-api-1.niosh.com.my",
+    "https://blockchain-api-2.niosh.com.my"
   ],
   "NetworkType": {
-    "name": "public",
-    "number": 184
+    "name": "private",
+    "number": 200
   },
   "RentalFeeInfo": {
     "namespaceRentalFee": {
@@ -24,7 +23,7 @@
     "name": "Native currency mosaic",
     "id": "402b2f579faebc59",
     "namespaceId": "prx.xpx",
-    "nativeCurName": "XPX"
+    "nativeCurName": ""
   },
   "MapsInfo": [
     {

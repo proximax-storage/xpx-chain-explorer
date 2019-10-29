@@ -28,11 +28,15 @@
     <transaction v-if="type === 'Transaction Hash'" :detail="param" @runOpen="openModal" @runPush="pushInfo"/>
     <!-- End Transaction Component -->
 
+    <!--
     <namespace-info v-if="type === 'Namespace'" :detail="param"/>
 
     <mosaic-info v-if="type === 'Mosaic ID' || type === 'Mosaic Name'" :detail="param"/>
+    -->
 
+    <!--
     <div class="address-list" v-if="type === 'Public Key' || type === 'Address'">
+      
       <div class="bititle">
         <h1 class="supertitle" :class="{ 'activeList': activeList === 'nam', 'inactiveList': activeList !== 'nam' }" @click="changeList('nam')">
           Namespaces
@@ -41,14 +45,17 @@
           Other Mosaics
         </h1>
       </div>
+      
       <div v-if="mosaicLoader === true" style="padding: 10px 0px">
         <mdb-progress bgColor="cyan darken-3" indeterminate />
       </div>
-
+      
+      
       <account-namespace v-show="activeList === 'nam'" v-if="type === 'Public Key' || type === 'Address'" :namespacesList="linkNamespaces"/>
 
       <mosaics v-show="activeList === 'mos'" v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Others Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
-
+      
+      
       <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'mos'" v-if="mosaicLoader === false && blockMosaics === null">
         No mosaics yet
       </div>
@@ -56,8 +63,9 @@
       <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'nam'" v-if="linkNamespaces === undefined || linkNamespaces.length === 0">
         No namespaces yet
       </div>
+      
     </div>
-
+    -->
 
     <!-- Mosaics Component -->
     <!-- End Mosaics Component -->
