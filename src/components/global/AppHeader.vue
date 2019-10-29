@@ -4,12 +4,12 @@
     <!-- Image Container -->
     <div class="cont">
       <div class="comlogo">
+        <div class="imgmid">
+          <img :src="require('@/assets/niosh.jpg')" alt="logo" class="logo">
+        </div>
         <div class="imgver">
           <img :src="require('@/assets/logo-proximax-sirius-explorer.svg')" alt="logo" class="logo">
           <div class="vers">{{ explorerVersion }}</div>
-        </div>
-        <div class="imgmid">
-          <img :src="require('@/assets/niosh.jpg')" alt="logo" class="logo">
         </div>
       </div>
       <div class="datetimeSect">
@@ -61,7 +61,7 @@ export default {
         year: 2019,
         militarHour: '12:00'
       },
-      explorerVersion: 'v0.0.3'
+      explorerVersion: 'v0.3.8 SP'
     }
   },
   methods: {
@@ -177,8 +177,8 @@ export default {
   flex-basis: 40%
 
 .logo
-  width: 200px
-  max-height: 100px
+  width: 180px
+  max-height: 150px
   object-fit: contain
 
 .imgver
@@ -191,6 +191,7 @@ export default {
     display: flex
     flex-flow: row nowrap
     justify-content: center
+    white-space: nowrap
     align-items: flex-end
     color: black
     font-size: 10px
@@ -276,25 +277,25 @@ export default {
 @media screen and (max-width: 746px)
 
   .logo
-    max-width: 150px
-    max-height: 70px
+    max-width: 130px
+    max-height: 100px
 
   .header
     & > .cont
       width: 100%
       flex-flow: row
       & > .comlogo
-        flex-basis: 60%
+        flex-basis: 70%
         & > .imgver
           display: flex
           justify-content: column
-          flex-basis: 30%
+          flex-basis: 35%
         & > .imgmid
           display: flex
           justify-content: column
-          flex-basis: 30%
+          flex-basis: 35%
       & > .datetimeSect
-        flex-basis: 40%
+        flex-basis: 30%
         & > .date
           display: flex
           flex-flow: column
@@ -313,10 +314,10 @@ export default {
       & > .comlogo
         flex-flow: column
         & > .imgver
+          padding: 10px 0 !important
           display: flex
           justify-content: center
-        & > .imgmid
-          padding: 10px 0 !important
+        & > .imgmid     
           display: flex
           justify-content: center
       & > .datetimeSect
