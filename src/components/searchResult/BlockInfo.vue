@@ -6,49 +6,48 @@
     <!-- Up Container -->
     <div class="bi-layout-up">
 
-      <!-- Right -->
+      <!-- Left -->
       <div>
         <div class="item">
           <div class="title">Block Generator</div>
           <div class="value link" @click="goToAddress(detail.publicKey)">{{ detail.publicKey }}</div>
         </div>
-        <div class="item">
-          <div class="title">Hash</div>
-          <div class="value">{{ detail.hash }}</div>
-        </div>
       </div>
-      <!-- End Right -->
+      <!-- End Left -->
 
-      <!-- Left -->
+      <!-- RIGHT -->
       <div>
         <div class="item">
           <div class="title">Timestamp</div>
           <div class="value">{{ detail.timestamp }}</div>
         </div>
-        <div class="item">
-          <div class="title">Difficulty</div>
-          <div class="value">{{ detail.difficulty }}</div>
-        </div>
       </div>
-      <!-- End Left -->
-
+      <!-- End RIGHT -->
+      
+      
     </div>
     <!-- End Up container -->
+
+    <div class="bi-layout-down">
+      <div class="layout-down-children full-row">
+        <div class="down-radius">
+          <div class="title">Hash</div>
+          <div class="value">{{ detail.hash }}</div>
+        </div>
+      </div>
+    </div>
 
     <!-- Down Container -->
     <div class="bi-layout-down">
 
       <!-- Left -->
-      <div class="layout-down-children">
+      <div class="layout-down-children full-row">
         <div class="down-radius">
           <div class="title">Records</div>
           <div class="value">{{ detail.txes }}</div>
         </div>
       </div>
       <!-- End Left -->
-
-      
-
     </div>
     <!-- End Down Container -->
   </div>
@@ -129,6 +128,9 @@ $radius: 20px
     display: flex
     flex-flow: row wrap
     justify-content: space-evenly
+    & > div.full-row
+      margin-left: 0
+      margin-right: 0
     & > div:first-child
       flex-grow: 2
       margin-right: 5px
@@ -143,12 +145,12 @@ $radius: 20px
     flex-flow: row wrap
     justify-content: space-between
     align-items: center
-    margin: 0px
-    & > div:first-child
+    margin: 0px 0px 8px 0px
+    & > div:first-child:not(.full-row)
       margin-right: 5px
     & > div:nth-child(2)
       margin: 0px 5px
-    & > div:last-child
+    & > div:last-child:not(.full-row)
       margin-left: 5px
 
 @media screen and (max-width: 741px)

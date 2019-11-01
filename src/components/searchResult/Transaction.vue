@@ -15,7 +15,7 @@
       <!-- left -->
       <div>
         <div class="up">
-          <div class="title">Sender</div>
+          <div class="title">Sender Address</div>
           <div class="value link" style="cursor: pointer" @click="goToAddress(detail.signer.address.pretty())">
             {{ detail.signer.address.pretty() }}
           </div>
@@ -28,7 +28,7 @@
             Recipient - Mosaic Rental Fee Sink
           </div>
           <div class="title" v-else-if="transactionType !== 'Register Namespace Transaction' || transactionType !== 'Mosaic definition'">
-            Recipient
+            Recipient Address
           </div>
           <!-- <div class="value link" v-if="detail.recipient" style="cursor: pointer" @click="goToAddress(detail.recipient.pretty())">
             {{ detail.recipient.pretty() }}

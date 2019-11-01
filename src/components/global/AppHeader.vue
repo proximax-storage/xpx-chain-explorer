@@ -51,8 +51,7 @@ export default {
   data () {
     return {
       navItems: [
-        { name: 'Blocks', route: '', class: 'active-h' },
-        { name: 'Network stats', route: 'networkStats', class: 'inactive-h' }
+        { name: 'Blocks', route: '', class: 'active-h' }
       ],
       date: {
         dayName: 'Mon.',

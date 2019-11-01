@@ -19,11 +19,6 @@ export default new Router({
       component: load('Home')
     },
     {
-      path: '/networkStats',
-      name: 'networkStats',
-      component: load('NetworkStats')
-    },
-    {
       path: '/result/:type/:id',
       name: 'searchResult',
       component: load('SearchResult')
