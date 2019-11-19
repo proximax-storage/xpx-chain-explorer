@@ -109,3 +109,6 @@
   * Change in search bar validations.
   * Bug fix in Account Info without public key valid for blockchain, show incoming transactions.
   * Minor bugs fixed.
+
+## MainNet Release v0.0.5
+  * Update nodes to SSL url.

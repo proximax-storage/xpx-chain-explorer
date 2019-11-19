@@ -60,10 +60,20 @@ export default {
 
     organizeData () {
       if (this.params !== null) {
+        // let params = this.params
+        // params.forEach(el => {
+        //   if (el && el.id && el.amount) {
+        //     el.amount = el.amount.compact()
+        //     el.id = el.id.toHex()
+        //   }
+        //   console.log(el)
+        // })
+        // console.log(params)
+
         this.params.forEach(el => {
           let tmpObj = {}
           if (el.id.toHex() === this.xpx) {
-            this.$emit('returnAmount', this.$utils.fmtAmountValue(el.amount.compact()))
+            this.$emit('returnAmount', el.amount.compact())
           } else {
             this.amountQuantity = 'Quantity'
             tmpObj.name = el.id.toHex()
@@ -96,8 +106,11 @@ export default {
                     )
                     this.titleMosaic = 'Mosaic Alias ID'
                     let tmpId = new Id(response.alias.mosaicId).toHex()
+
+                    console.log(tmpId)
+
                     if (tmpId === this.xpx) {
-                      this.$emit('returnAmount', this.$utils.fmtAmountValue(el.amount.compact()))
+                      this.$emit('returnAmount', el.amount.compact())
                     } else {
                       this.$proxProvider.getMosaic(tmpId).subscribe(
                         response2 => {

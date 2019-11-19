@@ -65,7 +65,7 @@
     <!-- Recent Transactions Component -->
     <recent-trans v-if="showRecentTransaction && blockTransactions.length > 0 && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
 
-    <incoming-trans v-if="type === 'Address' && param.publicKey === '0000000000000000000000000000000000000000000000000000000000000000'" :arrayTransactions="incomingTransactions"/>
+    <incoming-trans v-if="type === 'Address' && param.publicKey === this.invalidPublicKey" :arrayTransactions="incomingTransactions"/>
     <!-- End Recent Transactions Component -->
 
     <!-- Modal Component -->
@@ -91,7 +91,7 @@ import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import IncomingTrans from '@/components/searchResult/IncomingTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
-import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams } from 'tsjs-xpx-chain-sdk'
+import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams, PublicAccount } from 'tsjs-xpx-chain-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import { mdbProgress } from 'mdbvue'
 import axios from 'axios'
@@ -141,7 +141,9 @@ export default {
       // modalConfig
       modalInfo: [],
       modalActive: false,
-      modalTitle: 'Info'
+      modalTitle: 'Info',
+
+      invalidPublicKey: '0000000000000000000000000000000000000000000000000000000000000000'
     }
   },
   mounted () {
@@ -165,6 +167,7 @@ export default {
           this.emergencyNet()
         } else {
           tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
+          this.viewTransactionsFromPublicAccount(tmp)
           this.getInfoAccountAndViewTransactions(tmp.address.address)
         }
       } else if (this.$route.params.id.length === 40 || this.$route.params.id.length === 46) {
@@ -214,18 +217,15 @@ export default {
      *
      * @param { String } Account
      */
-    getInfoAccountAndViewTransactions (account) {
+    async getInfoAccountAndViewTransactions (account) {
       const addr = Address.createFromRawAddress(account)
       const xpx = this.$store.state.xpx
       let errorActive1 = false
       let errorActive2 = false
       this.mosaicLoader = true
 
-      this.$proxProvider.accountHttp.incomingTransactions(addr).subscribe(
-        response => {
-          this.incomingTransactions = response
-        }
-      )
+      let incoming = await this.$proxProvider.accountHttp.incomingTransactions(addr).toPromise()
+      this.incomingTransactions = incoming
 
       this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
@@ -235,7 +235,7 @@ export default {
           if ([null, undefined].includes(resp.publicKey)) {
             let tmpObj = {
               address: resp.address,
-              publicKey: '0000000000000000000000000000000000000000000000000000000000000000'
+              publicKey: this.invalidPublicKey
             }
             this.param = tmpObj
           } else {
@@ -287,7 +287,6 @@ export default {
                 }
               )
             })
-
             // this.blockMosaics = filteredTrans
             // this.showRecentMosaic = !this.showRecentMosaic
           } else {
@@ -553,22 +552,39 @@ export default {
      *
      * @param { any } publicAccount
      */
-    viewTransactionsFromPublicAccount(publicAccount) {
-      this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
-        transactions => {
-          if (transactions.length > 0) {
-            transactions.forEach(element => {
-              element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
-              element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString()))
-              this.blockTransactions.push(element)
-            })
-            this.showRecentTransaction = true
-          }
-        },
-        error => {
-          console.error('ACCOUNT ERROR....', error)
+    async viewTransactionsFromPublicAccount(publicAccount) {
+      const addr = Address.createFromRawAddress(publicAccount.address.address)
+
+      try {
+        let transactions = await this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).toPromise()
+
+        if (transactions.length > 0) {
+          transactions.forEach(element => {
+            element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
+            element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString()))
+            this.blockTransactions.push(element)
+          })
+          this.showRecentTransaction = true
         }
-      )
+      } catch (error) {
+        console.log('ACCOUNT ERROR',error)
+      }
+
+      // this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
+      //   transactions => {
+      //     if (transactions.length > 0) {
+      //       transactions.forEach(element => {
+      //         element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
+      //         element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString()))
+      //         this.blockTransactions.push(element)
+      //       })
+      //       this.showRecentTransaction = true
+      //     }
+      //   },
+      //   error => {
+      //     console.error('ACCOUNT ERROR....', error)
+      //   }
+      // )
     },
 
     /**
@@ -618,6 +634,7 @@ export default {
     async emergencyNet () {
       let response = await axios.get('./config/config.json')
       let tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, response.data.NetworkType.number)
+      this.viewTransactionsFromPublicAccount(tmp)
       this.getInfoAccountAndViewTransactions(tmp.address.address)
     },
 

@@ -161,13 +161,14 @@ export default {
 
 <style lang="sass" scoped>
 .logo
-  width: 200px
+  width: 120px
+  padding: 10px 2px
 
 .imgver
   display: flex
   width: auto
   & > .vers
-    padding: 0px 3px
+    padding: 10px 3px
     display: flex
     flex-flow: row nowrap
     justify-content: center
@@ -184,7 +185,7 @@ export default {
   text-align: center
   right: 0
   left: 0
-  top: 10px
+  top: 12px
   width: 100px
   margin: auto
   padding: 3px 20px

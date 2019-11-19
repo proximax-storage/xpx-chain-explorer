@@ -17,11 +17,12 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        echo 'Writing Nexus Credentials'
-        script {
+        // echo 'Writing Nexus Credentials'
+        // script {
           // Writes a multi-line .npmrc file with the authentication hash for Nexus
-          writeFile file: '.npmrc', text: 'registry=https://nexus.internal.proximax.io/repository/npm-group/\n@scope:registry=https://nexus.internal.proximax.io/repository/npm-private/\nemail=jenkins@proximax.io\nalways-auth=true\n_auth=' + env.nexusAuth + '\n'
-        }
+          // to download proximax SDK from public repository 
+	 //writeFile file: '.npmrc', text: 'registry=https://nexus.internal.proximax.io/repository/npm-group/\n@scope:registry=https://nexus.internal.proximax.io/repository/npm-private/\nemail=jenkins@proximax.io\nalways-auth=true\n_auth=' + env.nexusAuth + '\n'
+        // }
 
         echo 'Starting Docker Container'
         withDockerContainer(image: 'node:8') {
@@ -111,7 +112,7 @@ pipeline {
     //     success {
     //       slackSend channel: '#devops',
     //         color: 'good',
-    //         message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bctestnetexplorer.xpxsirius.io"
+    //         message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
     //     }
 
     //     failure {
@@ -132,6 +133,9 @@ pipeline {
     // }
 
     stage('Deploy to Testnet') {
+      when {
+        tag 'release-testnet*'
+      }
       steps {
         echo 'Deploying to Testnet'
 
@@ -162,6 +166,43 @@ pipeline {
           slackSend channel: '#devops',
             color: 'bad',
             message: "Branch *${env.GIT_BRANCH}* TESTNET deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
+        }
+      }
+    }
+    stage('Deploy to Mainnet') {
+      when {
+        tag 'release-mainnet*'
+      }
+      steps {
+        echo 'Deploying to Mainnet'
+
+        echo 'Managing S3'
+        withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
+          echo 'Deleting old files'
+          s3Delete bucket: 'explorer.xpxsirius.io', path: './'
+
+          echo 'Uploading new files'
+          s3Upload bucket: 'explorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
+        }
+
+        echo 'Managing CloudFront'
+        withAWS(credentials: 'jenkins-ecr') {
+          echo 'Invalidating CloudFront'
+          cfInvalidate distribution: 'E3EW93L9PWUY18', paths: ['/*']
+        }
+      }
+
+      post {
+        success {
+          slackSend channel: '#devops',
+            color: 'good',
+            message: "Branch *${env.GIT_BRANCH}* MAINNET deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bctestnetexplorer.xpxsirius.io"
+        }
+
+        failure {
+          slackSend channel: '#devops',
+            color: 'bad',
+            message: "Branch *${env.GIT_BRANCH}* MAINNET deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
         }
       }
     }

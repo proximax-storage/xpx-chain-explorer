@@ -5,7 +5,7 @@
     <!-- Center -->
     <div class="tran-layout-middle">
       <h1 class="supertitle" style="font-size: 20px; text-align: center">{{ transactionType || 'Transaction'}}</h1>
-      <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="calculatedAmount"></span> XPX</p>
+      <p class="amount" v-if="calculatedAmount !== null">Amount: <span v-html="$utils.fmtAmountValue(calculatedAmount)"></span> XPX</p>
       <!-- <p class="fee" v-if="[16961, 16705].includes(this.detail.type) === false">Fee:
         <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span>
       </p> -->
@@ -219,6 +219,7 @@ export default {
     this.verifyType()
     this.verifyTransactionDetails()
     this.getEffectiveFee()
+    console.log(this.detail)
   },
 
   methods: {
@@ -477,7 +478,11 @@ export default {
           break;
         case 'Link Account':
           this.plusInfo = [
-            { key: 'Info', value: 'Not supported yet' }
+            { key: 'Link Action', value: (this.detail.linkAction === 0) ? 'Link' : 'Unlink' },
+            { key: 'Network Type', value: this.$proxProvider.getNetworkById(this.detail.networkType).name },
+            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
+            { key: 'Version', value: this.detail.version },
+            // { key: 'Info', value: 'Not supported yet' }
           ]
           // this.iterator(this.detail)
           break;
@@ -547,7 +552,12 @@ export default {
     },
 
     returnAmount (data) {
-      this.calculatedAmount = data
+      console.log(data, this.calculatedAmount)
+      if (this.calculatedAmount !== null) {
+        this.calculatedAmount += data
+      } else {
+        this.calculatedAmount = data
+      }
     }
   }
 }

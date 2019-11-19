@@ -1,4 +1,15 @@
 {
+  "Coin": {
+    "name": "XPX",
+    "mosaic": {
+      "id": "402b2f579faebc59",
+      "name": "xpx"
+    },
+    "namespace": {
+      "id": "bffb42a19116bdf6",
+      "name": "prx.xpx"
+    }
+  },
   "Nodes": [
     "http://18.138.51.117:3000",
     "http://13.229.155.165:3000",
@@ -16,7 +27,7 @@
     },
     "mosaicRentalFee": {
       "name": "Mosaic Rental Fee Sink",
-      "address": "XC5ZZN-SYLOXO-EQIAAF-N6B5S6-QAQSFF-5TEVC4-XLTV",
+      "address": "XBO3L3-K5AQTX-DXO6Z6-W6KAPO-RI4XHN-65J5VG-HOQU",
       "publicKey": "94A9BB9660037E622C8F626E061DB1557CBBED0338402E82E796168E80EF9765"
     }
   },
