@@ -1,7 +1,7 @@
 <template>
 
   <!-- Recent Transactions Component -->
-  <div class="recent animated fast fadeIn">
+  <div class="recent animated fast fadeIn" v-if="arrayTransactions && arrayTransactions.length > 0">
 
     <!-- Title -->
     <h1 class="supertitle">{{ nameLabel }}</h1>
