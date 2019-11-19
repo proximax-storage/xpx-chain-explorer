@@ -63,7 +63,7 @@ export default {
         this.params.forEach(el => {
           let tmpObj = {}
           if (el.id.toHex() === this.xpx) {
-            this.$emit('returnAmount', this.$utils.fmtAmountValue(el.amount.compact()))
+            this.$emit('returnAmount', el.amount.compact())
           } else {
             this.amountQuantity = 'Quantity'
             tmpObj.name = el.id.toHex()
@@ -97,7 +97,7 @@ export default {
                     this.titleMosaic = 'Mosaic Alias ID'
                     let tmpId = new Id(response.alias.mosaicId).toHex()
                     if (tmpId === this.xpx) {
-                      this.$emit('returnAmount', this.$utils.fmtAmountValue(el.amount.compact()))
+                      this.$emit('returnAmount', el.amount.compact())
                     } else {
                       this.$proxProvider.getMosaic(tmpId).subscribe(
                         response2 => {
