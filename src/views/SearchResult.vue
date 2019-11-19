@@ -660,8 +660,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.address-list
-
 .activeList
   background: #2BA1B9
   color: white !important
