@@ -112,3 +112,23 @@
 
 ## MainNet Release v0.0.5
   * Update nodes to SSL url.
+
+## MainNet Release v0.4.0
+  * General Changes.
+  * Bug fix in InnerTransaction and SearchBar.
+
+## MainNet Release v0.4.0.1
+  * Bug fix in SearchBar.
+  * Changes in Config file.
+  * Minor bugs fixed.
+
+## MainNet Release v0.4.0.2
+  * Changes in the recent transactions component.
+  * Changes in transaction view, xpx bug fixed.
+  * Minor changes in AppHeader component.
+
+## MainNet Release v0.4.0.3
+  * Fixed dependency bug.
+
+## MainNet Release v0.4.1
+  * Corrections in the Transaction.Mosaics component
