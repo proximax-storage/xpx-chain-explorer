@@ -1,25 +1,29 @@
 <template>
-  <div class="mosaics animated faster fadeIn" v-if="showFinalData !== null && showFinalData.length > 0">
-    <h1 class="supertitle center-text" v-show="mosaicAliasName.length !== 1 && mosaicAliasName[0] !== 'prx.xpx'">
+  <div class="mosaics animated faster fadeIn" v-if="mosaicList.length > 0">
+    <h1 class="supertitle center-text">
       Mosaics In Transfer
     </h1>
 
     <div>
-      <div class="element" v-for="(item, index) in showFinalData" :key="index" v-show="mosaicAliasName[index] !== 'prx.xpx'">
+      <div class="element" v-for="(item, index) in mosaicList" :key="index">
 
-        <div class="animated faster fadeInDown">
-          <div class="title">{{ titleMosaic }}</div>
-          <div class="value link" @click="(titleMosaic === 'Mosaic Id') ? goToMosaic(item.name) : goToNamespace(item.name)">{{ item.name }}</div>
+        <div class="sub animated faster fadeInDown">
+          <div class="title">Mosaic Id</div>
+          <div class="value link" @click="goToMosaic(item.id)">
+            {{ item.id }}
+          </div>
         </div>
 
-        <div v-if="titleMosaic == 'Mosaic Alias ID'" class="animated faster fadeInDown">
+        <div v-if="item.name !== null" class="sub animated faster fadeIn">
           <div class="title">Mosaic Alias Name</div>
-          <div class="valueLower">{{ mosaicAliasName[index] }}</div>
+          <div class="valueLower link" @click="goToMosaic(item.name)">{{ item.name }}</div>
         </div>
 
-        <div class="animated faster fadeInDown">
+        <div class="sub animated faster fadeInDown">
           <div class="title" >Mosaic {{ amountQuantity }}</div>
-          <div class="value" v-html="arrayAmount[index]"></div>
+          <div class="value" v-if="item.divisibility === 0" v-html="item.amount"></div>
+          <div class="value" v-if="item.divisibility !== 0" v-html="$utils.fmtDivisibility(item.amount, item.divisibility)">
+          </div>
         </div>
 
       </div>
@@ -38,11 +42,13 @@ export default {
   data () {
     return {
       xpx: this.$store.state.xpx,
+      namespaceXpx: this.$store.state.namespaceXpx,
       finalData: [],
       titleMosaic: 'Mosaic Id',
       mosaicAliasName: [],
       arrayAmount: [],
-      amountQuantity: 'Amount'
+      amountQuantity: 'Amount',
+      mosaicList: []
     }
   },
   mounted () {
@@ -60,64 +66,84 @@ export default {
 
     organizeData () {
       if (this.params !== null) {
-        this.params.forEach(el => {
+        let params = this.params
+        params.forEach(el => {
+          if (el && el.id && el.amount) {
+            el.amount = el.amount.compact()
+            el.id = el.id.toHex()
+          }
+        })
+
+        params.forEach(async item => {
           let tmpObj = {}
-          if (el.id.toHex() === this.xpx) {
-            this.$emit('returnAmount', el.amount.compact())
+          let id = Id.fromHex(item.id)
+          if (item.id === this.xpx || item.id === this.namespaceXpx) {
+            this.$emit('returnAmount', item.amount)
           } else {
             this.amountQuantity = 'Quantity'
-            tmpObj.name = el.id.toHex()
-            this.$proxProvider.getMosaic(el.id).subscribe(
-              response => {
-                if (response.properties.divisibility !== 0) {
-                  this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response.properties.divisibility))
-                  // tmpObj.amount = this.$utils.fmtDivisibility(el.amount.compact(),  response.properties.divisibility)
-                  this.finalData.push(tmpObj)
-                } else {
-                  this.arrayAmount.push(`${el.amount.compact()}`)
-                  // tmpObj.amount = `${el.amount.compact()}`
-                  this.finalData.push(tmpObj)
-                }
-              },
-              error => {
-                this.$proxProvider.getNamespacesInfo(el.id).subscribe(
-                  response => {
-                    this.$proxProvider.getNamespacesName([el.id]).subscribe(
-                      nameResponse => {
-                        nameResponse = nameResponse.reverse()
-                        if (nameResponse.length === 1) {
-                          this.mosaicAliasName.push(nameResponse[0].name)
-                        } else if (nameResponse.length === 2) {
-                          this.mosaicAliasName.push(`${nameResponse[0].name}.${nameResponse[1].name}`)
-                        } else if (nameResponse.length === 3) {
-                          this.mosaicAliasName.push(`${nameResponse[0].name}.${nameResponse[1].name}.${nameResponse[2].name}`)
-                        }
-                      }
-                    )
-                    this.titleMosaic = 'Mosaic Alias ID'
-                    let tmpId = new Id(response.alias.mosaicId).toHex()
-                    if (tmpId === this.xpx) {
-                      this.$emit('returnAmount', el.amount.compact())
-                    } else {
-                      this.$proxProvider.getMosaic(tmpId).subscribe(
-                        response2 => {
-                          if (response2.properties.divisibility !== 0) {
-                            this.arrayAmount.push(this.$utils.fmtDivisibility(el.amount.compact(),  response2.properties.divisibility))
-                            this.finalData.push(tmpObj)
-                          } else {
-                            this.arrayAmount.push(`${el.amount.compact()}`)
-                            this.finalData.push(tmpObj)
-                          }
-                        }
-                      )
-                    }
+            tmpObj.id = item.id
+            tmpObj.amount = item.amount
+            tmpObj.name = null
+            try {
+              let mosaicResponse = await this.$proxProvider.getMosaic(id).toPromise()
+              tmpObj.divisibility = mosaicResponse.divisibility
+              let mosaicExist = this.mosaicList.find(el => el.id === tmpObj.id)
+
+              if ([undefined, null].includes(mosaicExist) === false) {
+                this.mosaicList.forEach(el => {
+                  if (el.id === tmpObj.id) {
+                    el.amount += tmpObj.amount
                   }
-                )
+                })
+              } else {
+                this.mosaicList.push(tmpObj)
               }
-            )
+            } catch (error) {
+              if (error && error.statusCode === 404) {
+                this.titleMosaic = 'Mosaic Alias ID'
+                try {
+                  let namespaceResponse = await this.$proxProvider.getNamespacesInfo(id).toPromise()
+                  let namespaceName = await this.$proxProvider.getNamespacesName([id]).toPromise()
+                  let mosaicAliasId = new Id(namespaceResponse.alias.mosaicId)
+                  let mosaicAliasInfo = await this.$proxProvider.getMosaic(mosaicAliasId).toPromise()
+
+                  tmpObj.name = this.sortName(namespaceName)
+                  tmpObj.id = mosaicAliasInfo.mosaicId.id.toHex()
+                  tmpObj.divisibility = mosaicAliasInfo.divisibility
+
+                  let mosaicExist = this.mosaicList.find(el => el.id === tmpObj.id)
+
+                  if ([undefined, null].includes(mosaicExist) === false) {
+                    this.mosaicList.forEach(el => {
+                      if (el.id === tmpObj.id) {
+                        el.name = tmpObj.name
+                        el.amount += tmpObj.amount
+                      }
+                    })
+                  } else {
+                    this.mosaicList.push(tmpObj)
+                  }
+                } catch (error) {
+                  console.warn('Namespace Error')
+                }
+              }
+            }
           }
         })
       }
+    },
+
+    sortName (arrayNames) {
+      let name = ''
+      arrayNames = arrayNames.reverse()
+      if (arrayNames.length === 1) {
+        name = arrayNames[0].name
+      } else if (arrayNames.length === 2) {
+        name = `${arrayNames[0].name}.${arrayNames[1].name}`
+      } else if (arrayNames.length === 3) {
+        name = `${arrayNames[0].name}.${arrayNames[1].name}.${arrayNames[2].name}`
+      }
+      return name
     }
   },
 
@@ -185,6 +211,9 @@ export default {
   text-decoration: underline
   cursor: pointer
 
+.sub
+  min-width: 200px
+
 @media screen and (max-width: 700px)
   .value,
   .valueLower
@@ -195,7 +224,9 @@ export default {
     text-decoration: underline
     cursor: pointer
 
-  .elemenr
+  .element
     flex-flow: column
 
+  .sub
+    padding: 5px
 </style>
