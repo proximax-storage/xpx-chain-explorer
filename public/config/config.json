@@ -57,5 +57,10 @@
       "urlNode": "https://betelgeuse.xpxsirius.io",
       "icon": "proximax.svg"
     }
-  ]
+  ],
+  "ModuleActive": {
+    "networkStats": true,
+    "map": false
+  },
+  "Version": "0.4.2"
 }

@@ -26,7 +26,7 @@
     <nav>
 
       <!-- Elements Of Navigation iterated -->
-      <div class="nav-item" v-for="(item, index) in navItems" :key="index" :class="item.class" :route="item.route" @click="buttonAction">
+      <div class="nav-item" v-for="(item, index) in navItems" :key="index" :class="item.class" :route="item.route" @click="buttonAction" v-show="item.modAct">
         {{ item.name }}
       </div>
       <!-- End Element of Navigation Area -->
@@ -44,9 +44,9 @@ export default {
   data () {
     return {
       navItems: [
-        { name: 'Blocks', route: '', class: 'active-h' },
-        { name: 'Network stats', route: 'networkStats', class: 'inactive-h' },
-        { name: 'Map', route: 'map', class: 'inactive-h' }
+        { name: 'Blocks', route: '', class: 'active-h', modAct: true },
+        { name: 'Network stats', route: 'networkStats', class: 'inactive-h', modAct: this.$config.moduleActive.networkStats },
+        { name: 'Map', route: 'map', class: 'inactive-h', modAct: this.$config.moduleActive.map }
       ],
       date: {
         dayName: 'Mon.',
@@ -55,7 +55,7 @@ export default {
         year: 2019,
         militarHour: '12:00'
       },
-      explorerVersion: 'v0.4.1'
+      explorerVersion: `v${this.$config.version}`
     }
   },
   methods: {
