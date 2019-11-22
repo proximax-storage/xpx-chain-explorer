@@ -36,39 +36,6 @@ export default class proximaxProvider {
   }
 
   /**
-   * Get id mosaic xpx
-   *
-   * @memberof proximaxProvider
-   */
-  static mosaicXpx(){
-    return '402b2f579faebc59'
-  }
-
-  /**
-   * Get id,name mosaic xpx
-   *
-   * @memberof proximaxProvider
-   */
-  static mosaicFullXpx(){
-    return {
-      id: '402b2f579faebc59',
-      name: 'prx.xpx'
-    }
-  }
-
-  /**
-   * Get id,name namespace xpx
-   *
-   * @memberof proximaxProvider
-   */
-  static namespaceXpx(){
-    return {
-      id: '316d77fd8b6fb3be',
-      name: 'prx'
-    }
-  }
-
-  /**
    * Get type transactions
    *
    * @memberof proximaxProvider
