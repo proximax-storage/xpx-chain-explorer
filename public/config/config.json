@@ -60,7 +60,7 @@
   ],
   "ModuleActive": {
     "networkStats": true,
-    "map": false
+    "map": true
   },
   "Version": "0.4.2"
 }
