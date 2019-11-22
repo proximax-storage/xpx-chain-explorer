@@ -43,7 +43,8 @@ export default {
   },
   mounted () {
     // Call Load Nodes Method
-    this.loadNodes()
+    this.loadConfig()
+    // this.loadNodes()
     this.average()
     // this.loadNetwork()
   },
@@ -60,36 +61,25 @@ export default {
      * from which the necessary information is obtained to render the data
      * of the proximax blockchain
      */
-    loadNodes () {
-      axios.get('./config/config.json')
-        .then(response => {
-          // NODE CONFIG
-          let nodesFile = response.data.Nodes
-          let tmpNodes = JSON.parse(this.$storage.get('customNodes'))
-          if (tmpNodes !== null && typeof tmpNodes === 'object') {
-            nodesFile = response.data.Nodes.concat(tmpNodes)
-          } else {
-            nodesFile = response.data.Nodes
-          }
-          this.$store.dispatch('updateNodes', nodesFile)
-          this.runWS()
-          // END NODE CCONFIG
+    loadConfig () {
+      // NODES
+      let nodesFile = this.$config.nodes
+      let tmpNodes = JSON.parse(this.$storage.get('customNodes'))
+      if (tmpNodes !== null && typeof tmpNodes === 'object') {
+        nodesFile = nodesFile.concat(tmpNodes)
+      } else {
+        nodesFile = nodesFile
+      }
+      this.$store.dispatch('updateNodes', nodesFile)
+      this.runWS()
 
-          // NETWORK CONFIG
-          let networksFile = response.data.NetworkType
+      // NETWORK TYPE
+      let networksFile = this.$config.networkType
+      this.$store.dispatch('setNetworkType', networksFile)
 
-          if (networksFile !== undefined) {
-            this.$store.dispatch('setNetworkType', networksFile)
-          } else if (typeof networksFile !== 'object' || networksFile === undefined) {
-            this.$store.dispatch('setNetworkType', { name: "TEST_NET", number: 168 })
-          }
-          // END NETWORK CONFIG
-
-          // RENTAL FEE CONFIG
-          let rentalFile = response.data.RentalFeeInfo
-          this.$store.dispatch('setRentalFeeInfo', rentalFile)
-          // END RENTAL FEE CONFIG
-        })
+      // RENTAL FEE
+      let rentalFile = this.$config.rentalFeeInfo
+      this.$store.dispatch('setRentalFeeInfo', rentalFile)
     },
 
     /**
