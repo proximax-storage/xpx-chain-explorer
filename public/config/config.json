@@ -50,5 +50,10 @@
       "urlNode": "http://13.251.128.180:3000",
       "icon": "proximax.svg"
     }
-  ]
+  ],
+  "ModuleActive": {
+    "networkStats": true,
+    "map": true
+  },
+  "Version": "0.4.2"
 }
