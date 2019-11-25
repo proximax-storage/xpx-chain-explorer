@@ -80,6 +80,9 @@ export default {
       // RENTAL FEE
       let rentalFile = this.$config.rentalFeeInfo
       this.$store.dispatch('setRentalFeeInfo', rentalFile)
+
+      let coinInfo = this.$config.coin
+      this.$store.dispatch('updateCoin', coinInfo)
     },
 
     /**

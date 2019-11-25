@@ -124,3 +124,9 @@
 
 ## MainNet Release v0.4.1
   * Corrections in the Transaction.Mosaics component
+
+## MainNet Release v0.4.2
+  * Improved application integration with the configuration file
+  * Changes to the configuration file
+  * Changes in map functionality
+  * Improved map loading speed
