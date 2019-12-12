@@ -70,6 +70,9 @@ pipeline {
         tag 'release-v*'
       }
       steps {
+        slackSend channel: '#devops',
+             color: 'bad',
+             message: "*${currentBuild.fullDisplayName}* is awaiting user input confirmation for testnet deployment"
         script {
           timeout(time: 1, unit: 'HOURS') {
           env.DEPLOY_TO_TESTNET = input message: "User Input Required",
@@ -85,7 +88,7 @@ pipeline {
       }
       steps {
         echo 'Copy testnet config file'
-        sh 'cp ci/env/testnet-config.json dist/conf/config.json'
+        sh 'cp ci/env/testnet-config.json dist/config/config.json'
 
         echo 'Deploying to Testnet'
 
@@ -125,6 +128,9 @@ pipeline {
         tag 'release-v*'
       }
       steps {
+        slackSend channel: '#devops',
+             color: 'bad',
+             message: "*${currentBuild.fullDisplayName}* is awaiting user input confirmation for mainnet deployment"
         script {
           timeout(time: 1, unit: 'HOURS') {
           env.DEPLOY_TO_MAINNET = input message: "User Input Required",
@@ -140,7 +146,7 @@ pipeline {
       }
       steps {
         echo 'Copy testnet config file'
-        sh 'cp ci/env/mainnet-config.json dist/conf/config.json'
+        sh 'cp ci/env/mainnet-config.json dist/config/config.json'
 
         echo 'Deploying to Mainnet'
 
