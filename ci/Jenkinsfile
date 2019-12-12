@@ -1,13 +1,12 @@
 pipeline {
   agent {
     node {
-      label 'docker-build-node'
+      label 'docker-t3a-small'
     }
   }
 
   environment {
     npm_config_cache = "npm-cache"
-    nexusAuth = credentials('jenkins-nexus-npm')
   }
 
   options {
@@ -17,13 +16,6 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        // echo 'Writing Nexus Credentials'
-        // script {
-          // Writes a multi-line .npmrc file with the authentication hash for Nexus
-          // to download proximax SDK from public repository 
-	 //writeFile file: '.npmrc', text: 'registry=https://nexus.internal.proximax.io/repository/npm-group/\n@scope:registry=https://nexus.internal.proximax.io/repository/npm-private/\nemail=jenkins@proximax.io\nalways-auth=true\n_auth=' + env.nexusAuth + '\n'
-        // }
-
         echo 'Starting Docker Container'
         withDockerContainer(image: 'node:8') {
           echo 'remove package-lock.json'
@@ -40,7 +32,7 @@ pipeline {
 
         echo 'Compressing Artifacts'
         // Creates an XZ compressed archive
-        sh "tar cJfv proximax-catapult-explorer-${env.GIT_BRANCH}.tar.xz dist"
+        sh "tar cJfv proximax-chain-explorer-${env.GIT_BRANCH}.tar.xz dist"
       }
 
       post {
@@ -52,159 +44,137 @@ pipeline {
       }
     }
 
-    // stage('Publish Artifact') {
-    //   steps {
-    //     echo 'Publishing Artifact to Nexus'
-    //     nexusArtifactUploader(
-    //       nexusVersion: 'nexus3',
-    //       protocol: 'https',
-    //       nexusUrl: 'nexus.internal.proximax.io',
-    //       version: "${env.GIT_BRANCH}",
-    //       repository: 'raw-repo',
-    //       credentialsId: 'jenkins-nexus',
-    //       artifacts: [
-    //         [
-    //           artifactId: 'proximax-catapult-explorer',
-    //           classifier: '',
-    //           file: 'proximax-catapult-explorer-' + "${env.GIT_BRANCH}" + '.tar.xz',
-    //           type: 'xz'
-    //         ]
-    //       ]
-    //     )
-    //   }
-
-    //   post {
-    //     // success {
-    //     //   slackSend channel: '#devops',
-    //     //     color: 'good',
-    //     //     message:  "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nArtifact stored in Nexus"
-    //     // }
-
-    //     failure {
-    //       slackSend channel: '#devops',
-    //         color: 'bad',
-    //         message: "Branch *${env.GIT_BRANCH}* of *${currentBuild.fullDisplayName}* FAILED :scream:"
-    //     }
-    //   }
-    // }
-
-    // stage('Deploy to Staging') {
-    //   steps {
-    //     echo 'Deploying to Staging'
-     
-    //     echo 'Managing S3'
-    //     withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
-    //       echo 'Deleting old files'
-    //       s3Delete bucket: 'bcstagingexplorer.xpxsirius.io', path: './'
-     
-    //       echo 'Uploading new files'
-    //       s3Upload bucket: 'bcstagingexplorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
-    //     }
-     
-    //     echo 'Managing CloudFront'
-    //     withAWS(credentials: 'jenkins-ecr') {
-    //       echo 'Invalidating CloudFront'
-    //       cfInvalidate distribution: 'E373B3Y0NEN1OB', paths: ['/*']
-    //     }
-    //   }
-
-    //   post {
-    //     success {
-    //       slackSend channel: '#devops',
-    //         color: 'good',
-    //         message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
-    //     }
-
-    //     failure {
-    //       slackSend channel: '#devops',
-    //         color: 'bad',
-    //         message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
-    //     }
-    //   }
-    // }
-
-    // stage('Wait for QA') {
-    //   steps {
-    //     timeout(time: 1, unit: 'HOURS') {
-    //       input message: "Ready to deploy to Testnet?",
-    //         ok: "Deploy"
-    //     }
-    //   }
-    // }
-
-    stage('Deploy to Testnet') {
-      when {
-        tag 'release-testnet*'
-      }
+    stage('Archive Artifact') {
       steps {
-        echo 'Deploying to Testnet'
-
-        echo 'Managing S3'
-        withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
-          echo 'Deleting old files'
-          s3Delete bucket: 'bctestnetexplorer.xpxsirius.io', path: './'
-
-          echo 'Uploading new files'
-          s3Upload bucket: 'bctestnetexplorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
-        }
-
-        echo 'Managing CloudFront'
-        withAWS(credentials: 'jenkins-ecr') {
-          echo 'Invalidating CloudFront'
-          cfInvalidate distribution: 'E1RZY6CIY8D6XA', paths: ['/*']
-        }
+        echo 'Archiving Artifact'
+        archiveArtifacts "proximax-chain-explorer-${env.GIT_BRANCH}.tar.xz"
       }
 
       post {
         success {
           slackSend channel: '#devops',
             color: 'good',
-            message: "Branch *${env.GIT_BRANCH}* TESTNET deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bctestnetexplorer.xpxsirius.io"
+            message:  "Branch *${env.GIT_BRANCH}* build of *${currentBuild.fullDisplayName}* completed successfully :100:\nArtifact stored in S3"
         }
 
         failure {
           slackSend channel: '#devops',
             color: 'bad',
-            message: "Branch *${env.GIT_BRANCH}* TESTNET deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
+            message: "Branch *${env.GIT_BRANCH}* of *${currentBuild.fullDisplayName}* FAILED :scream:"
         }
       }
     }
-    stage('Deploy to Mainnet') {
+
+    stage('Promotion to Testnet') {
       when {
-        tag 'release-mainnet*'
+        // tag 'release-v*'
+        branch 'update-jenkins' //for testing purpose
       }
       steps {
+        script {
+          timeout(time: 1, unit: 'HOURS') {
+          env.DEPLOY_TO_TESTNET = input message: "User Input Required",
+            parameters: [choice(name: 'Deploy to Testnet', choices: 'no\nyes', description: 'Choose yes if you want to deploy to Testnet')]
+          }
+        }
+      }
+    }
+
+    stage('Deploy to Testnet') {
+      when {
+        environment name: 'DEPLOY_TO_TESTNET', value: 'yes'
+      }
+      steps {
+        echo 'Copy testnet config file'
+        sh 'cp ci/env/testnet-config.json dist/conf/config.json'
+
+        echo 'Deploying to Testnet'
+
+        echo 'Managing S3'
+        // withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
+        //   echo 'Deleting old files'
+        //   s3Delete bucket: 'bctestnetexplorer.xpxsirius.io', path: './'
+
+        //   echo 'Uploading new files'
+        //   s3Upload bucket: 'bctestnetexplorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
+        // }
+
+        echo 'Managing CloudFront'
+        // withAWS(credentials: 'jenkins-ecr') {
+        //   echo 'Invalidating CloudFront'
+        //   cfInvalidate distribution: 'E1RZY6CIY8D6XA', paths: ['/*']
+        // }
+      }
+
+      // post {
+      //   success {
+      //     slackSend channel: '#devops',
+      //       color: 'good',
+      //       message: "Branch *${env.GIT_BRANCH}* TESTNET deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bctestnetexplorer.xpxsirius.io"
+      //   }
+
+      //   failure {
+      //     slackSend channel: '#devops',
+      //       color: 'bad',
+      //       message: "Branch *${env.GIT_BRANCH}* TESTNET deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
+      //   }
+      // }
+    }
+
+    stage('Promotion to Mainnet') {
+      when {
+        // tag 'release-v*'
+        branch 'update-jenkins' //for testing purpose
+      }
+      steps {
+        script {
+          timeout(time: 1, unit: 'HOURS') {
+          env.DEPLOY_TO_MAINNET = input message: "User Input Required",
+            parameters: [choice(name: 'Deploy to Mainnet', choices: 'no\nyes', description: 'Choose yes if you want to deploy to Mainnet')]
+          }
+        }
+      }
+    }
+
+    stage('Deploy to Mainnet') {
+      when {
+        environment name: 'DEPLOY_TO_MAINNET', value: 'yes'
+      }
+      steps {
+        echo 'Copy testnet config file'
+        sh 'cp ci/env/mainnet-config.json dist/conf/config.json'
+
         echo 'Deploying to Mainnet'
 
         echo 'Managing S3'
-        withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
-          echo 'Deleting old files'
-          s3Delete bucket: 'explorer.xpxsirius.io', path: './'
+        // withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
+        //   echo 'Deleting old files'
+        //   s3Delete bucket: 'explorer.xpxsirius.io', path: './'
 
-          echo 'Uploading new files'
-          s3Upload bucket: 'explorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
-        }
+        //   echo 'Uploading new files'
+        //   s3Upload bucket: 'explorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
+        // }
 
         echo 'Managing CloudFront'
-        withAWS(credentials: 'jenkins-ecr') {
-          echo 'Invalidating CloudFront'
-          cfInvalidate distribution: 'E3EW93L9PWUY18', paths: ['/*']
-        }
+        // withAWS(credentials: 'jenkins-ecr') {
+        //   echo 'Invalidating CloudFront'
+        //   cfInvalidate distribution: 'E3EW93L9PWUY18', paths: ['/*']
+        // }
       }
 
-      post {
-        success {
-          slackSend channel: '#devops',
-            color: 'good',
-            message: "Branch *${env.GIT_BRANCH}* MAINNET deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bctestnetexplorer.xpxsirius.io"
-        }
+      // post {
+      //   success {
+      //     slackSend channel: '#devops',
+      //       color: 'good',
+      //       message: "Branch *${env.GIT_BRANCH}* MAINNET deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bctestnetexplorer.xpxsirius.io"
+      //   }
 
-        failure {
-          slackSend channel: '#devops',
-            color: 'bad',
-            message: "Branch *${env.GIT_BRANCH}* MAINNET deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
-        }
-      }
+      //   failure {
+      //     slackSend channel: '#devops',
+      //       color: 'bad',
+      //       message: "Branch *${env.GIT_BRANCH}* MAINNET deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
+      //   }
+      // }
     }
   }
 }
