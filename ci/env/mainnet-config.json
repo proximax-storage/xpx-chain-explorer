@@ -1,0 +1,61 @@
+{
+  "Coin": {
+    "name": "XPX",
+    "mosaic": {
+      "id": "402b2f579faebc59",
+      "name": "xpx"
+    },
+    "namespace": {
+      "id": "bffb42a19116bdf6",
+      "name": "prx.xpx"
+    }
+  },
+  "Nodes": [
+    "https://arcturus.xpxsirius.io",
+    "https://aldebaran.xpxsirius.io",
+    "https://betelgeuse.xpxsirius.io",
+    "https://bigcalvin.xpxsirius.io",
+    "https://westerlund.xpxsirius.io",
+    "https://canismajor.xpxsirius.io",
+    "https://coronaborealis.xpxsirius.io",
+    "https://delphinus.xpxsirius.io",
+    "https://eridanus.xpxsirius.io",
+    "https://lyrasithara.xpxsirius.io"
+  ],
+  "NetworkType": {
+    "name": "Public",
+    "number": 184
+  },
+  "RentalFeeInfo": {
+    "namespaceRentalFee": {
+      "name": "Namespace Rental Fee Sink",
+      "address": "XA7KWF-N5CMLV-G7W3OH-Z5CV3G-3VYH3N-5EQQTK-OVJH",
+      "publicKey": "9FF38184F03950C09FFFF4A90C171E4C3C566985EEACA486A59CC8B607C10BF6"
+    },
+    "mosaicRentalFee": {
+      "name": "Mosaic Rental Fee Sink",
+      "address": "XBO3L3-K5AQTX-DXO6Z6-W6KAPO-RI4XHN-65J5VG-HOQU",
+      "publicKey": "94A9BB9660037E622C8F626E061DB1557CBBED0338402E82E796168E80EF9765"
+    }
+  },
+  "MapsInfo": [
+    {
+      "name": "arcturus",
+      "ip": "13.250.17.22",
+      "urlNode": "https://arcturus.xpxsirius.io",
+      "icon": "proximax.svg"
+    },
+    {
+      "name": "aldebaran",
+      "ip": "13.250.17.22",
+      "urlNode": "https://aldebaran.xpxsirius.io",
+      "icon": "proximax.svg"
+    },
+    {
+      "name": "betelgeuse",
+      "ip": "13.250.17.22",
+      "urlNode": "https://betelgeuse.xpxsirius.io",
+      "icon": "proximax.svg"
+    }
+  ]
+}
