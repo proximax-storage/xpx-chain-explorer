@@ -8,12 +8,9 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "ajv": "^5.5.2",
-    "ajv-keywords": "^3.4.0",
     "axios": "^0.18.0",
     "chart.js": "^2.8.0",
     "js-joda": "^1.10.1",
-    "js-xpx-chain-library": "^0.3.0",
     "mdbvue": "git+https://oauth2:SyJaA8eSM2gkFZh4onhD@git.mdbootstrap.com/mdb/vue/vu-pro.git#5.8.1",
     "postcss-import": "^12.0.1",
     "register-service-worker": "^1.6.2",

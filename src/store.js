@@ -15,8 +15,8 @@ export default new Vuex.Store({
     blockList: [],
     rentalFeeInfo: undefined,
     netType: undefined,
-    xpx: '402b2f579faebc59',
-    namespaceXpx: 'bffb42a19116bdf6'
+    xpx: '',
+    namespaceXpx: ''
   },
   mutations: {
     UPDATE_NODES: (state, data) => {
@@ -71,35 +71,42 @@ export default new Vuex.Store({
     },
     SET_NETWORK_TYPE: (state, data) => {
       state.netType = data
+    },
+    UPDATE_COIN: (state, data) => {
+      state.xpx = data.mosaic.id
+      state.namespaceXpx = data.namespace.id
     }
   },
   actions: {
-    updateNodes ({ commit }, data) {
+    updateNodes({ commit }, data) {
       commit('UPDATE_NODES', data)
     },
-    updateCurrentNode ({ commit }, index) {
+    updateCurrentNode({ commit }, index) {
       commit('UPDATE_CURRENT_NODE', index)
     },
-    changeCurrentBlock ({ commit }, data) {
+    changeCurrentBlock({ commit }, data) {
       commit('UPDATE_CURRENT_BLOCK', data)
     },
-    updateErrorInfo ({ commit }, data) {
+    updateErrorInfo({ commit }, data) {
       commit('UPDATE_ERROR_INFO', data)
     },
-    changeLoader ({ commit }, data) {
+    changeLoader({ commit }, data) {
       commit('CHANGE_LOADER', data)
     },
-    updateAverage ({ commit }, data) {
+    updateAverage({ commit }, data) {
       commit('UPDATE_AVERAGE', data)
     },
-    setRentalFeeInfo ({ commit }, data) {
+    setRentalFeeInfo({ commit }, data) {
       commit('SET_RENTAL_FEE_INFO', data)
     },
     pushNewNode({ commit }, data) {
       commit('PUSH_NEW_NODE', data)
     },
-    setNetworkType({commit}, data) {
+    setNetworkType({ commit }, data) {
       commit('SET_NETWORK_TYPE', data)
+    },
+    updateCoin({ commit }, data) {
+      commit('UPDATE_COIN', data)
     }
   },
   getters: {

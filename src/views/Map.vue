@@ -111,10 +111,9 @@ export default {
 
   methods: {
     async getInfoNodes () {
-      let maps = await axios.get('./config/config.json')
-      maps = maps.data.MapsInfo
-
+      let maps = this.$config.mapsInfo
       let formatMaps = []
+
       maps.forEach(map => {
         let tmpObj = {
           name: map.name,
@@ -157,7 +156,7 @@ export default {
         } catch (e) {
           map.lat = ''
           map.lon = ''
-          map.location = ''
+          map.location = 'Unknown'
           map.version = 0
           map.height = 0
           map.status = 'Offline'
