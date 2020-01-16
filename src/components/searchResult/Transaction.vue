@@ -56,9 +56,13 @@
       <!-- Right -->
       <div>
         <div class="up">
+          <div class="title">Timestamp</div>
+          <div class="value">{{ $utils.fmtTime(timestamp) }}</div>
+        </div>
+        <!-- <div class="up">
           <div class="title">Deadline</div>
           <div class="value">{{ $utils.fmtTime(detail.deadline.value) }}</div>
-        </div>
+        </div> -->
         <div class="down">
           <div class="title">Block Height</div>
           <div class="value link" @click="goToBlock(detail.transactionInfo.height.compact())">
@@ -186,6 +190,7 @@ import InnerTransactions from '@/components/searchResult/Transaction.InnerTransa
 import Cosignatures from '@/components/searchResult/Transaction.Cosignatures'
 import Modifications from '@/components/searchResult/Transaction.Modifications.vue'
 import MosaicsInTransfer from '@/components/searchResult/Transaction.Mosaics.vue'
+import { Deadline } from 'tsjs-xpx-chain-sdk'
 
 export default {
   name: 'Transaction',
@@ -206,7 +211,8 @@ export default {
       mosaicsOfTransfer: null,
       xpx: this.$store.state.xpx,
       calculatedAmount: null,
-      effectiveFee: null
+      effectiveFee: null,
+      timestamp: null
     }
   },
 
@@ -219,6 +225,7 @@ export default {
     this.verifyType()
     this.verifyTransactionDetails()
     this.getEffectiveFee()
+    this.getTimestamp()
     console.log(this.detail)
   },
 
@@ -514,6 +521,21 @@ export default {
           ]
           break
       }
+    },
+
+    async getTimestamp () {
+      let height = this.detail.transactionInfo.height.compact()
+      try {
+        let response = await this.$proxProvider.blockHttp.getBlockByHeight(height).toPromise()
+        console.log(response.timestamp.compact())
+        this.timestamp = response.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)
+        let datatime = new Date(response.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000))
+        console.log(datatime)
+      } catch (error) {
+        console.warn(error);
+      }
+
+      console.log(this.detail.transactionInfo.height.compact())
     },
 
     /**

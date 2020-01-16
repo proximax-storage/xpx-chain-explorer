@@ -2,7 +2,7 @@
   "Coin": {
     "name": "XPX",
     "mosaic": {
-      "id": "13bfc518e40549d7",
+      "id": "402b2f579faebc59",
       "name": "xpx"
     },
     "namespace": {
@@ -11,15 +11,20 @@
     }
   },
   "Nodes": [
-    "https://bctestnet1.brimstone.xpxsirius.io",
-    "https://bctestnet2.brimstone.xpxsirius.io",
-    "https://bctestnet3.brimstone.xpxsirius.io",
-    "https://bcstage1.xpxsirius.io",
-    "https://bcstage2.xpxsirius.io"
+    "https://arcturus.xpxsirius.io",
+    "https://aldebaran.xpxsirius.io",
+    "https://betelgeuse.xpxsirius.io",
+    "https://bigcalvin.xpxsirius.io",
+    "https://westerlund.xpxsirius.io",
+    "https://canismajor.xpxsirius.io",
+    "https://coronaborealis.xpxsirius.io",
+    "https://delphinus.xpxsirius.io",
+    "https://eridanus.xpxsirius.io",
+    "https://lyrasithara.xpxsirius.io"
   ],
   "NetworkType": {
-    "name": "Public_Test",
-    "number": 168
+    "name": "Public",
+    "number": 184
   },
   "RentalFeeInfo": {
     "namespaceRentalFee": {

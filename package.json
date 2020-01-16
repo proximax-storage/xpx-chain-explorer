@@ -4,8 +4,11 @@
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "start-test": "rm public/config/config.json && cp public/config/config.test.json public/config/config.json && vue-cli-service serve",
+    "start-prod": "rm public/config/config.json && cp public/config/config.prod.json public/config/config.json && vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "build-test": "rm public/config/config.json && cp public/config/config.test.json public/config/config.json && vue-cli-service build",
+    "build-prod": "rm public/config/config.json && cp public/config/config.prod.json public/config/config.json && vue-cli-service build"
   },
   "dependencies": {
     "axios": "^0.18.0",
