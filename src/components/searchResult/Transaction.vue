@@ -527,15 +527,11 @@ export default {
       let height = this.detail.transactionInfo.height.compact()
       try {
         let response = await this.$proxProvider.blockHttp.getBlockByHeight(height).toPromise()
-        console.log(response.timestamp.compact())
         this.timestamp = response.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)
         let datatime = new Date(response.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000))
-        console.log(datatime)
       } catch (error) {
         console.warn(error);
       }
-
-      console.log(this.detail.transactionInfo.height.compact())
     },
 
     /**
