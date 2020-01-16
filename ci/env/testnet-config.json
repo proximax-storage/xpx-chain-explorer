@@ -27,25 +27,25 @@
         },
         "mosaicRentalFee": {
             "name": "Mosaic Rental Fee Sink",
-            "address": "XBO3L3-K5AQTX-DXO6Z6-W6KAPO-RI4XHN-65J5VG-HOQU",
-            "publicKey": "94A9BB9660037E622C8F626E061DB1557CBBED0338402E82E796168E80EF9765"
+            "address": "VDYWV4-WIGX5Z-KSVX6T-TIAG6D-R2P7OM-JSYBEP-VNLL",
+            "publicKey": "69D90104D29557F4B30BB2796C9EEC3321A031402A7262B70DCAB0C182D7B81F"
         }
     },
     "MapsInfo": [{
             "name": "bctestnet1",
-            "ip": "18.138.51.117",
+            "ip": "18.136.100.74",
             "urlNode": "http://bctestnet1.brimstone.xpxsirius.io:3000",
             "icon": "proximax.svg"
         },
         {
             "name": "bctestnet2",
-            "ip": "13.229.155.165",
+            "ip": "54.169.115.159",
             "urlNode": "http://bctestnet2.brimstone.xpxsirius.io:3000",
             "icon": "proximax.svg"
         },
         {
             "name": "bctestnet3",
-            "ip": "13.251.128.180",
+            "ip": "18.236.165.26",
             "urlNode": "http://bctestnet3.brimstone.xpxsirius.io:3000",
             "icon": "proximax.svg"
         }
