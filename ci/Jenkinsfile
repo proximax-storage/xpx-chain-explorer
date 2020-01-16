@@ -108,7 +108,7 @@ pipeline {
 
     stage('Promotion to Testnet') {
       when {
-        tag 'release-v*'
+        tag 'v*'
       }
       steps {
         slackSend channel: '#devops',
@@ -166,7 +166,7 @@ pipeline {
 
     stage('Promotion to Mainnet') {
       when {
-        tag 'release-v*'
+        tag 'v*'
       }
       steps {
         slackSend channel: '#devops',
