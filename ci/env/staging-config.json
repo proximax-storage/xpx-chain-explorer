@@ -11,7 +11,7 @@
         }
     },
     "Nodes": [
-        "http://bcstage1.xpxsirius.io:3000"
+        "https://bcstage1.xpxsirius.io"
     ],
     "NetworkType": {
         "name": "publicTest",
