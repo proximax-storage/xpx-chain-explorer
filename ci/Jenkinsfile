@@ -95,7 +95,7 @@ pipeline {
         success {
           slackSend channel: '#devops',
             color: 'good',
-            message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bctestnetexplorer.xpxsirius.io"
+            message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
         }
 
         failure {
