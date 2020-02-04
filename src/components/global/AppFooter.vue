@@ -1,7 +1,7 @@
 <template>
   <!-- Footer Commponent -->
   <div class="footer animated fadeIn">
-    <p>Copyright 2019. ProximaX. All rights reserved. <b>Sirius Explorer {{ softwareVersion }}</b></p>
+    <p>Copyright 2020. NIOSH. All rights reserved. <b>Sirius Explorer {{ softwareVersion }}</b></p>
   </div>
   <!-- End Footer Component -->
 </template>
@@ -11,7 +11,7 @@ export default {
   name: 'AppFooter',
   data () {
     return {
-      softwareVersion: 'v0.3.8 SP',
+      softwareVersion: 'v0.3.8 SE',
     }
   }
 }

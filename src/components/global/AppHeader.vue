@@ -60,7 +60,7 @@ export default {
         year: 2019,
         militarHour: '12:00'
       },
-      explorerVersion: 'v0.3.8 SP'
+      explorerVersion: 'v0.3.8 SE'
     }
   },
   methods: {
