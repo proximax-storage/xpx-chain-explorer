@@ -1,8 +1,8 @@
 {
-  "Coin": {
+  "coin": {
     "name": "XPX",
     "mosaic": {
-      "id": "402b2f579faebc59",
+      "id": "13bfc518e40549d7",
       "name": "xpx"
     },
     "namespace": {
@@ -10,23 +10,12 @@
       "name": "prx.xpx"
     }
   },
-  "Nodes": [
-    "https://arcturus.xpxsirius.io",
-    "https://aldebaran.xpxsirius.io",
-    "https://betelgeuse.xpxsirius.io",
-    "https://bigcalvin.xpxsirius.io",
-    "https://westerlund.xpxsirius.io",
-    "https://canismajor.xpxsirius.io",
-    "https://coronaborealis.xpxsirius.io",
-    "https://delphinus.xpxsirius.io",
-    "https://eridanus.xpxsirius.io",
-    "https://lyrasithara.xpxsirius.io"
+  "nodes": [
+    "bctestnet1.brimstone.xpxsirius.io",
+    "bctestnet2.brimstone.xpxsirius.io",
+    "bctestnet3.brimstone.xpxsirius.io"
   ],
-  "NetworkType": {
-    "name": "Public",
-    "number": 184
-  },
-  "RentalFeeInfo": {
+  "rentalFeeInfo": {
     "namespaceRentalFee": {
       "name": "Namespace Rental Fee Sink",
       "address": "XA7KWF-N5CMLV-G7W3OH-Z5CV3G-3VYH3N-5EQQTK-OVJH",
@@ -38,29 +27,5 @@
       "publicKey": "94A9BB9660037E622C8F626E061DB1557CBBED0338402E82E796168E80EF9765"
     }
   },
-  "MapsInfo": [
-    {
-      "name": "arcturus",
-      "ip": "13.250.17.22",
-      "urlNode": "https://arcturus.xpxsirius.io",
-      "icon": "proximax.svg"
-    },
-    {
-      "name": "aldebaran",
-      "ip": "13.250.17.22",
-      "urlNode": "https://aldebaran.xpxsirius.io",
-      "icon": "proximax.svg"
-    },
-    {
-      "name": "betelgeuse",
-      "ip": "13.250.17.22",
-      "urlNode": "https://betelgeuse.xpxsirius.io",
-      "icon": "proximax.svg"
-    }
-  ],
-  "ModuleActive": {
-    "networkStats": true,
-    "map": true
-  },
-  "Version": "0.4.2"
+  "version": "0.4.2"
 }

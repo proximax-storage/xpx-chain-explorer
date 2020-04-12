@@ -1,48 +1,41 @@
 import Vue from 'vue'
-import 'bootstrap-css-only/css/bootstrap.min.css'
-import 'mdbvue/build/css/mdb.css'
 import App from './App.vue'
+import './registerServiceWorker'
 import router from './router'
 import store from './store'
-import './registerServiceWorker'
-import { Persistence } from '@/services/persistence.js'
-import proximaxProvider from '@/services/proximaxProviders.js'
-import Utils from '@/services/Utils.js'
+import vuetify from './plugins/vuetify'
+import ProximaxProvider from './services/proximaxProvider'
 import axios from 'axios'
-import { Config } from '@/services/configService.js'
+import utils from './services/utils'
+import routerMixin from './mixins/router-mixin'
 
-let currentNode = localStorage.getItem('currentNode')
-
-Vue.prototype.$storage = new Persistence(localStorage)
-Vue.prototype.$sessionStorage = new Persistence(sessionStorage)
-Vue.prototype.$utils = Utils
 Vue.config.productionTip = false
+Vue.prototype.$utils = utils
+Vue.mixin(routerMixin)
 
-const configIntegration = async (currentNodeExist = false) => {
+const RunApp = async () => {
+  const config = await axios.get(`${window.location.origin}/config/config.json`)
+
+  const node = `http://${config.data.nodes[0]}:3000`
+
+  Vue.prototype.$config = config.data
+
   try {
-    let configInfo = await axios.get('../config/config.json')
-    Vue.prototype.$config = new Config(configInfo.data)
-    if (currentNodeExist === false) {
-      localStorage.setItem('currentNode', configInfo.data.Nodes[0])
-      Vue.prototype.$proxProvider = new proximaxProvider(configInfo.data.Nodes[0])
-    } else {
-      Vue.prototype.$proxProvider = new proximaxProvider(currentNode)
-    }
-  } catch (e) {
-    console.error(e);
+    const info = (await axios.get(`${node}/node/info`)).data
+    console.log(info)
+    info.currentNode = node
+    Vue.prototype.$nodeInfo = info
+    Vue.prototype.$provider = new ProximaxProvider(node)
+  } catch (error) {
+    console.log('Not node info')
   }
 
   new Vue({
     router,
     store,
-    render: function (h) { return h(App) }
+    vuetify,
+    render: h => h(App)
   }).$mount('#app')
 }
 
-if (currentNode === null) {
-  console.log('No Current Node')
-  configIntegration(false)
-} else {
-  console.log('Current Node is', currentNode)
-  configIntegration(true)
-}
+RunApp()
