@@ -78,8 +78,12 @@ export default {
         this.block(tmpObj)
       } else if (tmpObj.isHex && tmpObj.length <= 40) {
         this.assetId(tmpObj)
-      } else if (tmpObj.isHex === false && tmpObj.length <= 40) {
+      } else if (tmpObj.isHex === false && tmpObj.length >= 2) {
         this.assetName(tmpObj)
+      } else {
+        this.sublabel = ''
+        this.searchData = null
+        this.errormsg = ''
       }
     },
 
@@ -109,7 +113,7 @@ export default {
           this.searchData = transaction
           this.sublabel = 'TxID'
           this.activeSnack = true
-          this.preparedRoute = `/publicKey/${obj.value}`
+          this.preparedRoute = `/hash/${obj.value}`
         } catch (error2) {
           console.warn('Public Key / TxID not found')
           this.sublabel = ''
@@ -131,8 +135,6 @@ export default {
       try {
         const address = Address.createFromRawAddress(obj.value)
         const account = await this.$provider.accountHttp.getAccountInfo(address).toPromise()
-        console.log(account)
-        console.log(account.publicKey === this.forbiddenPubKey)
 
         if (account.publicKey === this.forbiddenPubKey) {
           throw String('Address does not have a valid public key')
@@ -140,9 +142,8 @@ export default {
 
         this.searchData = account
         this.activeSnack = true
+        this.preparedRoute = `/address/${obj.value}`
       } catch (error) {
-        console.log(error)
-
         if (typeof error === 'string') {
           this.errormsg = 'Address does not have a valid Public Key'
         } else {
@@ -179,14 +180,29 @@ export default {
       this.activeLoader = true
 
       const id = Id.fromHex(obj.value.toLowerCase())
-      console.log(id)
-      try {
-        const mosaicResult = await this.$provider.mosaicHttp.getMosaic(id).toPromise()
-        console.log(mosaicResult)
-        this.activeLoader = false
-      } catch (error) {
-        const namespaceResult = await this.$provider.namespaceHttp.getNamespace(id).toPromise()
-        console.log(namespaceResult)
+
+      if (isNaN(id.lower) === false && isNaN(id.higher) === false) {
+        try {
+          const mosaicResult = await this.$provider.mosaicHttp.getMosaic(id).toPromise()
+          console.log(mosaicResult)
+          this.searchData = mosaicResult
+          this.activeSnack = true
+          this.activeLoader = false
+          this.preparedRoute = `/mosaic/${obj.value}`
+        } catch (error) {
+          try {
+            const namespaceResult = await this.$provider.namespaceHttp.getNamespace(id).toPromise()
+            console.log(namespaceResult)
+            this.searchData = namespaceResult
+            this.activeSnack = true
+            this.activeLoader = false
+            this.preparedRoute = `/namespace/${obj.value}`
+          } catch (error) {
+
+          }
+        }
+      } else {
+        console.log('Not approved')
         this.activeLoader = false
       }
     },
@@ -196,12 +212,14 @@ export default {
       this.activeLoader = true
       console.log(obj)
       if (obj.value.includes(' ') === false && obj.value[obj.value.length - 1] !== '.') {
-        const tmpId = new NamespaceId(obj.value)
         try {
+          const tmpId = new NamespaceId(obj.value)
           const namespaceResult = await this.$provider.namespaceHttp.getNamespace(tmpId).toPromise()
           console.log(namespaceResult)
-          this.errormsg = null
           this.activeLoader = false
+          this.searchData = namespaceResult
+          this.preparedRoute = `/assetName/${obj.value}`
+          this.errormsg = null
         } catch (error) {
           console.warn('Not Found')
           this.errormsg = 'Namespace / Mosaic not found'

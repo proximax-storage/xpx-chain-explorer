@@ -1,7 +1,5 @@
 <template>
   <div>
-    <v-progress-linear v-if="load" class="mb-4" indeterminate/>
-
     <div class="blue lighten-5">
       <v-row>
         <v-col>
@@ -12,6 +10,7 @@
           </div>
           <p class="text-center ma-0">TxID / Hash</p>
           <p class="text-center ma-0">{{ this.hash }}</p>
+          <p class="ma-0"><v-progress-linear v-if="load" class="mb-4" indeterminate/></p>
         </v-col>
       </v-row>
 

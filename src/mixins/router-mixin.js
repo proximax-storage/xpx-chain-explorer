@@ -14,7 +14,10 @@ export default {
 
     $goToCustomRoute (route) {
       if (typeof route === 'string') {
-        this.$router.push(route)
+        this.$router.push('/')
+        setTimeout(() => {
+          this.$router.push(route)
+        }, 25)
       }
     },
 

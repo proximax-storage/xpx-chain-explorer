@@ -27,6 +27,22 @@ const routes = [
       {
         path: 'hash/:hash',
         component: child('Blockchain', 'Hash')
+      },
+      {
+        path: 'address/:address',
+        component: child('Blockchain', 'Address')
+      },
+      {
+        path: 'mosaic/:mosaic',
+        component: child('Blockchain', 'Mosaic')
+      },
+      {
+        path: 'namespace/:namespace',
+        component: child('Blockchain', 'Namespace')
+      },
+      {
+        path: 'assetName/:name',
+        component: child('Blockchain', 'AssetName')
       }
     ]
   },

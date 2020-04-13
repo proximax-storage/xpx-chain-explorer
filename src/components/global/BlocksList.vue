@@ -42,9 +42,9 @@ export default {
 
   watch: {
     getCurrentBlock (nv, ov) {
-      console.log('currentttt', nv)
+      // console.log('currentttt', nv)
       const some = this.blocks.some(elem => elem.height.compact() === nv.height.compact())
-      console.log(some)
+      // console.log(some)
       if (some === false) {
         this.blocks.unshift(nv)
       }
