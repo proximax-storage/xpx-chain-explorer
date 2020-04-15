@@ -309,18 +309,7 @@ export default class ProximaxProvider {
     return this.getMosaicsName([mosaicId])
   }
 
-  /**
-   * Get Network By Id
-   *
-   * This is a method that uses the 'getAllNetworks' function and the 'id'
-   * parameter to filter and return information from a network in an object
-   * that contains the name and numerical value of that network
-   *
-   * @param { Number } id
-   */
-  getNetworkById (id) {
-    const networks = this.getAllNetworks()
-    const found = networks.filter(el => el.value === id)
-    return (found.length !== 0) ? found[0] : null
+  networkByNumber (number) {
+    return NetworkType[number]
   }
 }
