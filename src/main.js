@@ -8,6 +8,7 @@ import ProximaxProvider from './services/proximaxProvider'
 import axios from 'axios'
 import utils from './services/utils'
 import routerMixin from './mixins/router-mixin'
+import NodesManagement from './services/NodesManagement'
 
 Vue.config.productionTip = false
 Vue.prototype.$utils = utils
@@ -20,8 +21,10 @@ const RunApp = async () => {
 
   const config = await axios.get(`${window.location.origin}/config/config.json`)
 
-  const node = `http://${config.data.nodes[0]}:3000`
-
+  const nodeman = new NodesManagement(config.data.nodes)
+  nodeman.validateNodes()
+  const node = nodeman.formatted.http
+  Vue.prototype.$nodeman = nodeman
   Vue.prototype.$config = config.data
 
   try {

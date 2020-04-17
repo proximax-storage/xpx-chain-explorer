@@ -63,17 +63,17 @@ export default {
     },
 
     runWS () {
-      let currentNode = this.$nodeInfo.currentNode
+      // let currentNode = this.$nodeInfo.currentNode
 
-      if (currentNode.includes('http://')) {
-        currentNode = currentNode.substr(7)
-        currentNode = `ws://${currentNode}`
-      } else if (currentNode.includes('https://')) {
-        currentNode = currentNode.substr(8)
-        currentNode = `wss://${currentNode}`
-      }
+      // if (currentNode.includes('http://')) {
+      //   currentNode = currentNode.substr(7)
+      //   currentNode = `ws://${currentNode}`
+      // } else if (currentNode.includes('https://')) {
+      //   currentNode = currentNode.substr(8)
+      //   currentNode = `wss://${currentNode}`
+      // }
 
-      const listener = new Listener(`${currentNode}`, WebSocket)
+      const listener = new Listener(this.$nodeman.formatted.ws, WebSocket)
       listener.open().then(() => {
         listener
           .newBlock()

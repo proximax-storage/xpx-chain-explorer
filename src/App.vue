@@ -39,6 +39,10 @@ export default {
 
   data: () => ({}),
 
+  mounted () {
+    console.log(this.$nodeman)
+  },
+
   methods: {
     goTop () {
       window.scrollBy({

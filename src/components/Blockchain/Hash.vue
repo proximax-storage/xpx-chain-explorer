@@ -101,36 +101,28 @@
       </v-row>
 
       <p class="ma-0 font-weight-medium">Offers</p>
-      <v-row v-if="this.type === 'Add Exchange Offer'">
-        <v-col>
-          <div v-for="(item, index) in hashInfo.offers" :key="index">
-            <v-row>
-              <v-col class="blue--text" xs="12" sm="12" md="4">Index</v-col>
-              <v-col class="text-break" xs="12" sm="12" md="8">{{ index + 1 }}</v-col>
-            </v-row>
-
-            <v-row>
-              <v-col class="blue--text" xs="12" sm="12" md="4">MosaicID</v-col>
-              <v-col class="text-break" xs="12" sm="12" md="8">{{ item.mosaicId.id.toHex() }}</v-col>
-            </v-row>
-
-            <v-row>
-              <v-col class="blue--text" xs="12" sm="12" md="4">Mosaic Amount</v-col>
-              <v-col class="text-break" xs="12" sm="12" md="8">{{ item.mosaicAmount.compact() }}</v-col>
-            </v-row>
-
-            <v-row>
-              <v-col class="blue--text" xs="12" sm="12" md="4">Cost</v-col>
-              <v-col class="text-break" xs="12" sm="12" md="8">{{ item.cost.compact() }}</v-col>
-            </v-row>
-
-            <v-row>
-              <v-col class="blue--text" xs="12" sm="12" md="4">Duration</v-col>
-              <v-col class="text-break" xs="12" sm="12" md="8">{{ item.duration.compact() }}</v-col>
-            </v-row>
-          </div>
-        </v-col>
-      </v-row>
+      <v-simple-table v-if="this.type === 'Add Exchange Offer'">
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Index</th>
+              <th class="text-left">MosaicID</th>
+              <th class="text-left">Mosaic Amount</th>
+              <th class="text-left">Cost</th>
+              <th class="text-left">Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in hashInfo.offers" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ item.mosaicId.id.toHex() }}</td>
+              <td>{{ item.mosaicAmount.compact() }}</td>
+              <td>{{ item.cost.compact() }}</td>
+              <td>{{ item.duration.compact() }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
 
       <v-row v-if="[undefined, null].includes(hashInfo) === false && [undefined, null].includes(hashInfo.innerTransactions) === false">
         <v-col>
