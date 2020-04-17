@@ -8,28 +8,144 @@
               <v-icon class="blue pa-3" dark style="border-radius: 50%">mdi-pound-box</v-icon>
             </p>
           </div>
-          <p class="text-center ma-0">TxID / Hash</p>
-          <p class="text-center ma-0">{{ this.hash }}</p>
+          <p class="text-center ma-0 font-weight-medium">TxID / Hash</p>
+          <p class="text-center ma-0 font-weight-medium">{{ hash }}</p>
           <p class="ma-0"><v-progress-linear v-if="load" class="mb-4" indeterminate/></p>
         </v-col>
       </v-row>
 
       <v-row v-if="hashInfo !== null">
         <v-col>
-          <p class="text-break">{{ `Type: ${this.type} ${this.hashInfo.type}` }}</p>
-          <p class="text-break">{{ `Signer: ${this.hashInfo.signer.address.pretty()}` }}</p>
-          <p class="text-break" v-if="[undefined, null].includes(this.hashInfo.recipient) === false">
-            {{ `Recipient: ${this.hashInfo.recipient.pretty()}` }}
+          <v-row>
+            <v-col class="blue--text" xs="12" sm="12" md="4">Type</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ `${type} ${hashInfo.type}` }}</v-col>
+          </v-row>
+
+          <v-row v-if="[undefined, null].includes(hashInfo.signer) === false">
+            <v-col class="blue--text" xs="12" sm="12" md="4">Signer</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.signer.address.pretty() }}</v-col>
+          </v-row>
+
+          <v-row v-if="[undefined, null].includes(hashInfo.recipient) === false">
+            <v-col class="blue--text" xs="12" sm="12" md="4">Recipient</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.recipient.pretty() }}</v-col>
+          </v-row>
+
+          <v-row v-if="[undefined, null].includes(hashInfo.message) === false">
+            <v-col class="blue--text" xs="12" sm="12" md="4">Message</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ (hashInfo.message.payload === '') ? 'Empty' : hashInfo.message.payload  }}</v-col>
+          </v-row>
+
+          <v-row v-if="[undefined, null].includes(hashInfo.namespaceName) === false">
+            <v-col class="blue--text" xs="12" sm="12" md="4">NamespaceName</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.namespaceName }}</v-col>
+          </v-row>
+
+          <v-row v-if="[undefined, null].includes(hashInfo.actionType) === false">
+            <v-col class="blue--text" xs="12" sm="12" md="4">Action Type</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ (hashInfo.actionType === 0) ? 'Link' : 'Unlink' }}</v-col>
+          </v-row>
+
+          <v-row v-if="[undefined, null].includes(hashInfo.mosaicId) === false">
+            <v-col class="blue--text" xs="12" sm="12" md="4">MosaicID</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.mosaicId.id.toHex().toUpperCase() }}</v-col>
+          </v-row>
+
+          <v-row v-if="[undefined, null].includes(hashInfo.namespaceId) === false">
+            <v-col class="blue--text" xs="12" sm="12" md="4">NamespaceID</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.namespaceId.id.toHex().toUpperCase() }}</v-col>
+          </v-row>
+
+          <v-row v-if="[undefined, null].includes(hashInfo.namespaceType) === false">
+            <v-col class="blue--text" xs="12" sm="12" md="4">Namespace Type</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ (hashInfo.namespaceType === 0) ? 'Root' : 'Sub' }}</v-col>
+          </v-row>
+
+          <v-row v-if="[undefined, null].includes(hashInfo.parentId) === false">
+            <v-col class="blue--text" xs="12" sm="12" md="4">ParentID</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.parentId.id.toHex().toUpperCase() }}</v-col>
+          </v-row>
+
+          <v-row>
+            <v-col class="blue--text" xs="12" sm="12" md="4">Height</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.transactionInfo.height.compact() }}</v-col>
+          </v-row>
+
+          <v-row v-if="[undefined, null].includes(hashInfo.mosaics) === false">
+            <v-col class="blue--text" xs="12" sm="12" md="4">Mosaics in Transaction</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.mosaics.length }}</v-col>
+          </v-row>
+
+          <v-row>
+            <v-col class="blue--text" xs="12" sm="12" md="4">Network Type</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">
+              {{ `${$provider.networkByNumber(hashInfo.networkType)} (${hashInfo.networkType})` }}
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col class="blue--text" xs="12" sm="12" md="4">Deadline</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.deadline.value }}</v-col>
+          </v-row>
+
+          <v-row>
+            <v-col class="blue--text" xs="12" sm="12" md="4">Signature</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.signature }}</v-col>
+          </v-row>
+
+          <v-row>
+            <v-col class="blue--text" xs="12" sm="12" md="4">Version</v-col>
+            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.version }}</v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+
+      <p class="ma-0 font-weight-medium">Offers</p>
+      <v-row v-if="this.type === 'Add Exchange Offer'">
+        <v-col>
+          <div v-for="(item, index) in hashInfo.offers" :key="index">
+            <v-row>
+              <v-col class="blue--text" xs="12" sm="12" md="4">Index</v-col>
+              <v-col class="text-break" xs="12" sm="12" md="8">{{ index + 1 }}</v-col>
+            </v-row>
+
+            <v-row>
+              <v-col class="blue--text" xs="12" sm="12" md="4">MosaicID</v-col>
+              <v-col class="text-break" xs="12" sm="12" md="8">{{ item.mosaicId.id.toHex() }}</v-col>
+            </v-row>
+
+            <v-row>
+              <v-col class="blue--text" xs="12" sm="12" md="4">Mosaic Amount</v-col>
+              <v-col class="text-break" xs="12" sm="12" md="8">{{ item.mosaicAmount.compact() }}</v-col>
+            </v-row>
+
+            <v-row>
+              <v-col class="blue--text" xs="12" sm="12" md="4">Cost</v-col>
+              <v-col class="text-break" xs="12" sm="12" md="8">{{ item.cost.compact() }}</v-col>
+            </v-row>
+
+            <v-row>
+              <v-col class="blue--text" xs="12" sm="12" md="4">Duration</v-col>
+              <v-col class="text-break" xs="12" sm="12" md="8">{{ item.duration.compact() }}</v-col>
+            </v-row>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row v-if="[undefined, null].includes(hashInfo) === false && [undefined, null].includes(hashInfo.innerTransactions) === false">
+        <v-col>
+          <p class="ma-0 font-weight-medium">Inner Transaction</p>
+          <p v-for="(item, index) in hashInfo.innerTransactions" :key="index" @click="showInner(item)">
+            {{ item.type }} | {{ item.signer.address.pretty() }}
           </p>
-          <p class="text-break">{{ `Network Type: ${$provider.networkByNumber(this.hashInfo.networkType)} (${this.hashInfo.networkType})` }}</p>
-          <p class="text-break">{{ `Hash: ${this.hashInfo.transactionInfo.hash}` }}</p>
         </v-col>
       </v-row>
     </div>
 
     <v-dialog v-model="dialog">
       <div class="white">
-        <p class="ma-0 text-center">Inner Transaction - Type</p>
+        <p class="ma-0 text-center text-break">Inner Transaction - Type</p>
+        <p class="ma-0 text-break">{{ selectedItem }}</p>
       </div>
     </v-dialog>
   </div>
@@ -45,8 +161,9 @@ export default {
     hash: null,
     hashInfo: null,
     load: false,
-    dialog: true,
-    type: null
+    dialog: false,
+    type: null,
+    selectedItem: null
   }),
 
   mounted () {
@@ -66,6 +183,11 @@ export default {
         console.log(error)
         this.load = false
       }
+    },
+
+    showInner (item) {
+      this.selectedItem = item
+      this.dialog = true
     }
   },
 

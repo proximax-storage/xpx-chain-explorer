@@ -9,14 +9,14 @@
             </p>
           </div>
           <p class="text-center ma-0">PublicKey</p>
-          <p class="text-center ma-0">{{ this.publicKey }}</p>
+          <p class="text-center ma-0">{{ publicKey }}</p>
           <p class="ma-0"><v-progress-linear v-if="load" class="mb-4" indeterminate/></p>
         </v-col>
       </v-row>
 
       <v-row v-if="publicKeyInfo !== null">
         <v-col>
-          <p class="text-break">{{ this.publicKeyInfo }}</p>
+          <p class="text-break">{{ publicKeyInfo }}</p>
         </v-col>
       </v-row>
     </div>

@@ -1,23 +1,44 @@
 <template>
   <div>
-    <div class="blue lighten-5">
-      <v-row class="ma-0 pa-0" style="border-radius: 5px">
-        <v-col class="pa-1">
+    <div class="">
+      <v-row class="ma-0 pa-0 justify-space-between">
+        <v-col class="pa-1 grey lighten-5" cols="3" style="border-radius: 5px">
           <p class="ma-0 text-center grey--text caption">Block Height</p>
-          <p class="ma-0 text-center body-2">{{ ([undefined, null].includes(getCurrentBlock)) ? 'Loading...' : getCurrentBlock.height.compact() }}</p>
+          <p class="ma-0 text-center body-2">
+            {{ ([undefined, null].includes(getCurrentBlock)) ? 'Loading...' : getCurrentBlock.height.compact() }}
+          </p>
         </v-col>
 
-        <v-col class="pa-1">
+        <v-col class="pa-1 grey lighten-5" cols="3" style="border-radius: 5px">
           <p class="ma-0 text-center grey--text caption">Node</p>
           <p class="ma-0 text-center body-2">{{ $nodeInfo.host }}</p>
         </v-col>
 
-        <v-col class="pa-1">
+        <v-col class="pa-1 grey lighten-5" cols="3" style="border-radius: 5px">
           <p class="ma-0 text-center grey--text caption">Average</p>
           <p class="ma-0 text-center body-2">15000</p>
         </v-col>
       </v-row>
     </div>
+
+    <!-- <div class="d-flex justify-space-around">
+      <div class="pa-2 pr-4 pl-2 blue lighten-5">
+        <p class="ma-0 text-center grey--text caption">Block Height</p>
+        <p class="ma-0 text-center body-2">
+          {{ ([undefined, null].includes(getCurrentBlock)) ? 'Loading...' : getCurrentBlock.height.compact() }}
+        </p>
+      </div>
+
+      <div class="pa-2 pr-4 pl-2 blue lighten-5">
+        <p class="ma-0 text-center grey--text caption">Node</p>
+        <p class="ma-0 text-center body-2">{{ $nodeInfo.host }}</p>
+      </div>
+
+      <div class="pa-2 pr-4 pl-2 blue lighten-5">
+        <p class="ma-0 text-center grey--text caption">Average</p>
+        <p class="ma-0 text-center body-2">15000</p>
+      </div>
+    </div> -->
   </div>
 </template>
 

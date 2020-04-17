@@ -14,6 +14,10 @@ Vue.prototype.$utils = utils
 Vue.mixin(routerMixin)
 
 const RunApp = async () => {
+  if (localStorage.getItem('history') === null) {
+    localStorage.setItem('history', JSON.stringify([]))
+  }
+
   const config = await axios.get(`${window.location.origin}/config/config.json`)
 
   const node = `http://${config.data.nodes[0]}:3000`

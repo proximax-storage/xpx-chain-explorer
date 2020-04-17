@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="blue lighten-5">
+    <div class="grey lighten-5">
       <v-row>
         <v-col>
           <div>
@@ -8,17 +8,43 @@
               <v-icon class="blue pa-3" dark style="border-radius: 50%">mdi-cube</v-icon>
             </p>
           </div>
-          <p class="text-center ma-0">Block</p>
-          <p class="text-center ma-0">{{ this.block }}</p>
+          <p class="text-center ma-0 font-weight-bold">Block Height</p>
+          <p class="text-center ma-0 font-weight-bold">{{ block }}</p>
           <p class="ma-0"><v-progress-linear v-if="load" class="mb-4" indeterminate/></p>
         </v-col>
       </v-row>
 
-      <v-row v-if="blockInfo !== null">
-        <v-col>
-          <p class="text-break">{{ this.blockInfo }}</p>
-        </v-col>
-      </v-row>
+      <div v-if="blockInfo !== null">
+        <v-row>
+          <v-col class="blue--text" xs="12" sm="12" md="4">Validator</v-col>
+          <v-col class="text-break" xs="12" sm="12" md="8">{{ blockInfo.signer.publicKey }}</v-col>
+        </v-row>
+
+        <v-row>
+          <v-col class="blue--text" xs="12" sm="12" md="4">Hash</v-col>
+          <v-col class="text-break" xs="12" sm="12" md="8">{{ blockInfo.hash }}</v-col>
+        </v-row>
+
+        <v-row>
+          <v-col class="blue--text" xs="12" sm="12" md="4">Timestamp</v-col>
+          <v-col class="text-break" xs="12" sm="12" md="8">{{ blockInfo.timestamp.compact() }}</v-col>
+        </v-row>
+
+        <v-row>
+          <v-col class="blue--text" xs="12" sm="12" md="4">Difficulty</v-col>
+          <v-col class="text-break" xs="12" sm="12" md="8">{{ `${blockInfo.difficulty.compact()}%` }}</v-col>
+        </v-row>
+
+        <v-row>
+          <v-col class="blue--text" xs="12" sm="12" md="4">Txs</v-col>
+          <v-col class="text-break" xs="12" sm="12" md="8">{{ blockInfo.numTransactions }}</v-col>
+        </v-row>
+
+        <v-row>
+          <v-col class="blue--text" xs="12" sm="12" md="4">Fee</v-col>
+          <v-col class="text-break" xs="12" sm="12" md="8">{{ blockInfo.totalFee.compact() }}</v-col>
+        </v-row>
+      </div>
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="blue lighten-5">
-      <v-row class="ma-0 mt-4 pa-4 d-flex justify-center" style="border-radius: 5px">
+    <div class="grey lighten-5">
+      <v-row class="ma-0 mt-4 pa-2 pl-4 d-flex justify-center" style="border-radius: 5px">
         <v-col lg="10" md="10" sm="10" class="pa-0">
           <v-text-field
           :label="`${label} ${sublabel}`"
@@ -12,17 +12,11 @@
         </v-col>
 
         <v-col lg="2" md="2" sm="2" class="pa-0 d-flex justify-center align-center">
-          <v-btn class="blue white--text" :disabled="searchData === null" rounded @click="$goToCustomRoute(preparedRoute)">Details</v-btn>
+          <v-btn small class="blue white--text" :disabled="searchData === null" rounded @click="$goToCustomRoute(preparedRoute)">Details</v-btn>
         </v-col>
       </v-row>
       <v-progress-linear v-if="activeLoader" indeterminate/>
     </div>
-
-    <!-- <v-row v-if="searchData !== null">
-      <v-col class="pa-5">
-        <p style="word-break: break-all">{{ searchData }}</p>
-      </v-col>
-    </v-row> -->
 
     <v-row>
       <v-col>

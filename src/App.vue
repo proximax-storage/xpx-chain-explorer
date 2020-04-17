@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="blue lighten-5" dense flat>
+    <v-app-bar app color="grey lighten-5" dense flat>
       <div class="d-flex align-center" @click="$goToHome">
         <v-img
           alt="ProximaX Logo"
@@ -14,11 +14,11 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn elevation="false" class="mr-4" @click="$goToHistory">
+      <v-btn text small elevation="false" class="mr-4" @click="$goToHistory">
         <span>History</span>
       </v-btn>
 
-      <v-btn elevation="false" @click="$goToNodes">
+      <v-btn text small elevation="false" @click="$goToNodes">
         <span>Nodes</span>
       </v-btn>
     </v-app-bar>

@@ -1,6 +1,28 @@
 <template>
   <v-container fluid>
-    <info/>
+    <div>
+      <div class="d-flex justify-space-between align-center">
+        <h1 class="title">History</h1>
+        <v-btn small text class="red--text" @click="cleanHistory">Clear History</v-btn>
+      </div>
+
+      <v-simple-table>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Index</th>
+              <th class="text-left">Route</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in history" :key="index" @click="$goToCustomRoute(item)">
+              <td class="text-left">{{ index + 1 }}</td>
+              <td class="text-left">{{ item }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </div>
   </v-container>
 </template>
 
@@ -8,8 +30,15 @@
 export default {
   name: 'History',
 
-  components: {
-    info: () => import('@/components/global/Info')
+  data: () => ({
+    history: JSON.parse(localStorage.getItem('history'))
+  }),
+
+  methods: {
+    cleanHistory () {
+      localStorage.setItem('history', JSON.stringify([]))
+      this.$goToHome()
+    }
   }
 }
 </script>

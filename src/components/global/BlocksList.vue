@@ -2,7 +2,7 @@
   <div>
     <v-simple-table>
       <template v-slot:default>
-        <thead class="grey lighten-3">
+        <thead class="grey lighten-5">
           <tr>
             <th>HEIGHT</th>
             <th>VALIDATOR</th>
