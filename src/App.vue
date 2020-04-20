@@ -27,7 +27,7 @@
       <router-view/>
     </v-content>
 
-    <v-btn fixed dark fab bottom right color="grey" @click="goTop">
+    <v-btn fixed dark fab bottom right color="primary" @click="goTop">
       <v-icon>mdi-arrow-up</v-icon>
     </v-btn>
   </v-app>

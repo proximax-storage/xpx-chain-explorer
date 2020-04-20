@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="blue lighten-5">
+    <v-alert outlined color="grey lighten-2" border="top" xs="12" sm="12" md="8" lg="8">
       <v-row>
         <v-col>
           <div>
@@ -8,99 +8,15 @@
               <v-icon class="blue pa-3" dark style="border-radius: 50%">mdi-pound-box</v-icon>
             </p>
           </div>
-          <p class="text-center ma-0 font-weight-medium">TxID / Hash</p>
-          <p class="text-center ma-0 font-weight-medium">{{ hash }}</p>
+          <p class="text-center ma-0 font-weight-bold primary--text">TxID / Hash</p>
+          <p class="text-center ma-0 font-weight-bold primary--text text-break">{{ hash }}</p>
           <p class="ma-0"><v-progress-linear v-if="load" class="mb-4" indeterminate/></p>
         </v-col>
       </v-row>
 
-      <v-row v-if="hashInfo !== null">
-        <v-col>
-          <v-row>
-            <v-col class="blue--text" xs="12" sm="12" md="4">Type</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ `${type} ${hashInfo.type}` }}</v-col>
-          </v-row>
+      <subtrans :hashInfo="hashInfo"/>
 
-          <v-row v-if="[undefined, null].includes(hashInfo.signer) === false">
-            <v-col class="blue--text" xs="12" sm="12" md="4">Signer</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.signer.address.pretty() }}</v-col>
-          </v-row>
-
-          <v-row v-if="[undefined, null].includes(hashInfo.recipient) === false">
-            <v-col class="blue--text" xs="12" sm="12" md="4">Recipient</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.recipient.pretty() }}</v-col>
-          </v-row>
-
-          <v-row v-if="[undefined, null].includes(hashInfo.message) === false">
-            <v-col class="blue--text" xs="12" sm="12" md="4">Message</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ (hashInfo.message.payload === '') ? 'Empty' : hashInfo.message.payload  }}</v-col>
-          </v-row>
-
-          <v-row v-if="[undefined, null].includes(hashInfo.namespaceName) === false">
-            <v-col class="blue--text" xs="12" sm="12" md="4">NamespaceName</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.namespaceName }}</v-col>
-          </v-row>
-
-          <v-row v-if="[undefined, null].includes(hashInfo.actionType) === false">
-            <v-col class="blue--text" xs="12" sm="12" md="4">Action Type</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ (hashInfo.actionType === 0) ? 'Link' : 'Unlink' }}</v-col>
-          </v-row>
-
-          <v-row v-if="[undefined, null].includes(hashInfo.mosaicId) === false">
-            <v-col class="blue--text" xs="12" sm="12" md="4">MosaicID</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.mosaicId.id.toHex().toUpperCase() }}</v-col>
-          </v-row>
-
-          <v-row v-if="[undefined, null].includes(hashInfo.namespaceId) === false">
-            <v-col class="blue--text" xs="12" sm="12" md="4">NamespaceID</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.namespaceId.id.toHex().toUpperCase() }}</v-col>
-          </v-row>
-
-          <v-row v-if="[undefined, null].includes(hashInfo.namespaceType) === false">
-            <v-col class="blue--text" xs="12" sm="12" md="4">Namespace Type</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ (hashInfo.namespaceType === 0) ? 'Root' : 'Sub' }}</v-col>
-          </v-row>
-
-          <v-row v-if="[undefined, null].includes(hashInfo.parentId) === false">
-            <v-col class="blue--text" xs="12" sm="12" md="4">ParentID</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.parentId.id.toHex().toUpperCase() }}</v-col>
-          </v-row>
-
-          <v-row>
-            <v-col class="blue--text" xs="12" sm="12" md="4">Height</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.transactionInfo.height.compact() }}</v-col>
-          </v-row>
-
-          <v-row v-if="[undefined, null].includes(hashInfo.mosaics) === false">
-            <v-col class="blue--text" xs="12" sm="12" md="4">Mosaics in Transaction</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.mosaics.length }}</v-col>
-          </v-row>
-
-          <v-row>
-            <v-col class="blue--text" xs="12" sm="12" md="4">Network Type</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">
-              {{ `${$provider.networkByNumber(hashInfo.networkType)} (${hashInfo.networkType})` }}
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col class="blue--text" xs="12" sm="12" md="4">Deadline</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.deadline.value }}</v-col>
-          </v-row>
-
-          <v-row>
-            <v-col class="blue--text" xs="12" sm="12" md="4">Signature</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.signature }}</v-col>
-          </v-row>
-
-          <v-row>
-            <v-col class="blue--text" xs="12" sm="12" md="4">Version</v-col>
-            <v-col class="text-break" xs="12" sm="12" md="8">{{ hashInfo.version }}</v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-
-      <p class="ma-0 font-weight-medium">Offers</p>
+      <p v-if="this.type === 'Add Exchange Offer'" class="ma-0 font-weight-medium">Offers</p>
       <v-simple-table v-if="this.type === 'Add Exchange Offer'">
         <template v-slot:default>
           <thead>
@@ -126,18 +42,35 @@
 
       <v-row v-if="[undefined, null].includes(hashInfo) === false && [undefined, null].includes(hashInfo.innerTransactions) === false">
         <v-col>
-          <p class="ma-0 font-weight-medium">Inner Transaction</p>
-          <p v-for="(item, index) in hashInfo.innerTransactions" :key="index" @click="showInner(item)">
-            {{ item.type }} | {{ item.signer.address.pretty() }}
-          </p>
+          <divider :title="'Inner Transactions'"/>
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">Index</th>
+                  <th class="text-left">Type</th>
+                  <th class="text-left">Fee</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in hashInfo.innerTransactions" :key="index" @click="openModal(index)">
+                  <td>{{ index + 1 }}</td>
+                  <td>{{ getType(item.type) }}</td>
+                  <td>{{ $utils.fmtAmount(item.maxFee.compact(), 6) }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
         </v-col>
       </v-row>
-    </div>
+    </v-alert>
 
     <v-dialog v-model="dialog">
-      <div class="white">
-        <p class="ma-0 text-center text-break">Inner Transaction - Type</p>
-        <p class="ma-0 text-break">{{ selectedItem }}</p>
+      <div class="white pa-4">
+        <div class="d-flex justify-space-between align-center pb-4">
+          <h1 class="title">Inner Transaction</h1>
+        </div>
+        <subtrans :hashInfo="modalTrans"/>
       </div>
     </v-dialog>
   </div>
@@ -149,13 +82,19 @@ import { TransactionType } from 'tsjs-xpx-chain-sdk'
 export default {
   name: 'Hash',
 
+  components: {
+    divider: () => import('@/components/global/Divider'),
+    subtrans: () => import('@/components/Hash/Subtransaction')
+  },
+
   data: () => ({
     hash: null,
     hashInfo: null,
     load: false,
     dialog: false,
     type: null,
-    selectedItem: null
+    selectedItem: null,
+    modalTrans: null
   }),
 
   mounted () {
@@ -168,7 +107,6 @@ export default {
       this.load = true
       try {
         const transaction = await this.$provider.transactionHttp.getTransaction(hash).toPromise()
-        console.log(transaction)
         this.hashInfo = transaction
         this.load = false
       } catch (error) {
@@ -180,37 +118,150 @@ export default {
     showInner (item) {
       this.selectedItem = item
       this.dialog = true
+    },
+
+    openModal (index) {
+      this.modalTrans = this.hashInfo.innerTransactions[index]
+      this.dialog = true
+    },
+
+    getType (type) {
+      let tmpType
+      switch (type) {
+        case TransactionType.TRANSFER:
+          tmpType = 'Transfer'
+          break
+
+        case TransactionType.REGISTER_NAMESPACE:
+          tmpType = 'Register Namespace'
+          break
+
+        case TransactionType.ADDRESS_ALIAS:
+          tmpType = 'Address Alias'
+          break
+
+        case TransactionType.MOSAIC_ALIAS:
+          tmpType = 'Mosaic Alias'
+          break
+
+        case TransactionType.MOSAIC_DEFINITION:
+          tmpType = 'Mosaic Definicion'
+          break
+
+        case TransactionType.MOSAIC_SUPPLY_CHANGE:
+          tmpType = 'Mosaic Supply Change'
+          break
+
+        case TransactionType.MODIFY_MULTISIG_ACCOUNT:
+          tmpType = 'Modify Multisig Account'
+          break
+
+        case TransactionType.AGGREGATE_COMPLETE:
+          tmpType = 'Aggregate Complete'
+          break
+
+        case TransactionType.AGGREGATE_BONDED:
+          tmpType = 'Aggregate Bonded'
+          break
+
+        case TransactionType.LOCK:
+          tmpType = 'Lock'
+          break
+
+        case TransactionType.SECRET_LOCK:
+          tmpType = 'Secret Lock'
+          break
+
+        case TransactionType.SECRET_PROOF:
+          tmpType = 'Secret Proof'
+          break
+
+        case TransactionType.MODIFY_ACCOUNT_RESTRICTION_ADDRESS:
+          tmpType = 'Modify Account Restriction Address'
+          break
+
+        case TransactionType.MODIFY_ACCOUNT_RESTRICTION_MOSAIC:
+          tmpType = 'Modify Account Restriction Mosaic'
+          break
+
+        case TransactionType.MODIFY_ACCOUNT_RESTRICTION_OPERATION:
+          tmpType = 'Modify Account Restriction Operation'
+          break
+
+        case TransactionType.LINK_ACCOUNT:
+          tmpType = 'Link Account'
+          break
+
+        case TransactionType.MODIFY_ACCOUNT_METADATA:
+          tmpType = 'Modify Account Metadata'
+          break
+
+        case TransactionType.MODIFY_MOSAIC_METADATA:
+          tmpType = 'Modify Mosaic Metadata'
+          break
+
+        case TransactionType.MODIFY_CONTRACT:
+          tmpType = 'Modify Contract'
+          break
+
+        case TransactionType.CHAIN_UPGRADE:
+          tmpType = 'Chain Upgrade'
+          break
+
+        case TransactionType.CHAIN_CONFIGURE:
+          tmpType = 'Chain Configure'
+          break
+        case TransactionType.ADD_EXCHANGE_OFFER:
+          tmpType = 'Add Exchange Offer'
+          break
+
+        case TransactionType.EXCHANGE_OFFER:
+          tmpType = 'Exchange Offer'
+          break
+
+        case TransactionType.REMOVE_EXCHANGE_OFFER:
+          tmpType = 'Remove Exchange Offer'
+          break
+      }
+
+      return tmpType
     }
   },
 
   watch: {
     hashInfo (nv, ov) {
       switch (nv.type) {
+        // datos listo
         case TransactionType.TRANSFER:
           console.log('TRANSFER', nv)
           this.type = 'Transfer'
           break
 
+          // datos listo
         case TransactionType.REGISTER_NAMESPACE:
           console.log('REGISTER_NAMESPACE', nv)
           this.type = 'Register Namespace'
           break
 
+          // datos listo
         case TransactionType.ADDRESS_ALIAS:
           console.log('ADDRESS_ALIAS', nv)
           this.type = 'Address Alias'
           break
 
+          // datos listo
         case TransactionType.MOSAIC_ALIAS:
           console.log('MOSAIC_ALIAS', nv)
           this.type = 'Mosaic Alias'
           break
 
+          // datos listo
         case TransactionType.MOSAIC_DEFINITION:
           console.log('MOSAIC_DEFINITION', nv)
           this.type = 'Mosaic Definicion'
           break
 
+        // datos listo
         case TransactionType.MOSAIC_SUPPLY_CHANGE:
           console.log('MOSAIC_SUPPLY_CHANGE', nv)
           this.type = 'Mosaic Supply Change'
@@ -231,6 +282,7 @@ export default {
           this.type = 'Aggregate Bonded'
           break
 
+        // datos listo
         case TransactionType.LOCK:
           console.log('LOCK', nv)
           this.type = 'Lock'
@@ -291,6 +343,7 @@ export default {
           this.type = 'Chain Configure'
           break
 
+        // datos listo
         case TransactionType.ADD_EXCHANGE_OFFER:
           console.log('ADD_EXCHANGE_OFFER', nv)
           this.type = 'Add Exchange Offer'

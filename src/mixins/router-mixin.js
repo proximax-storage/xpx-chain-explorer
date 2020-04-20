@@ -14,6 +14,10 @@ export default {
       localStorage.setItem('history', JSON.stringify(history))
     },
 
+    $reloadApp () {
+      window.location.reload()
+    },
+
     $goToHome () {
       this.$router.push('/')
     },

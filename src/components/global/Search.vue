@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="grey lighten-5">
+    <div class="grey lighten-5 mb-4" style="border-radius: 5px">
       <v-row class="ma-0 mt-4 pa-2 pl-4 d-flex justify-center" style="border-radius: 5px">
         <v-col lg="10" md="10" sm="10" class="pa-0">
           <v-text-field
@@ -17,15 +17,6 @@
       </v-row>
       <v-progress-linear v-if="activeLoader" indeterminate/>
     </div>
-
-    <v-row>
-      <v-col>
-        <v-snackbar v-model="activeSnack">
-          <div>Press enter for details</div>
-          <v-btn @click="activeSnack = false">Close</v-btn>
-        </v-snackbar>
-      </v-col>
-    </v-row>
   </div>
 </template>
 
@@ -41,7 +32,6 @@ export default {
     searchValue: '',
     errormsg: '',
     activeLoader: false,
-    activeSnack: false,
     searchData: null,
     forbiddenPubKey: '0000000000000000000000000000000000000000000000000000000000000000',
     preparedRoute: null
@@ -50,7 +40,6 @@ export default {
   methods: {
     analize (value) {
       this.errormsg = ''
-      this.activeSnack = false
       this.searchData = null
 
       const tmpObj = {
@@ -97,7 +86,6 @@ export default {
         console.log(accountInfo.publicKey)
         this.searchData = accountInfo
         this.sublabel = 'Public Key'
-        this.activeSnack = true
         this.preparedRoute = `/publicKey/${obj.value}`
       } catch (error) {
         try {
@@ -106,7 +94,6 @@ export default {
           console.log(transaction.transactionInfo.hash)
           this.searchData = transaction
           this.sublabel = 'TxID'
-          this.activeSnack = true
           this.preparedRoute = `/hash/${obj.value}`
         } catch (error2) {
           console.warn('Public Key / TxID not found')
@@ -135,7 +122,6 @@ export default {
         }
 
         this.searchData = account
-        this.activeSnack = true
         this.preparedRoute = `/address/${obj.value}`
       } catch (error) {
         if (typeof error === 'string') {
@@ -158,7 +144,6 @@ export default {
         const block = await this.$provider.blockHttp.getBlockByHeight(parseInt(obj.value)).toPromise()
         console.log(block)
         this.searchData = block
-        this.activeSnack = true
         this.preparedRoute = `/block/${obj.value}`
       } catch (error) {
         console.warn('Block not Found')
@@ -180,16 +165,16 @@ export default {
           const mosaicResult = await this.$provider.mosaicHttp.getMosaic(id).toPromise()
           console.log(mosaicResult)
           this.searchData = mosaicResult
-          this.activeSnack = true
           this.activeLoader = false
+          this.sublabel = 'MosaicID'
           this.preparedRoute = `/mosaic/${obj.value}`
         } catch (error) {
           try {
             const namespaceResult = await this.$provider.namespaceHttp.getNamespace(id).toPromise()
             console.log(namespaceResult)
             this.searchData = namespaceResult
-            this.activeSnack = true
             this.activeLoader = false
+            this.sublabel = 'NamespaceID'
             this.preparedRoute = `/namespace/${obj.value}`
           } catch (error) {
 

@@ -11,10 +11,10 @@
     }
   },
   "nodes": [
-    "bcstage1.xpxsirius.io",
     "bctestnet1.brimstone.xpxsirius.io",
     "bctestnet2.brimstone.xpxsirius.io",
-    "bctestnet3.brimstone.xpxsirius.io"
+    "bctestnet3.brimstone.xpxsirius.io",
+    "bcstage1.xpxsirius.io"
   ],
   "rentalFeeInfo": {
     "namespaceRentalFee": {

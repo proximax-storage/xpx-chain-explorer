@@ -1,10 +1,15 @@
 <template>
   <v-container fluid>
     <div>
-      <div class="d-flex justify-space-between align-center">
+      <div class="d-flex justify-space-between align-center pb-4">
         <h1 class="title">History</h1>
         <v-btn small text class="red--text" @click="cleanHistory">Clear History</v-btn>
       </div>
+
+      <v-alert border="top" color="orange lighten-2" dark text>
+        <p class="ma-0 caption">Some routes may not work, if you recently changed node</p>
+        <p class="ma-0 caption">Because the selected node may not have the same type of network or not belong to the same blockchain</p>
+      </v-alert>
 
       <v-simple-table>
         <template v-slot:default>

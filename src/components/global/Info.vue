@@ -4,41 +4,22 @@
       <v-row class="ma-0 pa-0 justify-space-between">
         <v-col class="pa-1 grey lighten-5" cols="3" style="border-radius: 5px">
           <p class="ma-0 text-center grey--text caption">Block Height</p>
-          <p class="ma-0 text-center body-2">
+          <p class="ma-0 text-center body-2 text-break">
             {{ ([undefined, null].includes(getCurrentBlock)) ? 'Loading...' : getCurrentBlock.height.compact() }}
           </p>
         </v-col>
 
-        <v-col class="pa-1 grey lighten-5" cols="3" style="border-radius: 5px">
+        <v-col class="pa-1 grey lighten-5" cols="5" style="border-radius: 5px">
           <p class="ma-0 text-center grey--text caption">Node</p>
-          <p class="ma-0 text-center body-2">{{ $nodeInfo.host }}</p>
+          <p class="ma-0 text-center body-2 text-break">{{ node }}</p>
         </v-col>
 
         <v-col class="pa-1 grey lighten-5" cols="3" style="border-radius: 5px">
           <p class="ma-0 text-center grey--text caption">Average</p>
-          <p class="ma-0 text-center body-2">15000</p>
+          <p class="ma-0 text-center body-2 text-break">15000</p>
         </v-col>
       </v-row>
     </div>
-
-    <!-- <div class="d-flex justify-space-around">
-      <div class="pa-2 pr-4 pl-2 blue lighten-5">
-        <p class="ma-0 text-center grey--text caption">Block Height</p>
-        <p class="ma-0 text-center body-2">
-          {{ ([undefined, null].includes(getCurrentBlock)) ? 'Loading...' : getCurrentBlock.height.compact() }}
-        </p>
-      </div>
-
-      <div class="pa-2 pr-4 pl-2 blue lighten-5">
-        <p class="ma-0 text-center grey--text caption">Node</p>
-        <p class="ma-0 text-center body-2">{{ $nodeInfo.host }}</p>
-      </div>
-
-      <div class="pa-2 pr-4 pl-2 blue lighten-5">
-        <p class="ma-0 text-center grey--text caption">Average</p>
-        <p class="ma-0 text-center body-2">15000</p>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -48,9 +29,12 @@ import { Listener } from 'tsjs-xpx-chain-sdk'
 export default {
   name: 'Info',
 
-  data: () => ({}),
+  data: () => ({
+    node: null
+  }),
 
   mounted () {
+    this.node = this.$nodeman.currentNode
     this.getInitialBlock()
     this.runWS()
   },

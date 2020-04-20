@@ -9,9 +9,11 @@ import axios from 'axios'
 import utils from './services/utils'
 import routerMixin from './mixins/router-mixin'
 import NodesManagement from './services/NodesManagement'
+import ConvHex from './services/ConvHex'
 
 Vue.config.productionTip = false
 Vue.prototype.$utils = utils
+Vue.prototype.$convHex = new ConvHex()
 Vue.mixin(routerMixin)
 
 const RunApp = async () => {

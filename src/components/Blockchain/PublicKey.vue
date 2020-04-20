@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="blue lighten-5">
+    <v-alert outlined color="grey lighten-2" border="top" xs="12" sm="12" md="8" lg="8">
       <v-row>
         <v-col>
           <div>
@@ -8,18 +8,37 @@
               <v-icon class="blue pa-3" dark style="border-radius: 50%">mdi-shield-key</v-icon>
             </p>
           </div>
-          <p class="text-center ma-0">PublicKey</p>
-          <p class="text-center ma-0">{{ publicKey }}</p>
+          <p class="text-center ma-0 font-weight-bold primary--text">PublicKey</p>
+          <p class="text-center ma-0 font-weight-bold primary--text text-break">{{ publicKey }}</p>
           <p class="ma-0"><v-progress-linear v-if="load" class="mb-4" indeterminate/></p>
         </v-col>
       </v-row>
 
-      <v-row v-if="publicKeyInfo !== null">
-        <v-col>
-          <p class="text-break">{{ publicKeyInfo }}</p>
-        </v-col>
-      </v-row>
-    </div>
+      <div v-if="publicKeyInfo !== null">
+        <div class="pb-2">
+          <p class="ma-0 primary--text caption" xs="12" sm="12" md="4">Address</p>
+          <p class="ma-0 black--text text-break" xs="12" sm="12" md="8">{{ publicKeyInfo.address.pretty() }}</p>
+        </div>
+
+        <div class="pb-2">
+          <p class="ma-0 primary--text caption" xs="12" sm="12" md="4">PublicKey</p>
+          <p class="ma-0 black--text text-break" xs="12" sm="12" md="8">{{ publicKeyInfo.publicKey }}</p>
+        </div>
+
+        <div class="pb-2">
+          <p class="ma-0 primary--text caption" xs="12" sm="12" md="4">Address Height</p>
+          <p class="ma-0 black--text text-break" xs="12" sm="12" md="8">{{ publicKeyInfo.addressHeight.compact() }}</p>
+        </div>
+
+        <div class="pb-2">
+          <p class="ma-0 primary--text caption" xs="12" sm="12" md="4">PublicKey Height</p>
+          <p class="ma-0 black--text text-break" xs="12" sm="12" md="8">{{ publicKeyInfo.publicKeyHeight.compact() }}</p>
+        </div>
+      </div>
+
+      <account-assets v-if="mosaics !== null" :mosaics="mosaics"/>
+      <multisig-info :multisigInfo="multisigInfo"/>
+    </v-alert>
   </div>
 </template>
 
@@ -29,9 +48,16 @@ import { PublicAccount } from 'tsjs-xpx-chain-sdk'
 export default {
   name: 'PublicKey',
 
+  components: {
+    'multisig-info': () => import('@/components/Account/MultisigInfo'),
+    'account-assets': () => import('@/components/Account/AccountAssets')
+  },
+
   data: () => ({
     publicKey: null,
     publicKeyInfo: null,
+    multisigInfo: null,
+    mosaics: null,
     load: false
   }),
 
@@ -48,10 +74,19 @@ export default {
         const accountInfo = await this.$provider.accountHttp.getAccountInfo(publicAccount.address).toPromise()
         console.log(accountInfo)
         this.publicKeyInfo = accountInfo
+        this.mosaics = accountInfo.mosaics
         this.load = false
       } catch (error) {
         console.log(error)
         this.load = false
+      }
+
+      try {
+        const multisigInfo = await this.$provider.accountHttp.getMultisigAccountInfo(publicAccount.address).toPromise()
+        console.log(multisigInfo)
+        this.multisigInfo = multisigInfo
+      } catch (error) {
+        console.warn('No Multisig Info')
       }
     }
   }

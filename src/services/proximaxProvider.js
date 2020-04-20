@@ -13,7 +13,8 @@ import {
   TransactionHttp,
   MosaicInfo,
   MosaicService,
-  NetworkType
+  NetworkType,
+  Deadline
 } from 'tsjs-xpx-chain-sdk'
 
 export default class ProximaxProvider {
@@ -311,5 +312,16 @@ export default class ProximaxProvider {
 
   networkByNumber (number) {
     return NetworkType[number]
+  }
+
+  fmtTime (timestamp) {
+    const date = new Date(timestamp + (Deadline.timestampNemesisBlock * 1000))
+    const day = (date.getDate() < 10) ? `0${date.getDate()}` : date.getDate()
+    const month = ((date.getMonth() + 1) < 10) ? `0${date.getMonth() + 1}` : date.getMonth() + 1
+    const hours = (date.getHours() < 10) ? `0${date.getHours()}` : date.getHours()
+    const minutes = (date.getMinutes() < 10) ? `0${date.getMinutes()}` : date.getMinutes()
+    const seconds = (date.getSeconds() < 10) ? `0${date.getSeconds()}` : date.getSeconds()
+    const final = `${date.getFullYear()}-${month}-${day} ${hours}:${minutes}:${seconds}`
+    return final
   }
 }

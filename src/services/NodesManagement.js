@@ -28,6 +28,8 @@ class NodesManagement {
 
   selectNode (index) {
     console.log(index)
+    console.log(this.nodes[index])
+    localStorage.setItem('currentNode', this.nodes[index])
   }
 
   getDefaultNode () {
@@ -45,8 +47,9 @@ class NodesManagement {
     }
 
     const currentNode = localStorage.getItem('currentNode')
+    console.log(currentNode)
     if (currentNode !== null) {
-      this.currentNode = currentNode
+      this.currentNode = (currentNode).toString()
     } else {
       this.currentNode = this.nodes[0]
       localStorage.setItem('currentNode', JSON.stringify(this.nodes[0]))
@@ -64,6 +67,9 @@ class NodesManagement {
     } else if (window.location.protocol === 'https:') {
       tmpObj.http = `https://${this.currentNode}:443`
       tmpObj.ws = `wss://${this.currentNode}:443`
+    } else if (window.location.protocol === 'app:') {
+      tmpObj.http = `http://${this.currentNode}:3000`
+      tmpObj.ws = `ws://${this.currentNode}:3000`
     }
 
     this.formatted = tmpObj
