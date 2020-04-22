@@ -1,5 +1,8 @@
 <template>
   <div v-if="hashInfo !== null">
+    <transfer-amount :mosaics="hashInfo.mosaics"/>
+
+    <divider :title="'Info'"/>
     <div class="pb-2">
       <p class="ma-0 primary--text caption" xs="12" sm="12" md="4">Type</p>
       <p class="ma-0 black--text text-break" xs="12" sm="12" md="8">{{ `${getType(hashInfo.type)} (${hashInfo.type})` }}</p>
@@ -79,11 +82,6 @@
       <p class="ma-0 black--text text-break" xs="12" sm="12" md="8">{{ hashInfo.parentId.id.toHex().toUpperCase() }}</p>
     </div>
 
-    <div class="pb-2" v-if="[undefined, null].includes(hashInfo.mosaics) === false">
-      <p class="ma-0 primary--text caption" xs="12" sm="12" md="4">Mosaics in Transaction</p>
-      <p class="ma-0 black--text text-break" xs="12" sm="12" md="8">{{ hashInfo.mosaics.length }}</p>
-    </div>
-
     <div class="pb-2" v-if="[undefined, null].includes(hashInfo.delta) === false">
       <p class="ma-0 primary--text caption" xs="12" sm="12" md="4">Amount (Delta)</p>
       <p class="ma-0 black--text text-break" xs="12" sm="12" md="8">{{ hashInfo.delta.compact() }}</p>
@@ -118,6 +116,8 @@
         </span>
       </p>
     </div>
+
+    <transfer-mosaics :mosaics="hashInfo.mosaics"/>
   </div>
 </template>
 
@@ -128,7 +128,9 @@ export default {
   name: 'Subtransaction',
 
   components: {
-    divider: () => import('@/components/global/Divider')
+    divider: () => import('@/components/global/Divider'),
+    'transfer-amount': () => import('@/components/Hash/TransferAmount.vue'),
+    'transfer-mosaics': () => import('@/components/Hash/TransferMosaics.vue')
   },
 
   props: {

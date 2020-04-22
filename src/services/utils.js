@@ -55,6 +55,11 @@ class Utils {
     result.reverse()
     return result.join('')
   }
+
+  static validateIsMosaics (id) {
+    const bits = 0x7FFFFFFF
+    return (id.higher | bits) === bits
+  }
 }
 
 export default Utils
