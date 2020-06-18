@@ -557,7 +557,7 @@ export default {
 
       try {
         let transactions = await this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).toPromise()
-
+        console.log("transactions::", transactions);
         if (transactions.length > 0) {
           transactions.forEach(element => {
             element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())

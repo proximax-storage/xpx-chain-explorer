@@ -40,7 +40,7 @@ export default class proximaxProvider {
    *
    * @memberof proximaxProvider
    */
-  static typeTransactions() {
+  static typeTransactions () {
     return {
       transfer: {
         id: TransactionType.TRANSFER,
@@ -117,6 +117,19 @@ export default class proximaxProvider {
       modifyNamespaceMetadata: {
         id: TransactionType.MODIFY_NAMESPACE_METADATA,
         name: 'Modify Namespace Metadata'
+      },
+      addExchangeOffer: {
+        id: TransactionType.ADD_EXCHANGE_OFFER,
+        name: 'Add Exchange Offer'
+      },
+      exchangeOffer: {
+        id: TransactionType.EXCHANGE_OFFER,
+        name: 'Exchange Offer'
+      },
+
+      RemoveExchangeOffer: {
+        id: TransactionType.REMOVE_EXCHANGE_OFFER,
+        name: 'Remove Exchange Offer'
       }
     }
   }
@@ -129,7 +142,7 @@ export default class proximaxProvider {
    * @returns {Observable} PublicAccount
    * @memberof proximaxProvider
    */
-  createPublicAccount(publicKey, network) {
+  createPublicAccount (publicKey, network) {
     return PublicAccount.createFromPublicKey(publicKey, network);
   }
 
@@ -140,7 +153,7 @@ export default class proximaxProvider {
    * @returns {Observable} Address
    * @memberof proximaxProvider
    */
-  createFromRawAddress(address) {
+  createFromRawAddress (address) {
     return Address.createFromRawAddress(address)
   }
 
@@ -151,7 +164,7 @@ export default class proximaxProvider {
    * @returns {Observable} Address
    * @memberof proximaxProvider
    */
-  createMosaicId(id) {
+  createMosaicId (id) {
     return new MosaicId(id)
   }
 
@@ -161,7 +174,7 @@ export default class proximaxProvider {
    * @returns {Observable} Address
    * @memberof proximaxProvider
    */
-  getBlocksHeightLocal() {
+  getBlocksHeightLocal () {
     return this.blocksHeight$
   }
 
@@ -184,7 +197,7 @@ export default class proximaxProvider {
    * @returns {Observable} accountHttp
    * @memberof proximaxProvider
    */
-  getAccountInfo(address) {
+  getAccountInfo (address) {
     return this.accountHttp.getAccountInfo(address)
   }
 
@@ -195,7 +208,7 @@ export default class proximaxProvider {
    * @returns {Observable} accountHttp
    * @memberof proximaxProvider
    */
-  getAllTransactionsFromAccount(publicAccount, queryParams = 10) {
+  getAllTransactionsFromAccount (publicAccount, queryParams = 10) {
     return this.accountHttp.transactions(publicAccount, new QueryParams(queryParams))
   }
 
@@ -206,7 +219,7 @@ export default class proximaxProvider {
    * @returns {Observable} mosaicHttp
    * @memberof proximaxProvider
    */
-  getMosaic(mosaicId) {
+  getMosaic (mosaicId) {
     return this.mosaicHttp.getMosaic(mosaicId)
   }
 
@@ -217,7 +230,7 @@ export default class proximaxProvider {
    * @returns {Class} MosaicId
    * @memberof proximaxProvider
    */
-  getMosaicId(id) {
+  getMosaicId (id) {
     return new MosaicId(id)
   }
 
@@ -228,7 +241,7 @@ export default class proximaxProvider {
    * @returns {Observable} mosaicHttp
    * @memberof proximaxProvider
    */
-  getMosaicsName(mosaicIds) {
+  getMosaicsName (mosaicIds) {
     return this.mosaicHttp.getMosaicsNames(mosaicIds)
   }
 
@@ -239,7 +252,7 @@ export default class proximaxProvider {
    * @returns {Observable} getNamespaces
    * @memberof proximaxProvider
    */
-  getNamespacesFromAccount(account) {
+  getNamespacesFromAccount (account) {
     return this.namespaceHttp.getNamespacesFromAccount(account)
   }
 
@@ -250,7 +263,7 @@ export default class proximaxProvider {
    * @returns {Observable} getNamespacesName
    * @memberof proximaxProvider
    */
-  getNamespacesNameFromHex(id) {
+  getNamespacesNameFromHex (id) {
     const idFromHex = Id.fromHex(id)
     const namespaceIds = this.getNameSpaceId([idFromHex.lower, idFromHex.higher])
     return this.getNamespacesName([namespaceIds])
@@ -263,7 +276,7 @@ export default class proximaxProvider {
    * @returns {Observable} namespaceHttp
    * @memberof proximaxProvider
    */
-  getNamespacesName(namespaceIds) {
+  getNamespacesName (namespaceIds) {
     return this.namespaceHttp.getNamespacesName(namespaceIds)
   }
 
@@ -274,7 +287,7 @@ export default class proximaxProvider {
    * @returns { Observable } namespaceHttp
    * @memberof proximaxProvider
    */
-  getNamespacesInfo(namespaceIds) {
+  getNamespacesInfo (namespaceIds) {
     return this.namespaceHttp.getNamespace(namespaceIds)
   }
 
@@ -285,7 +298,7 @@ export default class proximaxProvider {
    * @returns {Observable} transactionHttp
    * @memberof proximaxProvider
    */
-  getTransactionInformation(hash) {
+  getTransactionInformation (hash) {
     return this.transactionHttp.getTransaction(hash)
   }
 
@@ -296,7 +309,7 @@ export default class proximaxProvider {
    * @returns MosaicName
    * @memberof proximaxProvider
    */
-  getMosaicNameFromHex(id) {
+  getMosaicNameFromHex (id) {
     const idFromHex = Id.fromHex(id)
     const mosaicId = this.getMosaicId([idFromHex.lower, idFromHex.higher]);
     return this.getMosaicsName([mosaicId]);
@@ -310,7 +323,7 @@ export default class proximaxProvider {
    * to return an array of objects that contain in each element the name and
    * the numeric value of all the networks
    */
-  getAllNetworks() {
+  getAllNetworks () {
     let object = this.NetworkType
     let arrTmp = []
     let arrFinal = []
@@ -340,7 +353,7 @@ export default class proximaxProvider {
    *
    * @param { Number } id
    */
-  getNetworkById(id) {
+  getNetworkById (id) {
     let networks = this.getAllNetworks()
     let found = networks.filter(el => el.value === id)
     return (found.length !== 0) ? found[0] : null
