@@ -226,7 +226,7 @@
     <!-- End Inner Transactions Component -->
 
     <!-- Exchange Offer Transaction Component -->
-    <exchange-offer-transaction :params="detail.offers" />
+    <exchange-offer-transaction :params="detail.offers" :type="transactionType" />
     <!-- End Inner Exchange Offer TransactionComponent -->
   </div>
   <!-- End Transaction Component -->

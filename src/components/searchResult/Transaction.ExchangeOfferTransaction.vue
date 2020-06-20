@@ -2,54 +2,51 @@
   <!-- Inner Transaction Component -->
   <div class="inner animated fast fadeIn">
     <!-- name -->
-    <h1 class="supertitle" v-if="params">Exchange Offer Transactions</h1>
+    <h1 class="supertitle" v-if="params">Exchange Offer List</h1>
     <!-- Iterated Element -->
     <div>
-      <div
-        class="element"
-        v-for="(item, index) in params"
-        :key="index"
-        style="border-radius: 20px"
-        @click="redirecToDetail(index)"
-      >
+      <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 20px">
         <div>
           <div class="title centerAlign">#</div>
           <div class="value centerAlign">{{ index + 1 }}</div>
         </div>
+        <template v-if="type === 'Remove Exchange Offer'">
+          <div>
+            <div class="title centerAlign">Type</div>
+            <div class="valueLower transacTitle centerAlign">{{ verifyType(item.offerType) }}</div>
+          </div>
+        </template>
+        <template v-if="type ==='Exchange Offer'  ||  type ==='Add Exchange Offer'">
+          <div>
+            <div class="title centerAlign">Type</div>
+            <div class="valueLower transacTitle centerAlign">{{ verifyType(item.type) }}</div>
+          </div>
+          <div v-if="type === 'Exchange Offer'">
+            <div class="title centerAlign">Owner</div>
+            <div
+              class="value centerAlign link"
+              style="cursor: pointer,  width: none"
+              @click="goToAddress(item.owner.address.pretty())"
+            >{{ item.owner.address.pretty() }}</div>
+          </div>
 
-        <div>
-          <div class="title centerAlign">Type</div>
-          <div class="valueLower transacTitle centerAlign">{{ verifyType(item.type) }}</div>
-        </div>
-        <div>
-          <div class="title centerAlign">Owner</div>
-          <div
-            class="value centerAlign link"
-            style="cursor: pointer,  width: none"
-            @click="goToAddress(item.owner.address.pretty())"
-          >{{ item.owner.address.pretty() }}</div>
-        </div>
-
-        <div>
-          <div class="title centerAlign">Cost</div>
-          <div class="value centerAlign">{{ item.cost.compact() }}</div>
-        </div>
-
-        <div>
-          <div class="title centerAlign">Mosaic Amount</div>
-          <div class="value centerAlign">{{ item.mosaicAmount.compact() }}</div>
-        </div>
+          <div>
+            <div class="title centerAlign">Cost (xpx)</div>
+            <div class="value centerAlign" v-html="$utils.fmtDivisibility(item.cost.compact(), 6)"></div>
+          </div>
+          <div>
+            <div class="title centerAlign">Mosaic Amount</div>
+            <div class="value centerAlign">{{ item.mosaicAmount.compact() }}</div>
+          </div>
+        </template>
         <div>
           <div class="title centerAlign">Mosaic Id</div>
-            <div
+          <div
             class="value centerAlign link"
             style="cursor: pointer,  width: none"
             @click="goToMosaic(item.mosaicId.toHex())"
           >{{ item.mosaicId.toHex()}}</div>
         </div>
-        </div>
-
-        <!-- mosaic -->
       </div>
     </div>
   </div>
@@ -60,7 +57,8 @@ import { ExchangeOfferType } from "tsjs-xpx-chain-sdk/dist/src/model/transaction
 export default {
   name: "ExchangeOfferTransaction",
   props: {
-    params: Array
+    params: Array,
+    type: ""
   },
   methods: {
     verifyType(itemType) {
