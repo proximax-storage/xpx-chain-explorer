@@ -1,53 +1,59 @@
 {
-    "Coin": {
-        "name": "XPX",
-        "mosaic": {
-            "id": "402b2f579faebc59",
-            "name": "xpx"
-        },
-        "namespace": {
-            "id": "bffb42a19116bdf6",
-            "name": "prx.xpx"
-        }
+  "Coin": {
+    "name": "XPX",
+    "mosaic": {
+      "id": "402b2f579faebc59",
+      "name": "xpx"
     },
-    "Nodes": [
-        "http://bctestnet1.brimstone.xpxsirius.io:3000",
-        "http://bctestnet2.brimstone.xpxsirius.io:3000",
-        "http://bctestnet3.brimstone.xpxsirius.io:3000"
-    ],
-    "NetworkType": {
-        "name": "publicTest",
-        "number": 168
+    "namespace": {
+      "id": "bffb42a19116bdf6",
+      "name": "prx.xpx"
+    }
+  },
+  "Nodes": [
+    "http://bctestnet1.brimstone.xpxsirius.io:3000",
+    "http://bctestnet2.brimstone.xpxsirius.io:3000",
+    "http://bctestnet3.brimstone.xpxsirius.io:3000"
+  ],
+  "NetworkType": {
+    "name": "publicTest",
+    "number": 168
+  },
+  "RentalFeeInfo": {
+    "namespaceRentalFee": {
+      "name": "Namespace Rental Fee Sink",
+      "address": "VCMCJP-RMJ6IU-BOZ7HC-YBQOSE-OVGISX-6AMUJ4-ESTN",
+      "publicKey": "81298A6EBA208AAAE1BD3278B30BB047D33CEABA4E13FF144753825C499ADB98"
     },
-    "RentalFeeInfo": {
-        "namespaceRentalFee": {
-            "name": "Namespace Rental Fee Sink",
-            "address": "VCMCJP-RMJ6IU-BOZ7HC-YBQOSE-OVGISX-6AMUJ4-ESTN",
-            "publicKey": "81298A6EBA208AAAE1BD3278B30BB047D33CEABA4E13FF144753825C499ADB98"
-        },
-        "mosaicRentalFee": {
-            "name": "Mosaic Rental Fee Sink",
-            "address": "XBO3L3-K5AQTX-DXO6Z6-W6KAPO-RI4XHN-65J5VG-HOQU",
-            "publicKey": "94A9BB9660037E622C8F626E061DB1557CBBED0338402E82E796168E80EF9765"
-        }
+    "mosaicRentalFee": {
+      "name": "Mosaic Rental Fee Sink",
+      "address": "XBO3L3-K5AQTX-DXO6Z6-W6KAPO-RI4XHN-65J5VG-HOQU",
+      "publicKey": "94A9BB9660037E622C8F626E061DB1557CBBED0338402E82E796168E80EF9765"
+    }
+  },
+  "MapsInfo": [
+    {
+      "name": "bctestnet1",
+      "ip": "18.138.51.117",
+      "urlNode": "http://bctestnet1.brimstone.xpxsirius.io:3000",
+      "icon": "proximax.svg"
     },
-    "MapsInfo": [{
-            "name": "bctestnet1",
-            "ip": "18.138.51.117",
-            "urlNode": "http://bctestnet1.brimstone.xpxsirius.io:3000",
-            "icon": "proximax.svg"
-        },
-        {
-            "name": "bctestnet2",
-            "ip": "13.229.155.165",
-            "urlNode": "http://bctestnet2.brimstone.xpxsirius.io:3000",
-            "icon": "proximax.svg"
-        },
-        {
-            "name": "bctestnet3",
-            "ip": "13.251.128.180",
-            "urlNode": "http://bctestnet3.brimstone.xpxsirius.io:3000",
-            "icon": "proximax.svg"
-        }
-    ]
+    {
+      "name": "bctestnet2",
+      "ip": "13.229.155.165",
+      "urlNode": "http://bctestnet2.brimstone.xpxsirius.io:3000",
+      "icon": "proximax.svg"
+    },
+    {
+      "name": "bctestnet3",
+      "ip": "13.251.128.180",
+      "urlNode": "http://bctestnet3.brimstone.xpxsirius.io:3000",
+      "icon": "proximax.svg"
+    }
+  ],
+  "ModuleActive": {
+    "networkStats": true,
+    "map": true
+  },
+  "Version": "0.4.3"
 }
