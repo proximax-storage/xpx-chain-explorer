@@ -1,0 +1,38 @@
+{
+    "Coin": {
+        "name": "XPX",
+        "mosaic": {
+            "id": "6ad1fa3645ee1987",
+            "name": "xpx"
+        },
+        "namespace": {
+            "id": "bffb42a19116bdf6",
+            "name": "prx.xpx"
+        }
+    },
+    "Nodes": [
+        "https://bcstage1.xpxsirius.io"
+    ],
+    "NetworkType": {
+        "name": "publicTest",
+        "number": 168
+    },
+    "RentalFeeInfo": {
+        "namespaceRentalFee": {
+            "name": "Namespace Rental Fee Sink",
+            "address": "VBQUQ6-WKGJE7-DYELEB-SBGN6C-5FMDMF-HTMCJ5-TJ43",
+            "publicKey": "984AD9C41FD0728202B994E50DAFE1635D95B78BB0939B6F076606CCE05ADB2B"
+        },
+        "mosaicRentalFee": {
+            "name": "Mosaic Rental Fee Sink",
+            "address": "VCLJME-KF2PGW-N52XFB-ABROWV-ZC2VNZ-PIB35H-C4LJ",
+            "publicKey": "97D888229129F7AE0DCC361A92963FC869F5AE508B714C72CA7B81E9C4AEBCA6"
+        }
+    },
+    "MapsInfo": [{
+        "name": "bcstage1",
+        "ip": "54.255.165.100",
+        "urlNode": "http://bcstage1.xpxsirius.io:3000",
+        "icon": "proximax.svg"
+    }]
+}

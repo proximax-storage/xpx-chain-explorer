@@ -65,9 +65,50 @@ pipeline {
       }
     }
 
+    stage("Deploy to Staging") {
+      when {
+        branch 'master'
+      }
+      steps {
+        echo 'Copy staging config file'
+        sh 'cp ci/env/staging-config.json dist/config/config.json'
+
+        echo 'Deploying to Staging'
+
+        echo 'Managing S3'
+        withAWS(credentials: 'jenkins-ecr', region: 'ap-southeast-2') {
+          echo 'Deleting old files'
+          s3Delete bucket: 'bcstagingexplorer.xpxsirius.io', path: './'
+
+          echo 'Uploading new files'
+          s3Upload bucket: 'bcstagingexplorer.xpxsirius.io', acl: 'PublicRead', file: 'dist/', sseAlgorithm: 'AES256'
+        }
+
+        echo 'Managing CloudFront'
+        withAWS(credentials: 'jenkins-ecr') {
+          echo 'Invalidating CloudFront'
+          cfInvalidate distribution: 'E373B3Y0NEN1OB', paths: ['/*']
+        }
+      }
+
+      post {
+        success {
+          slackSend channel: '#devops',
+            color: 'good',
+            message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* completed successfully :100:\nAvailable at http://bcstagingexplorer.xpxsirius.io"
+        }
+
+        failure {
+          slackSend channel: '#devops',
+            color: 'bad',
+            message: "Branch *${env.GIT_BRANCH}* STAGING deployment of *${currentBuild.fullDisplayName}* FAILED :scream:"
+        }
+      }
+    }
+
     stage('Promotion to Testnet') {
       when {
-        tag 'release-v*'
+        tag 'v*'
       }
       steps {
         slackSend channel: '#devops',
@@ -125,7 +166,7 @@ pipeline {
 
     stage('Promotion to Mainnet') {
       when {
-        tag 'release-v*'
+        tag 'v*'
       }
       steps {
         slackSend channel: '#devops',
