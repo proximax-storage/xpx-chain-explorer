@@ -2,7 +2,7 @@
   "Coin": {
     "name": "XPX",
     "mosaic": {
-      "id": "13bfc518e40549d7",
+      "id": "6ad1fa3645ee1987",
       "name": "xpx"
     },
     "namespace": {
@@ -11,9 +11,8 @@
     }
   },
   "Nodes": [
-    "https://bctestnet1.brimstone.xpxsirius.io",
-    "https://bctestnet2.brimstone.xpxsirius.io",
-    "https://bctestnet3.brimstone.xpxsirius.io"
+    "https://bcstage1.xpxsirius.io",
+    "https://bcstage2.xpxsirius.io"
   ],
   "NetworkType": {
     "name": "Public_Test",
@@ -33,19 +32,19 @@
   },
   "MapsInfo": [
     {
-      "name": "bctestnet1.brimstone",
+      "name": "18.138.51.117",
       "ip": "18.138.51.117",
       "urlNode": "http://18.138.51.117:3000",
       "icon": "proximax.svg"
     },
     {
-      "name": "bctestnet2.brimstone",
+      "name": "13.229.155.165",
       "ip": "13.229.155.165",
       "urlNode": "http://13.229.155.165:3000",
       "icon": "proximax.svg"
     },
     {
-      "name": "bctestnet3.brimstone",
+      "name": "13.251.128.180",
       "ip": "13.251.128.180",
       "urlNode": "http://13.251.128.180:3000",
       "icon": "proximax.svg"

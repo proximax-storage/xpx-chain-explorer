@@ -33,17 +33,41 @@ npm install --unsafe-perm
 
 When the dependencies have been installed, it is already possible to run the project for development or to build it for production.
 
-*For Development (Hot reload)*.
+#### *For Run (Hot reload)*
+Depending on the type of sirius network, we will execute different commands.
+- *For bctestnet:*
 
 ```
-npm run start
+npm run start-test
+```
+- *For bcstage:*
+
+```
+npm run start-stage
+```
+- *For mainnet:*
+
+```
+npm run start-prod
 ```
 
-*For production (Minified and optimized)*.
+#### *For build (Minified and optimized)*.
+- *For bctestnet:*
 
 ```
-npm run build
+npm run build-test
 ```
+- *For bcstage:*
+
+```
+npm run build-stage
+```
+- *For mainnet:*
+
+```
+npm run build-prod
+```
+
 
 ## Serve the project
 
