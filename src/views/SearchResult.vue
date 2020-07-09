@@ -223,8 +223,7 @@ export default {
       let errorActive1 = false
       let errorActive2 = false
       this.mosaicLoader = true
-
-      let incoming = await this.$proxProvider.accountHttp.incomingTransactions(addr).toPromise()
+      let incoming = await this.$proxProvider.accountHttp.incomingTransactions(addr, new QueryParams(100)).toPromise()
       this.incomingTransactions = incoming
 
       this.$proxProvider.getAccountInfo(addr).subscribe(
