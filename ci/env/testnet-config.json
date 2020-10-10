@@ -35,19 +35,19 @@
     {
       "name": "bctestnet1",
       "ip": "18.136.100.74",
-      "urlNode": "http://bctestnet1.brimstone.xpxsirius.io:3000",
+      "urlNode": "https://bctestnet1.brimstone.xpxsirius.io",
       "icon": "proximax.svg"
     },
     {
       "name": "bctestnet2",
       "ip": "54.169.115.159",
-      "urlNode": "http://bctestnet2.brimstone.xpxsirius.io:3000",
+      "urlNode": "https://bctestnet2.brimstone.xpxsirius.io",
       "icon": "proximax.svg"
     },
     {
       "name": "bctestnet3",
       "ip": "18.236.165.26",
-      "urlNode": "http://bctestnet3.brimstone.xpxsirius.io:3000",
+      "urlNode": "https://bctestnet3.brimstone.xpxsirius.io",
       "icon": "proximax.svg"
     }
   ],
