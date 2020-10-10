@@ -11,9 +11,9 @@
     }
   },
   "Nodes": [
-    "http://bctestnet1.brimstone.xpxsirius.io:3000",
-    "http://bctestnet2.brimstone.xpxsirius.io:3000",
-    "http://bctestnet3.brimstone.xpxsirius.io:3000"
+    "https://bctestnet1.brimstone.xpxsirius.io",
+    "https://bctestnet2.brimstone.xpxsirius.io",
+    "https://bctestnet3.brimstone.xpxsirius.io"
   ],
   "NetworkType": {
     "name": "publicTest",
