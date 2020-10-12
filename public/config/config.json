@@ -2,7 +2,7 @@
   "Coin": {
     "name": "XPX",
     "mosaic": {
-      "id": "402b2f579faebc59",
+      "id": "13bfc518e40549d7",
       "name": "xpx"
     },
     "namespace": {
@@ -11,20 +11,13 @@
     }
   },
   "Nodes": [
-    "arcturus.xpxsirius.io",
-    "aldebaran.xpxsirius.io",
-    "betelgeuse.xpxsirius.io",
-    "bigcalvin.xpxsirius.io",
-    "westerlund.xpxsirius.io",
-    "canismajor.xpxsirius.io",
-    "coronaborealis.xpxsirius.io",
-    "delphinus.xpxsirius.io",
-    "eridanus.xpxsirius.io",
-    "lyrasithara.xpxsirius.io"
+    "bctestnet1.brimstone.xpxsirius.io",
+    "bctestnet2.brimstone.xpxsirius.io",
+    "bctestnet3.brimstone.xpxsirius.io"
   ],
   "NetworkType": {
-    "name": "Public",
-    "number": 184
+    "name": "Public_Test",
+    "number": 168
   },
   "RentalFeeInfo": {
     "namespaceRentalFee": {
@@ -40,21 +33,21 @@
   },
   "MapsInfo": [
     {
-      "name": "arcturus",
-      "ip": "13.250.17.22",
-      "urlNode": "https://arcturus.xpxsirius.io",
+      "name": "bctestnet1.brimstone",
+      "ip": "18.138.51.117",
+      "urlNode": "http://18.138.51.117:3000",
       "icon": "proximax.svg"
     },
     {
-      "name": "aldebaran",
-      "ip": "13.250.17.22",
-      "urlNode": "https://aldebaran.xpxsirius.io",
+      "name": "bctestnet2.brimstone",
+      "ip": "13.229.155.165",
+      "urlNode": "http://13.229.155.165:3000",
       "icon": "proximax.svg"
     },
     {
-      "name": "betelgeuse",
-      "ip": "13.250.17.22",
-      "urlNode": "https://betelgeuse.xpxsirius.io",
+      "name": "bctestnet3.brimstone",
+      "ip": "13.251.128.180",
+      "urlNode": "http://13.251.128.180:3000",
       "icon": "proximax.svg"
     }
   ],
