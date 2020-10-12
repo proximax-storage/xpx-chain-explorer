@@ -299,7 +299,7 @@ export default {
         }
       )
 
-      axios.get(`${this.$store.state.currentNode}/account/${addr.address}/namespaces`)
+      axios.get(`${this.$store.getters.getCurrentNodeProtocol}/account/${addr.address}/namespaces`)
         .then(response => {
           let tmpArr = []
           let revisionArray = []
@@ -368,7 +368,7 @@ export default {
           this.linkNamespaces = []
         })
 
-      axios.get(`${this.$store.state.currentNode}/account/${addr.address}/multisig`)
+      axios.get(`${this.$store.getters.getCurrentNodeProtocol}/account/${addr.address}/multisig`)
         .then(response => {
           let objTmp = {
             account: response.data.multisig.account,
@@ -556,7 +556,6 @@ export default {
 
       try {
         let transactions = await this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).toPromise()
-        console.log("transactions::", transactions);
         if (transactions.length > 0) {
           transactions.forEach(element => {
             element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())

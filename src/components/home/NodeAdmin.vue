@@ -36,7 +36,7 @@
     <!-- End Average Response Area -->
 
     <div class="newNode" v-if="newNode">
-      <input type="search" class="place-white black-text optional-in" v-model="newNodeValue" placeholder="http://mynode.io:8080 or https://mynode.io:8080">
+      <input type="search" class="place-white black-text optional-in" v-model="newNodeValue" placeholder="mynode.io:8080 or mynode.io:8080">
       <!-- <mdb-input class="place-white" style="width: 100%" v-model="newNodeValue" label="Add you new node" placeholder="http://mynode.io:8080 or https://mynode.io:8080"/> -->
       <div>{{ nodeMessage }}</div>
       <mdb-progress v-if="nodeLoader === true" bgColor="cyan darken-3" style="width: 100%" indeterminate/>
@@ -95,6 +95,14 @@ export default {
     getCurrentNode () {
       return this.$store.state.currentNode
     },
+     /**
+     * Update Node
+     *
+     * Get the last stored Node from the store
+     */
+    getCurrentNodeProtocol () {
+      return this.$store.getters.getCurrentNodeProtocol
+    },
 
     /**
      * Get All Nodes
@@ -148,7 +156,7 @@ export default {
         this.nodeLoader = true
         if (this.newNodeValue !== '') {
           this.nodeMessage = ''
-          axios.get(`${this.newNodeValue}/node/info`).then(
+          axios.get(`${this.$store.getters.getProtocol}//${this.newNodeValue}/node/info`).then(
             response => {
               if (this.$store.state.nodes.includes(this.newNodeValue) === false) {
                 if (response.data.networkIdentifier === this.$store.state.netType.number) {
