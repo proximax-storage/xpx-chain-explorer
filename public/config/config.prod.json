@@ -11,16 +11,16 @@
     }
   },
   "Nodes": [
-    "https://arcturus.xpxsirius.io",
-    "https://aldebaran.xpxsirius.io",
-    "https://betelgeuse.xpxsirius.io",
-    "https://bigcalvin.xpxsirius.io",
-    "https://westerlund.xpxsirius.io",
-    "https://canismajor.xpxsirius.io",
-    "https://coronaborealis.xpxsirius.io",
-    "https://delphinus.xpxsirius.io",
-    "https://eridanus.xpxsirius.io",
-    "https://lyrasithara.xpxsirius.io"
+    "arcturus.xpxsirius.io",
+    "aldebaran.xpxsirius.io",
+    "betelgeuse.xpxsirius.io",
+    "bigcalvin.xpxsirius.io",
+    "westerlund.xpxsirius.io",
+    "canismajor.xpxsirius.io",
+    "coronaborealis.xpxsirius.io",
+    "delphinus.xpxsirius.io",
+    "eridanus.xpxsirius.io",
+    "lyrasithara.xpxsirius.io"
   ],
   "NetworkType": {
     "name": "Public",
@@ -62,5 +62,5 @@
     "networkStats": true,
     "map": true
   },
-  "Version": "0.4.3"
+  "Version": "0.4.4"
 }

@@ -16,7 +16,8 @@ export default new Vuex.Store({
     rentalFeeInfo: undefined,
     netType: undefined,
     xpx: '',
-    namespaceXpx: ''
+    namespaceXpx: '',
+    protocol: 'http:'
   },
   mutations: {
     UPDATE_NODES: (state, data) => {
@@ -75,39 +76,46 @@ export default new Vuex.Store({
     UPDATE_COIN: (state, data) => {
       state.xpx = data.mosaic.id
       state.namespaceXpx = data.namespace.id
+    },
+    PROTOCOL: (state, data) => {
+      console.log('PROTOCOL', data)
+      state.protocol = data
     }
   },
   actions: {
-    updateNodes({ commit }, data) {
+    updateNodes ({ commit }, data) {
       commit('UPDATE_NODES', data)
     },
-    updateCurrentNode({ commit }, index) {
+    updateCurrentNode ({ commit }, index) {
       commit('UPDATE_CURRENT_NODE', index)
     },
-    changeCurrentBlock({ commit }, data) {
+    changeCurrentBlock ({ commit }, data) {
       commit('UPDATE_CURRENT_BLOCK', data)
     },
-    updateErrorInfo({ commit }, data) {
+    updateErrorInfo ({ commit }, data) {
       commit('UPDATE_ERROR_INFO', data)
     },
-    changeLoader({ commit }, data) {
+    changeLoader ({ commit }, data) {
       commit('CHANGE_LOADER', data)
     },
-    updateAverage({ commit }, data) {
+    updateAverage ({ commit }, data) {
       commit('UPDATE_AVERAGE', data)
     },
-    setRentalFeeInfo({ commit }, data) {
+    setRentalFeeInfo ({ commit }, data) {
       commit('SET_RENTAL_FEE_INFO', data)
     },
-    pushNewNode({ commit }, data) {
+    pushNewNode ({ commit }, data) {
       commit('PUSH_NEW_NODE', data)
     },
-    setNetworkType({ commit }, data) {
+    setNetworkType ({ commit }, data) {
       commit('SET_NETWORK_TYPE', data)
     },
-    updateCoin({ commit }, data) {
+    updateCoin ({ commit }, data) {
       commit('UPDATE_COIN', data)
-    }
+    },
+    setProtocol ({ commit }, data) {
+      commit('PROTOCOL', data)
+    },
   },
   getters: {
     getCurrentBlock: state => state.currentBlock.height,
@@ -116,10 +124,15 @@ export default new Vuex.Store({
       let memoryNode = localStorage.getItem('currentNode')
       return (memoryNode === '' || memoryNode === undefined) ? state.currentNode : memoryNode
     },
+    getCurrentNodeProtocol: state => {
+      let memoryNode =  `${state.protocol}//${localStorage.getItem('currentNode')}` 
+      return (memoryNode === '' || memoryNode === undefined) ? `${state.protocol}//${state.currentNode}` : memoryNode
+    },
     getErrorInfo: state => state.errorInfo,
     getLoaderState: state => state.loaderActive,
     getAverage: state => state.average,
     getAverageList: state => state.averageList,
-    getBlockList: state => state.blockList
+    getBlockList: state => state.blockList,
+    getProtocol: state => state.protocol
   }
 })

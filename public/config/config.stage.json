@@ -11,8 +11,8 @@
     }
   },
   "Nodes": [
-    "https://bcstage1.xpxsirius.io",
-    "https://bcstage2.xpxsirius.io"
+    "bcstage1.xpxsirius.io",
+    "bcstage2.xpxsirius.io"
   ],
   "NetworkType": {
     "name": "Public_Test",
@@ -54,5 +54,5 @@
     "networkStats": true,
     "map": true
   },
-  "Version": "0.4.3"
+  "Version": "0.4.4"
 }
