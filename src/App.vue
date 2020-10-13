@@ -96,11 +96,11 @@ export default {
       // $utils is Utils service (Utils Service) included in the main instance of vue (No need import)
 
       // Get the current Node from the persistence service
-      let currentNode = `${this.$store.getters.getProtocol}//${this.$storage.get('currentNode')}` 
+      let currentNode = this.$utils.buildUrl(`${this.$store.getters.getProtocol}//${this.$storage.get('currentNode')}`)
       // In the case that there is no information in the persistence service,
       // it is obtained from es vuex or $ store
       if (currentNode === null) {
-        currentNode = this.$store.state.currentNode
+       currentNode =  this.$utils.buildUrl(`${this.$store.getters.getProtocol}//${this.$store.state.currentNode}`)
       }
 
       if (currentNode.includes('http://')) {

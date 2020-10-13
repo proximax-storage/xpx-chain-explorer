@@ -31,9 +31,9 @@ const configIntegration = async (currentNodeExist = false) => {
     Vue.prototype.$config = new Config(configInfo.data)
     if (currentNodeExist === false) {
       localStorage.setItem('currentNode', configInfo.data.Nodes[0])
-      Vue.prototype.$proxProvider = new proximaxProvider( `${protocol()}//${configInfo.data.Nodes[0]}`)
+      Vue.prototype.$proxProvider = new proximaxProvider(Vue.prototype.$utils.buildUrl(`${protocol()}//${configInfo.data.Nodes[0]}`))
     } else {
-      Vue.prototype.$proxProvider = new proximaxProvider(`${protocol()}//${currentNode}`)
+      Vue.prototype.$proxProvider = new proximaxProvider(Vue.prototype.$utils.buildUrl(`${protocol()}//${currentNode}`))
     }
   } catch (e) {
     console.error(e);
@@ -50,6 +50,6 @@ if (currentNode === null) {
   console.log('No Current Node')
   configIntegration(false)
 } else {
-  console.log('Current Node is', `${protocol()}//${currentNode}`)
+  console.log('Current Node is', Vue.prototype.$utils.buildUrl(`${protocol()}//${currentNode}`))
   configIntegration(true)
 }
