@@ -125,7 +125,7 @@ export default new Vuex.Store({
       return (memoryNode === '' || memoryNode === undefined) ? state.currentNode : memoryNode
     },
     getCurrentNodeProtocol: state => {
-      let memoryNode =  `${state.protocol}//${localStorage.getItem('currentNode')}` 
+      let memoryNode =Vue.prototype.$utils.buildUrl(`${state.protocol}//${localStorage.getItem('currentNode')}`) 
       return (memoryNode === '' || memoryNode === undefined) ? `${state.protocol}//${state.currentNode}` : memoryNode
     },
     getErrorInfo: state => state.errorInfo,

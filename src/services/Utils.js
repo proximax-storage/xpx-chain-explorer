@@ -94,5 +94,16 @@ export default class Utils {
   static pretty(address) {
     let tmp = address.split()
   }
+  static buildUrl (url) {
+    let port = '';
+    const splitStr = url.split('://');
+    const protocol = (splitStr.length > 1) ? splitStr[0] : 'http';
+    const domainPort = (splitStr.length > 1) ? splitStr[1] : splitStr[0];
+    const domainPortSplit = domainPort.split(':');
+    const domainIp = domainPortSplit[0];
+    if (domainPortSplit.length > 1) port = domainPortSplit[1];
+    else port = (protocol === 'http') ? '3000' : '443';
+    return `${protocol}://${domainIp}:${port}`
+  }
 }
 
