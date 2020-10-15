@@ -52,10 +52,10 @@ export default {
       default: 1000
     },
     arrayTransactions: Array,
-    mosaicData: Object,
+    detail: Object,
     nameLabel: {
       type: String,
-      default: 'Mosaic Rich List'
+      default: 'Asset Rich List'
     }
   },
   methods: {
@@ -64,8 +64,8 @@ export default {
       window.open(routeData.href, '_blank')
     },
     calculatePercentage (amount) {
-      let percent = parseFloat((amount / this.mosaicData.supply.compact()) * 100)
-      return percent.toFixed(this.mosaicData.divisibility)
+      let percent = parseFloat((amount / this.detail.supply.compact()) * 100)
+      return percent.toFixed(this.detail.divisibility)
     },
   }
 }

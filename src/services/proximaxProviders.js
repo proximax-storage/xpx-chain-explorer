@@ -23,14 +23,14 @@ export default class proximaxProvider {
     this.Url = url
     this.blocksHeight = new BehaviorSubject(null)
     this.blocksHeight$ = this.blocksHeight.asObservable()
-    this.mosaicHttp = new MosaicHttp(this.Url)
+    this.assetHttp = new MosaicHttp(this.Url)
     this.blockHttp = new BlockHttp(this.Url)
     this.chainHttp = new ChainHttp(this.Url)
     this.accountHttp = new AccountHttp(this.Url)
     this.namespaceHttp = new NamespaceHttp(this.Url)
     this.transactionHttp = new TransactionHttp(this.Url)
-    this.MosaicInfo = new MosaicInfo()
-    this.mosaicService = new MosaicService(this.accountHttp, this.mosaicHttp, this.namespaceHttp)
+    this.assetInfo = new MosaicInfo()
+    this.assetService = new MosaicService(this.accountHttp, this.assetHttp, this.namespaceHttp)
     this.accountInfo = {}
     this.NetworkType = NetworkType
   }
@@ -50,13 +50,13 @@ export default class proximaxProvider {
         id: TransactionType.REGISTER_NAMESPACE,
         name: 'Register Namespace Transaction'
       },
-      mosaicDefinition: {
+      assetDefinition: {
         id: TransactionType.MOSAIC_DEFINITION,
-        name: 'Mosaic definition'
+        name: 'Asset definition'
       },
-      mosaicSupplyChange: {
+      assetSupplyChange: {
         id: TransactionType.MOSAIC_SUPPLY_CHANGE,
-        name: 'Mosaic supply change'
+        name: 'Asset supply change'
       },
       modifyMultisigAccount: {
         id: TransactionType.MODIFY_MULTISIG_ACCOUNT,
@@ -82,9 +82,9 @@ export default class proximaxProvider {
         id: TransactionType.SECRET_PROOF,
         name: 'Secret proof'
       },
-      mosaicAlias: {
+      assetAlias: {
         id: TransactionType.MOSAIC_ALIAS,
-        name: 'Mosaic Alias'
+        name: 'Asset Alias'
       },
       addressAlias: {
         id: TransactionType.ADDRESS_ALIAS,
@@ -94,9 +94,9 @@ export default class proximaxProvider {
         id: TransactionType.MODIFY_ACCOUNT_PROPERTY_ADDRESS,
         name: 'Modify Account Property Address'
       },
-      modifyAccountPropertyMosaic: {
+      modifyAccountPropertyAsset: {
         id: TransactionType.MODIFY_ACCOUNT_PROPERTY_MOSAIC,
-        name: 'Modify Account Property Mosaic'
+        name: 'Modify Account Property Asset'
       },
       modifyAccountPropertyEntityType: {
         id: TransactionType.MODIFY_ACCOUNT_PROPERTY_ENTITY_TYPE,
@@ -110,9 +110,9 @@ export default class proximaxProvider {
         id: TransactionType.MODIFY_ACCOUNT_METADATA,
         name: 'Modify Account Metadata'
       },
-      modifyMosaicMetadata: {
+      modifyAssetMetadata: {
         id: TransactionType.MODIFY_MOSAIC_METADATA,
-        name: 'Modify Mosaic Metadata'
+        name: 'Modify Asset Metadata'
       },
       modifyNamespaceMetadata: {
         id: TransactionType.MODIFY_NAMESPACE_METADATA,
@@ -164,7 +164,7 @@ export default class proximaxProvider {
    * @returns {Observable} Address
    * @memberof proximaxProvider
    */
-  createMosaicId (id) {
+  createAssetId (id) {
     return new MosaicId(id)
   }
 
@@ -213,36 +213,36 @@ export default class proximaxProvider {
   }
 
   /**
-   * Get mosaic
+   * Get asset
    *
-   * @param mosaicId
-   * @returns {Observable} mosaicHttp
+   * @param assetId
+   * @returns {Observable} assetHttp
    * @memberof proximaxProvider
    */
-  getMosaic (mosaicId) {
-    return this.mosaicHttp.getMosaic(mosaicId)
+  getAsset (assetId) {
+    return this.assetHttp.getMosaic(assetId)
   }
 
   /**
-   * Get mosaic Class
+   * Get asset id
    *
    * @param id
-   * @returns {Class} MosaicId
+   * @returns {Class} AssetId
    * @memberof proximaxProvider
    */
-  getMosaicId (id) {
+  getAssetId (id) {
     return new MosaicId(id)
   }
 
   /**
-   * Get mosaics name
+   * Get assets name
    *
-   * @param mosaicIds
-   * @returns {Observable} mosaicHttp
+   * @param assetIds
+   * @returns {Observable} assetHttp
    * @memberof proximaxProvider
    */
-  getMosaicsName (mosaicIds) {
-    return this.mosaicHttp.getMosaicsNames(mosaicIds)
+  getAssetsName (assetIds) {
+    return this.assetHttp.getMosaicsNames(assetIds)
   }
 
   /**
@@ -303,16 +303,16 @@ export default class proximaxProvider {
   }
 
   /**
-   * Get mosaic name from hexadecimal
+   * Get asset name from hexadecimal
    *
    * @param id
-   * @returns MosaicName
+   * @returns AssetName
    * @memberof proximaxProvider
    */
-  getMosaicNameFromHex (id) {
+  getAssetNameFromHex (id) {
     const idFromHex = Id.fromHex(id)
-    const mosaicId = this.getMosaicId([idFromHex.lower, idFromHex.higher]);
-    return this.getMosaicsName([mosaicId]);
+    const assetId = this.getAssetId([idFromHex.lower, idFromHex.higher]);
+    return this.getAssetsName([assetId]);
   }
 
   /**

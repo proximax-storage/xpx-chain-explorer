@@ -1,8 +1,8 @@
 <template>
-  <!-- Mosaic Component -->
+  <!-- Asset Component -->
   <div class="recent animated fast fadeIn">
     <!-- <h1 class="supertitle">{{ nameLabel }}</h1> -->
-    <!-- Iterated Elements (Mosaics) -->
+    <!-- Iterated Elements (Assets) -->
     <div class="guide animated fast fadeIn" v-show="arrayTransactions && arrayTransactions.length > 0">
 
       <div>
@@ -10,7 +10,7 @@
       </div>
 
       <div>
-        <div class="title">Mosaic Id</div>
+        <div class="title">Asset Id</div>
       </div>
 
       <div>
@@ -35,8 +35,8 @@
       </div>
 
       <div>
-        <div class="title">Mosaic Id</div>
-        <div class="value link" @click="goToMosaic(item.id)">{{ item.id }}</div>
+        <div class="title">Asset Id</div>
+        <div class="value link" @click="goToAsset(item.id)">{{ item.id }}</div>
       </div>
 
       <div>
@@ -58,7 +58,7 @@
     <!-- End Iterated Elements -->
 
   </div>
-  <!-- End Mosaic Component -->
+  <!-- End Asset Component -->
 </template>
 
 <script>
@@ -84,7 +84,7 @@ export default {
     return {
       arrayData: [],
       arrayAmount: [],
-      importantLabel: 'Mosaic Name'
+      importantLabel: 'Asset Name'
     }
   },
   /**
@@ -101,13 +101,13 @@ export default {
       if (this.arrayTransactions) {
         let items = this.arrayTransactions.map(el => el.name === undefined)
         if (items[0] === false) {
-          this.importantLabel = 'Mosaic Alias Name'
+          this.importantLabel = 'Asset Alias Name'
         }
       }
     },
 
-    goToMosaic (mosaicId) {
-      let routeData = this.$router.resolve({ path: `/result/mosaicInfo/${mosaicId}` })
+    goToAsset (assetId) {
+      let routeData = this.$router.resolve({ path: `/result/assetInfo/${assetId}` })
       window.open(routeData.href, '_blank')
     }
   }
@@ -122,7 +122,7 @@ $radius: 5px
   text-decoration: underline
   cursor: pointer
 
-.mosaicNameTrans
+.assetNameTrans
   opacity: 0
 
 .title
@@ -219,7 +219,7 @@ $radius: 5px
   .alternate
     display: block
 
-  .mosaicNameTrans
+  .assetNameTrans
     opacity: 1
 
   .recent > .element

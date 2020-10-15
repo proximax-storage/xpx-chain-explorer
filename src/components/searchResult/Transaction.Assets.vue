@@ -1,26 +1,26 @@
 <template>
-  <div class="mosaics animated faster fadeIn" v-if="mosaicList.length > 0">
+  <div class="assets animated faster fadeIn" v-if="assetList.length > 0">
     <h1 class="supertitle center-text">
-      Mosaics In Transfer
+      Assets In Transfer
     </h1>
 
     <div>
-      <div class="element" v-for="(item, index) in mosaicList" :key="index">
+      <div class="element" v-for="(item, index) in assetList" :key="index">
 
         <div class="sub animated faster fadeInDown">
-          <div class="title">Mosaic Id</div>
-          <div class="value link" @click="goToMosaic(item.id)">
+          <div class="title">Asset Id</div>
+          <div class="value link" @click="goToAsset(item.id)">
             {{ item.id }}
           </div>
         </div>
 
         <div v-if="item.name !== null" class="sub animated faster fadeIn">
-          <div class="title">Mosaic Alias Name</div>
-          <div class="valueLower link" @click="goToMosaic(item.name)">{{ item.name }}</div>
+          <div class="title">Asset Alias Name</div>
+          <div class="valueLower link" @click="goToAsset(item.name)">{{ item.name }}</div>
         </div>
 
         <div class="sub animated faster fadeInDown">
-          <div class="title" >Mosaic {{ amountQuantity }}</div>
+          <div class="title" >Asset {{ amountQuantity }}</div>
           <div class="value" v-if="item.divisibility === 0" v-html="item.amount"></div>
           <div class="value" v-if="item.divisibility !== 0" v-html="$utils.fmtDivisibility(item.amount, item.divisibility)">
           </div>
@@ -35,7 +35,7 @@
 import { Id } from 'tsjs-xpx-chain-sdk'
 
 export default {
-  name: 'MosaicsInTransfer',
+  name: 'AssetsInTransfer',
   props: {
     params: Array,
   },
@@ -44,11 +44,11 @@ export default {
       xpx: this.$store.state.xpx,
       namespaceXpx: this.$store.state.namespaceXpx,
       finalData: [],
-      titleMosaic: 'Mosaic Id',
-      mosaicAliasName: [],
+      titleAsset: 'Asset Id',
+      assetAliasName: [],
       arrayAmount: [],
       amountQuantity: 'Amount',
-      mosaicList: []
+      assetList: []
     }
   },
   mounted () {
@@ -59,8 +59,8 @@ export default {
       window.open(routeData.href, '_blank')
     },
 
-    goToMosaic (mosaicId) {
-      let routeData = this.$router.resolve({ path: `/result/mosaicInfo/${mosaicId}` })
+    goToAsset (assetId) {
+      let routeData = this.$router.resolve({ path: `/result/assetInfo/${assetId}` })
       window.open(routeData.href, '_blank')
     },
 
@@ -85,43 +85,43 @@ export default {
             tmpObj.amount = item.amount
             tmpObj.name = null
             try {
-              let mosaicResponse = await this.$proxProvider.getMosaic(id).toPromise()
-              tmpObj.divisibility = mosaicResponse.divisibility
-              let mosaicExist = this.mosaicList.find(el => el.id === tmpObj.id)
+              let assetResponse = await this.$proxProvider.getAsset(id).toPromise()
+              tmpObj.divisibility = assetResponse.divisibility
+              let assetExist = this.assetList.find(el => el.id === tmpObj.id)
 
-              if ([undefined, null].includes(mosaicExist) === false) {
-                this.mosaicList.forEach(el => {
+              if ([undefined, null].includes(assetExist) === false) {
+                this.assetList.forEach(el => {
                   if (el.id === tmpObj.id) {
                     el.amount += tmpObj.amount
                   }
                 })
               } else {
-                this.mosaicList.push(tmpObj)
+                this.assetList.push(tmpObj)
               }
             } catch (error) {
               if (error && error.statusCode === 404) {
-                this.titleMosaic = 'Mosaic Alias ID'
+                this.titleAsset = 'Asset Alias ID'
                 try {
                   let namespaceResponse = await this.$proxProvider.getNamespacesInfo(id).toPromise()
                   let namespaceName = await this.$proxProvider.getNamespacesName([id]).toPromise()
-                  let mosaicAliasId = new Id(namespaceResponse.alias.mosaicId)
-                  let mosaicAliasInfo = await this.$proxProvider.getMosaic(mosaicAliasId).toPromise()
+                  let assetAliasId = new Id(namespaceResponse.alias.mosaicId)
+                  let assetAliasInfo = await this.$proxProvider.getAsset(assetAliasId).toPromise()
 
                   tmpObj.name = this.sortName(namespaceName)
-                  tmpObj.id = mosaicAliasInfo.mosaicId.id.toHex()
-                  tmpObj.divisibility = mosaicAliasInfo.divisibility
+                  tmpObj.id = assetAliasInfo.mosaicId.id.toHex()
+                  tmpObj.divisibility = assetAliasInfo.divisibility
 
-                  let mosaicExist = this.mosaicList.find(el => el.id === tmpObj.id)
+                  let assetExist = this.assetList.find(el => el.id === tmpObj.id)
 
-                  if ([undefined, null].includes(mosaicExist) === false) {
-                    this.mosaicList.forEach(el => {
+                  if ([undefined, null].includes(assetExist) === false) {
+                    this.assetList.forEach(el => {
                       if (el.id === tmpObj.id) {
                         el.name = tmpObj.name
                         el.amount += tmpObj.amount
                       }
                     })
                   } else {
-                    this.mosaicList.push(tmpObj)
+                    this.assetList.push(tmpObj)
                   }
                 } catch (error) {
                   console.warn('Namespace Error')
@@ -170,7 +170,7 @@ export default {
 .center-text
   text-align: center
 
-.mosaics
+.assets
   padding: 10px
 
 .element

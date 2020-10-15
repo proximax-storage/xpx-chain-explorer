@@ -59,7 +59,7 @@ export default {
         { name: 'Basic', class: 'active-s' },
         { name: 'Hash', class: '' },
         { name: 'Namespace', class: '' },
-        { name: 'Mosaic', class: '' }
+        { name: 'Asset', class: '' }
       ],
       valueSearch: '',
       validSearch: false,
@@ -88,9 +88,9 @@ export default {
       } else if (item.name === 'Namespace') {
         this.typeSearch = 'namespaceInfo'
         this.label = 'Namespace / Sub-namespace'
-      } else if (item.name === 'Mosaic') {
-        this.typeSearch = 'mosaicInfo'
-        this.label = 'Mosaic ID / Alias (e.g. prx.xpx)'
+      } else if (item.name === 'Asset') {
+        this.typeSearch = 'assetInfo'
+        this.label = 'Asset ID / Alias (e.g. prx.xpx)'
       }
 
       this.isValid()
@@ -154,8 +154,8 @@ export default {
           valid = true
           break;
 
-        case 'mosaicInfo':
-          path = 'mosaicInfo'
+        case 'assetInfo':
+          path = 'assetInfo'
           valid = true
           break;
       }
@@ -195,10 +195,10 @@ export default {
               } else {
                 throw 'The search field cannot be empty'
               }
-            } else if (['namespaceInfo', 'mosaicInfo'].includes(this.typeSearch)) {
+            } else if (['namespaceInfo', 'assetInfo'].includes(this.typeSearch)) {
               if (lowerValue === '') {
                 routeData = this.$router.resolve({
-                  path: `/list/${(this.pathSearch === 'mosaicInfo') ? 'mosaics' : 'namespaces'}`
+                  path: `/list/${(this.pathSearch === 'assetInfo') ? 'assets' : 'namespaces'}`
                 })
               } else {
                 routeData = this.$router.resolve({

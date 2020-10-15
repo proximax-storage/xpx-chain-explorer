@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div v-else-if="type === 'Modify Mosaic Metadata'">
+    <div v-else-if="type === 'Modify Asset Metadata'">
       <div class="element" v-for="(item, index) in params" :key="index">
         <div style="padding: 2px">
           <div class="title">Key</div>

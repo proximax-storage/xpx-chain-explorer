@@ -30,7 +30,8 @@
 
     <namespace-info v-if="type === 'Namespace'" :detail="param"/>
 
-    <mosaic-info v-if="type === 'Mosaic ID' || type === 'Mosaic Name'" :detail="param"/>
+    <!-- Assets Component -->
+    <asset-info v-if="type === 'Asset ID' || type === 'Asset Name'" :detail="param"/>
 
     <div class="address-list" v-if="type === 'Public Key' || type === 'Address'">
       <div class="bititle">
@@ -38,19 +39,19 @@
           Namespaces
         </h1>
         <h1 class="supertitle" :class="{ 'activeList': activeList === 'mos', 'inactiveList': activeList !== 'mos' }" @click="changeList('mos')">
-          Other Mosaics
+          Other Assets
         </h1>
       </div>
-      <div v-if="mosaicLoader === true" style="padding: 10px 0px">
+      <div v-if="assetLoader === true" style="padding: 10px 0px">
         <mdb-progress bgColor="cyan darken-3" indeterminate />
       </div>
 
       <account-namespace v-show="activeList === 'nam'" v-if="type === 'Public Key' || type === 'Address'" :namespacesList="linkNamespaces"/>
 
-      <mosaics v-show="activeList === 'mos'" v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Others Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
+      <assets v-show="activeList === 'mos'" v-if="showRecentAsset && blockAssets !== null && blockAssets.length > 0" :arrayTransactions="blockAssets" :nameLabel="'Others Assets'" @viewAsset ="openModal" @pushInfo="pushInfo"/>
 
-      <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'mos'" v-if="mosaicLoader === false && blockMosaics === null">
-        No mosaics yet
+      <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'mos'" v-if="assetLoader === false && blockAssets === null">
+        No assets yet
       </div>
 
       <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'nam'" v-if="linkNamespaces === undefined || linkNamespaces.length === 0">
@@ -58,13 +59,11 @@
       </div>
     </div>
 
+    <!-- End Assets Component -->
 
-    <!-- Mosaics Component -->
-    <!-- End Mosaics Component -->
-
-    <div v-if="$route.params.type === 'mosaicInfo'">
+    <div v-if="$route.params.type === 'assetInfo'">
       <!-- Rich List Component -->
-      <richlist v-if="tableData.length > 0" :arrayTransactions="tableData" :mosaicData="mosaicInfo"/>
+      <richlist v-if="tableData.length > 0" :arrayTransactions="tableData" :detail="assetData"/>
       <!-- End Rich List Component -->
     </div>
 
@@ -94,11 +93,11 @@ import Multisig from '@/components/searchResult/MultisigInfo.vue'
 import BlockInfo from '@/components/searchResult/BlockInfo.vue'
 import Transaction from '@/components/searchResult/Transaction.vue'
 import NamespaceInfo from '@/components/searchResult/NamespaceInfo.vue'
-import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
+import AssetInfo from '@/components/searchResult/AssetInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import IncomingTrans from '@/components/searchResult/IncomingTrans.vue'
-import Mosaics from '@/components/searchResult/Mosaics.vue'
+import Assets from '@/components/searchResult/Assets.vue'
 import Richlist from '@/components/searchResult/Richlist.vue'
 import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams, PublicAccount } from 'tsjs-xpx-chain-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
@@ -117,9 +116,9 @@ export default {
     BlockInfo,
     Transaction,
     NamespaceInfo,
-    MosaicInfo,
+    AssetInfo,
     RecentTrans,
-    Mosaics,
+    Assets,
     Richlist,
     Modal,
     mdbProgress,
@@ -133,9 +132,9 @@ export default {
       recent: [],
       tableData: [],
       incomingTransactions: [],
-      showRecentMosaic: false,
-      blockMosaics: null,
-      mosaicLoader: false,
+      showRecentAsset: false,
+      blockAssets: null,
+      assetLoader: false,
       // Public Key
       errorPublicKey: false,
       linkNamespaces: undefined,
@@ -148,7 +147,7 @@ export default {
       errorMultisig: false,
 
       // Rich List
-      mosaicInfo: undefined,
+      assetData: undefined,
 
       // modalConfig
       modalInfo: [],
@@ -197,24 +196,24 @@ export default {
       } else {
         this.getNamespaceInfo(this.$route.params.id)
       }
-    } else if (this.$route.params.type === 'mosaicInfo') {
+    } else if (this.$route.params.type === 'assetInfo') {
       if (this.isHex(this.$route.params.id) === false) {
         let tmp = this.$route.params.id
         let tmp2 = new NamespaceId(tmp)
         this.$proxProvider.getNamespacesInfo(tmp2.id).subscribe(
           response => {
-            this.getMosaicInfo(response.alias.mosaicId.toHex())
+            this.getAssetInfo(response.alias.mosaicId.toHex())
           },
           error => {
             this.$store.dispatch('updateErrorInfo', {
               active: true,
-              message: 'Mosaic not found',
+              message: 'Asset not found',
               submessage: 'Check the information provided and try again'
             })
           }
         )
       } else {
-        this.getMosaicInfo(this.$route.params.id)
+        this.getAssetInfo(this.$route.params.id)
       }
     }
     this.value = this.$route.params.id
@@ -234,7 +233,7 @@ export default {
       const xpx = this.$store.state.xpx
       let errorActive1 = false
       let errorActive2 = false
-      this.mosaicLoader = true
+      this.assetLoader = true
       let incoming = await this.$proxProvider.accountHttp.incomingTransactions(addr, new QueryParams(100)).toPromise()
       this.incomingTransactions = incoming
 
@@ -258,37 +257,37 @@ export default {
             let tmpArr = []
 
             if (filteredTrans.length === 0) {
-              this.mosaicLoader = false
+              this.assetLoader = false
             }
 
 
             filteredTrans.forEach((el, index) => {
-              this.$proxProvider.getMosaic(el.id).subscribe(
-                mosaicResponse => {
+              this.$proxProvider.getAsset(el.id).subscribe(
+                assetResponse => {
                   let amountCompact = el.amount.compact()
-                  let mosHeight = mosaicResponse.height.compact()
-                  let mosDurat = (mosaicResponse.duration === undefined) ? 0 : mosaicResponse.duration.compact()
-                  this.$proxProvider.getMosaicsName([mosaicResponse.mosaicId]).subscribe(
+                  let mosHeight = assetResponse.height.compact()
+                  let mosDurat = (assetResponse.duration === undefined) ? 0 : assetResponse.duration.compact()
+                  this.$proxProvider.getAssetsName([assetResponse.mosaicId]).subscribe(
                     responseName => {
                       let tmpObj = {
                         name: (responseName[0].names.length > 0) ? responseName[0].names[0].name : '',
                         id: el.id.toHex(),
-                        owner: (resp.publicKey === mosaicResponse.owner.publicKey) ? 'true' : 'false',
-                        quantity: (mosaicResponse.divisibility === 0) ? amountCompact : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility),
+                        owner: (resp.publicKey === assetResponse.owner.publicKey) ? 'true' : 'false',
+                        quantity: (assetResponse.divisibility === 0) ? amountCompact : this.$utils.fmtDivisibility(el.amount.compact(), assetResponse.divisibility),
                         expired: (this.$store.state.currentBlock.height >= (mosHeight + mosDurat)) ? false : true
                       }
                       tmpArr.push(tmpObj)
                       if (index + 1 === filteredTrans.length) {
-                        this.blockMosaics = tmpArr
-                        this.showRecentMosaic = !this.showRecentMosaic
-                        this.mosaicLoader = false
+                        this.blockAssets = tmpArr
+                        this.showRecentAsset = !this.showRecentAsset
+                        this.assetLoader = false
                       }
                     },
                     error => {
                       console.warn(error)
-                      this.blockMosaics = null
-                      this.showRecentMosaic = !this.showRecentMosaic
-                      this.mosaicLoader = false
+                      this.blockAssets = null
+                      this.showRecentAsset = !this.showRecentAsset
+                      this.assetLoader = false
                     }
                   )
                 }, err => {
@@ -296,10 +295,8 @@ export default {
                 }
               )
             })
-            // this.blockMosaics = filteredTrans
-            // this.showRecentMosaic = !this.showRecentMosaic
           } else {
-            this.mosaicLoader = false
+            this.assetLoader = false
           }
 
           this.viewTransactionsFromPublicAccount(resp.publicAccount)
@@ -503,12 +500,12 @@ export default {
       )
     },
 
-    getMosaicInfo (mosaicHex) {
-      let mosaicId = Id.fromHex(mosaicHex)
-      this.$proxProvider.getMosaic(mosaicId).subscribe(
+    getAssetInfo (assetHex) {
+      let assetId = Id.fromHex(assetHex)
+      this.$proxProvider.getAsset(assetId).subscribe(
         response => {
-          this.mosaicInfo = response
-          this.$proxProvider.getMosaicsName([mosaicId]).subscribe(
+          this.assetData = response
+          this.$proxProvider.getAssetsName([assetId]).subscribe(
             nameResponse => {
               this.param = response
               this.param.name = (nameResponse[0].names && nameResponse[0].names.length !== 0) ? nameResponse[0].names[0].name : undefined
@@ -516,12 +513,12 @@ export default {
             }
           )
 
-          this.viewRichlist(mosaicId)
+          this.viewRichlist(assetId)
         },
         error => {
           this.$store.dispatch('updateErrorInfo', {
             active: true,
-            message: 'Mosaic not found',
+            message: 'Asset not found',
             submessage: 'Check the information provided and try again'
           })
         }
@@ -539,8 +536,8 @@ export default {
         this.type = 'Address'
       } else if (this.$route.params.type === 'namespaceInfo') {
         this.type = 'Namespace'
-      } else if (this.$route.params.type === 'mosaicInfo') {
-        this.type = (isNaN(parseInt(this.$route.params.id, 16))) ? 'Mosaic Name' : 'Mosaic ID'
+      } else if (this.$route.params.type === 'assetInfo') {
+        this.type = (isNaN(parseInt(this.$route.params.id, 16))) ? 'Asset Name' : 'Asset ID'
       }
       this.value = this.$route.params.id
     },
@@ -569,19 +566,19 @@ export default {
     },
 
     /**
-     * View Rich List From Mosaic Id
-     * Get rich list from the mosaic id
+     * View Rich List From Asset Id
+     * Get rich list from the asset id
      *
-     * @param { any } mosaicId
+     * @param { any } assetId
      */
-    async viewRichlist(mosaicId) {
+    async viewRichlist(assetId) {
       try {
-        let transactions = await this.$proxProvider.mosaicHttp.getMosaicRichlist(mosaicId, 100).toPromise()
+        let transactions = await this.$proxProvider.assetHttp.getMosaicRichlist(assetId, 100).toPromise()
         if (transactions.length > 0) {
           this.tableData = transactions
         }
       } catch (error) {
-        console.log('MOSAIC RICH LIST ERROR',error)
+        console.log('ASSET RICH LIST ERROR',error)
       }
     },
 
