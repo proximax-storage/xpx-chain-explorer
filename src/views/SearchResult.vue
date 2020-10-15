@@ -62,11 +62,19 @@
     <!-- Mosaics Component -->
     <!-- End Mosaics Component -->
 
-    <!-- Recent Transactions Component -->
-    <recent-trans v-if="showRecentTransaction && blockTransactions.length > 0 && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
+    <div v-if="$route.params.type === 'mosaicInfo'">
+      <!-- Rich List Component -->
+      <richlist v-if="tableData.length > 0" :arrayTransactions="tableData" :mosaicData="mosaicInfo"/>
+      <!-- End Rich List Component -->
+    </div>
 
-    <incoming-trans v-if="type === 'Address' && param.publicKey === this.invalidPublicKey" :arrayTransactions="incomingTransactions"/>
-    <!-- End Recent Transactions Component -->
+    <div v-else>
+      <!-- Recent Transactions Component -->
+      <recent-trans v-if="tableData.length > 0" :arrayTransactions="tableData"/>
+
+      <incoming-trans v-if="type === 'Address' && param.publicKey === this.invalidPublicKey" :arrayTransactions="incomingTransactions"/>
+      <!-- End Recent Transactions Component -->
+    </div>
 
     <!-- Modal Component -->
     <modal :param="modalInfo" :active="modalActive" :run="closeModal" :title="modalTitle"/>
@@ -91,6 +99,7 @@ import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import IncomingTrans from '@/components/searchResult/IncomingTrans.vue'
 import Mosaics from '@/components/searchResult/Mosaics.vue'
+import Richlist from '@/components/searchResult/Richlist.vue'
 import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams, PublicAccount } from 'tsjs-xpx-chain-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import { mdbProgress } from 'mdbvue'
@@ -111,6 +120,7 @@ export default {
     MosaicInfo,
     RecentTrans,
     Mosaics,
+    Richlist,
     Modal,
     mdbProgress,
     IncomingTrans
@@ -121,8 +131,7 @@ export default {
       type: '',
       value: '',
       recent: [],
-      showRecentTransaction: false,
-      blockTransactions: [],
+      tableData: [],
       incomingTransactions: [],
       showRecentMosaic: false,
       blockMosaics: null,
@@ -137,6 +146,9 @@ export default {
       multisigData: undefined,
       multisigRelatedAccount: [],
       errorMultisig: false,
+
+      // Rich List
+      mosaicInfo: undefined,
 
       // modalConfig
       modalInfo: [],
@@ -191,7 +203,7 @@ export default {
         let tmp2 = new NamespaceId(tmp)
         this.$proxProvider.getNamespacesInfo(tmp2.id).subscribe(
           response => {
-            this.getMosaicInfo(new Id(response.alias.mosaicId).toHex())
+            this.getMosaicInfo(response.alias.mosaicId.toHex())
           },
           error => {
             this.$store.dispatch('updateErrorInfo', {
@@ -229,8 +241,6 @@ export default {
       this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
-          console.log(resp)
-
           if ([null, undefined].includes(resp.publicKey)) {
             let tmpObj = {
               address: resp.address,
@@ -404,55 +414,43 @@ export default {
     getBlockByHeight (block) {
       this.$proxProvider.blockHttp.getBlockByHeight(parseInt(block)).subscribe(
         next => {
-        next.date = this.$utils.fmtTime(new Date(next.timestamp.compact() + Deadline.timestampNemesisBlock * 1000))
-        next.difficulty = (next.difficulty.compact()/Math.pow(10, 14)*100).toFixed(2) + "%"
-        next.totalFee = this.$utils.fmtAmountValue(next.totalFee.compact())
-        this.param = {
-          height: block,
-          timestamp: next.date,
-          publicKey: next.signer.publicKey,
-          hash: next.hash,
-          difficulty: next.difficulty,
-          txes: next.numTransactions,
-          fee: next.totalFee
-        }
-        this.showRecentTransaction = (this.param.txes > 0) ? true : false
-        this.showComponent()
-        this.showInfo = true
-
-        let transactions = 100
-        if (next.numTransactions < 100 && next.numTransactions > 75) {
-          transactions = 75
-        } else if (next.numTransactions < 75 && next.numTransactions > 50) {
-          transactions = 50
-        } else if (next.numTransactions < 50 && next.numTransactions > 25) {
-          transactions = 25
-        } else if (next.numTransactions < 25 && next.numTransactions > 10) {
-          transactions = 10
-        }
-
-        this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(transactions)).subscribe(
-          blockTransactions => {
-            this.blockTransactions = blockTransactions
-            for (const index in this.blockTransactions) {
-              this.blockTransactions[index].fee = this.$utils.fmtAmountValue(this.blockTransactions[index].maxFee.compact())
-              this.blockTransactions[index].deadline = this.$utils.fmtTime(new Date(this.blockTransactions[index].deadline.value.toString()))
-            }
-            this.showRecentTransaction = true
-            this.noShowTransactions = (this.blockTransactions.length > 0) ? false : true
-          },
-          error => {
-            this.noShowTransactions = true
+          next.date = this.$utils.fmtTime(new Date(next.timestamp.compact() + Deadline.timestampNemesisBlock * 1000))
+          next.difficulty = (next.difficulty.compact()/Math.pow(10, 14)*100).toFixed(2) + "%"
+          next.totalFee = this.$utils.fmtAmountValue(next.totalFee.compact())
+          this.param = {
+            height: block,
+            timestamp: next.date,
+            publicKey: next.signer.publicKey,
+            hash: next.hash,
+            difficulty: next.difficulty,
+            txes: next.numTransactions,
+            fee: next.totalFee
           }
-        )
-      },
-      error => {
-        this.$store.dispatch('updateErrorInfo', {
-          active: true,
-          message: 'Block Height not found',
-          submessage: 'Check the information provided and try again'
-        })
-      })
+          this.showComponent()
+
+          if (this.param.txes > 0) {
+            this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(100)).subscribe(
+              blockTransactions => {
+                this.tableData = blockTransactions
+                for (const index in this.tableData) {
+                  this.tableData[index].fee = this.$utils.fmtAmountValue(this.tableData[index].maxFee.compact())
+                  this.tableData[index].deadline = this.$utils.fmtTime(new Date(this.tableData[index].deadline.value.toString()))
+                }
+              },
+              error => {
+                console.log('BLOCK TRANSACTIONS ERROR',error)
+              }
+            )
+          }
+        },
+        error => {
+          this.$store.dispatch('updateErrorInfo', {
+            active: true,
+            message: 'Block Height not found',
+            submessage: 'Check the information provided and try again'
+          })
+        }
+      )
     },
 
     /**
@@ -509,6 +507,7 @@ export default {
       let mosaicId = Id.fromHex(mosaicHex)
       this.$proxProvider.getMosaic(mosaicId).subscribe(
         response => {
+          this.mosaicInfo = response
           this.$proxProvider.getMosaicsName([mosaicId]).subscribe(
             nameResponse => {
               this.param = response
@@ -516,6 +515,8 @@ export default {
               this.showComponent()
             }
           )
+
+          this.viewRichlist(mosaicId)
         },
         error => {
           this.$store.dispatch('updateErrorInfo', {
@@ -540,7 +541,6 @@ export default {
         this.type = 'Namespace'
       } else if (this.$route.params.type === 'mosaicInfo') {
         this.type = (isNaN(parseInt(this.$route.params.id, 16))) ? 'Mosaic Name' : 'Mosaic ID'
-        // this.type = 'Mosaic ID'
       }
       this.value = this.$route.params.id
     },
@@ -560,29 +560,29 @@ export default {
           transactions.forEach(element => {
             element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
             element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString()))
-            this.blockTransactions.push(element)
+            this.tableData.push(element)
           })
-          this.showRecentTransaction = true
         }
       } catch (error) {
-        console.log('ACCOUNT ERROR',error)
+        console.log('ACCOUNT TRANSACTIONS ERROR',error)
       }
+    },
 
-      // this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
-      //   transactions => {
-      //     if (transactions.length > 0) {
-      //       transactions.forEach(element => {
-      //         element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
-      //         element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString()))
-      //         this.blockTransactions.push(element)
-      //       })
-      //       this.showRecentTransaction = true
-      //     }
-      //   },
-      //   error => {
-      //     console.error('ACCOUNT ERROR....', error)
-      //   }
-      // )
+    /**
+     * View Rich List From Mosaic Id
+     * Get rich list from the mosaic id
+     *
+     * @param { any } mosaicId
+     */
+    async viewRichlist(mosaicId) {
+      try {
+        let transactions = await this.$proxProvider.mosaicHttp.getMosaicRichlist(mosaicId, 100).toPromise()
+        if (transactions.length > 0) {
+          this.tableData = transactions
+        }
+      } catch (error) {
+        console.log('MOSAIC RICH LIST ERROR',error)
+      }
     },
 
     /**
