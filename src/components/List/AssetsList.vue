@@ -1,8 +1,8 @@
 <template>
-  <div class="mosaicsList">
+  <div class="assetsList">
     <div class="guide" style="background: black">
       <div>
-        <div class="title">Mosaic Id</div>
+        <div class="title">Asset Id</div>
       </div>
 
       <div>
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <dir class="empty" v-show="mosaicArr.length === 0">
+    <dir class="empty" v-show="assetArr.length === 0">
       <div>
         {{ loaderMessage }}
       </div>
@@ -32,11 +32,11 @@
       </div>
     </dir>
 
-    <div class="list" v-show="mosaicArr.length > 0">
-      <div class="element animated fadeIn" v-for="(item, index) in mosaicArr" :key="index">
+    <div class="list" v-show="assetArr.length > 0">
+      <div class="element animated fadeIn" v-for="(item, index) in assetArr" :key="index">
         <div>
-          <div class="title">Mosaic Id</div>
-          <div class="value link" @click="goToMosaic(item.id)">{{ item.id }}</div>
+          <div class="title">Asset Id</div>
+          <div class="value link" @click="goToAsset(item.id)">{{ item.id }}</div>
         </div>
 
         <div>
@@ -51,7 +51,7 @@
         </div>
 
         <div>
-          <div class="title">Mosaic Id</div>
+          <div class="title">Asset Id</div>
           <div class="value">{{ item.divisibility }}</div>
         </div>
 
@@ -70,17 +70,17 @@ import { mdbProgress } from 'mdbvue'
 import axios from 'axios'
 
 export default {
-  name: 'MosaicsList',
+  name: 'AssetsList',
   components: {
     mdbProgress
   },
   data () {
     return {
       resp: undefined,
-      mosaicArr: [],
+      assetArr: [],
       idList: [],
       // LOADER
-      loaderMessage: 'Loading mosaics please wait a few moments',
+      loaderMessage: 'Loading assets please wait a few moments',
       loaderProgress: true
     }
   },
@@ -116,20 +116,20 @@ export default {
                 this.$proxProvider.getMosaic(el.mosaicId.id).subscribe(
                   response => {
                     response.id = el.mosaicId.id.toHex()
-                    this.mosaicArr.push(response)
+                    this.assetArr.push(response)
                   },
                   err => {
-                    console.error('Mosaic not found')
+                    console.error('Asset not found')
                   }
                 )
               } else if (el.type === 16705) {
                 this.$proxProvider.getMosaic(el.innerTransactions[0].mosaicId.id).subscribe(
                   response => {
                     response.id = response.mosaicId.id.toHex()
-                    this.mosaicArr.push(response)
+                    this.assetArr.push(response)
                   },
                   err => {
-                    console.error('Mosaic not found')
+                    console.error('Asset not found')
                   }
                 )
               }
@@ -166,8 +166,8 @@ export default {
       window.open(routeData.href, '_blank')
     },
 
-    goToMosaic (mosaicId) {
-      let routeData = this.$router.resolve({ path: `/result/mosaicInfo/${mosaicId}` })
+    goToAsset (assetId) {
+      let routeData = this.$router.resolve({ path: `/result/assetInfo/${assetId}` })
       window.open(routeData.href, '_blank')
     }
   }
@@ -175,7 +175,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.mosaicsList
+.assetsList
   padding: 10px
 
 .guide

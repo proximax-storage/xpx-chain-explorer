@@ -30,7 +30,8 @@
 
     <namespace-info v-if="type === 'Namespace'" :detail="param"/>
 
-    <mosaic-info v-if="type === 'Mosaic ID' || type === 'Mosaic Name'" :detail="param"/>
+    <!-- Assets Component -->
+    <asset-info v-if="type === 'Asset ID' || type === 'Asset Name'" :detail="param"/>
 
     <div class="address-list" v-if="type === 'Public Key' || type === 'Address'">
       <div class="bititle">
@@ -38,19 +39,19 @@
           Namespaces
         </h1>
         <h1 class="supertitle" :class="{ 'activeList': activeList === 'mos', 'inactiveList': activeList !== 'mos' }" @click="changeList('mos')">
-          Other Mosaics
+          Other Assets
         </h1>
       </div>
-      <div v-if="mosaicLoader === true" style="padding: 10px 0px">
+      <div v-if="assetLoader === true" style="padding: 10px 0px">
         <mdb-progress bgColor="cyan darken-3" indeterminate />
       </div>
 
       <account-namespace v-show="activeList === 'nam'" v-if="type === 'Public Key' || type === 'Address'" :namespacesList="linkNamespaces"/>
 
-      <mosaics v-show="activeList === 'mos'" v-if="showRecentMosaic && blockMosaics !== null && blockMosaics.length > 0" :arrayTransactions="blockMosaics" :nameLabel="'Others Mosaics'" @viewMosaic ="openModal" @pushInfo="pushInfo"/>
+      <assets v-show="activeList === 'mos'" v-if="showRecentAsset && blockAssets !== null && blockAssets.length > 0" :arrayTransactions="blockAssets" :nameLabel="'Others Assets'" @viewAsset ="openModal" @pushInfo="pushInfo"/>
 
-      <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'mos'" v-if="mosaicLoader === false && blockMosaics === null">
-        No mosaics yet
+      <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'mos'" v-if="assetLoader === false && blockAssets === null">
+        No assets yet
       </div>
 
       <div class="emptyMosNam animated fast fadeIn" v-show="activeList === 'nam'" v-if="linkNamespaces === undefined || linkNamespaces.length === 0">
@@ -58,15 +59,21 @@
       </div>
     </div>
 
+    <!-- End Assets Component -->
 
-    <!-- Mosaics Component -->
-    <!-- End Mosaics Component -->
+    <div v-if="$route.params.type === 'assetInfo'">
+      <!-- Rich List Component -->
+      <richlist v-if="tableData.length > 0" :arrayTransactions="tableData" :detail="assetData"/>
+      <!-- End Rich List Component -->
+    </div>
 
-    <!-- Recent Transactions Component -->
-    <recent-trans v-if="showRecentTransaction && blockTransactions.length > 0 && blockTransactions.length > 0" :arrayTransactions="blockTransactions"/>
+    <div v-else>
+      <!-- Recent Transactions Component -->
+      <recent-trans v-if="tableData.length > 0" :arrayTransactions="tableData"/>
 
-    <incoming-trans v-if="type === 'Address' && param.publicKey === this.invalidPublicKey" :arrayTransactions="incomingTransactions"/>
-    <!-- End Recent Transactions Component -->
+      <incoming-trans v-if="type === 'Address' && param.publicKey === this.invalidPublicKey" :arrayTransactions="incomingTransactions"/>
+      <!-- End Recent Transactions Component -->
+    </div>
 
     <!-- Modal Component -->
     <modal :param="modalInfo" :active="modalActive" :run="closeModal" :title="modalTitle"/>
@@ -86,11 +93,12 @@ import Multisig from '@/components/searchResult/MultisigInfo.vue'
 import BlockInfo from '@/components/searchResult/BlockInfo.vue'
 import Transaction from '@/components/searchResult/Transaction.vue'
 import NamespaceInfo from '@/components/searchResult/NamespaceInfo.vue'
-import MosaicInfo from '@/components/searchResult/MosaicInfo.vue'
+import AssetInfo from '@/components/searchResult/AssetInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import IncomingTrans from '@/components/searchResult/IncomingTrans.vue'
-import Mosaics from '@/components/searchResult/Mosaics.vue'
+import Assets from '@/components/searchResult/Assets.vue'
+import Richlist from '@/components/searchResult/Richlist.vue'
 import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams, PublicAccount } from 'tsjs-xpx-chain-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
 import { mdbProgress } from 'mdbvue'
@@ -108,9 +116,10 @@ export default {
     BlockInfo,
     Transaction,
     NamespaceInfo,
-    MosaicInfo,
+    AssetInfo,
     RecentTrans,
-    Mosaics,
+    Assets,
+    Richlist,
     Modal,
     mdbProgress,
     IncomingTrans
@@ -121,12 +130,11 @@ export default {
       type: '',
       value: '',
       recent: [],
-      showRecentTransaction: false,
-      blockTransactions: [],
+      tableData: [],
       incomingTransactions: [],
-      showRecentMosaic: false,
-      blockMosaics: null,
-      mosaicLoader: false,
+      showRecentAsset: false,
+      blockAssets: null,
+      assetLoader: false,
       // Public Key
       errorPublicKey: false,
       linkNamespaces: undefined,
@@ -137,6 +145,9 @@ export default {
       multisigData: undefined,
       multisigRelatedAccount: [],
       errorMultisig: false,
+
+      // Rich List
+      assetData: undefined,
 
       // modalConfig
       modalInfo: [],
@@ -185,24 +196,24 @@ export default {
       } else {
         this.getNamespaceInfo(this.$route.params.id)
       }
-    } else if (this.$route.params.type === 'mosaicInfo') {
+    } else if (this.$route.params.type === 'assetInfo') {
       if (this.isHex(this.$route.params.id) === false) {
         let tmp = this.$route.params.id
         let tmp2 = new NamespaceId(tmp)
         this.$proxProvider.getNamespacesInfo(tmp2.id).subscribe(
           response => {
-            this.getMosaicInfo(new Id(response.alias.mosaicId).toHex())
+            this.getAssetInfo(response.alias.mosaicId.toHex())
           },
           error => {
             this.$store.dispatch('updateErrorInfo', {
               active: true,
-              message: 'Mosaic not found',
+              message: 'Asset not found',
               submessage: 'Check the information provided and try again'
             })
           }
         )
       } else {
-        this.getMosaicInfo(this.$route.params.id)
+        this.getAssetInfo(this.$route.params.id)
       }
     }
     this.value = this.$route.params.id
@@ -222,15 +233,13 @@ export default {
       const xpx = this.$store.state.xpx
       let errorActive1 = false
       let errorActive2 = false
-      this.mosaicLoader = true
+      this.assetLoader = true
       let incoming = await this.$proxProvider.accountHttp.incomingTransactions(addr, new QueryParams(100)).toPromise()
       this.incomingTransactions = incoming
 
       this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
           // Assign the response to accountInfo and show the account information
-          console.log(resp)
-
           if ([null, undefined].includes(resp.publicKey)) {
             let tmpObj = {
               address: resp.address,
@@ -248,37 +257,37 @@ export default {
             let tmpArr = []
 
             if (filteredTrans.length === 0) {
-              this.mosaicLoader = false
+              this.assetLoader = false
             }
 
 
             filteredTrans.forEach((el, index) => {
-              this.$proxProvider.getMosaic(el.id).subscribe(
-                mosaicResponse => {
+              this.$proxProvider.getAsset(el.id).subscribe(
+                assetResponse => {
                   let amountCompact = el.amount.compact()
-                  let mosHeight = mosaicResponse.height.compact()
-                  let mosDurat = (mosaicResponse.duration === undefined) ? 0 : mosaicResponse.duration.compact()
-                  this.$proxProvider.getMosaicsName([mosaicResponse.mosaicId]).subscribe(
+                  let mosHeight = assetResponse.height.compact()
+                  let mosDurat = (assetResponse.duration === undefined) ? 0 : assetResponse.duration.compact()
+                  this.$proxProvider.getAssetsName([assetResponse.mosaicId]).subscribe(
                     responseName => {
                       let tmpObj = {
                         name: (responseName[0].names.length > 0) ? responseName[0].names[0].name : '',
                         id: el.id.toHex(),
-                        owner: (resp.publicKey === mosaicResponse.owner.publicKey) ? 'true' : 'false',
-                        quantity: (mosaicResponse.divisibility === 0) ? amountCompact : this.$utils.fmtDivisibility(el.amount.compact(), mosaicResponse.divisibility),
+                        owner: (resp.publicKey === assetResponse.owner.publicKey) ? 'true' : 'false',
+                        quantity: (assetResponse.divisibility === 0) ? amountCompact : this.$utils.fmtDivisibility(el.amount.compact(), assetResponse.divisibility),
                         expired: (this.$store.state.currentBlock.height >= (mosHeight + mosDurat)) ? false : true
                       }
                       tmpArr.push(tmpObj)
                       if (index + 1 === filteredTrans.length) {
-                        this.blockMosaics = tmpArr
-                        this.showRecentMosaic = !this.showRecentMosaic
-                        this.mosaicLoader = false
+                        this.blockAssets = tmpArr
+                        this.showRecentAsset = !this.showRecentAsset
+                        this.assetLoader = false
                       }
                     },
                     error => {
                       console.warn(error)
-                      this.blockMosaics = null
-                      this.showRecentMosaic = !this.showRecentMosaic
-                      this.mosaicLoader = false
+                      this.blockAssets = null
+                      this.showRecentAsset = !this.showRecentAsset
+                      this.assetLoader = false
                     }
                   )
                 }, err => {
@@ -286,10 +295,8 @@ export default {
                 }
               )
             })
-            // this.blockMosaics = filteredTrans
-            // this.showRecentMosaic = !this.showRecentMosaic
           } else {
-            this.mosaicLoader = false
+            this.assetLoader = false
           }
 
           this.viewTransactionsFromPublicAccount(resp.publicAccount)
@@ -404,55 +411,43 @@ export default {
     getBlockByHeight (block) {
       this.$proxProvider.blockHttp.getBlockByHeight(parseInt(block)).subscribe(
         next => {
-        next.date = this.$utils.fmtTime(new Date(next.timestamp.compact() + Deadline.timestampNemesisBlock * 1000))
-        next.difficulty = (next.difficulty.compact()/Math.pow(10, 14)*100).toFixed(2) + "%"
-        next.totalFee = this.$utils.fmtAmountValue(next.totalFee.compact())
-        this.param = {
-          height: block,
-          timestamp: next.date,
-          publicKey: next.signer.publicKey,
-          hash: next.hash,
-          difficulty: next.difficulty,
-          txes: next.numTransactions,
-          fee: next.totalFee
-        }
-        this.showRecentTransaction = (this.param.txes > 0) ? true : false
-        this.showComponent()
-        this.showInfo = true
-
-        let transactions = 100
-        if (next.numTransactions < 100 && next.numTransactions > 75) {
-          transactions = 75
-        } else if (next.numTransactions < 75 && next.numTransactions > 50) {
-          transactions = 50
-        } else if (next.numTransactions < 50 && next.numTransactions > 25) {
-          transactions = 25
-        } else if (next.numTransactions < 25 && next.numTransactions > 10) {
-          transactions = 10
-        }
-
-        this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(transactions)).subscribe(
-          blockTransactions => {
-            this.blockTransactions = blockTransactions
-            for (const index in this.blockTransactions) {
-              this.blockTransactions[index].fee = this.$utils.fmtAmountValue(this.blockTransactions[index].maxFee.compact())
-              this.blockTransactions[index].deadline = this.$utils.fmtTime(new Date(this.blockTransactions[index].deadline.value.toString()))
-            }
-            this.showRecentTransaction = true
-            this.noShowTransactions = (this.blockTransactions.length > 0) ? false : true
-          },
-          error => {
-            this.noShowTransactions = true
+          next.date = this.$utils.fmtTime(new Date(next.timestamp.compact() + Deadline.timestampNemesisBlock * 1000))
+          next.difficulty = (next.difficulty.compact()/Math.pow(10, 14)*100).toFixed(2) + "%"
+          next.totalFee = this.$utils.fmtAmountValue(next.totalFee.compact())
+          this.param = {
+            height: block,
+            timestamp: next.date,
+            publicKey: next.signer.publicKey,
+            hash: next.hash,
+            difficulty: next.difficulty,
+            txes: next.numTransactions,
+            fee: next.totalFee
           }
-        )
-      },
-      error => {
-        this.$store.dispatch('updateErrorInfo', {
-          active: true,
-          message: 'Block Height not found',
-          submessage: 'Check the information provided and try again'
-        })
-      })
+          this.showComponent()
+
+          if (this.param.txes > 0) {
+            this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(100)).subscribe(
+              blockTransactions => {
+                this.tableData = blockTransactions
+                for (const index in this.tableData) {
+                  this.tableData[index].fee = this.$utils.fmtAmountValue(this.tableData[index].maxFee.compact())
+                  this.tableData[index].deadline = this.$utils.fmtTime(new Date(this.tableData[index].deadline.value.toString()))
+                }
+              },
+              error => {
+                console.log('BLOCK TRANSACTIONS ERROR',error)
+              }
+            )
+          }
+        },
+        error => {
+          this.$store.dispatch('updateErrorInfo', {
+            active: true,
+            message: 'Block Height not found',
+            submessage: 'Check the information provided and try again'
+          })
+        }
+      )
     },
 
     /**
@@ -505,22 +500,25 @@ export default {
       )
     },
 
-    getMosaicInfo (mosaicHex) {
-      let mosaicId = Id.fromHex(mosaicHex)
-      this.$proxProvider.getMosaic(mosaicId).subscribe(
+    getAssetInfo (assetHex) {
+      let assetId = Id.fromHex(assetHex)
+      this.$proxProvider.getAsset(assetId).subscribe(
         response => {
-          this.$proxProvider.getMosaicsName([mosaicId]).subscribe(
+          this.assetData = response
+          this.$proxProvider.getAssetsName([assetId]).subscribe(
             nameResponse => {
               this.param = response
               this.param.name = (nameResponse[0].names && nameResponse[0].names.length !== 0) ? nameResponse[0].names[0].name : undefined
               this.showComponent()
             }
           )
+
+          this.viewRichlist(assetId)
         },
         error => {
           this.$store.dispatch('updateErrorInfo', {
             active: true,
-            message: 'Mosaic not found',
+            message: 'Asset not found',
             submessage: 'Check the information provided and try again'
           })
         }
@@ -538,9 +536,8 @@ export default {
         this.type = 'Address'
       } else if (this.$route.params.type === 'namespaceInfo') {
         this.type = 'Namespace'
-      } else if (this.$route.params.type === 'mosaicInfo') {
-        this.type = (isNaN(parseInt(this.$route.params.id, 16))) ? 'Mosaic Name' : 'Mosaic ID'
-        // this.type = 'Mosaic ID'
+      } else if (this.$route.params.type === 'assetInfo') {
+        this.type = (isNaN(parseInt(this.$route.params.id, 16))) ? 'Asset Name' : 'Asset ID'
       }
       this.value = this.$route.params.id
     },
@@ -560,29 +557,29 @@ export default {
           transactions.forEach(element => {
             element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
             element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString()))
-            this.blockTransactions.push(element)
+            this.tableData.push(element)
           })
-          this.showRecentTransaction = true
         }
       } catch (error) {
-        console.log('ACCOUNT ERROR',error)
+        console.log('ACCOUNT TRANSACTIONS ERROR',error)
       }
+    },
 
-      // this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).subscribe(
-      //   transactions => {
-      //     if (transactions.length > 0) {
-      //       transactions.forEach(element => {
-      //         element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
-      //         element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString()))
-      //         this.blockTransactions.push(element)
-      //       })
-      //       this.showRecentTransaction = true
-      //     }
-      //   },
-      //   error => {
-      //     console.error('ACCOUNT ERROR....', error)
-      //   }
-      // )
+    /**
+     * View Rich List From Asset Id
+     * Get rich list from the asset id
+     *
+     * @param { any } assetId
+     */
+    async viewRichlist(assetId) {
+      try {
+        let transactions = await this.$proxProvider.assetHttp.getMosaicRichlist(assetId, 100).toPromise()
+        if (transactions.length > 0) {
+          this.tableData = transactions
+        }
+      } catch (error) {
+        console.log('ASSET RICH LIST ERROR',error)
+      }
     },
 
     /**

@@ -1,6 +1,6 @@
 <template>
-  <div class="mosaicInfo animated fast fadeIn">
-    <!-- <h1 class="supertitle">Mosaic Info</h1> -->
+  <div class="assetInfo animated fast fadeIn">
+    <!-- <h1 class="supertitle">Asset Info</h1> -->
     <div class="mos-layout-up">
       <div>
         <div class="up">
@@ -9,7 +9,7 @@
           <div class="valueLower" v-else>{{ (detail.name !== undefined) ? detail.name : 'No Available' }}</div>
         </div>
         <div class="down">
-          <div class="title">Mosaic Id</div>
+          <div class="title">Asset Id</div>
           <div class="value">{{ detail.mosaicId.toHex() }}</div>
         </div>
       </div>
@@ -75,7 +75,7 @@
       </div>
     </div>
 
-    <h1 class="supertitle center-text" style="margin-top: 10px">Mosaic Properties</h1>
+    <h1 class="supertitle center-text" style="margin-top: 10px">Asset Properties</h1>
     <div class="mos-layout-plus">
       <div>
         <div class="element" style="border-radius: 20px">
@@ -104,7 +104,7 @@
 
 <script>
 export default {
-  name: 'MosaicInfo',
+  name: 'AssetInfo',
   props: {
     detail: Object
   },
@@ -217,7 +217,7 @@ $radius: 20px
   font-weight: normal
   word-break: break-all
 
-.mosaicInfo
+.assetInfo
   padding: 10px
   color: black
   & > .mos-layout-up
@@ -264,7 +264,7 @@ $radius: 20px
     text-decoration: underline
     cursor: pointer
 
-  .mosaicInfo
+  .assetInfo
     & > .mos-layout-up
       flex-flow: column
       & > div

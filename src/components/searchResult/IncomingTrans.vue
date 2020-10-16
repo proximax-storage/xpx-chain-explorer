@@ -19,8 +19,8 @@
             <img :src="require('@/assets/arrow-transaction-recipient-green.svg')" width="15">
           </figure>
           <div class="value link" @click="goToAddress(item.recipient.pretty())" v-if="item.recipient">{{ item.recipient.pretty() }}</div>
-          <div class="value" v-else-if="item.type === typeTransactions.mosaicDefinition.id">
-            {{ mosaicRental }}
+          <div class="value" v-else-if="item.type === typeTransactions.assetDefinition.id">
+            {{ assetRental }}
           </div>
           <div class="value" v-else-if="item.type === typeTransactions.registerNamespace.id">
             {{ namespaceRental }}
@@ -86,7 +86,7 @@ export default {
   data () {
     return {
       typeTransactions: proximaxProvider.typeTransactions(),
-      mosaicRental: this.$store.state.rentalFeeInfo.mosaicRentalFee.address,
+      assetRental: this.$store.state.rentalFeeInfo.mosaicRentalFee.address,
       namespaceRental: this.$store.state.rentalFeeInfo.namespaceRentalFee.address
     }
   },

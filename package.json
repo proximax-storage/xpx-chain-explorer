@@ -1,6 +1,6 @@
 {
   "name": "xpx-chain-explorer",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve",
@@ -20,7 +20,7 @@
     "postcss-import": "^12.0.1",
     "register-service-worker": "^1.6.2",
     "rxjs": "^6.5.2",
-    "tsjs-xpx-chain-sdk": "^0.7.1",
+    "tsjs-xpx-chain-sdk": "^0.8.0",
     "utf8": "^3.0.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",

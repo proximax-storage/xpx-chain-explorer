@@ -146,9 +146,10 @@ In this view the value to be searched is analyzed, which is added in the route a
   * BlockInfo
   * Transaction
   * NamespaceInfo
-  * MosaicInfo
+  * AssetInfo
   * RecentTrans
-  * Mosaics
+  * Assets
+  * Richlist
   * Modal
   * mdbProgress
   * IncomingTrans
@@ -163,7 +164,7 @@ This view shows a list of tiles and namespaces, corresponding to the "Rental Fee
   * NodeAdmin
   * SearchBar
   * NamespacesList
-  * MosaicsList
+  * AssetsList
 
 ## Components
 
@@ -196,7 +197,7 @@ This component was initially used, however it was removed, but it is intended to
 ### SearchBar.vue
 *from the root, root > src > components > global > SearchBar.vue.*
 
-Delicate component that fulfills the function of receiving a parameter to perform a search, said parameter must comply with the characteristics depending on the type of search, for example: Address, PublicKey, Block, Hash, MosaicID, NamespaceID, Mosaic Name and Namespace Name.
+Delicate component that fulfills the function of receiving a parameter to perform a search, said parameter must comply with the characteristics depending on the type of search, for example: Address, PublicKey, Block, Hash, AssetID, NamespaceID, Asset Name and Namespace Name.
 
 ### TopButton.vue
 *from the root, root > src > components > global > TopButton.vue.*
@@ -219,8 +220,8 @@ The second is a box that shows the height of the current block.
 
 And the third and last, is a box that shows the calculation of the average response time of the nodes corresponding to the last block.
 
-### MosaicsList.vue
-*from the root, root > src > components > List > MosaicsList.vue.*
+### AssetsList.vue
+*from the root, root > src > components > List > AssetsList.vue.*
 
 Like the block component, this component shows a list of tiles corresponding to the "Rental Fee Sink Account".
 
@@ -249,15 +250,20 @@ This component is only a section and shows the most detailed information of a bl
 
 This component is shown if a public key is invalid for the blockchain but has incoming transactions.
 
-### MosaicInfo.vue
-*from the root, root > src > components > searchResult > MosaicInfo.vue.*
+### AssetInfo.vue
+*from the root, root > src > components > searchResult > AssetInfo.vue.*
 
-This component is only a section and shows detailed information of a mosaic.
+This component is only a section and shows detailed information of a asset.
 
-### Mosaics.vue
-*from the root, root > src > components > searchResult > Mosaics.vue.*
+### Assets.vue
+*from the root, root > src > components > searchResult > Assets.vue.*
 
-This component shows a list of mosaicos and some additional details, corresponding to an account, which is what you find in the current view.
+This component shows a list of assets and some additional details, corresponding to an account, which is what you find in the current view.
+
+### Richlist.vue
+*from the root, root > src > components > searchResult > Richlist.vue.*
+
+This component shows the rich list of a asset.
 
 ### MultisigInfo.vue
 *from the root, root > src > components > searchResult > MultisigInfo.vue.*
@@ -290,7 +296,7 @@ This component shows the detailed information of a transaction, even if it is "A
   * InnerTransactions
   * Cosignatures
   * Modifications
-  * MosaicsInTransfer
+  * AssetsInTransfer
 
 ### Transaction.Cosignatures.vue
 *from the root, root > src > components > searchResult > Transaction.Cosignatures.vue.*
@@ -305,9 +311,9 @@ In the event that the transaction is "Aggregate", this component lists the inter
 ### Transaction.Modifications.vue
 *from the root, root > src > components > searchResult > Transaction.Modifications.vue.*
 
-In the event that the transaction is "Modify Mosaic Metadata", this component shows these modifications.
+In the event that the transaction is "Modify Asset Metadata", this component shows these modifications.
 
-### Transactions.Mosaics.vue
+### Transactions.Assets.vue
 *from the root, root > src > components > searchResult > Transaction.Modifications.vue.*
 
 This component lists the tiles sent in the current transaction except for XPX shown as amount.

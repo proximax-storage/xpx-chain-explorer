@@ -35,16 +35,16 @@
             <div class="value centerAlign" v-html="$utils.fmtDivisibility(item.cost.compact(), 6)"></div>
           </div>
           <div>
-            <div class="title centerAlign">Mosaic Amount</div>
+            <div class="title centerAlign">Asset Amount</div>
             <div class="value centerAlign">{{ item.mosaicAmount.compact() }}</div>
           </div>
         </template>
         <div>
-          <div class="title centerAlign">Mosaic Id</div>
+          <div class="title centerAlign">Asset Id</div>
           <div
             class="value centerAlign link"
             style="cursor: pointer,  width: none"
-            @click="goToMosaic(item.mosaicId.toHex())"
+            @click="goToAsset(item.mosaicId.toHex())"
           >{{ item.mosaicId.toHex()}}</div>
         </div>
       </div>
@@ -82,9 +82,9 @@ export default {
           : this.$router.resolve({ path: `/result/address/${address}` });
       window.open(routeData.href, "_blank");
     },
-    goToMosaic(mosaicId) {
+    goToAsset(assetId) {
       let routeData = this.$router.resolve({
-        path: `/result/mosaicInfo/${mosaicId}`
+        path: `/result/assetInfo/${assetId}`
       });
       window.open(routeData.href, "_blank");
     }

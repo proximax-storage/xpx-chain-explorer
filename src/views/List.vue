@@ -4,8 +4,8 @@
     <search-bar/>
 
     <div>
-      <div class="selectedList" v-if="typeList === 'mosaics'">
-        Mosaic List
+      <div class="selectedList" v-if="typeList === 'assets'">
+        Asset List
       </div>
       <div class="selectedList" v-if="typeList === 'namespaces'">
         Namespace List
@@ -16,8 +16,8 @@
     </div>
 
     <div>
-      <div v-if="typeList === 'mosaics'">
-        <mosaics-list/>
+      <div v-if="typeList === 'assets'">
+        <assets-list/>
       </div>
       <div v-if="typeList === 'namespaces'">
         <namespaces-list/>
@@ -30,7 +30,7 @@
 import NodeAdmin from '@/components/home/NodeAdmin.vue'
 import SearchBar from '@/components/global/SearchBar.vue'
 import NamespacesList from '@/components/List/NamespacesList.vue'
-import MosaicsList from '@/components/List/MosaicsList.vue'
+import AssetsList from '@/components/List/AssetsList.vue'
 
 export default {
   name: 'List',
@@ -38,7 +38,7 @@ export default {
     NodeAdmin,
     SearchBar,
     NamespacesList,
-    MosaicsList
+    AssetsList
   },
   data () {
     return {
@@ -47,8 +47,6 @@ export default {
   },
   mounted () {
     this.typeList = this.$route.params.category
-    /* http://localhost:8080/#/list/mosaics */
-
   }
 }
 </script>
