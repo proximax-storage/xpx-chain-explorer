@@ -412,9 +412,9 @@ export default {
      *
      * @param { String } block
      */
-    getBlockByHeight (block) {
+    async getBlockByHeight (block) {
       this.$proxProvider.blockHttp.getBlockByHeight(parseInt(block)).subscribe(
-        next => {
+        async next => {
           next.date = this.$utils.fmtTime(new Date(next.timestamp.compact() + Deadline.timestampNemesisBlock * 1000))
           next.difficulty = (next.difficulty.compact()/Math.pow(10, 14)*100).toFixed(2) + "%"
           next.totalFee = this.$utils.fmtAmountValue(next.totalFee.compact())
@@ -430,18 +430,36 @@ export default {
           this.showComponent()
 
           if (this.param.txes > 0) {
-            this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(this.pageSize)).subscribe(
-              blockTransactions => {
-                this.tableData = blockTransactions
+            try {
+              if (this.tableNextData.length > 0) {
+                // Get prefetch data
+                this.tableData = this.tableData.concat(this.tableNextData)
+              } else if (this.tableData.length > 0) {
+                // Do nothing since there is no more data to fetch
+                return
+              } else {
+                // Get data during initial loading
+                this.tableData = await this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(this.pageSize)).toPromise()
                 for (const index in this.tableData) {
                   this.tableData[index].fee = this.$utils.fmtAmountValue(this.tableData[index].maxFee.compact())
                   this.tableData[index].deadline = this.$utils.fmtTime(new Date(this.tableData[index].deadline.value.toString()))
                 }
-              },
-              error => {
-                console.log('BLOCK TRANSACTIONS ERROR',error)
               }
-            )
+
+              if (this.tableData.length == this.pageSize) {
+                // Prefetch data
+                this.page += 1
+                this.tableNextData = await this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(this.pageSize, this.tableData[this.tableData.length - 1].transactionInfo.id)).toPromise()
+                for (const index in this.tableNextData) {
+                  this.tableNextData[index].fee = this.$utils.fmtAmountValue(this.tableNextData[index].maxFee.compact())
+                  this.tableNextData[index].deadline = this.$utils.fmtTime(new Date(this.tableNextData[index].deadline.value.toString()))
+                }
+              } else if (this.tableData.length < ((this.page + 1) * this.pageSize)) {
+                this.tableNextData = []
+              }
+            } catch (error) {
+              console.log('BLOCK TRANSACTIONS ERROR',error)
+            }
           }
         },
         error => {
@@ -592,7 +610,7 @@ export default {
           // Prefetch data
           this.page += 1
           this.tableNextData = await this.$proxProvider.assetHttp.getMosaicRichlist(this.assetData.mosaicId, {pageSize: this.pageSize, page: this.page}).toPromise()
-        } else if (this.tableData.length < this.pageSize) {
+        } else if (this.tableData.length < ((this.page + 1) * this.pageSize)) {
           this.tableNextData = []
         }
       } catch (error) {
