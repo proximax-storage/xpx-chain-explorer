@@ -31,7 +31,7 @@
     <namespace-info v-if="type === 'Namespace'" :detail="param"/>
 
     <!-- Assets Component -->
-    <asset-info v-if="type === 'Asset ID' || type === 'Asset Name'" :detail="param"/>
+    <asset-info v-if="type === 'Asset ID' || type === 'Asset Name'" :detail="param" :arrayTransactions="tableData"/>
 
     <div class="address-list" v-if="type === 'Public Key' || type === 'Address'">
       <div class="bititle">
@@ -61,18 +61,19 @@
 
     <!-- End Assets Component -->
 
-    <div v-if="$route.params.type === 'assetInfo'">
-      <!-- Rich List Component -->
-      <richlist v-if="tableData.length > 0" :arrayTransactions="tableData" :detail="assetData"/>
-      <!-- End Rich List Component -->
-    </div>
-
-    <div v-else>
+    <div v-if="$route.params.type !== 'assetInfo'">
       <!-- Recent Transactions Component -->
       <recent-trans v-if="tableData.length > 0" :arrayTransactions="tableData"/>
 
       <incoming-trans v-if="type === 'Address' && param.publicKey === this.invalidPublicKey" :arrayTransactions="incomingTransactions"/>
       <!-- End Recent Transactions Component -->
+    </div>
+
+    <div class="special-bottom animated faster fadeInDown" v-if="tableNextData.length !== 0" @click="loadMore">
+      <div>
+        <span>Load More</span>
+        <span class="value" v-if="buttonLoaderActive"><mdb-spinner small color="yellow"/></span>
+      </div>
     </div>
 
     <!-- Modal Component -->
@@ -98,10 +99,9 @@ import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
 import IncomingTrans from '@/components/searchResult/IncomingTrans.vue'
 import Assets from '@/components/searchResult/Assets.vue'
-import Richlist from '@/components/searchResult/Richlist.vue'
-import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams, PublicAccount } from 'tsjs-xpx-chain-sdk'
+import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams, PageQueryParams, PublicAccount } from 'tsjs-xpx-chain-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
-import { mdbProgress } from 'mdbvue'
+import { mdbProgress, mdbSpinner } from 'mdbvue'
 import axios from 'axios'
 
 export default {
@@ -119,9 +119,9 @@ export default {
     AssetInfo,
     RecentTrans,
     Assets,
-    Richlist,
     Modal,
     mdbProgress,
+    mdbSpinner,
     IncomingTrans
   },
   data () {
@@ -131,6 +131,10 @@ export default {
       value: '',
       recent: [],
       tableData: [],
+      tableNextData: [],
+      page: 0,
+      pageSize: 10,
+      buttonLoaderActive: false,
       incomingTransactions: [],
       showRecentAsset: false,
       blockAssets: null,
@@ -234,7 +238,7 @@ export default {
       let errorActive1 = false
       let errorActive2 = false
       this.assetLoader = true
-      let incoming = await this.$proxProvider.accountHttp.incomingTransactions(addr, new QueryParams(100)).toPromise()
+      let incoming = await this.$proxProvider.accountHttp.incomingTransactions(addr, new QueryParams(this.pageSize)).toPromise()
       this.incomingTransactions = incoming
 
       this.$proxProvider.getAccountInfo(addr).subscribe(
@@ -426,7 +430,7 @@ export default {
           this.showComponent()
 
           if (this.param.txes > 0) {
-            this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(100)).subscribe(
+            this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(this.pageSize)).subscribe(
               blockTransactions => {
                 this.tableData = blockTransactions
                 for (const index in this.tableData) {
@@ -513,7 +517,7 @@ export default {
             }
           )
 
-          this.viewRichlist(assetId)
+          this.viewRichlist()
         },
         error => {
           this.$store.dispatch('updateErrorInfo', {
@@ -552,7 +556,7 @@ export default {
       const addr = Address.createFromRawAddress(publicAccount.address.address)
 
       try {
-        let transactions = await this.$proxProvider.getAllTransactionsFromAccount(publicAccount, 100).toPromise()
+        let transactions = await this.$proxProvider.accountHttp.transactions(publicAccount, new QueryParams(this.pageSize)).toPromise()
         if (transactions.length > 0) {
           transactions.forEach(element => {
             element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
@@ -571,11 +575,25 @@ export default {
      *
      * @param { any } assetId
      */
-    async viewRichlist(assetId) {
+    async viewRichlist() {
       try {
-        let transactions = await this.$proxProvider.assetHttp.getMosaicRichlist(assetId, 100).toPromise()
-        if (transactions.length > 0) {
-          this.tableData = transactions
+        if (this.tableNextData.length > 0) {
+          // Get prefetch data
+          this.tableData = this.tableData.concat(this.tableNextData)
+        } else if (this.tableData.length > 0) {
+          // Do nothing since there is no more data to fetch
+          return
+        } else {
+          // Get data during initial loading
+          this.tableData = await this.$proxProvider.assetHttp.getMosaicRichlist(this.assetData.mosaicId, {pageSize: this.pageSize, page: this.page}).toPromise()
+        }
+
+        if (this.tableData.length == this.pageSize) {
+          // Prefetch data
+          this.page += 1
+          this.tableNextData = await this.$proxProvider.assetHttp.getMosaicRichlist(this.assetData.mosaicId, {pageSize: this.pageSize, page: this.page}).toPromise()
+        } else if (this.tableData.length < this.pageSize) {
+          this.tableNextData = []
         }
       } catch (error) {
         console.log('ASSET RICH LIST ERROR',error)
@@ -636,6 +654,12 @@ export default {
     isHex (value) {
       let regex =  /^[0-9A-Fa-f]+$/
       return regex.test(value)
+    },
+
+    loadMore () {
+      this.buttonLoaderActive = true
+      this.viewRichlist()
+      this.buttonLoaderActive = false
     }
   },
   watch: {
@@ -713,6 +737,35 @@ export default {
   text-align: center
   background: #f4f4f4
   margin: 10px 0px
+
+.special-bottom
+  padding-bottom: 10px
+  margin-top: 5px
+  display: flex
+  flex-flow: row nowrap
+  justify-content: space-around
+  color: white
+  border-radius: 20px
+  background: transparent
+  & > div
+    display: flex
+    flex-flow: column
+    align-items: center
+    padding: 5px
+    background: #2d819b
+    border-radius: 20px
+    padding: 5px 40px
+    & > span:first-child
+      font-size: 15px !important
+      text-transform: uppercase
+      font-weight: bold
+      color: white
+    & > span:last-child
+      text-align: center
+      font-size: 10px
+      text-transform: uppercase
+      font-weight: bold
+      color: white
 
 @media screen and (max-width: 550px)
   .search-type

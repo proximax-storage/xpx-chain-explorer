@@ -2,7 +2,6 @@ import { Observable, BehaviorSubject } from 'rxjs'
 import {
   BlockHttp,
   ChainHttp,
-  QueryParams,
   MosaicHttp,
   Address,
   AccountHttp,
@@ -187,17 +186,6 @@ export default class proximaxProvider {
    */
   getAccountInfo (address) {
     return this.accountHttp.getAccountInfo(address)
-  }
-
-  /**
-   * Get all transactions from an account
-   *
-   * @param address
-   * @returns {Observable} accountHttp
-   * @memberof proximaxProvider
-   */
-  getAllTransactionsFromAccount (publicAccount, queryParams = 10) {
-    return this.accountHttp.transactions(publicAccount, new QueryParams(queryParams))
   }
 
   /**

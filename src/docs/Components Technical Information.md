@@ -149,7 +149,6 @@ In this view the value to be searched is analyzed, which is added in the route a
   * AssetInfo
   * RecentTrans
   * Assets
-  * Richlist
   * Modal
   * mdbProgress
   * IncomingTrans
@@ -259,11 +258,6 @@ This component is only a section and shows detailed information of a asset.
 *from the root, root > src > components > searchResult > Assets.vue.*
 
 This component shows a list of assets and some additional details, corresponding to an account, which is what you find in the current view.
-
-### Richlist.vue
-*from the root, root > src > components > searchResult > Richlist.vue.*
-
-This component shows the rich list of a asset.
 
 ### MultisigInfo.vue
 *from the root, root > src > components > searchResult > MultisigInfo.vue.*
