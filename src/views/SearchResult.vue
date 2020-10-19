@@ -62,11 +62,9 @@
     <!-- End Assets Component -->
 
     <div v-if="$route.params.type !== 'assetInfo'">
-      <!-- Recent Transactions Component -->
+      <!-- Transactions Component -->
       <recent-trans v-if="tableData.length > 0" :arrayTransactions="tableData"/>
-
-      <incoming-trans v-if="type === 'Address' && param.publicKey === this.invalidPublicKey" :arrayTransactions="incomingTransactions"/>
-      <!-- End Recent Transactions Component -->
+      <!-- End Transactions Component -->
     </div>
 
     <div class="special-bottom animated faster fadeInDown" v-if="tableNextData.length !== 0" @click="loadMore">
@@ -97,7 +95,6 @@ import NamespaceInfo from '@/components/searchResult/NamespaceInfo.vue'
 import AssetInfo from '@/components/searchResult/AssetInfo.vue'
 import Modal from '@/components/global/Modal.vue'
 import RecentTrans from '@/components/searchResult/RecentTrans.vue'
-import IncomingTrans from '@/components/searchResult/IncomingTrans.vue'
 import Assets from '@/components/searchResult/Assets.vue'
 import { Address, Deadline, NetworkType , Id, NamespaceId, NamespaceName, MosaicId, QueryParams, PageQueryParams, PublicAccount } from 'tsjs-xpx-chain-sdk'
 import proximaxProvider from '@/services/proximaxProviders.js'
@@ -122,7 +119,6 @@ export default {
     Modal,
     mdbProgress,
     mdbSpinner,
-    IncomingTrans
   },
   data () {
     return {
@@ -135,7 +131,6 @@ export default {
       page: 0,
       pageSize: 10,
       buttonLoaderActive: false,
-      incomingTransactions: [],
       showRecentAsset: false,
       blockAssets: null,
       assetLoader: false,
@@ -149,9 +144,6 @@ export default {
       multisigData: undefined,
       multisigRelatedAccount: [],
       errorMultisig: false,
-
-      // Rich List
-      assetData: undefined,
 
       // modalConfig
       modalInfo: [],
@@ -179,12 +171,12 @@ export default {
       let tmp
       if (this.$route.params.id.length === 64) {
         if (this.$store.state.netType === undefined) {
-          this.emergencyNet()
+          let response = axios.get('./config/config.json')
+          tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, response.data.NetworkType.number)
         } else {
           tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number)
-          this.viewTransactionsFromPublicAccount(tmp)
-          this.getInfoAccountAndViewTransactions(tmp.address.address)
         }
+        this.getInfoAccountAndViewTransactions(tmp.address.address)
       } else if (this.$route.params.id.length === 40 || this.$route.params.id.length === 46) {
         this.getInfoAccountAndViewTransactions(this.$route.params.id)
       }
@@ -238,8 +230,6 @@ export default {
       let errorActive1 = false
       let errorActive2 = false
       this.assetLoader = true
-      let incoming = await this.$proxProvider.accountHttp.incomingTransactions(addr, new QueryParams(this.pageSize)).toPromise()
-      this.incomingTransactions = incoming
 
       this.$proxProvider.getAccountInfo(addr).subscribe(
         resp => {
@@ -303,7 +293,7 @@ export default {
             this.assetLoader = false
           }
 
-          this.viewTransactionsFromPublicAccount(resp.publicAccount)
+          this.viewTransactionsFromPublicAccount()
         },
         error => {
           this.errorPublicKey = true
@@ -430,36 +420,7 @@ export default {
           this.showComponent()
 
           if (this.param.txes > 0) {
-            try {
-              if (this.tableNextData.length > 0) {
-                // Get prefetch data
-                this.tableData = this.tableData.concat(this.tableNextData)
-              } else if (this.tableData.length > 0) {
-                // Do nothing since there is no more data to fetch
-                return
-              } else {
-                // Get data during initial loading
-                this.tableData = await this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(this.pageSize)).toPromise()
-                for (const index in this.tableData) {
-                  this.tableData[index].fee = this.$utils.fmtAmountValue(this.tableData[index].maxFee.compact())
-                  this.tableData[index].deadline = this.$utils.fmtTime(new Date(this.tableData[index].deadline.value.toString()))
-                }
-              }
-
-              if (this.tableData.length == this.pageSize) {
-                // Prefetch data
-                this.page += 1
-                this.tableNextData = await this.$proxProvider.blockHttp.getBlockTransactions(parseInt(block), new QueryParams(this.pageSize, this.tableData[this.tableData.length - 1].transactionInfo.id)).toPromise()
-                for (const index in this.tableNextData) {
-                  this.tableNextData[index].fee = this.$utils.fmtAmountValue(this.tableNextData[index].maxFee.compact())
-                  this.tableNextData[index].deadline = this.$utils.fmtTime(new Date(this.tableNextData[index].deadline.value.toString()))
-                }
-              } else if (this.tableData.length < ((this.page + 1) * this.pageSize)) {
-                this.tableNextData = []
-              }
-            } catch (error) {
-              console.log('BLOCK TRANSACTIONS ERROR',error)
-            }
+            this.getBlockTransactions()
           }
         },
         error => {
@@ -526,7 +487,7 @@ export default {
       let assetId = Id.fromHex(assetHex)
       this.$proxProvider.getAsset(assetId).subscribe(
         response => {
-          this.assetData = response
+          this.param = response
           this.$proxProvider.getAssetsName([assetId]).subscribe(
             nameResponse => {
               this.param = response
@@ -535,7 +496,7 @@ export default {
             }
           )
 
-          this.viewRichlist()
+          this.getRichlist()
         },
         error => {
           this.$store.dispatch('updateErrorInfo', {
@@ -565,22 +526,49 @@ export default {
     },
 
     /**
-     * View Transactions From Public Account
-     * Search all transactions from the public account
+     * View Transactions From Public Account / Address
      *
-     * @param { any } publicAccount
      */
-    async viewTransactionsFromPublicAccount(publicAccount) {
-      const addr = Address.createFromRawAddress(publicAccount.address.address)
-
+    async viewTransactionsFromPublicAccount() {
       try {
-        let transactions = await this.$proxProvider.accountHttp.transactions(publicAccount, new QueryParams(this.pageSize)).toPromise()
-        if (transactions.length > 0) {
-          transactions.forEach(element => {
+        if (this.tableNextData.length > 0) {
+          // Get prefetch data
+          this.tableNextData.forEach(element => {
             element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
             element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString()))
             this.tableData.push(element)
           })
+          if (this.tableNextData.length < this.pageSize) {
+            this.tableNextData = []
+            return
+          }
+        } else if (this.tableData.length > 0) {
+          // Do nothing since there is no more data to fetch
+          return
+        } else {
+          // Get data during initial loading
+          if (this.param.publicKey == this.invalidPublicKey) {
+            this.tableData = await this.$proxProvider.accountHttp.incomingTransactions(this.param.address, new QueryParams(this.pageSize)).toPromise()
+          } else {
+            this.tableData = await this.$proxProvider.accountHttp.transactions(this.param.publicAccount, new QueryParams(this.pageSize)).toPromise()
+          }
+          for (const index in this.tableData) {
+            this.tableData[index].fee = this.$utils.fmtAmountValue(this.tableData[index].maxFee.compact())
+            this.tableData[index].deadline = this.$utils.fmtTime(new Date(this.tableData[index].deadline.value.toString()))
+          }
+        }
+
+        if (this.tableData.length == (this.page + 1) * this.pageSize) {
+          // Prefetch data
+          this.page += 1
+          if (this.param.publicKey == this.invalidPublicKey) {
+            this.tableNextData = await this.$proxProvider.accountHttp.incomingTransactions(this.param.address, new QueryParams(this.pageSize, this.tableData[this.tableData.length - 1].transactionInfo.id)).toPromise()
+          } else {
+            this.tableNextData = await this.$proxProvider.accountHttp.transactions(this.param.publicAccount, new QueryParams(this.pageSize, this.tableData[this.tableData.length - 1].transactionInfo.id)).toPromise()
+          }
+          if (this.tableData[this.tableData.length - 1].transactionInfo.id == this.tableNextData[this.tableNextData.length - 1].transactionInfo.id) {
+            this.tableNextData = []
+          }
         }
       } catch (error) {
         console.log('ACCOUNT TRANSACTIONS ERROR',error)
@@ -588,12 +576,38 @@ export default {
     },
 
     /**
-     * View Rich List From Asset Id
-     * Get rich list from the asset id
+     * Get Block Transactions
      *
-     * @param { any } assetId
      */
-    async viewRichlist() {
+    async getBlockTransactions() {
+      try {
+        if (this.tableData.length != this.param.txes) {
+          if (this.tableData.length > 0) {
+            this.tableNextData = await this.$proxProvider.blockHttp.getBlockTransactions(parseInt(this.param.height), new QueryParams(this.pageSize, this.tableData[this.tableData.length - 1].transactionInfo.id)).toPromise()
+          } else {
+            this.tableNextData = await this.$proxProvider.blockHttp.getBlockTransactions(parseInt(this.param.height), new QueryParams(this.pageSize)).toPromise()
+          }
+          this.tableNextData.forEach(element => {
+            element.fee = this.$utils.fmtAmountValue(element.maxFee.compact())
+            element.deadline = this.$utils.fmtTime(new Date(element.deadline.value.toString()))
+            this.tableData.push(element)
+          })
+        }
+
+        // Deliberate not else case because tableData has new elements since new transactions has been added
+        if (this.tableData.length == this.param.txes) {
+          this.tableNextData = []
+        }
+      } catch (error) {
+        console.log('BLOCK TRANSACTIONS ERROR',error)
+      }
+    },
+
+    /**
+     * Get Rich List
+     *
+     */
+    async getRichlist() {
       try {
         if (this.tableNextData.length > 0) {
           // Get prefetch data
@@ -603,14 +617,14 @@ export default {
           return
         } else {
           // Get data during initial loading
-          this.tableData = await this.$proxProvider.assetHttp.getMosaicRichlist(this.assetData.mosaicId, {pageSize: this.pageSize, page: this.page}).toPromise()
+          this.tableData = await this.$proxProvider.assetHttp.getMosaicRichlist(this.param.mosaicId, {pageSize: this.pageSize, page: this.page}).toPromise()
         }
 
-        if (this.tableData.length == this.pageSize) {
+        if (this.tableData.length == (this.page + 1) * this.pageSize) {
           // Prefetch data
           this.page += 1
-          this.tableNextData = await this.$proxProvider.assetHttp.getMosaicRichlist(this.assetData.mosaicId, {pageSize: this.pageSize, page: this.page}).toPromise()
-        } else if (this.tableData.length < ((this.page + 1) * this.pageSize)) {
+          this.tableNextData = await this.$proxProvider.assetHttp.getMosaicRichlist(this.param.mosaicId, {pageSize: this.pageSize, page: this.page}).toPromise()
+        } else {
           this.tableNextData = []
         }
       } catch (error) {
@@ -662,13 +676,6 @@ export default {
       this.activeList = list
     },
 
-    async emergencyNet () {
-      let response = await axios.get('./config/config.json')
-      let tmp = this.$proxProvider.createPublicAccount(this.$route.params.id, response.data.NetworkType.number)
-      this.viewTransactionsFromPublicAccount(tmp)
-      this.getInfoAccountAndViewTransactions(tmp.address.address)
-    },
-
     isHex (value) {
       let regex =  /^[0-9A-Fa-f]+$/
       return regex.test(value)
@@ -676,7 +683,13 @@ export default {
 
     loadMore () {
       this.buttonLoaderActive = true
-      this.viewRichlist()
+      if (this.$route.params.type === 'publicKey' || this.$route.params.type === 'address') {
+        this.viewTransactionsFromPublicAccount()
+      } else if (this.$route.params.type === 'blockHeight') {
+        this.getBlockTransactions()
+      } else if (this.$route.params.type === 'assetInfo') {
+        this.getRichlist()
+      }
       this.buttonLoaderActive = false
     }
   },
