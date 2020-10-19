@@ -129,7 +129,7 @@ export default {
       tableData: [],
       tableNextData: [],
       page: 0,
-      pageSize: 10,
+      pageSize: 25,
       buttonLoaderActive: false,
       showRecentAsset: false,
       blockAssets: null,
