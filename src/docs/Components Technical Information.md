@@ -151,7 +151,6 @@ In this view the value to be searched is analyzed, which is added in the route a
   * Assets
   * Modal
   * mdbProgress
-  * IncomingTrans
 
 ### List.vue
 *from the root, root > src > views > List.vue.*
@@ -243,11 +242,6 @@ This component shows a list of namespaces and some additional details, correspon
 *from the root, root > src > components > searchResult > BlockInfo.vue.*
 
 This component is only a section and shows the most detailed information of a block.
-
-### IncomingTrans.vue
-*from the root, root > src > components > searchResult > IncomingTrans.vue.*
-
-This component is shown if a public key is invalid for the blockchain but has incoming transactions.
 
 ### AssetInfo.vue
 *from the root, root > src > components > searchResult > AssetInfo.vue.*
