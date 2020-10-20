@@ -1,6 +1,6 @@
 {
-  "name": "proximax-catapult-explorer",
-  "version": "0.1.0",
+  "name": "xpx-chain-explorer",
+  "version": "0.4.5",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve",
@@ -13,24 +13,24 @@
     "build-stage": "rm public/config/config.json && cp public/config/config.stage.json public/config/config.json && vue-cli-service build"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "chart.js": "^2.8.0",
     "js-joda": "^1.10.1",
     "mdbvue": "git+https://oauth2:SyJaA8eSM2gkFZh4onhD@git.mdbootstrap.com/mdb/vue/vu-pro.git#5.8.1",
     "postcss-import": "^12.0.1",
     "register-service-worker": "^1.6.2",
     "rxjs": "^6.5.2",
-    "tsjs-xpx-chain-sdk": "^0.7.1", 
+    "tsjs-xpx-chain-sdk": "^0.7.1",
     "utf8": "^3.0.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-pwa": "^3.7.0",
-    "@vue/cli-service": "^3.7.0",
-    "sass": "^1.18.0",
-    "sass-loader": "^7.1.0",
+    "@vue/cli-plugin-pwa": "^4.5.7",
+    "@vue/cli-service": "^4.5.7",
+    "sass": "^1.27.0",
+    "sass-loader": "^10.0.3",
     "vue-template-compiler": "^2.5.21"
   },
   "postcss": {

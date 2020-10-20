@@ -54,6 +54,5 @@
   "ModuleActive": {
     "networkStats": true,
     "map": true
-  },
-  "Version": "0.4.4"
+  }
 }
