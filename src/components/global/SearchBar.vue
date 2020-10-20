@@ -59,11 +59,10 @@ export default {
         { name: 'Basic', class: 'active-s' },
         { name: 'Hash', class: '' },
         { name: 'Namespace', class: '' },
-        { name: 'Mosaic', class: '' }
+        { name: 'Asset', class: '' }
       ],
       valueSearch: '',
       validSearch: false,
-      // Banner
       bannerActive: false,
       bannerMessage: ''
     }
@@ -88,9 +87,9 @@ export default {
       } else if (item.name === 'Namespace') {
         this.typeSearch = 'namespaceInfo'
         this.label = 'Namespace / Sub-namespace'
-      } else if (item.name === 'Mosaic') {
-        this.typeSearch = 'mosaicInfo'
-        this.label = 'Mosaic ID / Alias (e.g. prx.xpx)'
+      } else if (item.name === 'Asset') {
+        this.typeSearch = 'assetInfo'
+        this.label = 'Asset ID / Alias (e.g. prx.xpx)'
       }
 
       this.isValid()
@@ -154,8 +153,8 @@ export default {
           valid = true
           break;
 
-        case 'mosaicInfo':
-          path = 'mosaicInfo'
+        case 'assetInfo':
+          path = 'assetInfo'
           valid = true
           break;
       }
@@ -195,10 +194,10 @@ export default {
               } else {
                 throw 'The search field cannot be empty'
               }
-            } else if (['namespaceInfo', 'mosaicInfo'].includes(this.typeSearch)) {
+            } else if (['namespaceInfo', 'assetInfo'].includes(this.typeSearch)) {
               if (lowerValue === '') {
                 routeData = this.$router.resolve({
-                  path: `/list/${(this.pathSearch === 'mosaicInfo') ? 'mosaics' : 'namespaces'}`
+                  path: `/list/${(this.pathSearch === 'assetInfo') ? 'assets' : 'namespaces'}`
                 })
               } else {
                 routeData = this.$router.resolve({
@@ -330,64 +329,4 @@ export default {
       & > button
         width: 100%
         margin: 0px 0px 3px 0px
-
-
-
-    // width: 100%
-    // display: flex
-    // flex-flow: row wrap
-    // align-items: center
-    // justify-content: space-between
-    // & > .search-button
-    //   margin: 0px 10px
-    //   display: flex
-    //   flex-flow: row wrap
-    //   justify-content: center
-    // & > .search-input
-    //   margin: 0px 10px
-    //   display: flex
-    //   flex-flow: row nowrap
-    //   align-items: center
-    //   flex-grow: 3
-    //   & > div
-    //     margin: 0px
-    //   & > button
-    //     display: flex
-    //     flex-flow: row nowrap
-    //     justify-content: center
-    //     align-items: center
-    //     margin: 0px 0px 0px 10px
-    //     padding: 13px 34px
-    //     border-radius: 30px
-    //     color: white
-    //     text-transform: uppercase
-    //     font-size: 12px
-    //     font-weight: bold
-    //     background: #2BA1B9
-    //     border: none
-    //     & > img
-    //       margin: 0px
-    //       width: 15px
-
-@media screen and (max-width: 620px)
-  // .dropdown
-  //   width: 100% !important
-
-  // .searchBar
-  //   & > .search-cont
-  //     flex-flow: column
-  //     & > .search-button
-  //       margin: 5px
-  //       flex-grow: 0
-  //       width: 100%
-  //     & > .search-input
-  //       display: flex
-  //       flex-flow: column
-  //       margin: 5px
-  //       flex-grow: 0
-  //       width: 100%
-  //       & > button
-  //         width: 100%
-  //         margin: 0px
-
 </style>

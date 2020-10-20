@@ -16,18 +16,7 @@
     <!-- Input Filter Container -->
     <div class="animated fast fadeIn">
       <div class="filter-input">
-        <!-- <div>
-          <mdb-dropdown style="width: 100%; margin-top:10px">
-            <mdb-dropdown-toggle slot="toggle" color="black-text" style="width: 100%; font-weight:bold; border: 2px solid #2BA1B9; color: black; border-radius: 20px">{{ buttonName || 'Select search' }}</mdb-dropdown-toggle>
-            <mdb-dropdown-menu>
-              <mdb-dropdown-item v-for="(item, index) in listOfOptions" :key="index" class="searchLink">
-                <a  @click="changeSearch(item)">{{ item }}</a>
-              </mdb-dropdown-item>
-            </mdb-dropdown-menu>
-          </mdb-dropdown>
-        </div> -->
         <div>
-          <!-- <mdb-input type="search" label="Filter Server" v-model="filter"/> -->
           <input type="search" class="optional-in" v-model="filter" placeholder="Filter">
         </div>
       </div>
@@ -199,9 +188,6 @@ export default {
         center: [lon, lat],
         zoom: 10
       })
-
-
-      // map.addControl(new mapboxgl.NavigationControl())
 
       let popup = new mapboxgl.Popup({ offset: 25 })
         .setHTML(

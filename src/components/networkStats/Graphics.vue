@@ -222,7 +222,6 @@ export default {
 <style lang="sass" scoped>
 .standard-canvas
   box-sizing: border-box
-  // padding: 10px
   width: 100% !important
   height: 250px !important
   background: white

@@ -19,8 +19,8 @@
             <img :src="require('@/assets/arrow-transaction-recipient-green.svg')" width="15">
           </figure>
           <div class="value link" @click="goToAddress(item.recipient.pretty())" v-if="item.recipient">{{ item.recipient.pretty() }}</div>
-          <div class="value" v-else-if="item.type === typeTransactions.mosaicDefinition.id">
-            {{ mosaicRental }}
+          <div class="value" v-else-if="item.type === typeTransactions.assetDefinition.id">
+            {{ assetRental }}
           </div>
           <div class="value" v-else-if="item.type === typeTransactions.registerNamespace.id">
             {{ namespaceRental }}
@@ -42,13 +42,6 @@
         <div class="value">{{ item.deadline }}</div>
       </div>
       <!-- End Center -->
-
-      <!-- Right -->
-      <!-- <div class="el-middle">
-        <div class="title">Fee</div>
-        <div class="value" v-html="item.fee"></div>
-      </div> -->
-      <!-- End Right -->
 
       <div class="el-right">
         <div class="viewIcon" @click="redirectToDetail(item)">
@@ -86,7 +79,7 @@ export default {
   data () {
     return {
       typeTransactions: proximaxProvider.typeTransactions(),
-      mosaicRental: this.$store.state.rentalFeeInfo.mosaicRentalFee.address,
+      assetRental: this.$store.state.rentalFeeInfo.mosaicRentalFee.address,
       namespaceRental: this.$store.state.rentalFeeInfo.namespaceRentalFee.address
     }
   },
@@ -186,7 +179,6 @@ $radius: 20px
   padding: 10px
 
 .recent
-  // margin: 15px 10px
   border-radius: $radius
   padding: 10px
   color: black
@@ -261,13 +253,11 @@ $radius: 20px
       border-radius: $radius $radius 0px 0px
       padding: 5px
       width: initial
-      // background: #00000020
       border-bottom: 1px solid #c0c0c090
     & > .el-middle
       border-radius: 0px
       padding: 5px
     & > .el-right
-      // background: #00000020
       border-top: 1px solid #c0c0c090
       border-radius: 0px
       padding: 5px

@@ -244,8 +244,6 @@ export default {
       font-weight: bold
       font-size: 15px
       cursor: pointer
-      // &:hover
-      //   box-shadow: inset 0px -2px 0px 0px #5bcde4
 
 @media screen and (max-width: 400px)
   .header

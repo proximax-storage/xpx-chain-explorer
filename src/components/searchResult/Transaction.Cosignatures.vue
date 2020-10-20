@@ -8,20 +8,10 @@
     <div class="el-cont">
       <div class="element" v-for="(item, index) in params" :key="index" style="border-radius: 20px">
 
-        <!-- <div>
-          <div class="title centerAlign">Signature</div>
-          <div class="value centerAlign">{{ item.signature }}</div>
-        </div> -->
-
         <div>
           <div class="title">{{ `${index + 1}.-` }} Signer Address</div>
           <div class="value link" @click="goToAddress(item.signer.address.pretty())">{{ item.signer.address.pretty() }}</div>
         </div>
-
-        <!-- <div>
-          <div class="title centerAlign">Signer Public Key</div>
-          <div class="value link centerAlign" @click="goToAddress(item.signer.publicKey)">{{ item.signer.publicKey }}</div>
-        </div> -->
 
       </div>
     </div>

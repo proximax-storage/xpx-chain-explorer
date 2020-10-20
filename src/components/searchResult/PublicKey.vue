@@ -33,7 +33,7 @@
           <div class="valueLower">PRX</div>
         </div>
         <div class="down">
-          <div class="title">{{ $config.coin.name }} Mosaic Id</div>
+          <div class="title">{{ $config.coin.name }} Asset Id</div>
           <div class="value">{{ $config.coin.mosaic.id }}</div>
         </div>
       </div>
@@ -65,7 +65,7 @@ export default {
     /**
      * Get ID
      *
-     * Return XPX Mosaic ID
+     * Return XPX Asset ID
      */
     getId () {
       return this.$store.state.xpx
@@ -74,14 +74,14 @@ export default {
     /**
      * Get Balance
      *
-     * This computed property obtains the balance depending on the mosaics that the component
-     * receives by parameters, analyzing the xpx mosaic and printing its value
+     * This computed property obtains the balance depending on the assets that the component
+     * receives by parameters, analyzing the xpx asset and printing its value
      */
     getBalance () {
-      let xpxMosaics = this.detail.mosaics.filter(el => el.id.id.toHex() === this.$store.state.xpx)
+      let xpxAssets = this.detail.mosaics.filter(el => el.id.id.toHex() === this.$store.state.xpx)
       let amount
-      if (xpxMosaics.length > 0) {
-        amount = this.$utils.fmtAmountValue(xpxMosaics[0].amount.compact())
+      if (xpxAssets.length > 0) {
+        amount = this.$utils.fmtAmountValue(xpxAssets[0].amount.compact())
       } else {
         amount = this.$utils.fmtAmountValue(0)
       }
@@ -156,7 +156,6 @@ $radius: 20px
   padding: 10px
 
 .publicKey
-  // margin: 15px 10px 0px 10px
   color: black
   & > .pk-layout-up
     padding: 10px

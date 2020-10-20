@@ -37,7 +37,6 @@
 
     <div class="newNode" v-if="newNode">
       <input type="search" class="place-white black-text optional-in" v-model="newNodeValue" placeholder="mynode.io:8080 or mynode.io:8080">
-      <!-- <mdb-input class="place-white" style="width: 100%" v-model="newNodeValue" label="Add you new node" placeholder="http://mynode.io:8080 or https://mynode.io:8080"/> -->
       <div>{{ nodeMessage }}</div>
       <mdb-progress v-if="nodeLoader === true" bgColor="cyan darken-3" style="width: 100%" indeterminate/>
       <div>
@@ -152,7 +151,6 @@ export default {
         this.newNodeValue = ''
         this.nodeLoader = false
       } else if (action == 'add') {
-        // this.newNode = false
         this.nodeLoader = true
         if (this.newNodeValue !== '') {
           this.nodeMessage = ''

@@ -10,7 +10,6 @@ class Persistence {
 
   get (item) {
     return this.storage.getItem(item)
-    // return (typeof newItem === 'object') ? JSON.parse(newItem) : newItem
   }
 
   set (name, item) {

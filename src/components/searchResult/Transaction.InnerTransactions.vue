@@ -125,34 +125,34 @@ export default {
             if (others.length > 0) {
               let tmpArr = []
               let tmpObj
-              others.forEach(async mosaic => {
+              others.forEach(async asset => {
                 try {
-                  let response = await this.$proxProvider.mosaicHttp.getMosaic(mosaic.id).toPromise()
-                  let responseName = await this.$proxProvider.mosaicHttp.getMosaicsNames([mosaic.id]).toPromise()
+                  let response = await this.$proxProvider.assetHttp.getMosaic(asset.id).toPromise()
+                  let responseName = await this.$proxProvider.assetHttp.getMosaicsNames([asset.id]).toPromise()
 
                   tmpObj = {
-                    key: `Quantity Mosaic: ${(responseName.length > 0) ? responseName[0].names[0].name : mosaic.id.toHex()}`,
-                    valueHtml: this.$utils.fmtDivisibility(mosaic.amount.compact(), response.divisibility)
+                    key: `Quantity Asset: ${(responseName.length > 0) ? responseName[0].names[0].name : asset.id.toHex()}`,
+                    valueHtml: this.$utils.fmtDivisibility(asset.amount.compact(), response.divisibility)
                   }
                   info.details.push(tmpObj)
                 } catch (e) {
                   if (e.statusCode === 404) {
-                    if (mosaic.id.toHex() === this.$store.state.namespaceXpx) {
+                    if (asset.id.toHex() === this.$store.state.namespaceXpx) {
                       tmpObj = {
                         key: `Amount`,
-                        valueHtml: this.$utils.fmtDivisibility(mosaic.amount.compact(), 6)
+                        valueHtml: this.$utils.fmtDivisibility(asset.amount.compact(), 6)
                       }
 
                       info.details.push(tmpObj)
-                    } else if (mosaic.id.toHex() !== this.$store.state.namespaceXpx) {
-                      let mosaicData = await this.getNamespaceInfo(mosaic)
-                      let mosaicName = await this.$proxProvider.mosaicHttp.getMosaicsNames([mosaic.id]).toPromise()
+                    } else if (asset.id.toHex() !== this.$store.state.namespaceXpx) {
+                      let assetData = await this.getNamespaceInfo(asset)
+                      let assetName = await this.$proxProvider.assetHttp.getMosaicsNames([asset.id]).toPromise()
 
-                      if (mosaicName.length === 0) {
-                        mosaicData.key = `Quantity Mosaic: ${(responseName.length > 0) ? responseName[0].names[0].name : mosaic.id.toHex()}`
-                        info.details.push(mosaicData)
+                      if (assetName.length === 0) {
+                        assetData.key = `Quantity Asset: ${(responseName.length > 0) ? responseName[0].names[0].name : asset.id.toHex()}`
+                        info.details.push(assetData)
                       } else {
-                        info.details.push(mosaicData)
+                        info.details.push(assetData)
                       }
                     }
                   }
@@ -162,13 +162,11 @@ export default {
           }
           break;
 
-        case 'Mosaic definition':
-          info.details.push({ key: 'Mosaic Id', value: this.params[index].mosaicId.id.toHex(), class: 'link', run: this.goToMosaic })
+        case 'Asset definition':
+          info.details.push({ key: 'Asset Id', value: this.params[index].mosaicId.id.toHex(), class: 'link', run: this.goToAsset })
           info.details.push({ key: 'Divisibility', value: this.params[index].mosaicProperties.divisibility })
-          // info.details.push({ key: 'Levy Mutable', value: this.params[index].mosaicProperties.levyMutable, class: (this.params[index].mosaicProperties.levyMutable) ? 'true' : 'false' })
           info.details.push({ key: 'Supply Mutable', value: this.params[index].mosaicProperties.supplyMutable, class: (this.params[index].mosaicProperties.supplyMutable) ? 'true' : 'false' })
           info.details.push({ key: 'Transferable', value: this.params[index].mosaicProperties.transferable, class: (this.params[index].mosaicProperties.transferable) ? 'true' : 'false' })
-          // info.details.push({ key: 'Duration', value: this.$utils.calculateDuration(this.params[index].mosaicProperties.duration.compact())})
           break;
 
         case 'Modify multisig account':
@@ -208,16 +206,15 @@ export default {
       return type
     },
 
-    async getNamespaceInfo (mosaic) {
+    async getNamespaceInfo (asset) {
       let tmpObj
       try {
-        let namespace = await this.$proxProvider.namespaceHttp.getNamespace(mosaic.id).toPromise()
-        let mosaicId = new Id(namespace.alias.mosaicId)
-        let mosaicInfo = await this.$proxProvider.mosaicHttp.getMosaic(mosaicId).toPromise()
-        console.log(mosaicInfo)
+        let namespace = await this.$proxProvider.namespaceHttp.getNamespace(asset.id).toPromise()
+        let assetId = new Id(namespace.alias.assetId)
+        let assetInfo = await this.$proxProvider.assetHttp.getMosaic(assetId).toPromise()
         tmpObj = {
-          key: `Quantity Mosaic: ${mosaic.id.toHex()}`,
-          valueHtml: this.$utils.fmtDivisibility(mosaic.amount.compact(), mosaicInfo.divisibility)
+          key: `Quantity Asset: ${asset.id.toHex()}`,
+          valueHtml: this.$utils.fmtDivisibility(asset.amount.compact(), assetInfo.divisibility)
         }
       } catch (error) {
         console.log(error)
@@ -248,8 +245,8 @@ export default {
       window.open(routeData.href, '_blank')
     },
 
-    goToMosaic (mosaicId) {
-      let routeData = this.$router.resolve({ path: `/result/mosaicInfo/${mosaicId}` })
+    goToAsset (assetId) {
+      let routeData = this.$router.resolve({ path: `/result/assetInfo/${assetId}` })
       window.open(routeData.href, '_blank')
     }
   }

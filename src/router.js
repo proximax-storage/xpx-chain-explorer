@@ -7,10 +7,6 @@ const load = view => {
   return () => import(`@/views/${view}.vue`)
 }
 
-// const loadChildren = view => {
-//   return () => import(`@/views//${view}.vue`)
-// }
-
 export default new Router({
   routes: [
     {
@@ -44,7 +40,3 @@ export default new Router({
     }
   ]
 })
-
-// component: function () {
-//   return import(/* webpackChunkName: "about" */ './views/About.vue')
-// }

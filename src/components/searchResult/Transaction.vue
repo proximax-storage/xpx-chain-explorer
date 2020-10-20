@@ -11,9 +11,6 @@
         Amount:
         <span v-html="$utils.fmtAmountValue(calculatedAmount)"></span> XPX
       </p>
-      <!-- <p class="fee" v-if="[16961, 16705].includes(this.detail.type) === false">Fee:
-        <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span>
-      </p>-->
       <p class="fee">
         Fee:
         <span v-html="this.effectiveFee"></span>
@@ -40,15 +37,12 @@
           >Recipient - Namespace Rental Fee Sink</div>
           <div
             class="title"
-            v-else-if="transactionType === 'Mosaic definition'"
-          >Recipient - Mosaic Rental Fee Sink</div>
+            v-else-if="transactionType === 'Asset definition'"
+          >Recipient - Asset Rental Fee Sink</div>
           <div
             class="title"
-            v-else-if="transactionType !== 'Register Namespace Transaction' || transactionType !== 'Mosaic definition'"
+            v-else-if="transactionType !== 'Register Namespace Transaction' || transactionType !== 'Asset definition'"
           >Recipient</div>
-          <!-- <div class="value link" v-if="detail.recipient" style="cursor: pointer" @click="goToAddress(detail.recipient.pretty())">
-            {{ detail.recipient.pretty() }}
-          </div>-->
           <div
             class="value link"
             v-if="transactionType === 'Register Namespace Transaction'"
@@ -56,17 +50,16 @@
           >{{ $store.state.rentalFeeInfo.namespaceRentalFee.address }}</div>
           <div
             class="value link"
-            v-else-if="transactionType === 'Mosaic definition'"
+            v-else-if="transactionType === 'Asset definition'"
             @click="goToAddress($store.state.rentalFeeInfo.namespaceRentalFee.address)"
           >{{ $store.state.rentalFeeInfo.namespaceRentalFee.address }}</div>
           <div
             class="value"
             :class="(detail.recipient === undefined) ? '' : 'link'"
-            v-else-if="transactionType !== 'Register Namespace Transaction' || transactionType !== 'Mosaic definition'"
+            v-else-if="transactionType !== 'Register Namespace Transaction' || transactionType !== 'Asset definition'"
             :style="(detail.recipient === undefined) ? '' : 'cursor: pointer'"
             @click="(detail.recipient === undefined) ? '' : goToAddress(detail.recipient.pretty())"
           >{{ (detail.recipient === undefined) ? 'No Available' : detail.recipient.pretty() }}</div>
-          <!-- <div class="value" v-else>{{ 'No available' }}</div> -->
         </div>
       </div>
       <!-- End Left -->
@@ -77,10 +70,6 @@
           <div class="title">Timestamp</div>
           <div class="value">{{ $utils.fmtTime(timestamp) }}</div>
         </div>
-        <!-- <div class="up">
-          <div class="title">Deadline</div>
-          <div class="value">{{ $utils.fmtTime(detail.deadline.value) }}</div>
-        </div>-->
         <div class="down">
           <div class="title">Block Height</div>
           <div
@@ -154,17 +143,17 @@
         </div>
         <!-- End Iterated Element -->
 
-        <!-- Mosaic Properties Area -->
+        <!-- Asset Properties Area -->
         <div
           class="layout-plus-children"
           style="background: #f4f4f4; box-shadow: 0px 0px 0px 1px #2BA1B9"
           v-if="detail.mosaicProperties"
         >
           <!-- Name -->
-          <div class="title">Mosaic Properties</div>
+          <div class="title">Asset Properties</div>
 
           <!-- Properties Container -->
-          <div class="value mosaic-properties">
+          <div class="value asset-properties">
             <span>
               Divisibility:
               <b>{{ detail.mosaicProperties.divisibility }}</b>
@@ -204,14 +193,14 @@
           </div>
           <!-- Properties Container -->
         </div>
-        <!-- Mosaic Properties Area -->
+        <!-- Asset Properties Area -->
       </div>
     </div>
     <!-- End Plus Area -->
 
-    <!-- Mosaics In Transfer Component -->
-    <mosaics-in-transfer :params="mosaicsOfTransfer" @returnAmount="returnAmount" />
-    <!-- End Mosaics In Transfer Component -->
+    <!-- Assets In Transfer Component -->
+    <assets-in-transfer :params="assetsOfTransfer" @returnAmount="returnAmount" />
+    <!-- End Assets In Transfer Component -->
 
     <!-- Modifications Component -->
     <modifications :params="detail.modifications" :type="transactionType" />
@@ -239,7 +228,7 @@ import InnerTransactions from "@/components/searchResult/Transaction.InnerTransa
 import ExchangeOfferTransaction from "@/components/searchResult/Transaction.ExchangeOfferTransaction";
 import Cosignatures from "@/components/searchResult/Transaction.Cosignatures";
 import Modifications from "@/components/searchResult/Transaction.Modifications.vue";
-import MosaicsInTransfer from "@/components/searchResult/Transaction.Mosaics.vue";
+import AssetsInTransfer from "@/components/searchResult/Transaction.Assets.vue";
 import { Deadline } from "tsjs-xpx-chain-sdk";
 
 export default {
@@ -253,13 +242,13 @@ export default {
     ExchangeOfferTransaction,
     Cosignatures,
     Modifications,
-    MosaicsInTransfer
+    AssetsInTransfer
   },
   data() {
     return {
       plusInfo: [],
       transactionType: "Transaction",
-      mosaicsOfTransfer: null,
+      assetsOfTransfer: null,
       xpx: this.$store.state.xpx,
       calculatedAmount: null,
       effectiveFee: null,
@@ -370,7 +359,7 @@ export default {
           }
 
           if (this.detail.mosaics && this.detail.mosaics.length > 0) {
-            this.mosaicsOfTransfer = this.detail.mosaics;
+            this.assetsOfTransfer = this.detail.mosaics;
           }
           break;
         case "Register Namespace Transaction":
@@ -432,7 +421,6 @@ export default {
                   ? this.detail.parentId.id.toHex()
                   : "No Available"
             },
-            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: "Version", value: this.detail.version }
           ];
 
@@ -449,15 +437,14 @@ export default {
           }
 
           findParent();
-          // this.iterator(this.detail)
           break;
-        case "Mosaic definition":
+        case "Asset definition":
           this.plusInfo = [
             {
-              key: "Mosaic Id",
+              key: "Asset Id",
               value: this.detail.mosaicId.id.toHex(),
               class: "value link",
-              run: this.goToMosaic
+              run: this.goToAsset
             },
             {
               key: "Nonce",
@@ -471,7 +458,6 @@ export default {
               value: this.$proxProvider.getNetworkById(this.detail.networkType)
                 .name
             },
-            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: "Version", value: this.detail.version }
           ];
 
@@ -486,9 +472,8 @@ export default {
                   : `(Blocks: 0) No Duration`
             });
           }
-          //this.iterator(this.detail)
           break;
-        case "Mosaic supply change":
+        case "Asset supply change":
           this.plusInfo = [
             {
               key: "Network Type",
@@ -496,29 +481,26 @@ export default {
                 .name
             },
             { key: "Version", value: this.detail.version }
-            // { key: 'Amount', value: this.$utils.fmtAmountValue(this.detail.delta.toHex()) },
-            // { key: 'Direction', value: this.detail.direction },
           ];
 
           this.$proxProvider.getMosaic(this.detail.mosaicId.id).subscribe(
             response => {
               this.plusInfo.unshift({
-                key: "Mosaic Id",
+                key: "Asset Id",
                 value: this.detail.mosaicId.id.toHex(),
                 class: "value link",
-                run: this.goToMosaic
+                run: this.goToAsset
               });
             },
             error => {
               this.plusInfo.unshift({
-                key: "Mosaic Id",
+                key: "Asset Id",
                 value: this.detail.mosaicId.id.toHex(),
                 class: "value link",
                 run: this.goToNamespace
               });
             }
           );
-          // this.iterator(this.detail)
           break;
         case "Modify multisig account":
           this.plusInfo = [
@@ -537,8 +519,6 @@ export default {
             },
             { key: "Version", value: this.detail.version }
           ];
-          // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
-          // this.iterator(this.detail)
           break;
         case "Aggregate complete":
           this.plusInfo = [
@@ -549,7 +529,6 @@ export default {
             },
             { key: "Version", value: this.detail.version }
           ];
-          // this.iterator(this.detail)
           break;
         case "Aggregate bonded":
           this.plusInfo = [
@@ -560,18 +539,17 @@ export default {
             },
             { key: "Version", value: this.detail.version }
           ];
-          // this.iterator(this.detail)
           break;
         case "Lock":
           this.plusInfo = [
             {
-              key: "Mosaic Id",
+              key: "Asset Id",
               value: this.detail.mosaic.id.toHex(),
               class: "value link",
-              run: this.goToMosaic
+              run: this.goToAsset
             },
             {
-              key: "Mosaic Amount",
+              key: "Asset Amount",
               value: "",
               valueHtml: this.$utils.fmtAmountValue(
                 this.detail.mosaic.amount.compact()
@@ -599,7 +577,6 @@ export default {
                   : "No Duration"
             }
           ];
-          // this.iterator(this.detail)
           break;
         case "Secret lock":
           this.iterator(this.detail);
@@ -607,7 +584,7 @@ export default {
         case "Secret proof":
           this.iterator(this.detail);
           break;
-        case "Mosaic Alias":
+        case "Asset Alias":
           this.plusInfo = [
             {
               key: "Namespace Id",
@@ -616,10 +593,10 @@ export default {
               run: this.goToNamespace
             },
             {
-              key: "Mosaic Id",
+              key: "Asset Id",
               value: this.detail.mosaicId.id.toHex(),
               class: "value link",
-              run: this.goToMosaic
+              run: this.goToAsset
             },
             {
               key: "Network Type",
@@ -647,7 +624,6 @@ export default {
                 class: "valueLower"
               });
             });
-          // this.iterator(this.detail)
           break;
         case "Address Alias":
           this.plusInfo = [
@@ -672,19 +648,15 @@ export default {
           } else if (this.detail.actionType === 1) {
             this.plusInfo.push({ key: "Action Type", value: "Unlink" });
           }
-          // this.iterator(this.detail)
           break;
         case "Modify Account Property Address":
           this.plusInfo = [{ key: "Info", value: "Not supported yet" }];
-          // this.iterator(this.detail)
           break;
-        case "Modify Account Property Mosaic":
+        case "Modify Account Property Asset":
           this.plusInfo = [{ key: "Info", value: "Not supported yet" }];
-          // this.iterator(this.detail)
           break;
         case "Modify Account Entity Type":
           this.plusInfo = [{ key: "Info", value: "Not supported yet" }];
-          // this.iterator(this.detail)
           break;
         case "Link Account":
           this.plusInfo = [
@@ -697,17 +669,13 @@ export default {
               value: this.$proxProvider.getNetworkById(this.detail.networkType)
                 .name
             },
-            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: "Version", value: this.detail.version }
-            // { key: 'Info', value: 'Not supported yet' }
           ];
-          // this.iterator(this.detail)
           break;
         case "Modify Account Metadata":
           this.plusInfo = [{ key: "Info", value: "Not supported yet" }];
-          // this.iterator(this.detail)
           break;
-        case "Modify Mosaic Metadata":
+        case "Modify Asset Metadata":
           this.plusInfo = [
             {
               key: "Metadata Id",
@@ -728,14 +696,11 @@ export default {
               value: this.$proxProvider.getNetworkById(this.detail.networkType)
                 .name
             },
-            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: "Version", value: this.detail.version }
           ];
-          // this.iterator(this.detail)
           break;
         case "Modify Namespace Metadata":
           this.plusInfo = [{ key: "Info", value: "Not supported yet" }];
-          // this.iterator(this.detail)
           break;
         case "Exchange Offer":
           this.plusInfo = [
@@ -821,9 +786,9 @@ export default {
       window.open(routeData.href, "_blank");
     },
 
-    goToMosaic(mosaicId) {
+    goToAsset(assetId) {
       let routeData = this.$router.resolve({
-        path: `/result/mosaicInfo/${mosaicId}`
+        path: `/result/assetInfo/${assetId}`
       });
       window.open(routeData.href, "_blank");
     },
@@ -867,7 +832,7 @@ $radius: 20px
   font-weight: normal
   text-transform: uppercase
   word-wrap: break-word
-  &.mosaic-properties
+  &.asset-properties
     display: flex
     flex-flow: row wrap
     justify-content: space-around
@@ -921,7 +886,6 @@ $radius: 20px
   border-radius: $radius
 
 .transaction
-  // margin: 15px 10px
   color: black
   & > .tran-layout-up
     padding: 10px
@@ -985,7 +949,7 @@ $radius: 20px
   .value,
   .valueLower
     font-size: 13px
-    &.mosaic-properties
+    &.asset-properties
       flex-flow: column wrap
 
   .link

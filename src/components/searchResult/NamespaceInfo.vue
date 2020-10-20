@@ -65,8 +65,8 @@
     <div class="nam-layout-plus" v-if="detail.alias.mosaicId !== undefined">
       <div>
         <div class="up">
-          <div class="title">Mosaic Id</div>
-          <div class="value link" @click="goToMosaic(getId(detail.alias.mosaicId).toHex())">
+          <div class="title">Asset Id</div>
+          <div class="value link" @click="goToAsset(getId(detail.alias.mosaicId).toHex())">
             {{ getId(detail.alias.mosaicId).toHex() }}
           </div>
         </div>
@@ -108,7 +108,7 @@ export default {
     }
   },
   mounted () {
-    this.getMosaicName()
+    this.getAssetName()
 
   },
   methods: {
@@ -116,7 +116,7 @@ export default {
       let idfull = new Id(id)
       return idfull
     },
-    getMosaicName () {
+    getAssetName () {
       let tmpArr = Array.from(this.detail.levels)
       tmpArr.forEach(el => el.name = 'No Available')
       tmpArr.forEach((el, index) => {
@@ -194,7 +194,6 @@ export default {
           var outArray = [];
           var power = [1];
           for (var i = 0; i < digits.length; i++) {
-              // invariant: at this point, fromBase^i = power
               if (digits[i]) {
                   outArray = add(outArray, multiplyByNumber(digits[i], power, toBase), toBase);
               }
@@ -243,8 +242,8 @@ export default {
       window.open(routeData.href, '_blank')
     },
 
-    goToMosaic (mosaicId) {
-      let routeData = this.$router.resolve({ path: `/result/mosaicInfo/${mosaicId}` })
+    goToAsset (assetId) {
+      let routeData = this.$router.resolve({ path: `/result/assetInfo/${assetId}` })
       window.open(routeData.href, '_blank')
     }
   }

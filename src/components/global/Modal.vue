@@ -47,27 +47,6 @@
           </div>
         </div>
 
-        <!-- <div>
-          <div class="element">
-            <div class="title">Aggregate Id</div>
-            <div class="value" :class="param.aggregateId.class">
-              {{ param.aggregateId.value }}
-            </div>
-          </div>
-
-          <div class="element">
-            <div class="title">Fee</div>
-            <div class="value" :class="param.signature.class" v-html="param.fee.valueHtml"></div>
-          </div>
-
-          <div class="element">
-            <div class="title">Type</div>
-            <div class="value" :class="param.type.class">
-              {{ param.type.value }}
-            </div>
-          </div>
-        </div> -->
-
         <div v-if="param.recipient !== undefined">
           <div class="element">
             <div class="title centerAlign">Recipient</div>
