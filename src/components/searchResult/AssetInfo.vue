@@ -57,15 +57,6 @@
           <div class="title">Active</div>
           <div class="value" v-if="(statusActive === true || statusActive === false) ? 'color: green' : 'color: red'" :style="(statusActive === true) ? 'color: green' : 'color: red'">{{ statusActive }}</div>
           <div class="value" v-if="statusActive === 'Loading'" style="color: orange">{{ statusActive }}</div>
-          <!-- <div class="value" style="color: orange; font-weight: bold" v-if="$store.state.currentBlock.height === 'Loading'">
-            Loading
-          </div>
-          <div class="value" style="color: green" v-else-if="detail.mosaicId.toHex() === this.$store.state.xpx || detail.name && detail.name.name === 'prx.xpx'">
-            true
-          </div>
-          <div class="value" :style="($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? 'color: red' : 'color: green'" v-else>
-            {{ ($store.state.currentBlock.height >= detail.height.compact() + detail.duration.compact()) ? false : true }}
-          </div> -->
         </div>
         <div class="down">
           <div class="title">Expires</div>

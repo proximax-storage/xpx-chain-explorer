@@ -53,8 +53,6 @@
         <div v-if="buttonLoadMoreActive">
           <span>Load more blocks</span>
           <span class="value" v-if="buttonLoaderActive"><mdb-spinner small color="yellow"/></span>
-          <!-- <span class="value" v-if="!buttonLoaderActive">Click here</span>
-          <span class="value" v-else><mdb-spinner small color="yellow"/></span> -->
         </div>
 
       </div>
@@ -195,7 +193,6 @@ export default {
   display: flex
   flex-flow: row nowrap
   justify-content: space-around
-  // margin: 2px 0px
   padding: 5px
   color: white
   border-radius: 5px
@@ -252,7 +249,6 @@ export default {
     flex-flow: row nowrap
     justify-content: space-around
     border: 1px solid #f4f4f4
-    // margin: 2px 0px
     padding: 10px 5px
     color: black
     border-radius: 5px

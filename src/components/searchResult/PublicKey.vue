@@ -156,7 +156,6 @@ $radius: 20px
   padding: 10px
 
 .publicKey
-  // margin: 15px 10px 0px 10px
   color: black
   & > .pk-layout-up
     padding: 10px

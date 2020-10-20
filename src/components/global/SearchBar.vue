@@ -63,7 +63,6 @@ export default {
       ],
       valueSearch: '',
       validSearch: false,
-      // Banner
       bannerActive: false,
       bannerMessage: ''
     }
@@ -330,64 +329,4 @@ export default {
       & > button
         width: 100%
         margin: 0px 0px 3px 0px
-
-
-
-    // width: 100%
-    // display: flex
-    // flex-flow: row wrap
-    // align-items: center
-    // justify-content: space-between
-    // & > .search-button
-    //   margin: 0px 10px
-    //   display: flex
-    //   flex-flow: row wrap
-    //   justify-content: center
-    // & > .search-input
-    //   margin: 0px 10px
-    //   display: flex
-    //   flex-flow: row nowrap
-    //   align-items: center
-    //   flex-grow: 3
-    //   & > div
-    //     margin: 0px
-    //   & > button
-    //     display: flex
-    //     flex-flow: row nowrap
-    //     justify-content: center
-    //     align-items: center
-    //     margin: 0px 0px 0px 10px
-    //     padding: 13px 34px
-    //     border-radius: 30px
-    //     color: white
-    //     text-transform: uppercase
-    //     font-size: 12px
-    //     font-weight: bold
-    //     background: #2BA1B9
-    //     border: none
-    //     & > img
-    //       margin: 0px
-    //       width: 15px
-
-@media screen and (max-width: 620px)
-  // .dropdown
-  //   width: 100% !important
-
-  // .searchBar
-  //   & > .search-cont
-  //     flex-flow: column
-  //     & > .search-button
-  //       margin: 5px
-  //       flex-grow: 0
-  //       width: 100%
-  //     & > .search-input
-  //       display: flex
-  //       flex-flow: column
-  //       margin: 5px
-  //       flex-grow: 0
-  //       width: 100%
-  //       & > button
-  //         width: 100%
-  //         margin: 0px
-
 </style>

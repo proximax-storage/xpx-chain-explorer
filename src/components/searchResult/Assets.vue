@@ -191,7 +191,6 @@ $radius: 5px
         color: white !important
 
 .recent
-  // margin: 0px 10px 10px 10px
   padding: 10px
   color: black
   & > .element

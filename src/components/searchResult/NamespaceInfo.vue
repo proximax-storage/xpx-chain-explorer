@@ -194,7 +194,6 @@ export default {
           var outArray = [];
           var power = [1];
           for (var i = 0; i < digits.length; i++) {
-              // invariant: at this point, fromBase^i = power
               if (digits[i]) {
                   outArray = add(outArray, multiplyByNumber(digits[i], power, toBase), toBase);
               }

@@ -69,7 +69,6 @@ export default {
       resp: undefined,
       namespacesArr: [],
       idList: [],
-      // LOADER
       loaderMessage: 'Loading namespaces please wait a few moments',
       loaderProgress: true
     }

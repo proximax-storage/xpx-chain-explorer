@@ -42,11 +42,8 @@ export default {
     TopButtom
   },
   mounted () {
-    // Call Load Nodes Method
     this.loadConfig()
-    // this.loadNodes()
     this.average()
-    // this.loadNetwork()
   },
   data () {
     return {
@@ -137,11 +134,6 @@ export default {
                 }
               )
             }
-
-            // block.totalFee = this.$utils.fmtAmountValue(block.totalFee.compact())
-            // block.date = this.$utils.fmtTime(new Date(block.timestamp.compact() + (Deadline.timestampNemesisBlock * 1000)))
-            // this.$store.dispatch('changeCurrentBlock', block)
-            // this.reset()
           })
         }
       )
@@ -152,8 +144,6 @@ export default {
           message: 'Comunication error with node!',
           submessage: 'Check the internet connection and reload the page'
         })
-
-        // console.error(err)
       })
     },
 
@@ -191,11 +181,6 @@ export default {
   box-sizing: border-box
 
 html
-  // background-image: url('./assets/background-proximax-explorer.jpg')
-  // background-position: top center
-  // background-size: 100%
-  // background-repeat: no-repeat
-  // background-color: #f3f3f3
   background: white
 body
   background: transparent

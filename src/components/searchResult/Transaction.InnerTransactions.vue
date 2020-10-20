@@ -165,10 +165,8 @@ export default {
         case 'Asset definition':
           info.details.push({ key: 'Asset Id', value: this.params[index].mosaicId.id.toHex(), class: 'link', run: this.goToAsset })
           info.details.push({ key: 'Divisibility', value: this.params[index].mosaicProperties.divisibility })
-          // info.details.push({ key: 'Levy Mutable', value: this.params[index].mosaicProperties.levyMutable, class: (this.params[index].mosaicProperties.levyMutable) ? 'true' : 'false' })
           info.details.push({ key: 'Supply Mutable', value: this.params[index].mosaicProperties.supplyMutable, class: (this.params[index].mosaicProperties.supplyMutable) ? 'true' : 'false' })
           info.details.push({ key: 'Transferable', value: this.params[index].mosaicProperties.transferable, class: (this.params[index].mosaicProperties.transferable) ? 'true' : 'false' })
-          // info.details.push({ key: 'Duration', value: this.$utils.calculateDuration(this.params[index].mosaicProperties.duration.compact())})
           break;
 
         case 'Modify multisig account':

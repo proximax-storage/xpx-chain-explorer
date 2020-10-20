@@ -178,18 +178,6 @@ export default class proximaxProvider {
     return this.blocksHeight$
   }
 
-
-  // /**
-  //  * Set blocks height local
-  //  *
-  //  * @param param
-  //  * @returns {Observable} BlockHeight
-  //  * @memberof proximaxProvider
-  //  */
-  // setBlocksHeightLocal(param) {
-  //   this.blocksHeight.next(param.compact())
-  // }
-
   /**
    * Gets an AccountInfo for an account.
    *

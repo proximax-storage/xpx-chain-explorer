@@ -43,13 +43,6 @@
       </div>
       <!-- End Center -->
 
-      <!-- Right -->
-      <!-- <div class="el-middle">
-        <div class="title">Fee</div>
-        <div class="value" v-html="item.fee"></div>
-      </div> -->
-      <!-- End Right -->
-
       <div class="el-right">
         <div class="viewIcon" @click="redirectToDetail(item)">
           <img :src="require('@/assets/info.svg')" alt="detail" style="width: 17px">
@@ -186,7 +179,6 @@ $radius: 20px
   padding: 10px
 
 .recent
-  // margin: 15px 10px
   border-radius: $radius
   padding: 10px
   color: black
@@ -261,13 +253,11 @@ $radius: 20px
       border-radius: $radius $radius 0px 0px
       padding: 5px
       width: initial
-      // background: #00000020
       border-bottom: 1px solid #c0c0c090
     & > .el-middle
       border-radius: 0px
       padding: 5px
     & > .el-right
-      // background: #00000020
       border-top: 1px solid #c0c0c090
       border-radius: 0px
       padding: 5px

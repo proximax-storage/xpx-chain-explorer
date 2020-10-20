@@ -21,7 +21,6 @@ function  protocol() {
   const href = window.location.href;
   const arr = href.split("/");
   return arr[0];
-  // return 'https:'
 }
 
 store.dispatch('setProtocol', protocol())

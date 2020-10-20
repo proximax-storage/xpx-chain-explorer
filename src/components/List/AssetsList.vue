@@ -79,7 +79,6 @@ export default {
       resp: undefined,
       assetArr: [],
       idList: [],
-      // LOADER
       loaderMessage: 'Loading assets please wait a few moments',
       loaderProgress: true
     }

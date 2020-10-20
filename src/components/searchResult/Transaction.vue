@@ -11,9 +11,6 @@
         Amount:
         <span v-html="$utils.fmtAmountValue(calculatedAmount)"></span> XPX
       </p>
-      <!-- <p class="fee" v-if="[16961, 16705].includes(this.detail.type) === false">Fee:
-        <span v-html="$utils.fmtAmountValue(detail.maxFee.compact())"></span>
-      </p>-->
       <p class="fee">
         Fee:
         <span v-html="this.effectiveFee"></span>
@@ -46,9 +43,6 @@
             class="title"
             v-else-if="transactionType !== 'Register Namespace Transaction' || transactionType !== 'Asset definition'"
           >Recipient</div>
-          <!-- <div class="value link" v-if="detail.recipient" style="cursor: pointer" @click="goToAddress(detail.recipient.pretty())">
-            {{ detail.recipient.pretty() }}
-          </div>-->
           <div
             class="value link"
             v-if="transactionType === 'Register Namespace Transaction'"
@@ -66,7 +60,6 @@
             :style="(detail.recipient === undefined) ? '' : 'cursor: pointer'"
             @click="(detail.recipient === undefined) ? '' : goToAddress(detail.recipient.pretty())"
           >{{ (detail.recipient === undefined) ? 'No Available' : detail.recipient.pretty() }}</div>
-          <!-- <div class="value" v-else>{{ 'No available' }}</div> -->
         </div>
       </div>
       <!-- End Left -->
@@ -77,10 +70,6 @@
           <div class="title">Timestamp</div>
           <div class="value">{{ $utils.fmtTime(timestamp) }}</div>
         </div>
-        <!-- <div class="up">
-          <div class="title">Deadline</div>
-          <div class="value">{{ $utils.fmtTime(detail.deadline.value) }}</div>
-        </div>-->
         <div class="down">
           <div class="title">Block Height</div>
           <div
@@ -432,7 +421,6 @@ export default {
                   ? this.detail.parentId.id.toHex()
                   : "No Available"
             },
-            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: "Version", value: this.detail.version }
           ];
 
@@ -449,7 +437,6 @@ export default {
           }
 
           findParent();
-          // this.iterator(this.detail)
           break;
         case "Asset definition":
           this.plusInfo = [
@@ -471,7 +458,6 @@ export default {
               value: this.$proxProvider.getNetworkById(this.detail.networkType)
                 .name
             },
-            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: "Version", value: this.detail.version }
           ];
 
@@ -486,7 +472,6 @@ export default {
                   : `(Blocks: 0) No Duration`
             });
           }
-          //this.iterator(this.detail)
           break;
         case "Asset supply change":
           this.plusInfo = [
@@ -496,8 +481,6 @@ export default {
                 .name
             },
             { key: "Version", value: this.detail.version }
-            // { key: 'Amount', value: this.$utils.fmtAmountValue(this.detail.delta.toHex()) },
-            // { key: 'Direction', value: this.detail.direction },
           ];
 
           this.$proxProvider.getMosaic(this.detail.mosaicId.id).subscribe(
@@ -518,7 +501,6 @@ export default {
               });
             }
           );
-          // this.iterator(this.detail)
           break;
         case "Modify multisig account":
           this.plusInfo = [
@@ -537,8 +519,6 @@ export default {
             },
             { key: "Version", value: this.detail.version }
           ];
-          // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
-          // this.iterator(this.detail)
           break;
         case "Aggregate complete":
           this.plusInfo = [
@@ -549,7 +529,6 @@ export default {
             },
             { key: "Version", value: this.detail.version }
           ];
-          // this.iterator(this.detail)
           break;
         case "Aggregate bonded":
           this.plusInfo = [
@@ -560,7 +539,6 @@ export default {
             },
             { key: "Version", value: this.detail.version }
           ];
-          // this.iterator(this.detail)
           break;
         case "Lock":
           this.plusInfo = [
@@ -599,7 +577,6 @@ export default {
                   : "No Duration"
             }
           ];
-          // this.iterator(this.detail)
           break;
         case "Secret lock":
           this.iterator(this.detail);
@@ -647,7 +624,6 @@ export default {
                 class: "valueLower"
               });
             });
-          // this.iterator(this.detail)
           break;
         case "Address Alias":
           this.plusInfo = [
@@ -672,19 +648,15 @@ export default {
           } else if (this.detail.actionType === 1) {
             this.plusInfo.push({ key: "Action Type", value: "Unlink" });
           }
-          // this.iterator(this.detail)
           break;
         case "Modify Account Property Address":
           this.plusInfo = [{ key: "Info", value: "Not supported yet" }];
-          // this.iterator(this.detail)
           break;
         case "Modify Account Property Asset":
           this.plusInfo = [{ key: "Info", value: "Not supported yet" }];
-          // this.iterator(this.detail)
           break;
         case "Modify Account Entity Type":
           this.plusInfo = [{ key: "Info", value: "Not supported yet" }];
-          // this.iterator(this.detail)
           break;
         case "Link Account":
           this.plusInfo = [
@@ -697,15 +669,11 @@ export default {
               value: this.$proxProvider.getNetworkById(this.detail.networkType)
                 .name
             },
-            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: "Version", value: this.detail.version }
-            // { key: 'Info', value: 'Not supported yet' }
           ];
-          // this.iterator(this.detail)
           break;
         case "Modify Account Metadata":
           this.plusInfo = [{ key: "Info", value: "Not supported yet" }];
-          // this.iterator(this.detail)
           break;
         case "Modify Asset Metadata":
           this.plusInfo = [
@@ -728,14 +696,11 @@ export default {
               value: this.$proxProvider.getNetworkById(this.detail.networkType)
                 .name
             },
-            // { key: 'Transaction Type (Hex)', value: this.detail.type.toString(16) },
             { key: "Version", value: this.detail.version }
           ];
-          // this.iterator(this.detail)
           break;
         case "Modify Namespace Metadata":
           this.plusInfo = [{ key: "Info", value: "Not supported yet" }];
-          // this.iterator(this.detail)
           break;
         case "Exchange Offer":
           this.plusInfo = [
@@ -921,7 +886,6 @@ $radius: 20px
   border-radius: $radius
 
 .transaction
-  // margin: 15px 10px
   color: black
   & > .tran-layout-up
     padding: 10px
