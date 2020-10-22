@@ -149,10 +149,8 @@ In this view the value to be searched is analyzed, which is added in the route a
   * AssetInfo
   * RecentTrans
   * Assets
-  * Richlist
   * Modal
   * mdbProgress
-  * IncomingTrans
 
 ### List.vue
 *from the root, root > src > views > List.vue.*
@@ -245,11 +243,6 @@ This component shows a list of namespaces and some additional details, correspon
 
 This component is only a section and shows the most detailed information of a block.
 
-### IncomingTrans.vue
-*from the root, root > src > components > searchResult > IncomingTrans.vue.*
-
-This component is shown if a public key is invalid for the blockchain but has incoming transactions.
-
 ### AssetInfo.vue
 *from the root, root > src > components > searchResult > AssetInfo.vue.*
 
@@ -259,11 +252,6 @@ This component is only a section and shows detailed information of a asset.
 *from the root, root > src > components > searchResult > Assets.vue.*
 
 This component shows a list of assets and some additional details, corresponding to an account, which is what you find in the current view.
-
-### Richlist.vue
-*from the root, root > src > components > searchResult > Richlist.vue.*
-
-This component shows the rich list of a asset.
 
 ### MultisigInfo.vue
 *from the root, root > src > components > searchResult > MultisigInfo.vue.*

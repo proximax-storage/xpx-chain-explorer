@@ -4,7 +4,7 @@
   <div class="recent animated fast fadeIn">
 
     <!-- Title -->
-    <h1 class="supertitle">{{ nameLabel }}</h1>
+    <h1 class="supertitle">Transactions</h1>
 
     <!-- Iterated Elements -->
     <div class="element" v-for="(item, index) in arrayTransactions" :key="index" :style="(index % 2 === 0) ? 'background: #f4f4f4' : 'background: white'" v-show="index >= 0 && index < limit + 1">
@@ -70,11 +70,7 @@ export default {
       type: Number,
       default: 1000
     },
-    arrayTransactions: Array,
-    nameLabel: {
-      type: String,
-      default: 'Recent Transactions'
-    }
+    arrayTransactions: Array
   },
   data () {
     return {

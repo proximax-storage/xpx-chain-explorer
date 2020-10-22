@@ -106,7 +106,7 @@ export default {
     searchList (publicKey, netType) {
       let account = this.$proxProvider.createPublicAccount(publicKey, netType)
       let net = this.$store.state.netType.number
-      this.$proxProvider.getAllTransactionsFromAccount(account, new QueryParams(100)).subscribe(
+      this.$proxProvider.accountHttp.transactions(account, new QueryParams(100)).subscribe(
         transactions => {
           if (transactions.length > 0) {
             this.resp = transactions
