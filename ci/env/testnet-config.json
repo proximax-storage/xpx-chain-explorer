@@ -11,9 +11,9 @@
     }
   },
   "Nodes": [
-    "https://bctestnet1.brimstone.xpxsirius.io",
-    "https://bctestnet2.brimstone.xpxsirius.io",
-    "https://bctestnet3.brimstone.xpxsirius.io"
+    "bctestnet1.brimstone.xpxsirius.io",
+    "bctestnet2.brimstone.xpxsirius.io",
+    "bctestnet3.brimstone.xpxsirius.io"
   ],
   "NetworkType": {
     "name": "publicTest",
@@ -54,6 +54,5 @@
   "ModuleActive": {
     "networkStats": true,
     "map": true
-  },
-  "Version": "0.4.3"
+  }
 }
