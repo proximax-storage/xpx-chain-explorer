@@ -6,7 +6,7 @@
         <div class="up">
           <div class="title">Name</div>
           <div class="valueLower" v-if="detail.mosaicId.toHex() === this.$store.state.xpx">prx.xpx</div>
-          <div class="valueLower" v-else>{{ (detail.name !== undefined) ? detail.name : 'No Available' }}</div>
+          <div class="valueLower" v-else>{{ (detail.name !== undefined) ? detail.name : 'Not Available' }}</div>
         </div>
         <div class="down">
           <div class="title">Asset Id</div>
@@ -114,7 +114,7 @@
 
           <div>
             <div class="title">Amount</div>
-            <div class="value"><span v-html="$utils.fmtAmountValue(item.amount.compact())"></span> XPX</div>
+            <div class="value"><span v-html="$utils.fmtAmountValue(item.amount.compact())"></span></div>
           </div>
   
           <div>
