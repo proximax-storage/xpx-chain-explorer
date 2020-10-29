@@ -10,7 +10,7 @@
       "name": "prx.xpx"
     }
   },
-  "Nodes": ["https://bcstage1.xpxsirius.io"],
+  "Nodes": ["bcstage1.xpxsirius.io"],
   "NetworkType": {
     "name": "publicTest",
     "number": 168
