@@ -1,7 +1,7 @@
 pipeline {
   agent {
     node {
-      label 'docker-t3a-small'
+      label 'docker-c5-xlarge'
     }
   }
 
