@@ -438,22 +438,28 @@ export default {
      *
      * This method performs the request and receipt of information about a transaction
      *
-     * @param { String } hast
+     * @param { String } hash
      */
-    getInfoTransaction: function (hast) {
-      this.$proxProvider.getTransactionInformation(hast).subscribe(
-        resp => {
-          this.param = resp
-          this.showComponent()
-        },
-        error => {
+    getInfoTransaction: async function (hash) {
+      try {
+        const statusResult = await this.$proxProvider.transactionHttp.getTransactionStatus(hash).toPromise();
+        if (statusResult.group.toUpperCase() === "CONFIRMED") {
+          this.param = await this.$proxProvider.getTransactionInformation(hash).toPromise();
+          this.showComponent();
+        } else if (statusResult.group.toUpperCase() === "FAILED") {
           this.$store.dispatch('updateErrorInfo', {
             active: true,
-            message: 'Transaction not found',
-            submessage: 'Check the information provided and try again'
-          })
+            message: 'Transaction failed',
+            submessage: statusResult.status
+          });
         }
-      )
+      } catch {
+        this.$store.dispatch('updateErrorInfo', {
+          active: true,
+          message: 'Transaction not found',
+          submessage: 'Check the information provided and try again'
+        });
+      }
     },
 
     getNamespaceInfo (namespaceHex) {
