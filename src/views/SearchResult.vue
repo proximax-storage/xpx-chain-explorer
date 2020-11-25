@@ -442,15 +442,28 @@ export default {
      */
     getInfoTransaction: async function (hash) {
       try {
-        const statusResult = await this.$proxProvider.transactionHttp.getTransactionStatus(hash).toPromise();
-        if (statusResult.group.toUpperCase() === "CONFIRMED") {
+        let statusResult = await this.$proxProvider.transactionHttp.getTransactionStatus(hash).toPromise();
+        statusResult = statusResult.group.toUpperCase();
+        if (statusResult === "CONFIRMED") {
           this.param = await this.$proxProvider.getTransactionInformation(hash).toPromise();
           this.showComponent();
-        } else if (statusResult.group.toUpperCase() === "FAILED") {
+        } else if (statusResult === "FAILED") {
           this.$store.dispatch('updateErrorInfo', {
             active: true,
             message: 'Transaction failed',
             submessage: statusResult.status
+          });
+        } else if (statusResult === "PARTIAL") {
+          this.$store.dispatch('updateErrorInfo', {
+            active: true,
+            message: 'Transaction awaiting signatures',
+            submessage: 'Transaction is awaiting for remaining cosigners to sign transaction'
+          });
+        } else {
+          this.$store.dispatch('updateErrorInfo', {
+            active: true,
+            message: 'Transaction unconfirmed',
+            submessage: 'Transaction is awaiting to be added into block'
           });
         }
       } catch {
