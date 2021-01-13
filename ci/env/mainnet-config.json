@@ -15,11 +15,7 @@
     "aldebaran.xpxsirius.io",
     "betelgeuse.xpxsirius.io",
     "bigcalvin.xpxsirius.io",
-    "westerlund.xpxsirius.io",
-    "canismajor.xpxsirius.io",
-    "coronaborealis.xpxsirius.io",
     "delphinus.xpxsirius.io",
-    "eridanus.xpxsirius.io",
     "lyrasithara.xpxsirius.io"
   ],
   "NetworkType": {
@@ -61,6 +57,5 @@
   "ModuleActive": {
     "networkStats": true,
     "map": true
-  },
-  "Version": "0.4.3"
+  }
 }
