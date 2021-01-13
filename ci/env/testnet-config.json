@@ -13,7 +13,8 @@
   "Nodes": [
     "bctestnet1.brimstone.xpxsirius.io",
     "bctestnet2.brimstone.xpxsirius.io",
-    "bctestnet3.brimstone.xpxsirius.io"
+    "bctestnet3.brimstone.xpxsirius.io",
+    "api-1.testnet2.xpxsirius.io"
   ],
   "NetworkType": {
     "name": "publicTest",
@@ -22,13 +23,13 @@
   "RentalFeeInfo": {
     "namespaceRentalFee": {
       "name": "Namespace Rental Fee Sink",
-      "address": "XA7KWF-N5CMLV-G7W3OH-Z5CV3G-3VYH3N-5EQQTK-OVJH",
-      "publicKey": "9FF38184F03950C09FFFF4A90C171E4C3C566985EEACA486A59CC8B607C10BF6"
+      "address": "VAE4O4-E3JXOT-JUDPGV-6NZK7Z-SNHRV2-LJ5NZN-SNKT",
+      "publicKey": "A200CC7C4DC7A389E625AFA585C9DA557D3D8B2FB67A56031ED2CCE47B530C74"
     },
     "mosaicRentalFee": {
       "name": "Mosaic Rental Fee Sink",
-      "address": "XBO3L3-K5AQTX-DXO6Z6-W6KAPO-RI4XHN-65J5VG-HOQU",
-      "publicKey": "94A9BB9660037E622C8F626E061DB1557CBBED0338402E82E796168E80EF9765"
+      "address": "VDYWV4-WIGX5Z-KSVX6T-TIAG6D-R2P7OM-JSYBEP-VNLL",
+      "publicKey": "69D90104D29557F4B30BB2796C9EEC3321A031402A7262B70DCAB0C182D7B81F"
     }
   },
   "MapsInfo": [
