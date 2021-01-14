@@ -61,13 +61,29 @@
       </div>
     </div>
 
-    <h1 class="supertitle center-text" v-if="detail.alias.mosaicId !== undefined">Alias</h1>
-    <div class="nam-layout-plus" v-if="detail.alias.mosaicId !== undefined">
+    <h1 class="supertitle center-text" v-if="detail.alias.type === 1">Alias</h1>
+    <div class="nam-layout-plus" v-if="detail.alias.type === 1">
       <div>
         <div class="up">
           <div class="title">Asset Id</div>
-          <div class="value link" @click="goToAsset(getId(detail.alias.mosaicId).toHex())">
-            {{ getId(detail.alias.mosaicId).toHex() }}
+          <div class="value link" @click="goToAsset(getId(detail.alias.mosaicId.id).toHex())">
+            {{ getId(detail.alias.mosaicId.id).toHex() }}
+          </div>
+        </div>
+        <div class="down">
+          <div class="title">Type</div>
+          <div class="value">{{ detail.alias.type }}</div>
+        </div>
+      </div>
+    </div>
+
+    <h1 class="supertitle center-text" v-if="detail.alias.type === 2">Alias</h1>
+    <div class="nam-layout-plus" v-if="detail.alias.type === 2">
+      <div>
+        <div class="up">
+          <div class="title">Address</div>
+          <div class="value link" @click="goToAddress(detail.alias.address.pretty())">
+            {{ detail.alias.address.pretty() }}
           </div>
         </div>
         <div class="down">
@@ -113,7 +129,7 @@ export default {
   },
   methods: {
     getId (id) {
-      let idfull = new Id(id)
+      let idfull = new Id([id.lower, id.higher])
       return idfull
     },
     getAssetName () {
