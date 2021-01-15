@@ -26,7 +26,12 @@ function  protocol() {
 store.dispatch('setProtocol', protocol())
 const configIntegration = async (currentNodeExist = false) => {
   try {
-    let configInfo = await axios.get('../config/config.json')
+    let configInfo = await axios.get('../config/config.json', {
+      headers: {
+        'Cache-Control': 'no-store',
+        'Pragma' : 'no-cache'
+      }
+    })
     Vue.prototype.$config = new Config(configInfo.data)
     if (currentNodeExist === false) {
       localStorage.setItem('currentNode', configInfo.data.Nodes[0])
