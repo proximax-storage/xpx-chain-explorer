@@ -147,15 +147,15 @@ export default {
         result = true
       } else if (this.detail.mosaicId.toHex() === this.$store.state.xpx) {
         result = true
-      } else if (currenBlockHeight >= this.detail.height.compact() + this.detail.duration.compact()) {
-        result = true
       } else if (currenBlockHeight <= this.detail.height.compact() + this.detail.duration.compact()) {
+        result = true
+      } else if (currenBlockHeight > this.detail.height.compact() + this.detail.duration.compact()) {
         result = false
       } else if (storeBlockHeight === 'Loading') {
         result = 'Loading'
-      } else if (storeBlockHeight >= this.detail.height.compact() + this.detail.duration.compact()) {
-        result = true
       } else if (storeBlockHeight <= this.detail.height.compact() + this.detail.duration.compact()) {
+        result = true
+      } else if (storeBlockHeight > this.detail.height.compact() + this.detail.duration.compact()) {
         result = false
       }
 
