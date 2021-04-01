@@ -566,10 +566,13 @@ export default {
           return
         } else {
           // Get data during initial loading
-          if (this.param.publicKey == this.invalidPublicKey) {
-            this.tableData = await this.$proxProvider.accountHttp.incomingTransactions(this.param.address, new QueryParams(this.pageSize)).toPromise()
-          } else {
+          if (this.$route.params.type === 'publicKey'){
+            let publicAccount = await this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number);
+            this.tableData = await this.$proxProvider.accountHttp.transactions(publicAccount, new QueryParams(this.pageSize)).toPromise()
+          } else if(this.param.publicKey !== this.invalidPublicKey){
             this.tableData = await this.$proxProvider.accountHttp.transactions(this.param.publicAccount, new QueryParams(this.pageSize)).toPromise()
+          } else {
+            this.tableData = await this.$proxProvider.accountHttp.incomingTransactions(this.param.address, new QueryParams(this.pageSize)).toPromise()
           }
           for (const index in this.tableData) {
             this.tableData[index].fee = this.$utils.fmtAmountValue(this.tableData[index].maxFee.compact())
@@ -580,10 +583,13 @@ export default {
         if (this.tableData.length == (this.page + 1) * this.pageSize) {
           // Prefetch data
           this.page += 1
-          if (this.param.publicKey == this.invalidPublicKey) {
-            this.tableNextData = await this.$proxProvider.accountHttp.incomingTransactions(this.param.address, new QueryParams(this.pageSize, this.tableData[this.tableData.length - 1].transactionInfo.id)).toPromise()
-          } else {
+          if (this.$route.params.type === 'publicKey') {
+            let publicAccount = await this.$proxProvider.createPublicAccount(this.$route.params.id, this.$store.state.netType.number);
+            this.tableNextData = await this.$proxProvider.accountHttp.transactions(publicAccount, new QueryParams(this.pageSize, this.tableData[this.tableData.length - 1].transactionInfo.id)).toPromise()
+          } else if(this.param.publicKey !== this.invalidPublicKey){
             this.tableNextData = await this.$proxProvider.accountHttp.transactions(this.param.publicAccount, new QueryParams(this.pageSize, this.tableData[this.tableData.length - 1].transactionInfo.id)).toPromise()
+          } else {
+            this.tableNextData = await this.$proxProvider.accountHttp.incomingTransactions(this.param.address, new QueryParams(this.pageSize, this.tableData[this.tableData.length - 1].transactionInfo.id)).toPromise()
           }
           if (this.tableData[this.tableData.length - 1].transactionInfo.id == this.tableNextData[this.tableNextData.length - 1].transactionInfo.id) {
             this.tableNextData = []
