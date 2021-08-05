@@ -55,7 +55,7 @@ export default class Utils {
       let a = parseFloat(quantity)/parseFloat(init)
       let b = a.toFixed(divisibility).split('.')
       let r = "<span class='sep'><strong>" +b[0].split(/(?=(?:...)*$)/).join("<span class='sep'>,")
-      return r + ".</strong><span class='dim'>" + b[1] + "</span>"
+      return r + (divisibility ? ".</strong><span class='dim'>" + b[1] + "</span>": "")
     }
   }
 
