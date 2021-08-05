@@ -114,7 +114,7 @@
 
           <div>
             <div class="title">Amount</div>
-            <div class="value"><span v-html="$utils.fmtAmountValue(item.amount.compact())"></span></div>
+            <div class="value"><span v-html="$utils.fmtDivisibility(item.amount.compact(), detail.divisibility)"></span></div>
           </div>
   
           <div>
