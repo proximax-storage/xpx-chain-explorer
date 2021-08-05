@@ -1,6 +1,6 @@
 {
   "name": "xpx-chain-explorer",
-  "version": "0.4.12",
+  "version": "0.4.13",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve",
